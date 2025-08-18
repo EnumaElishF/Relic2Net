@@ -16,12 +16,7 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: fe3c56e34e8540743902692dfc014e56
-  m_SerializeEntries:
-  - m_GUID: 51dcf79bb5600824ea9cfc7a0914fb07
-    m_Address: HotUpdate.dll
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
+  m_SerializeEntries: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 5acaa973be4686f40904af89ab5043c2, type: 2}
   m_SchemaSet:
