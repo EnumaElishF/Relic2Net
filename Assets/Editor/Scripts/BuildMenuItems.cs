@@ -5,7 +5,9 @@ using UnityEditor.SceneManagement;
 using UnityEngine.SceneManagement;
 using System.IO;
 using JKFrame;
-
+/// <summary>
+/// 工具
+/// </summary>
 public static class BuildMenuItems
 {
     public const string rootFloderPath = "Builds";
@@ -25,6 +27,10 @@ public static class BuildMenuItems
     {
 
         Debug.Log("开始构建服务端");
+
+        //服务端不需要热更新：   对ProjectSetting的HybridCLR设置，取消勾选，HybridCLR插件的Enable
+        HybridCLR.Editor.SettingsUtil.Enable = false;
+
         List<string> sceneList = new List<string>(EditorSceneManager.sceneCountInBuildSettings);
         for (int i =  0;i < EditorSceneManager.sceneCountInBuildSettings;i++)
         {
@@ -44,6 +50,10 @@ public static class BuildMenuItems
             locationPathName = $"{projectRootPath}/{rootFloderPath}/{serverFloderPath}/Server.exe"
         };
         BuildPipeline.BuildPlayer(buildPlayerOptions);
+
+        HybridCLR.Editor.SettingsUtil.Enable = true;//关闭HybridCLR
+
+
         Debug.Log("完成构建服务端");
 
     }
