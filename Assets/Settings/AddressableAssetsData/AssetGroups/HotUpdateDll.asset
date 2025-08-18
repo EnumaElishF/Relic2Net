@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
-  m_Name: Default Local Group
+  m_Name: HotUpdateDll
   m_EditorClassIdentifier: 
-  m_GroupName: Default Local Group
+  m_GroupName: HotUpdateDLL
   m_Data:
     m_SerializedData: []
-  m_GUID: fe3c56e34e8540743902692dfc014e56
+  m_GUID: b073cf72e68cf18459bd16140caa14f1
   m_SerializeEntries:
   - m_GUID: 51dcf79bb5600824ea9cfc7a0914fb07
     m_Address: HotUpdate.dll
@@ -26,5 +26,5 @@ MonoBehaviour:
   m_Settings: {fileID: 11400000, guid: 5acaa973be4686f40904af89ab5043c2, type: 2}
   m_SchemaSet:
     m_Schemas:
-    - {fileID: 11400000, guid: 8ca75c30cdac79949881b87ff1696d48, type: 2}
-    - {fileID: 11400000, guid: 9ef9387bacac2af4fad173791a6fc4fb, type: 2}
+    - {fileID: 11400000, guid: d62aa0284d0d5be4ba1ab4c8175f1973, type: 2}
+    - {fileID: 11400000, guid: 396567bcf255fef4aa8cf98ea3dccbc5, type: 2}
