@@ -12,13 +12,14 @@ public class HotUpdateSystem : MonoBehaviour
 {
     [SerializeField] private TextAsset[] aotDllAssets;
     [SerializeField] private string[] hotUpdateDllNames;
+    [SerializeField] private string versionInfoAddressableKey;
     private Action<float> onPercentageForEachFile;
-    private Action<bool> onOver;
-    public void StartHotUpdate(Action<float> onPercentageForEachFile, Action<bool> onOver)
+    private Action<bool> onEnd;
+    public void StartHotUpdate(Action<float> onPercentageForEachFile, Action<bool> onEnd)
     {
         //赋值一下全局参数的值，作为给当前方法传参
         this.onPercentageForEachFile = onPercentageForEachFile;
-        this.onOver = onOver;
+        this.onEnd = onEnd;
         //开始更新
         StartCoroutine(DoUpdateAddressables());
     }
@@ -51,6 +52,10 @@ public class HotUpdateSystem : MonoBehaviour
                 else
                 {
                     Debug.Log("下载目录更新成功");
+                    //优先下载版本信息
+                    TextAsset versionInfoTextAsset =  GetVersionInfo();
+                    Debug.Log($"版本信息:{versionInfoTextAsset.text}");
+
 
                     List<IResourceLocator> locators = updateCatalogsHandle.Result;
                     foreach(IResourceLocator locator in locators)
@@ -99,7 +104,6 @@ public class HotUpdateSystem : MonoBehaviour
             }
             else Debug.Log("无需更新");
         }
-        onOver?.Invoke(succeed);
 
         Addressables.Release(checkForCatalogUpdatesHandle);
 
@@ -109,7 +113,21 @@ public class HotUpdateSystem : MonoBehaviour
             LoadMetaForAOTAssemblies();
         }
 
+        //所有的事情都干完，才能回调
+        onEnd?.Invoke(succeed);
+
     }
+    /// <summary>
+    /// 获取版本信息
+    /// </summary>
+    /// 
+    private TextAsset GetVersionInfo()
+    {
+        //这里版本信息就 不做异步 了，必须要等，因为要拿到版本信息才能继续去工作(因为他文件也小感受不大）
+        Addressables.DownloadDependenciesAsync(versionInfoAddressableKey, true).WaitForCompletion();
+        return Addressables.LoadAssetAsync<TextAsset>(versionInfoAddressableKey).WaitForCompletion();
+    }
+
     private void LoadHotUpdateDll()
     {
         for(int i = 0; i < hotUpdateDllNames.Length; i++)

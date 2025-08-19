@@ -1,15 +1,15 @@
-using System.Collections;
+锘縰sing System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//实际更新的逻辑
+//瀹為檯鏇存柊鐨勯�昏緫
 public class TestHotUpdateLogic : MonoBehaviour
 {
 
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log("版本2");
+        Debug.Log("鐗堟湰2");
     }
 
     // Update is called once per frame
