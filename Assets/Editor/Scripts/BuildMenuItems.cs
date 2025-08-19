@@ -53,7 +53,7 @@ public static class BuildMenuItems
         BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions()
         {
             scenes = sceneList.ToArray(),
-            target = BuildTarget.StandaloneWindows,
+            target = BuildTarget.StandaloneWindows64,
             subtarget = (int)StandaloneBuildSubtarget.Server,
             locationPathName = $"{projectRootPath}/{rootFloderPath}/{serverFloderPath}/Server.exe"
         };
@@ -88,7 +88,7 @@ public static class BuildMenuItems
         BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions()
         {
             scenes = sceneList.ToArray(),
-            target = BuildTarget.StandaloneWindows,
+            target = BuildTarget.StandaloneWindows64,  //生成目标文件夹名称为StandaloneWindows64
             subtarget = (int)StandaloneBuildSubtarget.Player,
             locationPathName = $"{projectRootPath}/{rootFloderPath}/{clientFloderPath}/Client.exe"
         };
