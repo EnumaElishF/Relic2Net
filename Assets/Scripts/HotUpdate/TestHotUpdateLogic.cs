@@ -2,12 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TestHotUpdate : MonoBehaviour
+//实际更新的逻辑
+public class TestHotUpdateLogic : MonoBehaviour
 {
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        Debug.Log("版本3");
     }
 
     // Update is called once per frame

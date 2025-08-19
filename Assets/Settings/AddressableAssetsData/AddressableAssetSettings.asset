@@ -15,12 +15,12 @@ MonoBehaviour:
   m_DefaultGroup: fe3c56e34e8540743902692dfc014e56
   m_currentHash:
     serializedVersion: 2
-    Hash: f730c17686b298795c7c8ac09f36fc5e
+    Hash: 00000000000000000000000000000000
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 1
   m_BundleLocalCatalog: 0
   m_CatalogRequestsTimeout: 0
-  m_DisableCatalogUpdateOnStart: 1
+  m_DisableCatalogUpdateOnStart: 0
   m_IgnoreUnsupportedFilesInBuild: 0
   m_UniqueBundleIds: 0
   m_NonRecursiveBuilding: 1
@@ -68,7 +68,7 @@ MonoBehaviour:
       - m_Id: 0f9be228033c92b46b81d8166e322f86
         m_Value: ServerData/[BuildTarget]/Assets
       - m_Id: 861643c58353e284793d12cffb2698ec
-        m_Value: http://http://localhost:8082/Assets
+        m_Value: http://localhost:8082/Assets
     m_ProfileEntryNames:
     - m_Id: d69f75524af09c6428b55e4eec96d5ec
       m_Name: BuildTarget
@@ -119,7 +119,7 @@ MonoBehaviour:
           m_Key: HostingServiceUploadSpeed
         - m_AssemblyName: mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
           m_ClassName: System.String
-          m_Data: Library/com.unity.addressables/aa/Windows/StandaloneWindows;ServerData/StandaloneWindows
+          m_Data: Library/com.unity.addressables/aa/Windows/StandaloneWindows64;ServerData/StandaloneWindows64/Assets
           m_Key: ContentRoot
         - m_AssemblyName: mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
           m_ClassName: System.Boolean

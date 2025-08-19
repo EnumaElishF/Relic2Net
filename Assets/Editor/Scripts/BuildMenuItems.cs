@@ -14,7 +14,7 @@ using UnityEditor.AddressableAssets.Settings;
 using UnityEditor.AddressableAssets;
 using UnityEditor.AddressableAssets.Build;
 /// <summary>
-/// 工具
+/// 打包工具
 /// </summary>
 public static class BuildMenuItems
 {

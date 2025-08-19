@@ -26,6 +26,7 @@ MonoBehaviour:
   patchAOTAssemblies:
   - JKFrame
   - Unity.Addressables
+  - Aot
   outputLinkFile: HybridCLRGenerate/link.xml
   outputAOTGenericReferenceFile: HybridCLRGenerate/AOTGenericReferences.cs
   maxGenericReferenceIteration: 10
