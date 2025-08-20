@@ -9,7 +9,7 @@ public class TestHotUpdateLogic : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log("版本2");
+        Debug.Log("版本1");
     }
 
     // Update is called once per frame

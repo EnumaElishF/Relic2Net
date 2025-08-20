@@ -1,18 +1,18 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-//Æô¶¯µÄÂß¼­
+//å¯åŠ¨çš„é€»è¾‘
 public class TestHotUpdate : MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log("¿ªÊ¼");
+        Debug.Log("å¼€å§‹");
         TextAsset dllText = Addressables.LoadAssetAsync<TextAsset>("HotUpdate.dll").WaitForCompletion();
         System.Reflection.Assembly.Load(dllText.bytes);
         Addressables.InstantiateAsync("GameObject").WaitForCompletion();
-        Debug.Log("½áÊø");
+        Debug.Log("ç»“æŸ");
     }
 
     // Update is called once per frame

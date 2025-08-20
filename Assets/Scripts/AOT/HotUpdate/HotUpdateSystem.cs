@@ -52,10 +52,8 @@ public class HotUpdateSystem : MonoBehaviour
                 else
                 {
                     Debug.Log("下载目录更新成功");
-                    //优先下载版本信息
-                    TextAsset versionInfoTextAsset =  GetVersionInfo();
-                    Debug.Log($"版本信息:{versionInfoTextAsset.text}");
 
+                    ShowLoadingWindow();
 
                     List<IResourceLocator> locators = updateCatalogsHandle.Result;
                     foreach(IResourceLocator locator in locators)
@@ -88,6 +86,9 @@ public class HotUpdateSystem : MonoBehaviour
                                     float percentage = downloadDependenciesHanle.PercentComplete;
                                     Debug.Log($"下载进度:{percentage}");
                                     onPercentageForEachFile?.Invoke(percentage);
+
+                                    UpdateLoadingWindowProgress(downloadSize * percentage, downloadSize);
+
                                     yield return CoroutineTool.WaitForFrame();//框架协程工具：避免gc
                                 }
                                 if (downloadDependenciesHanle.Status == AsyncOperationStatus.Succeeded)
@@ -100,6 +101,8 @@ public class HotUpdateSystem : MonoBehaviour
                         }
                         Addressables.Release(sizeHandle);
                     }
+
+                    CloseLoadingWindow();
                 }
             }
             else Debug.Log("无需更新");
@@ -121,11 +124,14 @@ public class HotUpdateSystem : MonoBehaviour
     /// 获取版本信息
     /// </summary>
     /// 
-    private TextAsset GetVersionInfo()
+    private string GetVersionInfo()
     {
         //这里版本信息就 不做异步 了，必须要等，因为要拿到版本信息才能继续去工作(因为他文件也小感受不大）
         Addressables.DownloadDependenciesAsync(versionInfoAddressableKey, true).WaitForCompletion();
-        return Addressables.LoadAssetAsync<TextAsset>(versionInfoAddressableKey).WaitForCompletion();
+        TextAsset textAsset =  Addressables.LoadAssetAsync<TextAsset>(versionInfoAddressableKey).WaitForCompletion();
+        string info = textAsset.text;
+        Addressables.Release(textAsset);
+        return info;
     }
 
     private void LoadHotUpdateDll()
@@ -148,6 +154,23 @@ public class HotUpdateSystem : MonoBehaviour
             LoadImageErrorCode errorCode = RuntimeApi.LoadMetadataForAOTAssembly(dllBytes, HomologousImageMode.SuperSet);
             Debug.Log($"LoadMetaForAOTAssemblies:{aotDllAssets[i].name},{errorCode}");
         }
+    }
+
+    private UI_LoadingWindow loadingWindow;
+    private void ShowLoadingWindow()
+    {
+        loadingWindow = UISystem.Show<UI_LoadingWindow>();
+        loadingWindow.Init(GetVersionInfo());
+    }
+
+    private void CloseLoadingWindow()
+    {
+        UISystem.Close<UI_LoadingWindow>();
+        loadingWindow = null;
+    }
+    private void UpdateLoadingWindowProgress(float current, float max)
+    {
+        loadingWindow.UpdateDownloadProgress(current, max);
     }
 
 }
