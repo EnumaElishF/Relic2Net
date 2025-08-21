@@ -3,10 +3,23 @@ using UnityEngine;
 
 public class Player : NetworkBehaviour
 {
-    //public NetworkVariable<float> moveSpeed;   //网络变量：值类型，或者是结构体
+    //多个玩家，所以Player没有单例
+    public static Player localPlayer { get; private set; }
 
+    //public NetworkVariable<float> moveSpeed;   //网络变量：值类型，或者是结构体
     public float moveSpeed = 3;
 
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
+#if !UNITY_SERVER
+        if(IsOwner&& IsClient)
+        {
+            //客户端快速访问到 “自己控制的玩家对象”
+            localPlayer = this;
+        }
+#endif
+    }
 
     void Update()
     {

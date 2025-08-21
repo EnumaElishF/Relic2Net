@@ -1,4 +1,5 @@
 ﻿using Unity.Netcode;
+using Unity.Netcode.Transports.UTP;
 using UnityEngine;
 
 //NetManager作为两边通用的，不分客户端还是服务端。算是通用部分。
@@ -6,9 +7,13 @@ public class NetManager : NetworkManager
 {
     //
     public static NetManager Instance { get; private set; }
+
+    public UnityTransport unityTransport { get; private set; }
     private void Awake()
     {
         Instance = this;
+        unityTransport = GetComponent<UnityTransport>();
+
     }
     public void InitClient()
     {
