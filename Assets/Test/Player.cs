@@ -5,6 +5,7 @@ public class Player : NetworkBehaviour
 {
     //public NetworkVariable<float> moveSpeed;   //网络变量：值类型，或者是结构体
 
+    public float moveSpeed = 3;
 
 
     void Update()
@@ -30,7 +31,7 @@ public class Player : NetworkBehaviour
     private void HandleMovementServerRpc(Vector3 inputDir)
     {
         //告诉服务端，有这个事情
-        transform.Translate(Time.deltaTime * 3 * inputDir);
+        transform.Translate(Time.deltaTime * moveSpeed * inputDir);
     }
 
 
