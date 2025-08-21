@@ -7,9 +7,17 @@ using UnityEngine.AddressableAssets.ResourceLocators;
 using JKFrame;
 using System;
 using HybridCLR;
+using System.IO;
 
 public class HotUpdateSystem : MonoBehaviour
 {
+    [Serializable]
+    private class HotUpdateSystemState
+    {
+        //加一个序列化Serializable，让他可以保存住数据
+        public bool hotUpdateSucceed;
+    }
+
     [SerializeField] private TextAsset[] aotDllAssets;
     [SerializeField] private string[] hotUpdateDllNames;
     [SerializeField] private string versionInfoAddressableKey;
@@ -25,10 +33,19 @@ public class HotUpdateSystem : MonoBehaviour
     }
     private IEnumerator DoUpdateAddressables()
     {
+        //确定上一次热更新的状态
+        HotUpdateSystemState state = SaveSystem.LoadSetting<HotUpdateSystemState>();
+        if(state ==null || !state.hotUpdateSucceed) //从来没有热更过 || 上次热更没有成功
+        {
+            Debug.Log("断点续传");
+            string catalogPath = $"{Application.persistentDataPath}/com.unity.addressables";
+            if (Directory.Exists(catalogPath)) Directory.Delete(catalogPath, true); //删掉上次热更的catalog文件夹，以做到，断点续传，进行重新检查下载
+        }
+
         //初始化
         yield return Addressables.InitializeAsync();
         bool succeed = true;
-        //检测目录更新
+        //检测目录更新：CheckForCatalogUpdates会找服务器上的目录，从而做到本地存档的目录catalog和服务器上目录catalog比较，不相等就需要热更
         AsyncOperationHandle<List<string>> checkForCatalogUpdatesHandle  = Addressables.CheckForCatalogUpdates(false);
         yield return checkForCatalogUpdatesHandle;
         if (checkForCatalogUpdatesHandle.Status != AsyncOperationStatus.Succeeded)
@@ -71,8 +88,9 @@ public class HotUpdateSystem : MonoBehaviour
                            long downloadSize = sizeHandle.Result;
                             if (downloadSize > 0)
                             {
-                                //实际的下载
-                                AsyncOperationHandle downloadDependenciesHanle = Addressables.DownloadDependenciesAsync(locator.Keys, Addressables.MergeMode.None, false);
+                                //实际的下载  : Addressables.MergeMode.None只能拿到第一个包，因为我们需要全部的包，所以需要用并集 Addressables.MergeMode.Union
+                                //AsyncOperationHandle downloadDependenciesHanle = Addressables.DownloadDependenciesAsync(locator.Keys, Addressables.MergeMode.None, false);
+                                AsyncOperationHandle downloadDependenciesHanle = Addressables.DownloadDependenciesAsync(locator.Keys, Addressables.MergeMode.Union, false);
                                 //循环查看下载进度
                                 while (!downloadDependenciesHanle.IsDone)
                                 {
@@ -109,6 +127,10 @@ public class HotUpdateSystem : MonoBehaviour
         }
 
         Addressables.Release(checkForCatalogUpdatesHandle);
+
+        if (state == null) state = new HotUpdateSystemState();
+        state.hotUpdateSucceed = succeed;
+        SaveSystem.SaveSetting(state); //保存为设置的二进制或者json格式数据，作为热更是否完全成功的标志，从而决定是否需要进行断点续传 (框架的工具设置)
 
         if (succeed)
         {
