@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -17,26 +17,39 @@ public class TestManager : MonoBehaviour
 
     private void OnGUI()
     {
-#if SERVER_EDITOR_TEST
-        if(Player.localPlayer != null)
+#if UNITY_SERVER || SERVER_EDITOR_TEST
+        //æœåŠ¡å™¨
+        if (NetManager.Instance.IsServer)
         {
-            // ÑÓ³Ù
-            GUILayout.Label("Delay:" + ClientRTTInfo.Instance.rttMs);
-            //µ±Ç°×ø±ê
-            GUILayout.Label("Position:" + Player.localPlayer.transform.position);
-            // ·şÎñ¶Ë¶ÔÏóÊıÁ¿ :»ñÈ¡ÍøÂç·şÎñ¶Ë¶ÔÏóÊıÁ¿·½·¨
+            if (ServerTestObject.Instance != null)
+            {
+                GUILayout.Label("æœåŠ¡å™¨å¯¹è±¡Position:" + ServerTestObject.Instance.transform.position);
+
+            }
+        }
+#endif
+
+#if !UNITY_SERVER || SERVER_EDITOR_TEST
+        //å®¢æˆ·ç«¯
+        if (Player.localPlayer != null)
+        {
+            // å»¶è¿Ÿ
+            GUILayout.Label("å»¶è¿ŸDelay:" + ClientRTTInfo.Instance.rttMs);
+            //å½“å‰åæ ‡
+            GUILayout.Label("Player Position:" + Player.localPlayer.transform.position);
+            // æœåŠ¡ç«¯å¯¹è±¡æ•°é‡ :è·å–ç½‘ç»œæœåŠ¡ç«¯å¯¹è±¡æ•°é‡æ–¹æ³•
             if (NetManager.Instance.SpawnManager.OwnershipToObjectsTable.TryGetValue(NetManager.ServerClientId,out Dictionary<ulong,NetworkObject> temp))
             {
                 GUILayout.Label("ServerObjects:" + temp.Count);
             }
-            //ÆäËû¿Í»§¶Ë¶ÔÏóÊıÁ¿
+            //å…¶ä»–å®¢æˆ·ç«¯å¯¹è±¡æ•°é‡
             int clientObjects = 0;
             foreach(KeyValuePair<ulong, Dictionary<ulong, NetworkObject>> item in NetManager.Instance.SpawnManager.OwnershipToObjectsTable)
             {
                 if(item.Key!=NetManager.ServerClientId && item.Key != NetManager.Instance.LocalClientId)
                 {
-                    // Èç¹û¼È²»ÊÇ ·şÎñÆ÷id£¬Ò²²»ÊÇ ±¾µØ¿Í»§¶Ë ×Ô¼ºµÄid
-                    clientObjects += item.Value.Count; //ÕâÑù¾ÍÖªµÀÁËÆäËû¿Í»§¶ËÓĞ¶àÉÙ¸ö
+                    // å¦‚æœæ—¢ä¸æ˜¯ æœåŠ¡å™¨idï¼Œä¹Ÿä¸æ˜¯ æœ¬åœ°å®¢æˆ·ç«¯ è‡ªå·±çš„id
+                    clientObjects += item.Value.Count; //è¿™æ ·å°±çŸ¥é“äº†å…¶ä»–å®¢æˆ·ç«¯æœ‰å¤šå°‘ä¸ª
                 }
             }
             GUILayout.Label("Other ClientObjects:" + clientObjects);

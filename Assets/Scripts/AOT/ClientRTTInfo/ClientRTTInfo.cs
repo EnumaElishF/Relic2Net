@@ -13,6 +13,7 @@ public class ClientRTTInfo : SingletonMono<ClientRTTInfo>
     protected override void Awake()
     {
         base.Awake();
+        DontDestroyOnLoad(gameObject);
         rttTimeQueue = new Queue<int>(calFrames);
     }
     private void OnDisable()
