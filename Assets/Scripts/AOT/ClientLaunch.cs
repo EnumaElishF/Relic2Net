@@ -1,8 +1,5 @@
-using JKFrame;
-using System.Collections;
-using System.Collections.Generic;
+﻿using JKFrame;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 
 public class ClientLaunch : MonoBehaviour
 {
@@ -12,9 +9,15 @@ public class ClientLaunch : MonoBehaviour
         {
             if (succeed)
             {
-                Addressables.InstantiateAsync("GameObject").WaitForCompletion();
+                OnHotUpdateSucceed();
             }
         });
+    }
+    private void OnHotUpdateSucceed()
+    {
+        NetManager.Instance.InitClient();
+        SceneSystem.LoadScene("GameScene");
+        Debug.Log("InitClient 成功");
     }
 
 

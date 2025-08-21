@@ -35,8 +35,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -15.534309, y: 216.1795}
-  m_SizeDelta: {x: 1101.1174, y: 223.749}
+  m_AnchoredPosition: {x: -27.696, y: 216.1795}
+  m_SizeDelta: {x: 1076.8, y: 223.749}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5105678166362316042
 CanvasRenderer:
@@ -59,7 +59,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.2901961, g: 0.3529412, b: 0.64705884, a: 1}
+  m_Color: {r: 0.8980393, g: 0.10980393, b: 0.5294118, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -79,7 +79,8 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: MMORPG
+  m_Text: "<color=#006AD2>\u7D20</color><color=#EF0000>\u6674</color><color=#E51C87>\u5C9B</color>
+    <color=yellow>2</color>"
 --- !u!114 &1663211643157505469
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5748,7 +5749,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 6b70a11753d68474589ce690f20ad9ec, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e6e783016aa3f6f48bc56ad487b11015, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
