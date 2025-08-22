@@ -19,6 +19,6 @@ public class UI_LoadingWindow : UI_WindowBase
         float maxMB = maxBytes / 1024f / 1024f;
         loadingBarSlider.maxValue = maxMB;
         loadingBarSlider.value = currentMB;
-        progressText.text = $"{Math.Round(currentMB, 2)}MB / {Math.Round(maxMB, 2)}MB";
+        progressText.text = $"{Math.Round(currentMB, 2)}MB / {Math.Round(maxMB, 2)}MB";  //保留 2 位小数
     }
 }

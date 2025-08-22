@@ -31,6 +31,7 @@ public class HotUpdateSystem : MonoBehaviour
         //开始更新
         StartCoroutine(DoUpdateAddressables());
     }
+    private bool succeed;
     private IEnumerator DoUpdateAddressables()
     {
         //确定上一次热更新的状态
@@ -42,9 +43,10 @@ public class HotUpdateSystem : MonoBehaviour
             if (Directory.Exists(catalogPath)) Directory.Delete(catalogPath, true); //删掉上次热更的catalog文件夹，以做到，断点续传，进行重新检查下载
         }
 
-        //初始化
+        //Addressables 系统的初始化 :Addressables 会检查本地是否存在缓存目录,不存在就重新创建。
         yield return Addressables.InitializeAsync();
-        bool succeed = true;
+
+        succeed = true;
         //检测目录更新：CheckForCatalogUpdates会找服务器上的目录，从而做到本地存档的目录catalog和服务器上目录catalog比较，不相等就需要热更
         AsyncOperationHandle<List<string>> checkForCatalogUpdatesHandle  = Addressables.CheckForCatalogUpdates(false);
         yield return checkForCatalogUpdatesHandle;
@@ -52,81 +54,47 @@ public class HotUpdateSystem : MonoBehaviour
         {
             succeed = false;
             Debug.LogError($"CheckForCatalogUpdates失败:{checkForCatalogUpdatesHandle.OperationException.Message}");
+            Addressables.Release(checkForCatalogUpdatesHandle);
+
         }
         else
         {
-            //下载最新的目录
-            if (checkForCatalogUpdatesHandle.Result.Count > 0)
+            List<string> catalogResult = checkForCatalogUpdatesHandle.Result;
+            Addressables.Release(checkForCatalogUpdatesHandle);
+
+            Debug.Log("下载最新的目录: catalog");
+            if (catalogResult.Count > 0)
             {
+                ShowLoadingWindow();
+
                 //IResourceLocator定位器
-                AsyncOperationHandle<List<IResourceLocator>> updateCatalogsHandle = Addressables.UpdateCatalogs(checkForCatalogUpdatesHandle.Result, false);
+                AsyncOperationHandle<List<IResourceLocator>> updateCatalogsHandle = Addressables.UpdateCatalogs(catalogResult, false);
+
                 yield return updateCatalogsHandle;
                 if (updateCatalogsHandle.Status != AsyncOperationStatus.Succeeded)
                 {
                     succeed = false;
+                    Addressables.Release(updateCatalogsHandle);
                     Debug.LogError($"CheckForCatalogUpdates失败:{updateCatalogsHandle.OperationException.Message}");
                 }
                 else
                 {
-                    Debug.Log("下载目录更新成功");
-
-                    ShowLoadingWindow();
-
-                    List<IResourceLocator> locators = updateCatalogsHandle.Result;
-                    foreach(IResourceLocator locator in locators)
+                    List<IResourceLocator> locatorList = updateCatalogsHandle.Result;
+                    Addressables.Release(updateCatalogsHandle);
+                    JKLog.Log("下载目录更新成功");
+                    List<object> downloadKeys = new List<object>(1000);
+                    foreach (IResourceLocator locator in locatorList)
                     {
-                        //下面全部的内容，完成了一次循环，也就是下载完成了：一个资源
-                        AsyncOperationHandle<long> sizeHandle  =  Addressables.GetDownloadSizeAsync(locator.Keys);
-                        yield return sizeHandle;
-                        if(sizeHandle.Status!= AsyncOperationStatus.Succeeded)
-                        {
-                            succeed = false;
-                            Debug.LogError($"GetDownloadSizeAsync失败:{sizeHandle.OperationException.Message}");
-                        }
-                        else
-                        {
-                           long downloadSize = sizeHandle.Result;
-                            if (downloadSize > 0)
-                            {
-                                //实际的下载  : Addressables.MergeMode.None只能拿到第一个包，因为我们需要全部的包，所以需要用并集 Addressables.MergeMode.Union
-                                //AsyncOperationHandle downloadDependenciesHanle = Addressables.DownloadDependenciesAsync(locator.Keys, Addressables.MergeMode.None, false);
-                                AsyncOperationHandle downloadDependenciesHanle = Addressables.DownloadDependenciesAsync(locator.Keys, Addressables.MergeMode.Union, false);
-                                //循环查看下载进度
-                                while (!downloadDependenciesHanle.IsDone)
-                                {
-                                    if(downloadDependenciesHanle.Status == AsyncOperationStatus.Failed) //因为还需要考虑为None的状态，所以不用！=Success
-                                    {
-                                        succeed = false;
-                                        Debug.LogError($"downloadDependenciesHanle失败:{downloadDependenciesHanle.OperationException.Message}");
-                                        break;
-                                    }
-                                    //分发下载进度
-                                    float percentage = downloadDependenciesHanle.PercentComplete;
-                                    Debug.Log($"下载进度:{percentage}");
-                                    onPercentageForEachFile?.Invoke(percentage);
-
-                                    UpdateLoadingWindowProgress(downloadSize * percentage, downloadSize);
-
-                                    yield return CoroutineTool.WaitForFrame();//框架协程工具：避免gc
-                                }
-                                if (downloadDependenciesHanle.Status == AsyncOperationStatus.Succeeded)
-                                {
-                                    Debug.Log($"下载进度完成:{locator.LocatorId}");
-                                }
-                                Addressables.Release(downloadDependenciesHanle);
-
-                            }
-                        }
-                        Addressables.Release(sizeHandle);
+                        downloadKeys.AddRange(locator.Keys);
                     }
-
+                    //SetLoadingWindow();
+                    yield return DownloadAllAssets(downloadKeys);
                     CloseLoadingWindow();
                 }
             }
             else Debug.Log("无需更新");
         }
 
-        Addressables.Release(checkForCatalogUpdatesHandle);
 
         if (state == null) state = new HotUpdateSystemState();
         state.hotUpdateSucceed = succeed;
@@ -136,12 +104,65 @@ public class HotUpdateSystem : MonoBehaviour
         {
             LoadHotUpdateDll();
             LoadMetaForAOTAssemblies();
+
+            // 因为Addressables在初始化目录后才加载dll，这会导致AD会认为类型为热更程序集中的类型是未知的资源 认为是System.Object
+            //Addressables.LoadContentCatalogAsync($"{Addressables.RuntimePath}/catalog.json");
         }
 
         //所有的事情都干完，才能回调
         onEnd?.Invoke(succeed);
 
     }
+
+    /// <summary>
+    /// 下载所有资源
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator DownloadAllAssets(List<object> keys)
+    {
+        //下面全部的内容，完成了一次循环，也就是下载完成了：一个资源
+        AsyncOperationHandle<long> sizeHandle = Addressables.GetDownloadSizeAsync((IEnumerable<object>)keys);
+        yield return sizeHandle;
+        if (sizeHandle.Status != AsyncOperationStatus.Succeeded)
+        {
+            succeed = false;
+            Debug.LogError($"GetDownloadSizeAsync失败:{sizeHandle.OperationException.Message}");
+        }
+        else
+        {
+            long downloadSize = sizeHandle.Result;
+            if (downloadSize > 0)
+            {
+                //实际的下载  : Addressables.MergeMode.None只能拿到第一个包，因为我们需要全部的包，所以需要用并集 Addressables.MergeMode.Union
+                AsyncOperationHandle downloadDependenciesHandle = Addressables.DownloadDependenciesAsync((IEnumerable<object>)keys, Addressables.MergeMode.Union, false);
+
+                //循环查看下载进度
+                while (!downloadDependenciesHandle.IsDone)
+                {
+                    if (downloadDependenciesHandle.Status == AsyncOperationStatus.Failed) //因为还需要考虑为None的状态，所以不用！=Success
+                    {
+                        succeed = false;
+                        Debug.LogError($"downloadDependenciesHanle失败:{downloadDependenciesHandle.OperationException.Message}");
+                        break;
+                    }
+                    // 分发下载进度
+                    float percentage = downloadDependenciesHandle.GetDownloadStatus().Percent;
+                    onPercentageForEachFile?.Invoke(percentage);
+                    UpdateLoadingWindowProgress(downloadSize * percentage, downloadSize);
+
+                    yield return CoroutineTool.WaitForFrame();
+                }
+                if (downloadDependenciesHandle.Status == AsyncOperationStatus.Succeeded)
+                {
+                    JKLog.Log($"全部下载完成");
+                }
+                Addressables.Release(downloadDependenciesHandle);
+            }
+        }
+        Addressables.Release(sizeHandle);
+    }
+
+
     /// <summary>
     /// 获取版本信息
     /// </summary>
