@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using JKFrame;
@@ -11,8 +10,138 @@ public class AOIManager : SingletonMono<AOIManager>
     private Dictionary<Vector2Int, HashSet<ulong>> chunkClientDic = new Dictionary<Vector2Int, HashSet<ulong>>();
     // <chunkCoord,serverObjectIDs>    记录这一块有哪些服务端对象
     private Dictionary<Vector2Int, HashSet<NetworkObject>> chunkServerObjectDic = new Dictionary<Vector2Int, HashSet<NetworkObject>>();
+    /// <summary>
+    /// 更新玩家在AOI地图上的坐标   (检查chunk块)
+    /// </summary>
+    /// <param name="clientID"></param>
+    /// <param name="oldCoord">"coord" 是坐标 "coordinate" 的缩写</param>
+    /// <param name="newCoord"></param>
+    public void UpdateClientChunkCoord(ulong clientID,Vector2Int oldCoord,Vector2Int newCoord)
+    {
+        if (oldCoord == newCoord) return;
+        // 从旧的地图块中移除
+        RemoveClient(clientID, oldCoord);
+
+        //判断是否跨地图块移动  (跨地图块的话就是类似传送的情况)
+        if (Vector2Int.Distance(oldCoord, newCoord) > 1.5f) //超过单个格子移动的极限距离,所以是传送性质的位移
+        {
+            //跨块移动
+            //单个格子的斜角度位移肯定是小于1.5f的，超过了就说明超出格子的极限距离 √2 = 1.414
+            for (int x = - visualChunkRange; x<=visualChunkRange; x++) //-1,0,1的九宫格
+            {
+                for(int y = -visualChunkRange; y <= visualChunkRange; y++)
+                {
+                    //虽然看着算法的时间复杂度比较大，但是因为面对的九个格子+客户端数量限制，实际上不会很大
+                    Vector2Int hideChunkCoord = new Vector2Int(oldCoord.x + x, oldCoord.y + y);
+                    Vector2Int showChunkCoord = new Vector2Int(oldCoord.x + x, oldCoord.y + y);
+                    ShowAndHideForChunkClients(clientID, hideChunkCoord,showChunkCoord);
+                }
+            }
+        }
+        else //正常一个格子的移动距离
+        {
+            //非跨块移动，考虑上下左右，以及多个斜方向移动（注：斜方向的则会被分解掉，像是为组合的左上，这种情况)
+            // 上，旧的最下面一行隐藏，新的最上一行显示
+            if (newCoord.y > oldCoord.y)
+            {
+                for (int i = -visualChunkRange; i <= visualChunkRange; i++)
+                {
+                    Vector2Int hideChunkCoord = new Vector2Int(oldCoord.x + i, oldCoord.y - visualChunkRange);
+                    Vector2Int showChunkCoord = new Vector2Int(newCoord.x + i, newCoord.y + visualChunkRange);
+                    ShowAndHideForChunkClients(clientID, hideChunkCoord, showChunkCoord);
+                }
+            }
+            // 下，旧的最下面一行显示，新的最上一行隐藏
+            else if (newCoord.y < oldCoord.y)
+            {
+                for (int i = -visualChunkRange; i <= visualChunkRange; i++)
+                {
+                    Vector2Int hideChunkCoord = new Vector2Int(oldCoord.x + i, oldCoord.y + visualChunkRange);
+                    Vector2Int showChunkCoord = new Vector2Int(newCoord.x + i, newCoord.y - visualChunkRange);
+                    ShowAndHideForChunkClients(clientID, hideChunkCoord, showChunkCoord);
+                }
+            }
+
+            // 左，旧的最右边面一列隐藏，新的最左边一列显示
+            if (newCoord.x < oldCoord.x)
+            {
+                for (int i = -visualChunkRange; i <= visualChunkRange; i++)
+                {
+                    Vector2Int hideChunkCoord = new Vector2Int(oldCoord.x + visualChunkRange, oldCoord.y + i);
+                    Vector2Int showChunkCoord = new Vector2Int(newCoord.x - visualChunkRange, newCoord.y + i);
+                    ShowAndHideForChunkClients(clientID, hideChunkCoord, showChunkCoord);
+                }
+            }
+            // 右，旧的最右边面一列显示，新的最左边一列隐藏
+            else if (newCoord.x > oldCoord.x)
+            {
+                for (int i = -visualChunkRange; i <= visualChunkRange; i++)
+                {
+                    Vector2Int hideChunkCoord = new Vector2Int(oldCoord.x - visualChunkRange, oldCoord.y + i);
+                    Vector2Int showChunkCoord = new Vector2Int(newCoord.x + visualChunkRange, newCoord.y + i);
+                    ShowAndHideForChunkClients(clientID, hideChunkCoord, showChunkCoord);
+                }
+            }
+        }
+
+        //把客户端加入当前新的块----先从旧的地图块中移除，又把客户端加入当前新的块。这样最内侧的方法也保证了自己不会存自己的情况
+        if (!chunkClientDic.TryGetValue(newCoord,out HashSet<ulong> newCoordClientIDs))
+        {
+            newCoordClientIDs = ResSystem.GetOrNew<HashSet<ulong>>();
+            chunkClientDic.Add(newCoord,newCoordClientIDs);
+        }
+        newCoordClientIDs.Add(clientID);
+    }
+
+    /// <summary>
+    /// 为某个地图块下的全部客户端，显示与隐藏某个客户端
+    /// </summary>
+    private void ShowAndHideForChunkClients(ulong clientID,Vector2Int hideChunkCoord,Vector2Int showChunkCoord)
+    {
+        ShowClientForChunkClients(clientID, showChunkCoord);
+        HideClientForChunkClients(clientID, hideChunkCoord);
+    }
+    // 某个客户端和某个区域的客户端们全部互相 可见
+    private void ShowClientForChunkClients(ulong clientID,Vector2Int chunkCoord)
+    {
+        if(chunkClientDic.TryGetValue(chunkCoord,out HashSet<ulong> clientIDs))
+        {
+            foreach(ulong newClientID in clientIDs)
+            {
+                ClientMutualShow(clientID, newClientID);
+            }
+        }
+    }
+    // 某个客户端和某个区域的客户端们全部互相 不可见
+    private void HideClientForChunkClients(ulong clientID, Vector2Int chunkCoord)
+    {
+        if (chunkClientDic.TryGetValue(chunkCoord, out HashSet<ulong> clientIDs))
+        {
+            foreach (ulong newClientID in clientIDs)
+            {
+                ClientMutualHide(clientID, newClientID);
+            }
+        }
+    }
+
+    public void RemoveClient(ulong clientID,Vector2Int coord)
+    {
+        if(chunkClientDic.TryGetValue(coord,out HashSet<ulong> clientIDs)) //得到ulong的id
+        {
+            //如果当前坐标下没有玩家，则回收容器。
+            if(clientIDs.Remove(clientID) && clientIDs.Count == 0)
+            {
+                clientIDs.ObjectPushPool();
+                chunkClientDic.Remove(coord);
+            }
+        }
+    }
     
-    //客户端互相可见
+    /// <summary>
+    /// 客户端互相可见
+    /// </summary>
+    /// <param name="clientA"></param>
+    /// <param name="clientB"></param>
     private void ClientMutualShow(ulong clientA,ulong clientB)
     {
         if (clientA == clientB) return;
@@ -31,7 +160,11 @@ public class AOIManager : SingletonMono<AOIManager>
             }
         }
     }
-    //客户端互相不可见
+    /// <summary>
+    /// 客户端互相不可见
+    /// </summary>
+    /// <param name="clientA"></param>
+    /// <param name="clientB"></param>
     private void ClientMutualHide(ulong clientA, ulong clientB)
     {
         if (clientA == clientB) return;
@@ -49,6 +182,11 @@ public class AOIManager : SingletonMono<AOIManager>
                 if (bItem.IsNetworkVisibleTo(clientA)) bItem.NetworkHide(clientA);
             }
         }
+    }
+
+    public Vector2Int GetCoordByWorldPostion(Vector3 worldPostion)
+    {
+        return new Vector2Int((int)(worldPostion.x / chunkSize), (int)(worldPostion.z / chunkSize));
     }
 
 
