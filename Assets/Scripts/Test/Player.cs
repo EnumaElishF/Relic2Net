@@ -19,6 +19,15 @@ public class Player : NetworkBehaviour
             localPlayer = this;
         }
 #endif
+
+#if UNITY_SERVER || SERVER_EDITOR_TEST
+        if (IsServer)
+        {
+            AOIManager.Instance.InitClient(OwnerClientId, Vector2Int.zero); //玩家本人的游戏对象的id
+        }
+
+#endif
+
     }
 
     void Update()
@@ -40,11 +49,20 @@ public class Player : NetworkBehaviour
 //---也就是说，完成上面的数据判断后，把最终的坐标移动交给了服务器。
 //这就是Rpc好用的地方。
 //这里的moveSpeed就算本地客户端作弊，修改了数据，但是服务端在使用的时候用的是服务端的moveSpeed，还达到了防作弊效果。
-[ServerRpc(RequireOwnership =false)]
+[ServerRpc(RequireOwnership =false)]  //只会被服务端调用的方法
     private void HandleMovementServerRpc(Vector3 inputDir)
     {
+        Vector2Int oldCoord = AOIManager.Instance.GetCoordByWorldPostion(transform.position);
         //告诉服务端，有这个事情
         transform.Translate(Time.deltaTime * moveSpeed * inputDir);
+
+        Vector2Int newCoord = AOIManager.Instance.GetCoordByWorldPostion(transform.position);
+        if (newCoord != oldCoord) //发生了地图块的坐标变化
+        {
+            AOIManager.Instance.UpdateClientChunkCoord(OwnerClientId, oldCoord, newCoord);
+
+        }
+ 
     }
 
 

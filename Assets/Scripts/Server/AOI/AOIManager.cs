@@ -4,6 +4,8 @@ using JKFrame;
 using Unity.Netcode;
 public class AOIManager : SingletonMono<AOIManager>
 {
+    private readonly static Vector2Int defaultCoord;
+
     [SerializeField] private float chunkSize = 50; //最远可以看到的其他玩家或者服务端对象
     [SerializeField] private int visualChunkRange = 1;//如果是1，就是刚好周围的一圈：九宫格
     // <chunkCoord,clinetIDs>   记录这一块有哪些客户端玩家
@@ -11,7 +13,24 @@ public class AOIManager : SingletonMono<AOIManager>
     // <chunkCoord,serverObjectIDs>    记录这一块有哪些服务端对象
     private Dictionary<Vector2Int, HashSet<NetworkObject>> chunkServerObjectDic = new Dictionary<Vector2Int, HashSet<NetworkObject>>();
 
+    static AOIManager()
+    {
+        defaultCoord = new Vector2Int(int.MinValue, int.MinValue);
+    }
+
+
     #region Client
+
+    /// <summary>
+    /// 初始化客户端
+    /// </summary>
+    /// <param name="clientID"></param>
+    /// <param name="chunkCoord"></param>
+    public void InitClient(ulong clientID, Vector2Int chunkCoord)
+    {
+        UpdateClientChunkCoord(clientID, defaultCoord, chunkCoord);
+    }
+
     /// <summary>
     /// 更新玩家在AOI地图上的坐标   (检查chunk块)
     /// </summary>
@@ -198,6 +217,7 @@ public class AOIManager : SingletonMono<AOIManager>
             }
         }
     }
+
     /// <summary>
     /// 某个区域的全部服务端对象 对某个客户端 不可见
     /// </summary>
@@ -233,9 +253,98 @@ public class AOIManager : SingletonMono<AOIManager>
 
     #region Server
 
-    public void UpdateServerObjectChunkCoord(ulong clientID, Vector2Int oldCoord, Vector2Int newCoord)
+    /// <summary>
+    /// 初始化服务器对象
+    /// </summary>
+    /// <param name="serverObject"></param>
+    /// <param name="chunkCoord"></param>
+    public void InitServerObject(NetworkObject serverObject, Vector2Int chunkCoord)
     {
+        UpdateServerObjectChunkCoord(serverObject, defaultCoord, chunkCoord);
+    }
 
+    /// <summary>
+    /// 更新服务器对象在AOI地图上的坐标   (检查chunk块)
+    /// </summary>
+    /// <param name="clientID"></param>
+    /// <param name="oldCoord">"coord" 是坐标 "coordinate" 的缩写</param>
+    /// <param name="newCoord"></param>
+    public void UpdateServerObjectChunkCoord(NetworkObject serverObject, Vector2Int oldCoord, Vector2Int newCoord)
+    {
+        if (oldCoord == newCoord) return;
+        // 从旧的地图块中移除
+        RemoveServerObject(serverObject, oldCoord);
+
+        //服务端的对象也要移动，也需要更新格子
+        //判断是否跨地图块移动  (跨地图块的话就是类似传送的情况)
+        if (Vector2Int.Distance(oldCoord, newCoord) > 1.5f) //超过单个格子移动的极限距离,所以是传送性质的位移
+        {
+            //跨块移动
+            //单个格子的斜角度位移肯定是小于1.5f的，超过了就说明超出格子的极限距离 √2 = 1.414
+            for (int x = -visualChunkRange; x <= visualChunkRange; x++) //-1,0,1的九宫格
+            {
+                for (int y = -visualChunkRange; y <= visualChunkRange; y++)
+                {
+                    //虽然看着算法的时间复杂度比较大，但是因为面对的九个格子+客户端数量限制，实际上不会很大
+                    Vector2Int hideChunkCoord = new Vector2Int(oldCoord.x + x, oldCoord.y + y);
+                    Vector2Int showChunkCoord = new Vector2Int(oldCoord.x + x, oldCoord.y + y);
+                    ShowAndHideChunkClientsForServerObject(serverObject, hideChunkCoord, showChunkCoord);
+                }
+            }
+        }
+        else //正常一个格子的移动距离
+        {
+            //非跨块移动，考虑上下左右，以及多个斜方向移动（注：斜方向的则会被分解掉，像是为组合的左上，这种情况)
+            // 上，旧的最下面一行隐藏，新的最上一行显示
+            if (newCoord.y > oldCoord.y)
+            {
+                for (int i = -visualChunkRange; i <= visualChunkRange; i++)
+                {
+                    Vector2Int hideChunkCoord = new Vector2Int(oldCoord.x + i, oldCoord.y - visualChunkRange);
+                    Vector2Int showChunkCoord = new Vector2Int(newCoord.x + i, newCoord.y + visualChunkRange);
+                    ShowAndHideChunkClientsForServerObject(serverObject, hideChunkCoord, showChunkCoord);
+                }
+            }
+            // 下，旧的最下面一行显示，新的最上一行隐藏
+            else if (newCoord.y < oldCoord.y)
+            {
+                for (int i = -visualChunkRange; i <= visualChunkRange; i++)
+                {
+                    Vector2Int hideChunkCoord = new Vector2Int(oldCoord.x + i, oldCoord.y + visualChunkRange);
+                    Vector2Int showChunkCoord = new Vector2Int(newCoord.x + i, newCoord.y - visualChunkRange);
+                    ShowAndHideChunkClientsForServerObject(serverObject, hideChunkCoord, showChunkCoord);
+                }
+            }
+
+            // 左，旧的最右边面一列隐藏，新的最左边一列显示
+            if (newCoord.x < oldCoord.x)
+            {
+                for (int i = -visualChunkRange; i <= visualChunkRange; i++)
+                {
+                    Vector2Int hideChunkCoord = new Vector2Int(oldCoord.x + visualChunkRange, oldCoord.y + i);
+                    Vector2Int showChunkCoord = new Vector2Int(newCoord.x - visualChunkRange, newCoord.y + i);
+                    ShowAndHideChunkClientsForServerObject(serverObject, hideChunkCoord, showChunkCoord);
+                }
+            }
+            // 右，旧的最右边面一列显示，新的最左边一列隐藏
+            else if (newCoord.x > oldCoord.x)
+            {
+                for (int i = -visualChunkRange; i <= visualChunkRange; i++)
+                {
+                    Vector2Int hideChunkCoord = new Vector2Int(oldCoord.x - visualChunkRange, oldCoord.y + i);
+                    Vector2Int showChunkCoord = new Vector2Int(newCoord.x + visualChunkRange, newCoord.y + i);
+                    ShowAndHideChunkClientsForServerObject(serverObject, hideChunkCoord, showChunkCoord);
+                }
+            }
+        }
+
+        // 把服务端对象加入到当前新块
+        if (!chunkServerObjectDic.TryGetValue(newCoord, out HashSet<NetworkObject> serverObjects))
+        {
+            serverObjects = ResSystem.GetOrNew<HashSet<NetworkObject>>();
+            chunkServerObjectDic.Add(newCoord, serverObjects);
+        }
+        serverObjects.Add(serverObject);
     }
 
 
@@ -247,10 +356,10 @@ public class AOIManager : SingletonMono<AOIManager>
         }
     }
 
-    private void ShowAndHideChunkClientsForServerObject(NetworkObject serverObject,Vector2Int chunkCoord)
+    private void ShowAndHideChunkClientsForServerObject(NetworkObject serverObject, Vector2Int hideChunkCoord, Vector2Int showChunkCoord)
     {
-        ShowChunkClientsForServerObject(serverObject, chunkCoord);
-        HideChunkClientsForServerObject(serverObject, chunkCoord);
+        ShowChunkClientsForServerObject(serverObject, showChunkCoord);//这个格子下的所有客户端都 能看见我
+        HideChunkClientsForServerObject(serverObject, hideChunkCoord);//这个格子下的所有客户端都 不能看见我
     }
 
     /// <summary>

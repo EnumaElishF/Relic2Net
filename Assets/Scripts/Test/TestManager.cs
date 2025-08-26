@@ -23,8 +23,8 @@ public class TestManager : MonoBehaviour
         {
             if (ServerTestObject.Instance != null)
             {
-                GUILayout.Label("服务器对象Position:" + ServerTestObject.Instance.transform.position);
-
+                //Debug.Log("服务器对象Position的GUI展示问题");
+                GUILayout.Label("Server Object Position:" + ServerTestObject.Instance.transform.position);
             }
         }
 #endif

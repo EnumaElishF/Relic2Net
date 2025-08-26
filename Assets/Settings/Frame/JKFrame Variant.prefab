@@ -70,6 +70,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6029324472053449204, guid: 92a72c9a3d3131f498a24198d7029305, type: 3}
+      propertyPath: FrameSetting
+      value: 
+      objectReference: {fileID: 11400000, guid: ab7c6adafb87c24418fa80f245d30a95, type: 2}
     - target: {fileID: 6029324472053449205, guid: 92a72c9a3d3131f498a24198d7029305, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

@@ -218,7 +218,7 @@ public class RuntimeScreeLogger : MonoBehaviour
                 string timeAndLog = null;
                 if (logMessage.fromJKLog)
                 {
-                    // 根据框架设置决定是否显示时间  （框架内容修改，修复bug）
+                    // 根据框架设置决定是否显示时间
                     if (JKFrameRoot.Setting.LogConfig.writeTime) timeAndLog = $"[{logMessage.time}]:{logMessage.log}";
                     else timeAndLog = logMessage.log;
 

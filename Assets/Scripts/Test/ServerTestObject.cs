@@ -11,6 +11,7 @@ public class ServerTestObject : NetworkBehaviour
         base.OnNetworkDespawn();
 #if UNITYSERVER || SERVER_EDITOR_TEST
         Instance = this;
+        AOIManager.Instance.InitServerObject(NetworkObject, Vector2Int.zero);
 #endif
      
     }
@@ -28,7 +29,16 @@ public class ServerTestObject : NetworkBehaviour
     }
     private void HandleMovement(Vector3 inputDir)
     {
+
+        Vector2Int oldCoord = AOIManager.Instance.GetCoordByWorldPostion(transform.position);
         //告诉服务端，有这个事情
         transform.Translate(Time.deltaTime * moveSpeed * inputDir);
+        Vector2Int newCoord = AOIManager.Instance.GetCoordByWorldPostion(transform.position);
+        if (newCoord != oldCoord) //发生了地图块的坐标变化
+        {
+            AOIManager.Instance.UpdateServerObjectChunkCoord(NetworkObject, oldCoord, newCoord);
+
+        }
+
     }
 }
