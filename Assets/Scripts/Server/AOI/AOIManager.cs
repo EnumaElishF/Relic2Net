@@ -1,118 +1,113 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using UnityEngine;
 using JKFrame;
 using Unity.Netcode;
 public class AOIManager : SingletonMono<AOIManager>
 {
-    [SerializeField] private float chunkSize = 50; //×îÔ¶¿ÉÒÔ¿´µ½µÄÆäËûÍæ¼Ò»òÕß·şÎñ¶Ë¶ÔÏó
-    [SerializeField] private int visualChunkRange = 1;//Èç¹ûÊÇ1£¬¾ÍÊÇ¸ÕºÃÖÜÎ§µÄÒ»È¦£º¾Å¹¬¸ñ
-    // <chunkCoord,clinetIDs>   ¼ÇÂ¼ÕâÒ»¿éÓĞÄÄĞ©¿Í»§¶ËÍæ¼Ò
+    [SerializeField] private float chunkSize = 50; //æœ€è¿œå¯ä»¥çœ‹åˆ°çš„å…¶ä»–ç©å®¶æˆ–è€…æœåŠ¡ç«¯å¯¹è±¡
+    [SerializeField] private int visualChunkRange = 1;//å¦‚æœæ˜¯1ï¼Œå°±æ˜¯åˆšå¥½å‘¨å›´çš„ä¸€åœˆï¼šä¹å®«æ ¼
+    // <chunkCoord,clinetIDs>   è®°å½•è¿™ä¸€å—æœ‰å“ªäº›å®¢æˆ·ç«¯ç©å®¶
     private Dictionary<Vector2Int, HashSet<ulong>> chunkClientDic = new Dictionary<Vector2Int, HashSet<ulong>>();
-    // <chunkCoord,serverObjectIDs>    ¼ÇÂ¼ÕâÒ»¿éÓĞÄÄĞ©·şÎñ¶Ë¶ÔÏó
+    // <chunkCoord,serverObjectIDs>    è®°å½•è¿™ä¸€å—æœ‰å“ªäº›æœåŠ¡ç«¯å¯¹è±¡
     private Dictionary<Vector2Int, HashSet<NetworkObject>> chunkServerObjectDic = new Dictionary<Vector2Int, HashSet<NetworkObject>>();
+
+    #region Client
     /// <summary>
-    /// ¸üĞÂÍæ¼ÒÔÚAOIµØÍ¼ÉÏµÄ×ø±ê   (¼ì²échunk¿é)
+    /// æ›´æ–°ç©å®¶åœ¨AOIåœ°å›¾ä¸Šçš„åæ ‡   (æ£€æŸ¥chunkå—)
     /// </summary>
     /// <param name="clientID"></param>
-    /// <param name="oldCoord">"coord" ÊÇ×ø±ê "coordinate" µÄËõĞ´</param>
+    /// <param name="oldCoord">"coord" æ˜¯åæ ‡ "coordinate" çš„ç¼©å†™</param>
     /// <param name="newCoord"></param>
-    public void UpdateClientChunkCoord(ulong clientID,Vector2Int oldCoord,Vector2Int newCoord)
+    public void UpdateClientChunkCoord(ulong clientID, Vector2Int oldCoord, Vector2Int newCoord)
     {
         if (oldCoord == newCoord) return;
-        // ´Ó¾ÉµÄµØÍ¼¿éÖĞÒÆ³ı
+        // ä»æ—§çš„åœ°å›¾å—ä¸­ç§»é™¤
         RemoveClient(clientID, oldCoord);
 
-        //ÅĞ¶ÏÊÇ·ñ¿çµØÍ¼¿éÒÆ¶¯  (¿çµØÍ¼¿éµÄ»°¾ÍÊÇÀàËÆ´«ËÍµÄÇé¿ö)
-        if (Vector2Int.Distance(oldCoord, newCoord) > 1.5f) //³¬¹ıµ¥¸ö¸ñ×ÓÒÆ¶¯µÄ¼«ÏŞ¾àÀë,ËùÒÔÊÇ´«ËÍĞÔÖÊµÄÎ»ÒÆ
+        //åˆ¤æ–­æ˜¯å¦è·¨åœ°å›¾å—ç§»åŠ¨  (è·¨åœ°å›¾å—çš„è¯å°±æ˜¯ç±»ä¼¼ä¼ é€çš„æƒ…å†µ)
+        if (Vector2Int.Distance(oldCoord, newCoord) > 1.5f) //è¶…è¿‡å•ä¸ªæ ¼å­ç§»åŠ¨çš„æé™è·ç¦»,æ‰€ä»¥æ˜¯ä¼ é€æ€§è´¨çš„ä½ç§»
         {
-            //¿ç¿éÒÆ¶¯
-            //µ¥¸ö¸ñ×ÓµÄĞ±½Ç¶ÈÎ»ÒÆ¿Ï¶¨ÊÇĞ¡ÓÚ1.5fµÄ£¬³¬¹ıÁË¾ÍËµÃ÷³¬³ö¸ñ×ÓµÄ¼«ÏŞ¾àÀë ¡Ì2 = 1.414
-            for (int x = - visualChunkRange; x<=visualChunkRange; x++) //-1,0,1µÄ¾Å¹¬¸ñ
+            //è·¨å—ç§»åŠ¨
+            //å•ä¸ªæ ¼å­çš„æ–œè§’åº¦ä½ç§»è‚¯å®šæ˜¯å°äº1.5fçš„ï¼Œè¶…è¿‡äº†å°±è¯´æ˜è¶…å‡ºæ ¼å­çš„æé™è·ç¦» âˆš2 = 1.414
+            for (int x = -visualChunkRange; x <= visualChunkRange; x++) //-1,0,1çš„ä¹å®«æ ¼
             {
-                for(int y = -visualChunkRange; y <= visualChunkRange; y++)
+                for (int y = -visualChunkRange; y <= visualChunkRange; y++)
                 {
-                    //ËäÈ»¿´×ÅËã·¨µÄÊ±¼ä¸´ÔÓ¶È±È½Ï´ó£¬µ«ÊÇÒòÎªÃæ¶ÔµÄ¾Å¸ö¸ñ×Ó+¿Í»§¶ËÊıÁ¿ÏŞÖÆ£¬Êµ¼ÊÉÏ²»»áºÜ´ó
+                    //è™½ç„¶çœ‹ç€ç®—æ³•çš„æ—¶é—´å¤æ‚åº¦æ¯”è¾ƒå¤§ï¼Œä½†æ˜¯å› ä¸ºé¢å¯¹çš„ä¹ä¸ªæ ¼å­+å®¢æˆ·ç«¯æ•°é‡é™åˆ¶ï¼Œå®é™…ä¸Šä¸ä¼šå¾ˆå¤§
                     Vector2Int hideChunkCoord = new Vector2Int(oldCoord.x + x, oldCoord.y + y);
                     Vector2Int showChunkCoord = new Vector2Int(oldCoord.x + x, oldCoord.y + y);
-                    ShowAndHideForChunkClients(clientID, hideChunkCoord,showChunkCoord);
+                    ShowAndHideForChunk(clientID, hideChunkCoord, showChunkCoord);
                 }
             }
         }
-        else //Õı³£Ò»¸ö¸ñ×ÓµÄÒÆ¶¯¾àÀë
+        else //æ­£å¸¸ä¸€ä¸ªæ ¼å­çš„ç§»åŠ¨è·ç¦»
         {
-            //·Ç¿ç¿éÒÆ¶¯£¬¿¼ÂÇÉÏÏÂ×óÓÒ£¬ÒÔ¼°¶à¸öĞ±·½ÏòÒÆ¶¯£¨×¢£ºĞ±·½ÏòµÄÔò»á±»·Ö½âµô£¬ÏñÊÇÎª×éºÏµÄ×óÉÏ£¬ÕâÖÖÇé¿ö)
-            // ÉÏ£¬¾ÉµÄ×îÏÂÃæÒ»ĞĞÒş²Ø£¬ĞÂµÄ×îÉÏÒ»ĞĞÏÔÊ¾
+            //éè·¨å—ç§»åŠ¨ï¼Œè€ƒè™‘ä¸Šä¸‹å·¦å³ï¼Œä»¥åŠå¤šä¸ªæ–œæ–¹å‘ç§»åŠ¨ï¼ˆæ³¨ï¼šæ–œæ–¹å‘çš„åˆ™ä¼šè¢«åˆ†è§£æ‰ï¼Œåƒæ˜¯ä¸ºç»„åˆçš„å·¦ä¸Šï¼Œè¿™ç§æƒ…å†µ)
+            // ä¸Šï¼Œæ—§çš„æœ€ä¸‹é¢ä¸€è¡Œéšè—ï¼Œæ–°çš„æœ€ä¸Šä¸€è¡Œæ˜¾ç¤º
             if (newCoord.y > oldCoord.y)
             {
                 for (int i = -visualChunkRange; i <= visualChunkRange; i++)
                 {
                     Vector2Int hideChunkCoord = new Vector2Int(oldCoord.x + i, oldCoord.y - visualChunkRange);
                     Vector2Int showChunkCoord = new Vector2Int(newCoord.x + i, newCoord.y + visualChunkRange);
-                    ShowAndHideForChunkClients(clientID, hideChunkCoord, showChunkCoord);
+                    ShowAndHideForChunk(clientID, hideChunkCoord, showChunkCoord);
                 }
             }
-            // ÏÂ£¬¾ÉµÄ×îÏÂÃæÒ»ĞĞÏÔÊ¾£¬ĞÂµÄ×îÉÏÒ»ĞĞÒş²Ø
+            // ä¸‹ï¼Œæ—§çš„æœ€ä¸‹é¢ä¸€è¡Œæ˜¾ç¤ºï¼Œæ–°çš„æœ€ä¸Šä¸€è¡Œéšè—
             else if (newCoord.y < oldCoord.y)
             {
                 for (int i = -visualChunkRange; i <= visualChunkRange; i++)
                 {
                     Vector2Int hideChunkCoord = new Vector2Int(oldCoord.x + i, oldCoord.y + visualChunkRange);
                     Vector2Int showChunkCoord = new Vector2Int(newCoord.x + i, newCoord.y - visualChunkRange);
-                    ShowAndHideForChunkClients(clientID, hideChunkCoord, showChunkCoord);
+                    ShowAndHideForChunk(clientID, hideChunkCoord, showChunkCoord);
                 }
             }
 
-            // ×ó£¬¾ÉµÄ×îÓÒ±ßÃæÒ»ÁĞÒş²Ø£¬ĞÂµÄ×î×ó±ßÒ»ÁĞÏÔÊ¾
+            // å·¦ï¼Œæ—§çš„æœ€å³è¾¹é¢ä¸€åˆ—éšè—ï¼Œæ–°çš„æœ€å·¦è¾¹ä¸€åˆ—æ˜¾ç¤º
             if (newCoord.x < oldCoord.x)
             {
                 for (int i = -visualChunkRange; i <= visualChunkRange; i++)
                 {
                     Vector2Int hideChunkCoord = new Vector2Int(oldCoord.x + visualChunkRange, oldCoord.y + i);
                     Vector2Int showChunkCoord = new Vector2Int(newCoord.x - visualChunkRange, newCoord.y + i);
-                    ShowAndHideForChunkClients(clientID, hideChunkCoord, showChunkCoord);
+                    ShowAndHideForChunk(clientID, hideChunkCoord, showChunkCoord);
                 }
             }
-            // ÓÒ£¬¾ÉµÄ×îÓÒ±ßÃæÒ»ÁĞÏÔÊ¾£¬ĞÂµÄ×î×ó±ßÒ»ÁĞÒş²Ø
+            // å³ï¼Œæ—§çš„æœ€å³è¾¹é¢ä¸€åˆ—æ˜¾ç¤ºï¼Œæ–°çš„æœ€å·¦è¾¹ä¸€åˆ—éšè—
             else if (newCoord.x > oldCoord.x)
             {
                 for (int i = -visualChunkRange; i <= visualChunkRange; i++)
                 {
                     Vector2Int hideChunkCoord = new Vector2Int(oldCoord.x - visualChunkRange, oldCoord.y + i);
                     Vector2Int showChunkCoord = new Vector2Int(newCoord.x + visualChunkRange, newCoord.y + i);
-                    ShowAndHideForChunkClients(clientID, hideChunkCoord, showChunkCoord);
+                    ShowAndHideForChunk(clientID, hideChunkCoord, showChunkCoord);
                 }
             }
         }
 
-        //°Ñ¿Í»§¶Ë¼ÓÈëµ±Ç°ĞÂµÄ¿é----ÏÈ´Ó¾ÉµÄµØÍ¼¿éÖĞÒÆ³ı£¬ÓÖ°Ñ¿Í»§¶Ë¼ÓÈëµ±Ç°ĞÂµÄ¿é¡£ÕâÑù×îÄÚ²àµÄ·½·¨Ò²±£Ö¤ÁË×Ô¼º²»»á´æ×Ô¼ºµÄÇé¿ö
-        if (!chunkClientDic.TryGetValue(newCoord,out HashSet<ulong> newCoordClientIDs))
+        //æŠŠå®¢æˆ·ç«¯åŠ å…¥å½“å‰æ–°çš„å—----å…ˆä»æ—§çš„åœ°å›¾å—ä¸­ç§»é™¤ï¼ŒåˆæŠŠå®¢æˆ·ç«¯åŠ å…¥å½“å‰æ–°çš„å—ã€‚è¿™æ ·æœ€å†…ä¾§çš„æ–¹æ³•ä¹Ÿä¿è¯äº†è‡ªå·±ä¸ä¼šå­˜è‡ªå·±çš„æƒ…å†µ
+        if (!chunkClientDic.TryGetValue(newCoord, out HashSet<ulong> newCoordClientIDs))
         {
             newCoordClientIDs = ResSystem.GetOrNew<HashSet<ulong>>();
-            chunkClientDic.Add(newCoord,newCoordClientIDs);
+            chunkClientDic.Add(newCoord, newCoordClientIDs);
         }
         newCoordClientIDs.Add(clientID);
     }
 
-    /// <summary>
-    /// ÎªÄ³¸öµØÍ¼¿éÏÂµÄÈ«²¿¿Í»§¶Ë£¬ÏÔÊ¾ÓëÒş²ØÄ³¸ö¿Í»§¶Ë
-    /// </summary>
-    private void ShowAndHideForChunkClients(ulong clientID,Vector2Int hideChunkCoord,Vector2Int showChunkCoord)
+
+    // æŸä¸ªå®¢æˆ·ç«¯å’ŒæŸä¸ªåŒºåŸŸçš„å®¢æˆ·ç«¯ä»¬å…¨éƒ¨äº’ç›¸ å¯è§
+    private void ShowClientForChunkClients(ulong clientID, Vector2Int chunkCoord)
     {
-        ShowClientForChunkClients(clientID, showChunkCoord);
-        HideClientForChunkClients(clientID, hideChunkCoord);
-    }
-    // Ä³¸ö¿Í»§¶ËºÍÄ³¸öÇøÓòµÄ¿Í»§¶ËÃÇÈ«²¿»¥Ïà ¿É¼û
-    private void ShowClientForChunkClients(ulong clientID,Vector2Int chunkCoord)
-    {
-        if(chunkClientDic.TryGetValue(chunkCoord,out HashSet<ulong> clientIDs))
+        if (chunkClientDic.TryGetValue(chunkCoord, out HashSet<ulong> clientIDs))
         {
-            foreach(ulong newClientID in clientIDs)
+            foreach (ulong newClientID in clientIDs)
             {
                 ClientMutualShow(clientID, newClientID);
             }
         }
     }
-    // Ä³¸ö¿Í»§¶ËºÍÄ³¸öÇøÓòµÄ¿Í»§¶ËÃÇÈ«²¿»¥Ïà ²»¿É¼û
+    // æŸä¸ªå®¢æˆ·ç«¯å’ŒæŸä¸ªåŒºåŸŸçš„å®¢æˆ·ç«¯ä»¬å…¨éƒ¨äº’ç›¸ ä¸å¯è§
     private void HideClientForChunkClients(ulong clientID, Vector2Int chunkCoord)
     {
         if (chunkClientDic.TryGetValue(chunkCoord, out HashSet<ulong> clientIDs))
@@ -124,36 +119,36 @@ public class AOIManager : SingletonMono<AOIManager>
         }
     }
 
-    public void RemoveClient(ulong clientID,Vector2Int coord)
+    public void RemoveClient(ulong clientID, Vector2Int coord)
     {
-        if(chunkClientDic.TryGetValue(coord,out HashSet<ulong> clientIDs)) //µÃµ½ulongµÄid
+        if (chunkClientDic.TryGetValue(coord, out HashSet<ulong> clientIDs)) //å¾—åˆ°ulongçš„id
         {
-            //Èç¹ûµ±Ç°×ø±êÏÂÃ»ÓĞÍæ¼Ò£¬Ôò»ØÊÕÈİÆ÷¡£
-            if(clientIDs.Remove(clientID) && clientIDs.Count == 0)
+            //å¦‚æœå½“å‰åæ ‡ä¸‹æ²¡æœ‰ç©å®¶ï¼Œåˆ™å›æ”¶å®¹å™¨ã€‚
+            if (clientIDs.Remove(clientID) && clientIDs.Count == 0)
             {
                 clientIDs.ObjectPushPool();
                 chunkClientDic.Remove(coord);
             }
         }
     }
-    
+
     /// <summary>
-    /// ¿Í»§¶Ë»¥Ïà¿É¼û
+    /// å®¢æˆ·ç«¯äº’ç›¸å¯è§
     /// </summary>
     /// <param name="clientA"></param>
     /// <param name="clientB"></param>
-    private void ClientMutualShow(ulong clientA,ulong clientB)
+    private void ClientMutualShow(ulong clientA, ulong clientB)
     {
         if (clientA == clientB) return;
         if (NetManager.Instance.SpawnManager.OwnershipToObjectsTable.TryGetValue(clientA, out Dictionary<ulong, NetworkObject> aNetWorObjectDic)
             && NetManager.Instance.SpawnManager.OwnershipToObjectsTable.TryGetValue(clientB, out Dictionary<ulong, NetworkObject> bNetWorObjectDic))
         {
-            // A¿É¼ûB
+            // Aå¯è§B
             foreach (NetworkObject aItem in aNetWorObjectDic.Values)
             {
-                if (!aItem.IsNetworkVisibleTo(clientB)) aItem.NetworkShow(clientB);//Èç¹û²»¿É¼û¾ÍÕ¹Ê¾
+                if (!aItem.IsNetworkVisibleTo(clientB)) aItem.NetworkShow(clientB);//å¦‚æœä¸å¯è§å°±å±•ç¤º
             }
-            // B¿É¼ûA
+            // Bå¯è§A
             foreach (NetworkObject bItem in bNetWorObjectDic.Values)
             {
                 if (!bItem.IsNetworkVisibleTo(clientA)) bItem.NetworkShow(clientA);
@@ -161,7 +156,7 @@ public class AOIManager : SingletonMono<AOIManager>
         }
     }
     /// <summary>
-    /// ¿Í»§¶Ë»¥Ïà²»¿É¼û
+    /// å®¢æˆ·ç«¯äº’ç›¸ä¸å¯è§
     /// </summary>
     /// <param name="clientA"></param>
     /// <param name="clientB"></param>
@@ -171,18 +166,135 @@ public class AOIManager : SingletonMono<AOIManager>
         if (NetManager.Instance.SpawnManager.OwnershipToObjectsTable.TryGetValue(clientA, out Dictionary<ulong, NetworkObject> aNetWorObjectDic)
             && NetManager.Instance.SpawnManager.OwnershipToObjectsTable.TryGetValue(clientB, out Dictionary<ulong, NetworkObject> bNetWorObjectDic))
         {
-            // A¿É¼ûB
+            // Aå¯è§B
             foreach (NetworkObject aItem in aNetWorObjectDic.Values)
             {
-                if (aItem.IsNetworkVisibleTo(clientB)) aItem.NetworkHide(clientB); //Èç¹û¿É¼û¾ÍÒş²Ø
+                if (aItem.IsNetworkVisibleTo(clientB)) aItem.NetworkHide(clientB); //å¦‚æœå¯è§å°±éšè—
             }
-            // B¿É¼ûA
+            // Bå¯è§A
             foreach (NetworkObject bItem in bNetWorObjectDic.Values)
             {
                 if (bItem.IsNetworkVisibleTo(clientA)) bItem.NetworkHide(clientA);
             }
         }
     }
+
+
+    /// <summary>
+    /// æŸä¸ªåŒºåŸŸçš„å…¨éƒ¨æœåŠ¡ç«¯å¯¹è±¡ å¯¹æŸä¸ªå®¢æˆ·ç«¯ å¯è§
+    /// </summary>
+    /// <param name="clientID"></param>
+    /// <param name="chunkCoord"></param>
+    private void ShowChunkServerObjectForClient(ulong clientID, Vector2Int chunkCoord)
+    {
+        if (chunkServerObjectDic.TryGetValue(chunkCoord, out HashSet<NetworkObject> serverObjects))
+        {
+            foreach (NetworkObject serverObject in serverObjects)
+            {
+                if (!serverObject.IsNetworkVisibleTo(clientID)) //å¦‚æœæ˜¯ä¸å¯è§çš„ï¼Œå°±ç»™ä»–æ”¹æˆ å¯è§
+                {
+                    serverObject.NetworkShow(clientID);
+                }
+            }
+        }
+    }
+    /// <summary>
+    /// æŸä¸ªåŒºåŸŸçš„å…¨éƒ¨æœåŠ¡ç«¯å¯¹è±¡ å¯¹æŸä¸ªå®¢æˆ·ç«¯ ä¸å¯è§
+    /// </summary>
+    /// <param name="clientID"></param>
+    /// <param name="chunkCoord"></param>
+    private void HideChunkServerObjectForClient(ulong clientID, Vector2Int chunkCoord)
+    {
+        if (chunkServerObjectDic.TryGetValue(chunkCoord, out HashSet<NetworkObject> serverObjects))
+        {
+            foreach (NetworkObject serverObject in serverObjects)
+            {
+                if (serverObject.IsNetworkVisibleTo(clientID)) //å¦‚æœæ˜¯å¯è§çš„ï¼Œå°±ç»™ä»–æ”¹æˆ ä¸å¯è§
+                {
+                    serverObject.NetworkHide(clientID);
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// ä¸ºæŸä¸ªåœ°å›¾å—ä¸‹çš„å…¨éƒ¨çš„å®¢æˆ·ç«¯ï¼Œæ˜¾ç¤ºä¸éšè—çš„æ§åˆ¶ {æ—¢æœ‰åŒºåŸŸå†…å®¢æˆ·ç«¯äº’ç›¸æ˜¯å¦å¯è§ï¼Œåˆæœ‰æœåŠ¡ç«¯ä¸Šçš„å¯¹è±¡å¯¹å®¢æˆ·ç«¯çš„æ˜¯å¦å¯è§}
+    /// </summary>
+    private void ShowAndHideForChunk(ulong clientID, Vector2Int hideChunkCoord, Vector2Int showChunkCoord)
+    {
+        ShowClientForChunkClients(clientID, showChunkCoord);
+        HideClientForChunkClients(clientID, hideChunkCoord);
+        ShowChunkServerObjectForClient(clientID, showChunkCoord);
+        HideChunkServerObjectForClient(clientID, hideChunkCoord);
+    }
+    #endregion
+
+
+
+    #region Server
+
+    public void UpdateServerObjectChunkCoord(ulong clientID, Vector2Int oldCoord, Vector2Int newCoord)
+    {
+
+    }
+
+
+    public void RemoveServerObject(NetworkObject serverObject, Vector2Int chunkCoord)
+    {
+        if (chunkServerObjectDic.TryGetValue(chunkCoord, out HashSet<NetworkObject> serverObjects))
+        {
+            serverObjects.Remove(serverObject);
+        }
+    }
+
+    private void ShowAndHideChunkClientsForServerObject(NetworkObject serverObject,Vector2Int chunkCoord)
+    {
+        ShowChunkClientsForServerObject(serverObject, chunkCoord);
+        HideChunkClientsForServerObject(serverObject, chunkCoord);
+    }
+
+    /// <summary>
+    /// ä¸ºä¸€ä¸ªæœåŠ¡ç«¯å¯¹è±¡ æ˜¾ç¤º æŸä¸ªåŒºåŸŸ(åœ°å›¾å—)ä¸‹çš„å…¨éƒ¨å®¢æˆ·ç«¯
+    /// </summary>
+    /// <param name="serverObject"></param>
+    /// <param name="chunkCoord"></param>
+
+    private void ShowChunkClientsForServerObject(NetworkObject serverObject,Vector2Int chunkCoord)
+    {
+        if(chunkClientDic.TryGetValue(chunkCoord,out HashSet<ulong> clientIDs))
+        {
+            foreach(ulong clientID in clientIDs)
+            {
+                if (!serverObject.IsNetworkVisibleTo(clientID))
+                {
+                    serverObject.NetworkShow(clientID);
+                }
+            }
+        }
+    }
+    /// <summary>
+    /// ä¸ºä¸€ä¸ªæœåŠ¡ç«¯å¯¹è±¡ éšè— æŸä¸ªåŒºåŸŸ(åœ°å›¾å—)ä¸‹çš„å…¨éƒ¨å®¢æˆ·ç«¯
+    /// </summary>
+    /// <param name="serverObject"></param>
+    /// <param name="chunkCoord"></param>
+    private void HideChunkClientsForServerObject(NetworkObject serverObject, Vector2Int chunkCoord)
+    {
+        if (chunkClientDic.TryGetValue(chunkCoord, out HashSet<ulong> clientIDs))
+        {
+            foreach (ulong clientID in clientIDs)
+            {
+                if (serverObject.IsNetworkVisibleTo(clientID))
+                {
+                    serverObject.NetworkHide(clientID);
+                }
+            }
+        }
+    }
+
+    #endregion
+
+
+
 
     public Vector2Int GetCoordByWorldPostion(Vector3 worldPostion)
     {
