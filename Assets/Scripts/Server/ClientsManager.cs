@@ -1,4 +1,3 @@
-# if UNITY_SERVER || SERVER_EDITOR_TEST
 using JKFrame;
 using System;
 using System.Collections;
@@ -26,4 +25,3 @@ public class ClientsManager : SingletonMono<ClientsManager>
         NetManager.Instance.SpawnObject(clientID, playerPrefab, Vector3.zero);
     }
 }
-#endif

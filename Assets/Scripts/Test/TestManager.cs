@@ -7,17 +7,14 @@ public class TestManager : MonoBehaviour
     public GameObject serverTestObjectPrefab;
     private void Start()
     {
-#if UNITYSERVER || SERVER_EDITOR_TEST
-        if (NetManager.Instance.IsServer)
-        {
-            NetManager.Instance.SpawnObject(NetManager.ServerClientId, serverTestObjectPrefab, Vector3.zero);
-        }
+#if UNITYSERVER || UNITY_EDITOR
+        NetManager.Instance.SpawnObject(NetManager.ServerClientId, serverTestObjectPrefab, Vector3.zero);
 #endif
     }
 
     private void OnGUI()
     {
-#if UNITY_SERVER || SERVER_EDITOR_TEST
+#if UNITY_SERVER || UNITY_EDITOR
         //服务器
         if (NetManager.Instance.IsServer)
         {
@@ -29,7 +26,7 @@ public class TestManager : MonoBehaviour
         }
 #endif
 
-#if !UNITY_SERVER || SERVER_EDITOR_TEST
+#if !UNITY_SERVER || UNITY_EDITOR
         //客户端
         if (Player.localPlayer != null)
         {

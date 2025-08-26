@@ -12,15 +12,15 @@ public class Player : NetworkBehaviour
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
-#if !UNITY_SERVER
-        if(IsOwner&& IsClient)
+#if !UNITY_SERVER || UNITY_EDITOR
+		if (IsOwner&& IsClient)
         {
             //客户端快速访问到 “自己控制的玩家对象”
             localPlayer = this;
         }
 #endif
 
-#if UNITY_SERVER || SERVER_EDITOR_TEST
+#if UNITY_SERVER || UNITY_EDITOR
         if (IsServer)
         {
             AOIManager.Instance.InitClient(OwnerClientId, Vector2Int.zero); //玩家本人的游戏对象的id
@@ -52,7 +52,9 @@ public class Player : NetworkBehaviour
 [ServerRpc(RequireOwnership =false)]  //只会被服务端调用的方法
     private void HandleMovementServerRpc(Vector3 inputDir)
     {
-        Vector2Int oldCoord = AOIManager.Instance.GetCoordByWorldPostion(transform.position);
+
+#if UNITY_SERVER || UNITY_EDITOR
+		Vector2Int oldCoord = AOIManager.Instance.GetCoordByWorldPostion(transform.position);
         //告诉服务端，有这个事情
         transform.Translate(Time.deltaTime * moveSpeed * inputDir);
 
@@ -62,8 +64,10 @@ public class Player : NetworkBehaviour
             AOIManager.Instance.UpdateClientChunkCoord(OwnerClientId, oldCoord, newCoord);
 
         }
- 
-    }
+#endif
+
+
+	}
 
 
 }

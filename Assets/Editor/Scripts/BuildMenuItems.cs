@@ -148,12 +148,12 @@ public static class BuildMenuItems
     }
     #region 服务端测试宏
     public static bool editorServerTest;
-    public const string editorServerTestSymbolString = "SERVER_EDITOR_TEST";
+    public const string editorServerTestSymbolString = "UNITY_EDITOR";
     [MenuItem("Project/TestServer")]
     public static void TestServer()
     {
         editorServerTest = !editorServerTest;
-        //增加预处理指令   自定义的SERVER_EDITOR_TEST，移除预处理指令  SERVER_EDITOR_TEST
+        //增加预处理指令   自定义的UNITY_EDITOR，移除预处理指令  UNITY_EDITOR
         if (editorServerTest) JKFrameSetting.AddScriptCompilationSymbol(editorServerTestSymbolString);
         else JKFrameSetting.RemoveScriptCompilationSymbol(editorServerTestSymbolString);
         Menu.SetChecked("Project/TestServer", editorServerTest);

@@ -9,7 +9,7 @@ public class ServerTestObject : NetworkBehaviour
     public override void OnNetworkDespawn()
     {
         base.OnNetworkDespawn();
-#if UNITYSERVER || SERVER_EDITOR_TEST
+#if UNITYSERVER || UNITY_EDITOR
         Instance = this;
         AOIManager.Instance.InitServerObject(NetworkObject, Vector2Int.zero);
 #endif
@@ -17,7 +17,7 @@ public class ServerTestObject : NetworkBehaviour
     }
     private void Update()
     {
-#if UNITYSERVER || SERVER_EDITOR_TEST
+#if UNITYSERVER || UNITY_EDITOR
         if (IsServer)
         {
             float h = Input.GetAxisRaw("Horizontal");
