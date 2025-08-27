@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class QuadTree 
+public class QuadTree
 {
     private static MapConfig mapConfig;
     private class Node
@@ -14,11 +14,16 @@ public class QuadTree
         private bool isTerrain;
         private Vector2Int terrainCoord;
 
+
         public Node(Bounds bounds,bool divide)
         {
             this.bounds = bounds;
             isTerrain = CheckTerrain(out terrainCoord);
-            
+
+            if (isTerrain)
+            {
+                Debug.Log("输出1600次:");
+            }
 
             if (divide && bounds.size.x > mapConfig.minQuadTreeNodeSize)
             {
@@ -43,7 +48,8 @@ public class QuadTree
         private bool CheckTerrain(out Vector2Int coord)
         {
             Vector3 size = bounds.size;
-            bool isTerrain = size.x == mapConfig.terrainSize && size.y == mapConfig.terrainSize;
+            //! 2d和3d参数在一起的时候，经常容易犯的低级错误，该写z的地方，容易写成y（错误），一定注意
+            bool isTerrain = size.x == mapConfig.terrainSize && size.z == mapConfig.terrainSize;
             coord = Vector2Int.zero;
             if (isTerrain)
             {
@@ -52,10 +58,27 @@ public class QuadTree
             }
             return isTerrain;
         }
+
+#if UNITY_EDITOR
+        public void Draw()
+        {
+            Gizmos.color = isTerrain ? Color.green : Color.white;
+            Gizmos.DrawWireCube(bounds.center, bounds.size * 1);
+            //绘制完后把颜色改回去
+            Gizmos.color = Color.white;
+
+
+            leftAndTop?.Draw();
+            rightAndTop?.Draw();
+            leftAndBottom?.Draw();
+            rightAndBottom?.Draw();
+        }
+#endif
+
     }
 
     private Node rootNode;
-    public QuadTree(MapConfig config, Action<Vector2Int> terrainEanble, Action<Vector2Int> terrainDisable, Func<Bounds, bool> checkVisibility)
+    public QuadTree(MapConfig config)
     {
         mapConfig = config;
         //这样就是一个19200*19200*200的立方体盒子
@@ -63,5 +86,12 @@ public class QuadTree
 
         rootNode = new Node(rootBounds, true);
     }
+#if UNITY_EDITOR
+
+    public void Draw()
+    {
+        rootNode?.Draw();
+    }
+#endif
 
 }
