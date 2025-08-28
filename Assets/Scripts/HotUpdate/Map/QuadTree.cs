@@ -6,6 +6,7 @@ public class QuadTree
     private static MapConfig mapConfig;
     private static Action<Vector2Int> onTerrainEnable;
     private static Action<Vector2Int> onTerrainDisable;
+    private static Func<Bounds,bool> onCheckVisibility; //带有包围盒参数Bounds的返回值为bool的 委托
     private class Node
     {
         public Bounds bounds;
@@ -65,6 +66,50 @@ public class QuadTree
             return isTerrain;
         }
 
+        private bool active = false;
+
+        public void CheckVisibility()
+        {
+            bool newActiveState = onCheckVisibility(bounds);
+            // 考虑 如果当前节点 == 旧节点，那就是他没变过，那他没变化，他的子节点有一部分原来看的见，现在看不到
+            // 他原本可见，现在不可见，那一定是要全部Disable掉的。但是如果子节点有变化，但是他作为父节点没有变化，需要深入考虑
+
+            //（1） 原本可见，现在可见  （2） 原本不可见，现在可见  
+            // (active && newActiveState) 或 (!active && newActiveState) 其实就是两种情况,是需要考虑进行 深度递归的
+            if (newActiveState)
+            {
+                // 原本可见，现在可见 :那就全部跑一遍检查，深度递归
+                if (isTerrain) onTerrainEnable.Invoke(terrainCoord);
+                else
+                {
+                    leftAndTop?.CheckVisibility();
+                    rightAndTop?.CheckVisibility();
+                    leftAndBottom?.CheckVisibility();
+                    rightAndBottom?.CheckVisibility();
+                }
+            }
+            else if (active && !newActiveState) // 原本可见，现在不可见
+            {
+                Disable();
+            }
+            //最终，递归都完事了，进行active变量的维护
+            active = newActiveState;
+        }
+        public void Disable()
+        {
+            //递归，检查是不是要Disable
+            leftAndTop?.Disable();
+            rightAndTop?.Disable();
+            leftAndBottom?.Disable();
+            rightAndBottom?.Disable();
+            if (isTerrain)
+            {
+                //如果是Terrain，需要告诉他，去Disable掉，（他需要terrainCoord坐标）
+                onTerrainDisable.Invoke(terrainCoord);
+            }
+            //如果不是Terrain，那就什么都不用管了，当前就被关闭掉了
+        }
+
 #if UNITY_EDITOR
         public void Draw()
         {
@@ -84,16 +129,22 @@ public class QuadTree
     }
 
     private Node rootNode;
-    public QuadTree(MapConfig config, Action<Vector2Int> terrainEnable, Action<Vector2Int> terrainDisable)
+    public QuadTree(MapConfig config, Action<Vector2Int> terrainEnable, Action<Vector2Int> terrainDisable, Func<Bounds, bool> checkVisibility)
     {
         mapConfig = config;
         onTerrainEnable = terrainEnable;
         onTerrainDisable = terrainDisable;
+        onCheckVisibility = checkVisibility;
 
         //这样就是一个19200*19200*200的立方体盒子
         Bounds rootBounds = new Bounds(new Vector3(0, mapConfig.terrainMaxHeight / 2, 0), new Vector3(mapConfig.quadTreeSize.x, mapConfig.terrainMaxHeight, mapConfig.quadTreeSize.y));
 
         rootNode = new Node(rootBounds, true);
+    }
+
+    public void CheckVisibility()
+    {
+        rootNode.CheckVisibility();
     }
 #if UNITY_EDITOR
 

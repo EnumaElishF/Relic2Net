@@ -91,23 +91,30 @@ public class ClientMapManager : SingletonMono<ClientMapManager>
     private QuadTree quadTree;
     private Dictionary<Vector2Int, TerrainController> terrainControllDic = new Dictionary<Vector2Int, TerrainController>(300);
     private List<Vector2Int> destroyTerrainCoords = new List<Vector2Int>(100);//销毁Terrain的坐标
-
+    private Plane[] cameraPlanes; //相机的视椎体的所有面，有6个面对应6个Panel
+    private Vector2Int playerTerrainCoord;
     protected override void Awake()
     {
         base.Awake();
-        quadTree = new QuadTree(mapConfig,EnableTerrain,DisableTerrain);
+        //四叉树
+        quadTree = new QuadTree(mapConfig,EnableTerrain,DisableTerrain,CheckVisibility);
     }
 
     private void Update()
     {
-        //玩家坐标的问题：首先加载玩家的当前所在块 (每一帧玩家的位置会变，需要确保玩家当前所在的块，是被优先加载进来的）
+        //相机,面
+        GeometryUtility.CalculateFrustumPlanes(camera, cameraPlanes);
+
+        //玩家坐标的问题：确保加载玩家的当前所在块 (每一帧玩家的位置会变，需要确保玩家当前所在的块，是被优先加载进来的）
+        quadTree.CheckVisibility();
         if (camera != null)
         {
             //玩家当前坐标所在地图块
-            Vector2Int playerTerrainCoord = GetTerrainCoordByWorldPos(camera.transform.position);
+            playerTerrainCoord = GetTerrainCoordByWorldPos(camera.transform.position);
             EnableTerrain(playerTerrainCoord);//玩家坐标穿给Enable需要的Terrain
 
         }
+
 
         //Terrain的管理
         foreach (KeyValuePair<Vector2Int, TerrainController> item in terrainControllDic)
@@ -145,6 +152,23 @@ public class ClientMapManager : SingletonMono<ClientMapManager>
     private Vector2Int GetTerrainCoordByWorldPos(Vector3 worldPos)
     {
         return new Vector2Int((int)(worldPos.x / mapConfig.terrainSize), (int)(worldPos.z / mapConfig.terrainSize));
+    }
+
+    private Vector3 GetWorldPosByTerrainCoord(Vector2Int coord)
+    {
+        return new Vector3(coord.x * mapConfig.terrainSize, 0, coord.y * mapConfig.terrainSize);
+    }
+
+    private bool CheckVisibility(Bounds bounds)
+    {
+        //希望实际的可见范围大一些,（因为使用异步加载，让加载的范围大一些，防止真的摄像机看的时候资源还没加载好
+        bounds.size *= 2;
+
+        if (GeometryUtility.TestPlanesAABB(cameraPlanes, bounds)) return true;
+        // 玩家当前地块附近的地块要显示：（另外这里的bounds.size因为传的时候乘2了，所以玩家周围地块会超过九宫格，范围变大
+        Vector3 boundsCenter = GetWorldPosByTerrainCoord(playerTerrainCoord);
+        Bounds playerTerrainBounds = new Bounds(boundsCenter, new Vector3(mapConfig.terrainSize, mapConfig.terrainMaxHeight, mapConfig.terrainSize) * 3);//xz都*3倍，变为九宫格的样式
+        return bounds.Intersects(playerTerrainBounds);
     }
 
 # if UNITY_EDITOR
