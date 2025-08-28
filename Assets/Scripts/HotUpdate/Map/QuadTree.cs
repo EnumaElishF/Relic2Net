@@ -55,6 +55,10 @@ public class QuadTree
             {
                 coord.x = (int)(bounds.center.x / mapConfig.terrainSize);
                 coord.y = (int)(bounds.center.z / mapConfig.terrainSize); //因为是2d的所以用z
+                //剔除mapSize的符合尺寸以外的terrain
+                int maxCoordAbsX = (int)(mapConfig.mapSize.x / mapConfig.terrainSize) / 2;
+                int maxCoordAbsY = (int)(mapConfig.mapSize.y / mapConfig.terrainSize) / 2;
+                isTerrain = Mathf.Abs(coord.x) < maxCoordAbsX && Mathf.Abs(coord.y) < maxCoordAbsY;
             }
             return isTerrain;
         }
@@ -82,7 +86,7 @@ public class QuadTree
     {
         mapConfig = config;
         //这样就是一个19200*19200*200的立方体盒子
-        Bounds rootBounds = new Bounds(new Vector3(0, mapConfig.terrainMaxHeight / 2, 0), new Vector3(mapConfig.quadTreeSize.x / 2, mapConfig.terrainMaxHeight, mapConfig.quadTreeSize.x / 2));
+        Bounds rootBounds = new Bounds(new Vector3(0, mapConfig.terrainMaxHeight / 2, 0), new Vector3(mapConfig.quadTreeSize.x, mapConfig.terrainMaxHeight, mapConfig.quadTreeSize.y));
 
         rootNode = new Node(rootBounds, true);
     }
