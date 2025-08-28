@@ -182,7 +182,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mapConfig: {fileID: 11400000, guid: d40c17d03978e5c4e98e415c8cc271b6, type: 2}
-  drawGizmos: 0
+  camera: {fileID: 1904977068793292977}
+  destroyTerrainTime: 60
+  drawGizmos: 1
 --- !u!1 &8142021973657567203
 GameObject:
   m_ObjectHideFlags: 0
@@ -308,6 +310,10 @@ PrefabInstance:
     - target: {fileID: 3777783239231947834, guid: dc7cbcac4b7aa204c9c0440b609a7476, type: 3}
       propertyPath: m_Name
       value: CenterTerrain
+      objectReference: {fileID: 0}
+    - target: {fileID: 3777783239231947834, guid: dc7cbcac4b7aa204c9c0440b609a7476, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7998638903484316818, guid: dc7cbcac4b7aa204c9c0440b609a7476, type: 3}
       propertyPath: m_LocalPosition.x

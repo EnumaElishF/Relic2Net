@@ -287,14 +287,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 17157920834711019, guid: 4f1c82b8ba416ea4eb755ff60365c6ba, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6622508188065258192, guid: 4f1c82b8ba416ea4eb755ff60365c6ba, type: 3}
-      propertyPath: drawGizmos
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 7086279215717684496, guid: 4f1c82b8ba416ea4eb755ff60365c6ba, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

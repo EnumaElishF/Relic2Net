@@ -4,6 +4,8 @@ using UnityEngine;
 public class QuadTree
 {
     private static MapConfig mapConfig;
+    private static Action<Vector2Int> onTerrainEnable;
+    private static Action<Vector2Int> onTerrainDisable;
     private class Node
     {
         public Bounds bounds;
@@ -82,9 +84,12 @@ public class QuadTree
     }
 
     private Node rootNode;
-    public QuadTree(MapConfig config)
+    public QuadTree(MapConfig config, Action<Vector2Int> terrainEnable, Action<Vector2Int> terrainDisable)
     {
         mapConfig = config;
+        onTerrainEnable = terrainEnable;
+        onTerrainDisable = terrainDisable;
+
         //这样就是一个19200*19200*200的立方体盒子
         Bounds rootBounds = new Bounds(new Vector3(0, mapConfig.terrainMaxHeight / 2, 0), new Vector3(mapConfig.quadTreeSize.x, mapConfig.terrainMaxHeight, mapConfig.quadTreeSize.y));
 
