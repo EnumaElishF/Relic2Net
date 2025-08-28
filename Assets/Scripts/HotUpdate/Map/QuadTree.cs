@@ -23,10 +23,10 @@ public class QuadTree
             this.bounds = bounds;
             isTerrain = CheckTerrain(out terrainCoord);
 
-            if (isTerrain)
-            {
-                Debug.Log("输出1600次:");
-            }
+            //if (isTerrain)
+            //{
+            //    Debug.Log("输出1600次:");
+            //}
 
             if (divide && bounds.size.x > mapConfig.minQuadTreeNodeSize)
             {

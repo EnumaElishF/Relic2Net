@@ -184,7 +184,7 @@ MonoBehaviour:
   mapConfig: {fileID: 11400000, guid: d40c17d03978e5c4e98e415c8cc271b6, type: 2}
   camera: {fileID: 1904977068793292977}
   destroyTerrainTime: 60
-  drawGizmos: 1
+  drawGizmos: 0
 --- !u!1 &8142021973657567203
 GameObject:
   m_ObjectHideFlags: 0

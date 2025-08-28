@@ -16,7 +16,7 @@ public class ClientMapManager : SingletonMono<ClientMapManager>
 
         public void Enable()
         {
-            if (state == TerrainState.Disable)
+            if (state != TerrainState.Enable)
             {
                 destroyTimer = 0;
                 state = TerrainState.Enable;
@@ -26,6 +26,18 @@ public class ClientMapManager : SingletonMono<ClientMapManager>
                 }
             }
         }
+        public void Disable()
+        {
+            if (state != TerrainState.Disable)
+            {
+                state = TerrainState.Disable;
+                if (terrain != null)
+                {
+                    terrain.gameObject.SetActive(false);
+                }
+            }
+        }
+
         public void Load(Vector2Int coord)
         {
             Vector2Int resCoord = coord + ClientMapManager.Instance.mapConfig.terrainResKeyCoordOffset;
@@ -49,7 +61,7 @@ public class ClientMapManager : SingletonMono<ClientMapManager>
                 {
                     terrain.gameObject.SetActive(false);
                 }
-            }, ClientMapManager.Instance.transform);
+            }, ClientMapManager.Instance.transform, null, false); //false关闭自动释放
         }
         public bool CheckAndDestroy()
         {
@@ -64,20 +76,13 @@ public class ClientMapManager : SingletonMono<ClientMapManager>
             }
             return false;
         }
-        public void Disable()
-        {
-            if (state == TerrainState.Enable)
-            {
-                state = TerrainState.Disable;
-                if (terrain != null)
-                {
-                    terrain.gameObject.SetActive(false);
-                }
-            }
-        }
         public void Destroy()
         {
-            ResSystem.UnloadInstance(terrain.gameObject);
+            if (terrain != null)
+            {
+                ResSystem.UnloadInstance(terrain.gameObject);
+            }
+
             destroyTimer = 0;
             terrain = null;
             this.ObjectPushPool();
@@ -91,7 +96,7 @@ public class ClientMapManager : SingletonMono<ClientMapManager>
     private QuadTree quadTree;
     private Dictionary<Vector2Int, TerrainController> terrainControllDic = new Dictionary<Vector2Int, TerrainController>(300);
     private List<Vector2Int> destroyTerrainCoords = new List<Vector2Int>(100);//销毁Terrain的坐标
-    private Plane[] cameraPlanes; //相机的视椎体的所有面，有6个面对应6个Panel
+    private Plane[] cameraPlanes = new Plane[6]; //相机的视椎体的所有面，有6个面对应6个Panel
     private Vector2Int playerTerrainCoord;
     protected override void Awake()
     {
@@ -146,7 +151,7 @@ public class ClientMapManager : SingletonMono<ClientMapManager>
             controller.Load(coord);
             terrainControllDic.Add(coord, controller);
         }
-        controller.Disable();
+        controller.Enable();
     }
 
     private Vector2Int GetTerrainCoordByWorldPos(Vector3 worldPos)
