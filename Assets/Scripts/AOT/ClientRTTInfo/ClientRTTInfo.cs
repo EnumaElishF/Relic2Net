@@ -6,6 +6,7 @@ using UnityEngine;
 /// </summary>
 public class ClientRTTInfo : SingletonMono<ClientRTTInfo>
 {
+    //ClientRTTInfo作为一个全局工具去使用
     public int rttMs { get; private set; } //平均 RTT（毫秒）
     private Queue<int> rttTimeQueue; //队列存储最近calFrames个帧的 RTT 数据
     [SerializeField] private int calFrames = 100; //设定calFrames帧（默认的100帧）
@@ -13,7 +14,6 @@ public class ClientRTTInfo : SingletonMono<ClientRTTInfo>
     protected override void Awake()
     {
         base.Awake();
-        DontDestroyOnLoad(gameObject);
         rttTimeQueue = new Queue<int>(calFrames);
     }
     private void OnDisable()
