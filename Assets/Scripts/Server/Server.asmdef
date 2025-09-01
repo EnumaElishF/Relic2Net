@@ -1,10 +1,10 @@
 {
-    "name": "HotUpdate",
+    "name": "Server",
     "rootNamespace": "",
     "references": [
-        "GUID:ce0b89fb0ce692240b67d87988d9a024",
         "GUID:7cb2814e6655d904f952bf240b160d11",
-        "GUID:4307f53044263cf4b835bd812fc161a4"
+        "GUID:ce0b89fb0ce692240b67d87988d9a024",
+        "GUID:1491147abca9d7d4bb7105af628b223e"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

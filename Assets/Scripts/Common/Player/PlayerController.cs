@@ -1,11 +1,15 @@
+using JKFrame;
 using Unity.Netcode;
 using UnityEngine;
 
-public class Player : NetworkBehaviour
+public class PlayerController : NetworkBehaviour
 {
+#if !UNITY_SERVER
+    public Transform cameraLookatTarget;
+    public Transform cameraFollowTarget;
+#endif
+    public Transform Transform { get => transform; }
     //多个玩家，所以Player没有单例
-    public static Player localPlayer { get; private set; }
-
     //public NetworkVariable<float> moveSpeed;   //网络变量：值类型，或者是结构体
     public float moveSpeed = 3;
 
@@ -16,15 +20,17 @@ public class Player : NetworkBehaviour
 		if (IsOwner&& IsClient)
         {
             //客户端快速访问到 “自己控制的玩家对象”
-            localPlayer = this;
+            //PlayerManager.Instance.InitLocalPlayer(this);  替换为下方传事件
+            EventSystem.TypeEventTrigger(new InitLocalPlayerEvent { localPlayer = this });
+
         }
 #endif
 
 #if UNITY_SERVER || UNITY_EDITOR
-        if (IsServer)
-        {
-            AOIManager.Instance.InitClient(OwnerClientId, Vector2Int.zero); //玩家本人的游戏对象的id
-        }
+        //if (IsServer)
+        //{
+        //    AOIManager.Instance.InitClient(OwnerClientId, Vector2Int.zero); //玩家本人的游戏对象的id
+        //}
 
 #endif
 
@@ -54,20 +60,20 @@ public class Player : NetworkBehaviour
     {
 
 #if UNITY_SERVER || UNITY_EDITOR
-		Vector2Int oldCoord = AOIManager.Instance.GetCoordByWorldPostion(transform.position);
-        //告诉服务端，有这个事情
-        transform.Translate(Time.deltaTime * moveSpeed * inputDir);
+        //Vector2Int oldCoord = AOIManager.Instance.GetCoordByWorldPostion(transform.position);
+        ////告诉服务端，有这个事情
+        //transform.Translate(Time.deltaTime * moveSpeed * inputDir);
 
-        Vector2Int newCoord = AOIManager.Instance.GetCoordByWorldPostion(transform.position);
-        if (newCoord != oldCoord) //发生了地图块的坐标变化
-        {
-            AOIManager.Instance.UpdateClientChunkCoord(OwnerClientId, oldCoord, newCoord);
+        //Vector2Int newCoord = AOIManager.Instance.GetCoordByWorldPostion(transform.position);
+        //if (newCoord != oldCoord) //发生了地图块的坐标变化
+        //{
+        //    AOIManager.Instance.UpdateClientChunkCoord(OwnerClientId, oldCoord, newCoord);
 
-        }
+        //}
 #endif
 
 
-	}
+    }
 
 
 }

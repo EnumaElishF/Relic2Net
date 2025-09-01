@@ -1,8 +1,8 @@
-using JKFrame;
+ï»¿using JKFrame;
 using UnityEngine;
 
 /// <summary>
-/// ×÷ÎªÆô¶¯Æ÷£¬»¹ÓĞ¿ç³¡¾°ÇĞ»»Ê¹ÓÃ£¬£¨²»×öÆäËû¹¦ÄÜ£©£¬ Ó¦¸ÃÊÇ³¡¾°µÄ³õÊ¼»¯Á÷³Ì£¬µÚÒ»¸öÆô¶¯µÄ½Å±¾
+/// ä½œä¸ºå¯åŠ¨å™¨ï¼Œè¿˜æœ‰è·¨åœºæ™¯åˆ‡æ¢ä½¿ç”¨ï¼Œï¼ˆä¸åšå…¶ä»–åŠŸèƒ½ï¼‰ï¼Œ åº”è¯¥æ˜¯åœºæ™¯çš„åˆå§‹åŒ–æµç¨‹ï¼Œç¬¬ä¸€ä¸ªå¯åŠ¨çš„è„šæœ¬
 /// </summary>
 public class GameSceneManager : MonoBehaviour
 {
@@ -11,7 +11,7 @@ public class GameSceneManager : MonoBehaviour
     {
         if (NetManager.Instance.IsServer)
         {
-            //¿ÉÒÔÖ±½ÓĞ´ËÀ£¬Ò²¿ÉÒÔÔÙºóÆÚÅäÖÃ
+            //å¯ä»¥ç›´æ¥å†™æ­»ï¼Œä¹Ÿå¯ä»¥å†åæœŸé…ç½®
             ResSystem.InstantiateGameObject("ServerOnGameScene");
         }
         else

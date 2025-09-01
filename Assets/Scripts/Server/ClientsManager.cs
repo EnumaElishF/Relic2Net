@@ -20,6 +20,7 @@ public class ClientsManager : SingletonMono<ClientsManager>
 
     private void OnClientConnectedCallback(ulong clientID)
     {
+        //TODO 登录注册之类的流程
         //TODO 预制体、坐标等后续基于配置
         NetManager.Instance.SpawnObject(clientID, playerPrefab, Vector3.zero);
     }

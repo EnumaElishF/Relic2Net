@@ -28,12 +28,12 @@ public class TestManager : MonoBehaviour
 
 #if !UNITY_SERVER || UNITY_EDITOR
         //客户端
-        if (Player.localPlayer != null)
+        if (PlayerManager.localPlayer != null)
         {
             // 延迟
             GUILayout.Label("延迟Delay:" + ClientRTTInfo.Instance.rttMs);
             //当前坐标
-            GUILayout.Label("Player Position:" + Player.localPlayer.transform.position);
+            GUILayout.Label("Player Position:" + PlayerManager.localPlayer.transform.position);
             // 服务端对象数量 :获取网络服务端对象数量方法
             if (NetManager.Instance.SpawnManager.OwnershipToObjectsTable.TryGetValue(NetManager.ServerClientId,out Dictionary<ulong,NetworkObject> temp))
             {
