@@ -1,3 +1,4 @@
+ï»¿using JKFrame;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,16 +8,18 @@ public class ServerLaunch : MonoBehaviour
 {
     void Start()
     {
-        Application.targetFrameRate = 60; //Ö¡ÊıÉèÖÃ
+        Application.targetFrameRate = 60; //å¸§æ•°è®¾ç½®
         InitServers();
         SceneManager.LoadScene("GameScene");
     }
 
     private void InitServers()
     {
-        //NetManager.Instance.StartServer(); ÒòÎª¿ÉÄÜÓĞÆäËûµÄÂß¼­Òª×ß£¬ËùÒÔÎÒÃÇÃ»ÓĞÓÃÔ­ÉúµÄº¯Êı
-        //ÎÒÃÇ×Ô½¨Ò»¸ö·şÎñÍøÂçÆô¶¯
-        NetManager.Instance.InitServer();
+        //NetManagerç»§æ‰¿çš„åŸºç±»NetworkManageråšäº†ä¸ä¼šé”€æ¯çš„è®¾ç½®ä»£ç 
+        ResSystem.InstantiateGameObject<NetManager>("NetworkManager").Init(false);//ç›´æ¥ç”¨çš„åŒæ­¥ï¼Œå› ä¸ºæ–‡ä»¶å¾ˆå°ï¼Œå¦‚æœå¤§äº†è¿˜æ˜¯è¦ç”¨å¼‚æ­¥åŠ è½½
+        //  å› ä¸ºå¯èƒ½æœ‰å…¶ä»–çš„é€»è¾‘è¦èµ°ï¼Œæ‰€ä»¥æˆ‘ä»¬æ²¡æœ‰ç”¨åŸç”Ÿçš„å‡½æ•°NetworkManagerè€Œæ˜¯è‡ªåˆ¶->NetManager
+        //--->æˆ‘ä»¬è‡ªå»ºä¸€ä¸ªæœåŠ¡ç½‘ç»œå¯åŠ¨
+        //NetManager.Instance.InitServer();
 
         Debug.Log("InitServers Succeed");
     }
