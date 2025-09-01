@@ -27,7 +27,7 @@ public class PlayerManager : SingletonMono<PlayerManager>
     public void InitLocalPlayer(PlayerController player)
     {
         localPlayer = player;
-        cinemachine.transform.position = localPlayer.Transform.position;
+        cinemachine.transform.position = localPlayer.transform.position;
         cinemachine.LookAt = localPlayer.cameraLookatTarget;
         cinemachine.Follow = localPlayer.cameraFollowTarget;
     }

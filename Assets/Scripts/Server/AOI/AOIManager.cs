@@ -2,6 +2,7 @@
 using UnityEngine;
 using JKFrame;
 using Unity.Netcode;
+using System;
 public class AOIManager : SingletonMono<AOIManager>
 {
     private readonly static Vector2Int defaultCoord;
@@ -18,6 +19,32 @@ public class AOIManager : SingletonMono<AOIManager>
         defaultCoord = new Vector2Int(int.MinValue, int.MinValue);
     }
 
+    protected override void Awake()
+    {
+        base.Awake();
+        //初始化，传chunkSize到公共程序
+        AOIUtility.Init(chunkSize);
+
+        //AOIManager，需要对 增加，更新坐标，删除 。。等玩家行为  "监听" 
+        EventSystem.AddTypeEventListener<AOIAddPlayerEvent>(OnAOIAddPlayerEvent);
+        EventSystem.AddTypeEventListener<AOIUpdatePlayerCoordEvent>(OnAOIUpdatePlayerCoordEvent);
+        EventSystem.AddTypeEventListener<AOIRemovePlayerEvent>(OnAOIRemovePlayerEvent);
+
+    }
+
+
+    private void OnAOIAddPlayerEvent(AOIAddPlayerEvent arg)
+    {
+        InitClient(arg.player.OwnerClientId, arg.coord);
+    }
+    private void OnAOIUpdatePlayerCoordEvent(AOIUpdatePlayerCoordEvent arg)
+    {
+        UpdateClientChunkCoord(arg.player.OwnerClientId, arg.oldCoord, arg.newCoord);
+    }
+    private void OnAOIRemovePlayerEvent(AOIRemovePlayerEvent arg)
+    {
+        RemoveClient(arg.player.OwnerClientId, arg.coord);
+    }
 
     #region Client
 
@@ -137,7 +164,11 @@ public class AOIManager : SingletonMono<AOIManager>
             }
         }
     }
-
+    /// <summary>
+    /// 移除客户端
+    /// </summary>
+    /// <param name="clientID"></param>
+    /// <param name="coord"></param>
     public void RemoveClient(ulong clientID, Vector2Int coord)
     {
         if (chunkClientDic.TryGetValue(coord, out HashSet<ulong> clientIDs)) //得到ulong的id
@@ -405,10 +436,6 @@ public class AOIManager : SingletonMono<AOIManager>
 
 
 
-    public Vector2Int GetCoordByWorldPostion(Vector3 worldPostion)
-    {
-        return new Vector2Int((int)(worldPostion.x / chunkSize), (int)(worldPostion.z / chunkSize));
-    }
 
 
 }

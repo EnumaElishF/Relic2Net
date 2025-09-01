@@ -1,7 +1,7 @@
 using Unity.Netcode;
 using UnityEngine;
 
-//TestÁÙÊ±½Å±¾£¬ÓÃÍê¾ÍÉ¾ÁË
+//Testä¸´æ—¶è„šæœ¬ï¼Œç”¨å®Œå°±åˆ äº†.
 public class ServerTestObject : NetworkBehaviour
 {
     public float moveSpeed;
@@ -30,15 +30,15 @@ public class ServerTestObject : NetworkBehaviour
     private void HandleMovement(Vector3 inputDir)
     {
 
-        Vector2Int oldCoord = AOIManager.Instance.GetCoordByWorldPostion(transform.position);
-        //¸æËß·şÎñ¶Ë£¬ÓĞÕâ¸öÊÂÇé
-        transform.Translate(Time.deltaTime * moveSpeed * inputDir);
-        Vector2Int newCoord = AOIManager.Instance.GetCoordByWorldPostion(transform.position);
-        if (newCoord != oldCoord) //·¢ÉúÁËµØÍ¼¿éµÄ×ø±ê±ä»¯
-        {
-            AOIManager.Instance.UpdateServerObjectChunkCoord(NetworkObject, oldCoord, newCoord);
+        //Vector2Int oldCoord = AOIManager.Instance.GetCoordByWorldPostion(transform.position);
+        ////å‘Šè¯‰æœåŠ¡ç«¯ï¼Œæœ‰è¿™ä¸ªäº‹æƒ…
+        //transform.Translate(Time.deltaTime * moveSpeed * inputDir);
+        //Vector2Int newCoord = AOIManager.Instance.GetCoordByWorldPostion(transform.position);
+        //if (newCoord != oldCoord) //å‘ç”Ÿäº†åœ°å›¾å—çš„åæ ‡å˜åŒ–
+        //{
+        //    AOIManager.Instance.UpdateServerObjectChunkCoord(NetworkObject, oldCoord, newCoord);
 
-        }
+        //}
 
     }
 }

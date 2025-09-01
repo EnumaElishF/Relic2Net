@@ -2,78 +2,136 @@ using JKFrame;
 using Unity.Netcode;
 using UnityEngine;
 
-public class PlayerController : NetworkBehaviour
+/// <summary>
+/// å…¬å…±   : å…¬å…±çš„åœ°æ–¹å¤§éƒ¨åˆ†éƒ½æ˜¯åšåˆ†æ”¯çš„ï¼Œåˆ†æˆå®¢æˆ·ç«¯ï¼Œå’Œ æœåŠ¡ç«¯
+/// </summary>
+public partial class PlayerController : NetworkBehaviour
 {
-#if !UNITY_SERVER
-    public Transform cameraLookatTarget;
-    public Transform cameraFollowTarget;
-#endif
-    public Transform Transform { get => transform; }
-    //¶à¸öÍæ¼Ò£¬ËùÒÔPlayerÃ»ÓĞµ¥Àı
-    //public NetworkVariable<float> moveSpeed;   //ÍøÂç±äÁ¿£ºÖµÀàĞÍ£¬»òÕßÊÇ½á¹¹Ìå
-    public float moveSpeed = 3;
+    //å¤šä¸ªç©å®¶ï¼Œæ‰€ä»¥Playeræ²¡æœ‰å•ä¾‹
+    //public NetworkVariable<float> moveSpeed;   //ç½‘ç»œå˜é‡ï¼šå€¼ç±»å‹ï¼Œæˆ–è€…æ˜¯ç»“æ„ä½“
 
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
-#if !UNITY_SERVER || UNITY_EDITOR
-		if (IsOwner&& IsClient)
+
+        if (IsClient)
         {
-            //¿Í»§¶Ë¿ìËÙ·ÃÎÊµ½ ¡°×Ô¼º¿ØÖÆµÄÍæ¼Ò¶ÔÏó¡±
-            //PlayerManager.Instance.InitLocalPlayer(this);  Ìæ»»ÎªÏÂ·½´«ÊÂ¼ş
-            EventSystem.TypeEventTrigger(new InitLocalPlayerEvent { localPlayer = this });
-
+#if !UNITY_SERVER || UNITY_EDITOR
+            Client_OnNetworkSpawn();
+#endif
         }
-#endif
-
+        else
+        {
 #if UNITY_SERVER || UNITY_EDITOR
-        //if (IsServer)
-        //{
-        //    AOIManager.Instance.InitClient(OwnerClientId, Vector2Int.zero); //Íæ¼Ò±¾ÈËµÄÓÎÏ·¶ÔÏóµÄid
-        //}
-
+            Server_OnNetworkSpawn();
 #endif
+        }
 
     }
 
-    void Update()
+    /// <summary>
+    /// ç©å®¶ä¸‹çº¿ï¼ŒDespawnæ¶ˆé™¤ç©å®¶
+    /// </summary>
+    public override void OnNetworkDespawn()
     {
-        if (!IsSpawned) return; //Èç¹û»¹Î´²úÂÑ£¬¾Í²»Ö´ĞĞÏÂÃæÂß¼­
-
-        if (IsOwner)
+        if (IsClient)
         {
-            //IsOwner ÊÇÒ»¸ö²¼¶ûÖµ£¬ÓÃÓÚÅĞ¶Ïµ±Ç°±¾µØ¿Í»§¶ËÊÇ·ñÊÇ¸Ã Network Object µÄ ¡°ËùÓĞÕß¡±£¨Owner£©¡£
-            float h = Input.GetAxisRaw("Horizontal");
-            float v = Input.GetAxisRaw("Vertical");
-            Vector3 inputDir = new Vector3(h, 0, v).normalized;
-            HandleMovementServerRpc(inputDir);
+#if !UNITY_SERVER || UNITY_EDITOR
+            //Client_OnNetworkSpawn();
+#endif
         }
+        else
+        {
+#if UNITY_SERVER || UNITY_EDITOR
+            Server_OnNetworkDespawn();
+#endif
+        }
+    }
 
-}
-
-//Ïàµ±ÓÚµ÷ÓÃ·şÎñ¶ËÉÏ×ÔÉíµÄ±¾Ìå
-//---Ò²¾ÍÊÇËµ£¬Íê³ÉÉÏÃæµÄÊı¾İÅĞ¶Ïºó£¬°Ñ×îÖÕµÄ×ø±êÒÆ¶¯½»¸øÁË·şÎñÆ÷¡£
-//Õâ¾ÍÊÇRpcºÃÓÃµÄµØ·½¡£
-//ÕâÀïµÄmoveSpeed¾ÍËã±¾µØ¿Í»§¶Ë×÷±×£¬ĞŞ¸ÄÁËÊı¾İ£¬µ«ÊÇ·şÎñ¶ËÔÚÊ¹ÓÃµÄÊ±ºòÓÃµÄÊÇ·şÎñ¶ËµÄmoveSpeed£¬»¹´ïµ½ÁË·À×÷±×Ğ§¹û¡£
-[ServerRpc(RequireOwnership =false)]  //Ö»»á±»·şÎñ¶Ëµ÷ÓÃµÄ·½·¨
+    //ç›¸å½“äºè°ƒç”¨æœåŠ¡ç«¯ä¸Šè‡ªèº«çš„æœ¬ä½“
+    //---ä¹Ÿå°±æ˜¯è¯´ï¼Œå®Œæˆä¸Šé¢çš„æ•°æ®åˆ¤æ–­åï¼ŒæŠŠæœ€ç»ˆçš„åæ ‡ç§»åŠ¨äº¤ç»™äº†æœåŠ¡å™¨ã€‚
+    //è¿™å°±æ˜¯Rpcå¥½ç”¨çš„åœ°æ–¹ã€‚
+    //è¿™é‡Œçš„moveSpeedå°±ç®—æœ¬åœ°å®¢æˆ·ç«¯ä½œå¼Šï¼Œä¿®æ”¹äº†æ•°æ®ï¼Œä½†æ˜¯æœåŠ¡ç«¯åœ¨ä½¿ç”¨çš„æ—¶å€™ç”¨çš„æ˜¯æœåŠ¡ç«¯çš„moveSpeedï¼Œè¿˜è¾¾åˆ°äº†é˜²ä½œå¼Šæ•ˆæœã€‚
+    [ServerRpc(RequireOwnership =false)]  //åªä¼šè¢«æœåŠ¡ç«¯è°ƒç”¨çš„æ–¹æ³•
     private void HandleMovementServerRpc(Vector3 inputDir)
     {
 
 #if UNITY_SERVER || UNITY_EDITOR
-        //Vector2Int oldCoord = AOIManager.Instance.GetCoordByWorldPostion(transform.position);
-        ////¸æËß·şÎñ¶Ë£¬ÓĞÕâ¸öÊÂÇé
-        //transform.Translate(Time.deltaTime * moveSpeed * inputDir);
-
-        //Vector2Int newCoord = AOIManager.Instance.GetCoordByWorldPostion(transform.position);
-        //if (newCoord != oldCoord) //·¢ÉúÁËµØÍ¼¿éµÄ×ø±ê±ä»¯
-        //{
-        //    AOIManager.Instance.UpdateClientChunkCoord(OwnerClientId, oldCoord, newCoord);
-
-        //}
+        Movement(inputDir);
 #endif
-
 
     }
 
 
 }
+
+/// <summary>
+/// å®¢æˆ·ç«¯
+/// </summary>
+#if !UNITY_SERVER || UNITY_EDITOR
+public partial class PlayerController : NetworkBehaviour
+{
+    public Transform cameraLookatTarget;
+    public Transform cameraFollowTarget;
+    private void Client_OnNetworkSpawn()
+    {
+        //IsOwner æ˜¯ä¸€ä¸ªå¸ƒå°”å€¼ï¼Œç”¨äºåˆ¤æ–­å½“å‰æœ¬åœ°å®¢æˆ·ç«¯æ˜¯å¦æ˜¯è¯¥ Network Object çš„ â€œæ‰€æœ‰è€…â€ï¼ˆOwnerï¼‰ã€‚
+        if (IsOwner)
+        {
+            //å®¢æˆ·ç«¯å¿«é€Ÿè®¿é—®åˆ° â€œè‡ªå·±æ§åˆ¶çš„ç©å®¶å¯¹è±¡â€
+            //PlayerManager.Instance.InitLocalPlayer(this);  æ›¿æ¢ä¸ºä¸‹æ–¹ä¼ äº‹ä»¶
+            EventSystem.TypeEventTrigger(new InitLocalPlayerEvent { localPlayer = this });
+
+            this.AddUpdate(LocalClientUpdate);//æ·»åŠ ä¸€ä¸ªUpdateçš„ç›‘å¬,æ¡†æ¶åšçš„
+        }
+    }
+
+    private void LocalClientUpdate()
+    {
+        float h = Input.GetAxisRaw("Horizontal");
+        float v = Input.GetAxisRaw("Vertical");
+        Vector3 inputDir = new Vector3(h, 0, v).normalized;
+        HandleMovementServerRpc(inputDir);
+
+    }
+}
+#endif
+/// <summary>
+/// æœåŠ¡ç«¯
+/// </summary>
+#if UNITY_SERVER || UNITY_EDITOR
+public partial class PlayerController : NetworkBehaviour
+{
+   [SerializeField] public float moveSpeed = 3;
+    public float MoveSpeed  { get => moveSpeed; }
+    private Vector2Int currentAOICoord;
+    private void Server_OnNetworkSpawn()
+    {
+        //ç™»å½•æ¸¸æˆåï¼Œæ‰€åœ¨çš„ä½ç½®ï¼Œå¯¹åº”å½“å‰çš„AOIçš„åæ ‡
+        currentAOICoord = AOIUtility.GetCoordByWorldPostion(transform.position);
+        AOIUtility.AddPlayer(this, currentAOICoord);
+    }
+    private void Movement(Vector2 inputDir)
+    {
+        inputDir.Normalize();
+        //å‘Šè¯‰æœåŠ¡ç«¯ï¼Œæœ‰è¿™ä¸ªäº‹æƒ…
+        transform.Translate(Time.deltaTime * moveSpeed * inputDir);
+
+        Vector2Int newCoord = AOIUtility.GetCoordByWorldPostion(transform.position);
+        Vector2Int oldCoord = currentAOICoord;
+        if (newCoord != oldCoord) //å‘ç”Ÿäº†åœ°å›¾å—çš„åæ ‡å˜åŒ–
+        {
+            AOIUtility.UpdatePlayerCoord(this, oldCoord, newCoord);
+            currentAOICoord = newCoord;
+        }
+    }
+
+    /// <summary>
+    /// æœåŠ¡ç«¯ç©å®¶ä¸‹çº¿
+    /// </summary>
+    private void Server_OnNetworkDespawn()
+    {
+        AOIUtility.RemovePlayer(this, currentAOICoord);
+    }
+}
+#endif
