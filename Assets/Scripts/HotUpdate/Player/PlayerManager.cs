@@ -11,11 +11,10 @@ public class PlayerManager : SingletonMono<PlayerManager>
     [SerializeField] private CinemachineFreeLook cinemachine;
     public static PlayerController localPlayer { get; private set; }
     /// <summary>
-    /// PlayerManaget在Awake里触发，然后PlayerController才在后续方法里面触发
+    /// PlayerManaget在Awake里触发xxx改为手动Init，然后要求PlayerController才在后续方法里面触发
     /// </summary>
-    protected override void Awake()
+    public void Init()
     {
-        base.Awake();
         EventSystem.AddTypeEventListener<InitLocalPlayerEvent>(OnInitLocalPlayerEvent);
     }
 

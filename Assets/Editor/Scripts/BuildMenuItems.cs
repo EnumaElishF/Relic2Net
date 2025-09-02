@@ -14,7 +14,7 @@ using UnityEditor.AddressableAssets.Settings;
 using UnityEditor.AddressableAssets;
 using UnityEditor.AddressableAssets.Build;
 /// <summary>
-/// ´ò°ü¹¤¾ß
+/// æ‰“åŒ…å·¥å…·
 /// </summary>
 public static class BuildMenuItems
 {
@@ -24,9 +24,9 @@ public static class BuildMenuItems
     [MenuItem("Project/Build/All")]
     public static void All()
     {
-        //µã»÷´ò°üÈ«²¿µÄÊ±ºò£¬ÒªÏÈ´ò°ü·şÎñ¶ËServer£¬ÔÙ´ò°ü¿Í»§¶Ë
-        //ÒòÎªÔÚ´ò°ü¹ı³ÌÖĞ»áÇĞ»»Æ½Ì¨¡£
-        //Èç¹û·şÎñ¶ËÊÇ×îºó£¬ÄÇÃ´ÔÚBuildSetting»¹Òª°ÑBuild×öÒ»¸öÇĞ»»£¬´ÓDedicated Server¸Ä³ÉWindowsµÈ¡£·ñÔò»á³öÎÊÌâÒ»Ö±ÔÚ·şÎñ¶Ë¡£
+        //ç‚¹å‡»æ‰“åŒ…å…¨éƒ¨çš„æ—¶å€™ï¼Œè¦å…ˆæ‰“åŒ…æœåŠ¡ç«¯Serverï¼Œå†æ‰“åŒ…å®¢æˆ·ç«¯
+        //å› ä¸ºåœ¨æ‰“åŒ…è¿‡ç¨‹ä¸­ä¼šåˆ‡æ¢å¹³å°ã€‚
+        //å¦‚æœæœåŠ¡ç«¯æ˜¯æœ€åï¼Œé‚£ä¹ˆåœ¨BuildSettingè¿˜è¦æŠŠBuildåšä¸€ä¸ªåˆ‡æ¢ï¼Œä»Dedicated Serveræ”¹æˆWindowsç­‰ã€‚å¦åˆ™ä¼šå‡ºé—®é¢˜ä¸€ç›´åœ¨æœåŠ¡ç«¯ã€‚
         Server();
         NewClient();
     }
@@ -34,18 +34,18 @@ public static class BuildMenuItems
     public static void Server()
     {
 
-        Debug.Log("¿ªÊ¼¹¹½¨·şÎñ¶Ë");
+        Debug.Log("å¼€å§‹æ„å»ºæœåŠ¡ç«¯");
 
-        //·şÎñ¶Ë²»ĞèÒªÈÈ¸üĞÂ£º   ¶ÔProjectSettingµÄHybridCLRÉèÖÃ£¬È¡Ïû¹´Ñ¡£¬HybridCLR²å¼şµÄEnable
+        //æœåŠ¡ç«¯ä¸éœ€è¦çƒ­æ›´æ–°ï¼š   å¯¹ProjectSettingçš„HybridCLRè®¾ç½®ï¼Œå–æ¶ˆå‹¾é€‰ï¼ŒHybridCLRæ’ä»¶çš„Enable
         HybridCLR.Editor.SettingsUtil.Enable = false;
 
         List<string> sceneList = new List<string>(EditorSceneManager.sceneCountInBuildSettings);
         for (int i =  0;i < EditorSceneManager.sceneCountInBuildSettings;i++)
         {
             string scenePath = SceneUtility.GetScenePathByBuildIndex(i);
-            if (scenePath != null && !scenePath.Contains("Client")) //ÅÅ³ıClient
+            if (scenePath != null && !scenePath.Contains("Client")) //æ’é™¤Client
             {
-                Debug.Log("Ìí¼Ó³¡¾°:" + scenePath);
+                Debug.Log("æ·»åŠ åœºæ™¯:" + scenePath);
                 sceneList.Add(scenePath);
             }
         }
@@ -59,28 +59,28 @@ public static class BuildMenuItems
         };
         BuildPipeline.BuildPlayer(buildPlayerOptions);
 
-        HybridCLR.Editor.SettingsUtil.Enable = true;//¹Ø±ÕHybridCLR
+        HybridCLR.Editor.SettingsUtil.Enable = true;//å…³é—­HybridCLR
 
 
-        Debug.Log("Íê³É¹¹½¨·şÎñ¶Ë");
+        Debug.Log("å®Œæˆæ„å»ºæœåŠ¡ç«¯");
 
     }
     [MenuItem("Project/Build/NewClient")]
     public static void NewClient()
     {
-        Debug.Log("¿ªÊ¼¹¹½¨¿Í»§¶Ë");
+        Debug.Log("å¼€å§‹æ„å»ºå®¢æˆ·ç«¯");
 
-        //HybridCLR¹¹½¨×¼±¸
-        PrebuildCommand.GenerateAll();//½øĞĞ»ªÙ¢µÄGenerateAll
-        GenerateDllBytesFile();//°áÔËdllÎÄ±¾ÎÄ¼ş
+        //HybridCLRæ„å»ºå‡†å¤‡
+        PrebuildCommand.GenerateAll();//è¿›è¡Œåä½—çš„GenerateAll
+        GenerateDllBytesFile();//æ¬è¿dllæ–‡æœ¬æ–‡ä»¶
 
         List<string> sceneList = new List<string>(EditorSceneManager.sceneCountInBuildSettings);
         for (int i = 0; i < EditorSceneManager.sceneCountInBuildSettings; i++)
         {
             string scenePath = SceneUtility.GetScenePathByBuildIndex(i);
-            if (scenePath != null && !scenePath.Contains("Server")) //ÅÅ³ıServer
+            if (scenePath != null && !scenePath.Contains("Server")) //æ’é™¤Server
             {
-                Debug.Log("Ìí¼Ó³¡¾°:" + scenePath);
+                Debug.Log("æ·»åŠ åœºæ™¯:" + scenePath);
                 sceneList.Add(scenePath);
             }
         }
@@ -88,31 +88,31 @@ public static class BuildMenuItems
         BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions()
         {
             scenes = sceneList.ToArray(),
-            target = BuildTarget.StandaloneWindows64,  //Éú³ÉÄ¿±êÎÄ¼ş¼ĞÃû³ÆÎªStandaloneWindows64
+            target = BuildTarget.StandaloneWindows64,  //ç”Ÿæˆç›®æ ‡æ–‡ä»¶å¤¹åç§°ä¸ºStandaloneWindows64
             subtarget = (int)StandaloneBuildSubtarget.Player,
             locationPathName = $"{projectRootPath}/{rootFloderPath}/{clientFloderPath}/Client.exe"
         };
         BuildPipeline.BuildPlayer(buildPlayerOptions);
-        //Addressables»á×Ô¶¯¹¹½¨
-        Debug.Log("Íê³É¹¹½¨¿Í»§¶Ë");
+        //Addressablesä¼šè‡ªåŠ¨æ„å»º
+        Debug.Log("å®Œæˆæ„å»ºå®¢æˆ·ç«¯");
     }
 
     [MenuItem("Project/Build/UpdateClient")]
     public static void UpdateClient()
     {
-        //UpdateClientÊÇ²»ĞèÒªÏñNewClientÄÇÑùÈ¥ÖØĞÂ²úÉúexeµÄ£»µ«ÊÇĞèÒª°Ñ×ÊÔ´È¥ÖØĞÂ×ßÒ»±é
-        Debug.Log("¿ªÊ¼¹¹½¨¿Í»§¶Ë¸üĞÂ°ü");
-        //»ªÙ¢²»ĞèÒªÈ¥¸üĞÂËùÓĞ£¬µ«ÊÇĞèÒª¸üĞÂdll
+        //UpdateClientæ˜¯ä¸éœ€è¦åƒNewClienté‚£æ ·å»é‡æ–°äº§ç”Ÿexeçš„ï¼›ä½†æ˜¯éœ€è¦æŠŠèµ„æºå»é‡æ–°èµ°ä¸€é
+        Debug.Log("å¼€å§‹æ„å»ºå®¢æˆ·ç«¯æ›´æ–°åŒ…");
+        //åä½—ä¸éœ€è¦å»æ›´æ–°æ‰€æœ‰ï¼Œä½†æ˜¯éœ€è¦æ›´æ–°dll
         CompileDllCommand.CompileDllActiveBuildTarget();
         GenerateDllBytesFile();
-        //Addressables¸üĞÂ°ü
+        //Addressablesæ›´æ–°åŒ…
         string path = ContentUpdateScript.GetContentStateDataPath(false);
         Debug.Log(path);
         AddressableAssetSettings addressableAssetSettings = AddressableAssetSettingsDefaultObject.Settings;
-        //¹¹½¨ÄÚÈİµÄ¸üĞÂ: Ä£Äâµã»÷Update a Previous Build
+        //æ„å»ºå†…å®¹çš„æ›´æ–°: æ¨¡æ‹Ÿç‚¹å‡»Update a Previous Build
         ContentUpdateScript.BuildContentUpdate(addressableAssetSettings, path);
 
-        Debug.Log("Íê³É¹¹½¨¿Í»§¶Ë¸üĞÂ°ü");
+        Debug.Log("å®Œæˆæ„å»ºå®¢æˆ·ç«¯æ›´æ–°åŒ…");
 
 
     }
@@ -121,39 +121,54 @@ public static class BuildMenuItems
     [MenuItem("Project/Build/GenerateDllBytesFile")]
     public static void GenerateDllBytesFile()
     {
-        Debug.Log("¿ªÊ¼Éú³ÉdllÎÄ±¾ÎÄ¼ş");
+        Debug.Log("å¼€å§‹ç”Ÿæˆdllæ–‡æœ¬æ–‡ä»¶");
 
-        string dllDirPath = System.Environment.CurrentDirectory + "\\" + SettingsUtil.GetHotUpdateDllsOutputDirByTarget(EditorUserBuildSettings.activeBuildTarget).Replace('/','\\');
-        string aotDllDirPath = System.Environment.CurrentDirectory  + "\\Assets\\Scripts\\DllBytes\\Aot";
-        string hotUpdateDllDirPath = System.Environment.CurrentDirectory  + "\\Assets\\Scripts\\DllBytes\\HotUpdate";
+        //æ–°åŠ  aotçš„æ›´æ–°  :ä¹Ÿå°±æ˜¯HybridCLRä¸‹çš„ AssembliesPostIl2CppStrip çš„StandaloneWindows64æ–‡ä»¶å¤¹å†…æ–‡ä»¶
+        string aotUpdateDllDirPath = System.Environment.CurrentDirectory + "\\" + SettingsUtil.GetAssembliesPostIl2CppStripDir(EditorUserBuildSettings.activeBuildTarget).Replace('/','\\');
+        //åŸ åŸºæœ¬çš„çƒ­æ›´æ–°   :ä¹Ÿå°±æ˜¯HybridCLRä¸‹çš„ HotUpdateDlls çš„StandaloneWindows64æ–‡ä»¶å¤¹å†…æ–‡ä»¶
+        string hotUpdateDllDirPath = System.Environment.CurrentDirectory + "\\" + SettingsUtil.GetHotUpdateDllsOutputDirByTarget(EditorUserBuildSettings.activeBuildTarget).Replace('/','\\');
+        string aotDllTextDirPath = System.Environment.CurrentDirectory  + "\\Assets\\Scripts\\DllBytes\\Aot";
+        string hotUpdateDllTextDirPath = System.Environment.CurrentDirectory  + "\\Assets\\Scripts\\DllBytes\\HotUpdate";
 
-        //½øĞĞ¸´ÖÆ
+        //è¿›è¡Œå¤åˆ¶
         foreach(var dllName in SettingsUtil.AOTAssemblyNames)
         {
-            //AOTÂ·¾¶  ºó×º¼Ótrue±íÊ¾¸²¸ÇÔ­ÒÑÓĞÎÄ¼ş
-            File.Copy($"{dllDirPath}\\{dllName}.dll", $"{aotDllDirPath}\\{dllName}.dll.bytes",true);
+            string path = $"{aotUpdateDllDirPath}\\{dllName}.dll";
+            if (File.Exists(path))
+            {
+                //ä¼˜å…ˆæ”¾AOTçš„  ï¼ˆæ–°åŠ 
+                File.Copy(path, $"{aotDllTextDirPath}\\{dllName}.dll.bytes", true); //åŠ å…¥è¿™ä¸ªæ˜¯ä¸ºäº†æ›´åˆç†ï¼Œé¿å…ä¸€äº›ï¼Œä¸‡ä¸€è£å‰ªåˆ°çš„æƒ…å†µï¼Œ
+            }
+            else
+            {
+                //ç„¶åçƒ­æ›´æ–°çš„
+                path = $"{hotUpdateDllDirPath}\\{dllName}.dll";
+                //AOTè·¯å¾„aotDllTextDirPath  åç¼€åŠ trueè¡¨ç¤ºè¦†ç›–åŸå·²æœ‰æ–‡ä»¶
+                File.Copy(path, $"{aotDllTextDirPath}\\{dllName}.dll.bytes", true);
+            }
+
         }
-        //ÄÃµ½²»°üº¬Ô¤ÁôµÄ³ÌĞò¼¯£¬Õâ¾ÍÊÇĞèÒªÈÈ¸üµÄ
+        //æ‹¿åˆ°ä¸åŒ…å«é¢„ç•™çš„ç¨‹åºé›†ï¼Œè¿™å°±æ˜¯éœ€è¦çƒ­æ›´çš„
         foreach(var dllName in SettingsUtil.HotUpdateAssemblyNamesExcludePreserved)
         {
-            //ÈÈ¸üÂ·¾¶ÏÂ
-            File.Copy($"{dllDirPath}\\{dllName}.dll", $"{hotUpdateDllDirPath}\\{dllName}.dll.bytes", true);
+            //çƒ­æ›´è·¯å¾„ä¸‹
+            File.Copy($"{hotUpdateDllDirPath}\\{dllName}.dll", $"{hotUpdateDllTextDirPath}\\{dllName}.dll.bytes", true);
         }
 
-        //Ë¢ĞÂÎÄ¼ş¼Ğ
+        //åˆ·æ–°æ–‡ä»¶å¤¹
         AssetDatabase.Refresh();
 
-        Debug.Log("Íê³ÉÉú³ÉdllÎÄ±¾ÎÄ¼ş");
+        Debug.Log("å®Œæˆç”Ÿæˆdllæ–‡æœ¬æ–‡ä»¶");
 
     }
-    #region ·şÎñ¶Ë²âÊÔºê
+    #region æœåŠ¡ç«¯æµ‹è¯•å®
     public static bool editorServerTest;
     public const string editorServerTestSymbolString = "UNITY_EDITOR";
     [MenuItem("Project/TestServer")]
     public static void TestServer()
     {
         editorServerTest = !editorServerTest;
-        //Ôö¼ÓÔ¤´¦ÀíÖ¸Áî   ×Ô¶¨ÒåµÄUNITY_EDITOR£¬ÒÆ³ıÔ¤´¦ÀíÖ¸Áî  UNITY_EDITOR
+        //å¢åŠ é¢„å¤„ç†æŒ‡ä»¤   è‡ªå®šä¹‰çš„UNITY_EDITORï¼Œç§»é™¤é¢„å¤„ç†æŒ‡ä»¤  UNITY_EDITOR
         if (editorServerTest) JKFrameSetting.AddScriptCompilationSymbol(editorServerTestSymbolString);
         else JKFrameSetting.RemoveScriptCompilationSymbol(editorServerTestSymbolString);
         Menu.SetChecked("Project/TestServer", editorServerTest);

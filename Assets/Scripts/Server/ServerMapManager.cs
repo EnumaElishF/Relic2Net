@@ -3,35 +3,35 @@ using UnityEngine;
 /// <summary>
 /// 
 /// </summary>
-public class ServerMapManager : MonoBehaviour
+public class ServerMapManager : SingletonMono<ServerMapManager>
 {
-    //ServerMapManagerÔÚÖÆ×÷»ù±¾µÄÅäÖÃ²ÎÊıÉÏ£¬ÒªºÍClientMapManagerÍ³Ò»±È½ÏºÃ
+    //ServerMapManageråœ¨åˆ¶ä½œåŸºæœ¬çš„é…ç½®å‚æ•°ä¸Šï¼Œè¦å’ŒClientMapManagerç»Ÿä¸€æ¯”è¾ƒå¥½
 
     [SerializeField] private MapConfig mapConfig;
 
-    void Start()
+    public void Init()
     {
-        //¸ù¾İµØÍ¼ÅäÖÃ£¬ÅúÁ¿Òì²½¼ÓÔØ²¢ÊµÀı»¯ËùÓĞµØÍ¼µØĞÎÇø¿é£¨Terrain£©£¬²¢ÉèÖÃËüÃÇÔÚÊÀ½çÖĞµÄÕıÈ·Î»ÖÃ
-        //´Ó¶øÊµÏÖ ¡°Ò»´ÎĞÔ¼ÓÔØÈ«²¿µØÍ¼¡± µÄĞ§¹û
+        //æ ¹æ®åœ°å›¾é…ç½®ï¼Œæ‰¹é‡å¼‚æ­¥åŠ è½½å¹¶å®ä¾‹åŒ–æ‰€æœ‰åœ°å›¾åœ°å½¢åŒºå—ï¼ˆTerrainï¼‰ï¼Œå¹¶è®¾ç½®å®ƒä»¬åœ¨ä¸–ç•Œä¸­çš„æ­£ç¡®ä½ç½®
+        //ä»è€Œå®ç° â€œä¸€æ¬¡æ€§åŠ è½½å…¨éƒ¨åœ°å›¾â€ çš„æ•ˆæœ
         int width = (int)(mapConfig.mapSize.x / mapConfig.terrainSize);
         int height = (int)(mapConfig.mapSize.y / mapConfig.terrainSize);
-        //Í¨¹ıÇ¶Ì× for Ñ­»·±éÀúËùÓĞµØĞÎÇø¿éµÄ×ÊÔ´×ø±ê£¨resCoord£©£¬·¶Î§ÊÇ (0,0) µ½ (width-1, height-1)£º
+        //é€šè¿‡åµŒå¥— for å¾ªç¯éå†æ‰€æœ‰åœ°å½¢åŒºå—çš„èµ„æºåæ ‡ï¼ˆresCoordï¼‰ï¼ŒèŒƒå›´æ˜¯ (0,0) åˆ° (width-1, height-1)ï¼š
         for (int x = 0; x < width; x++)
         {
             for(int y=0;y< height; y++)
             {
                 Vector2Int resCoord = new Vector2Int(x, y);
                 string resKey = $"{resCoord.x}_{resCoord.y}";
-                //ÓÃLambda±í´ïÊ½À´Ğ´Ò»¸ö»Øµ÷º¯Êı
+                //ç”¨Lambdaè¡¨è¾¾å¼æ¥å†™ä¸€ä¸ªå›è°ƒå‡½æ•°
                 ResSystem.InstantiateGameObjectAsync<Terrain>(resKey, (terrain) =>
                 {
-                    //·şÎñ¶ËµÄterrainÈç¹ûÒªÒ»¿ÚÆø°Ñ1600¸öterrainäÖÈ¾ÏÂÀ´£¬µçÄÔ¸ºµ£ºÜÖØ£¬ËùÒÔ²»½¨Òé¿ªÆôÕâ¸ö£¬¶øÇÒ·şÎñ¶ËÒ²Ã»ÓĞÊ²Ã´±ØÒª
+                    //æœåŠ¡ç«¯çš„terrainå¦‚æœè¦ä¸€å£æ°”æŠŠ1600ä¸ªterrainæ¸²æŸ“ä¸‹æ¥ï¼Œç”µè„‘è´Ÿæ‹…å¾ˆé‡ï¼Œæ‰€ä»¥ä¸å»ºè®®å¼€å¯è¿™ä¸ªï¼Œè€Œä¸”æœåŠ¡ç«¯ä¹Ÿæ²¡æœ‰ä»€ä¹ˆå¿…è¦
                     terrain.enabled = false;
                     Vector2Int terrainCoord = resCoord - mapConfig.terrainResKeyCoordOffset;
-                    //ÊÀ½ç×ø±ê
+                    //ä¸–ç•Œåæ ‡
                     terrain.transform.position = new Vector3(terrainCoord.x * mapConfig.terrainSize, 0, terrainCoord.y * mapConfig.terrainSize);
 
-                }, transform, null, false); //false¹Ø±Õ×Ô¶¯ÊÍ·Å
+                }, transform, null, false); //falseå…³é—­è‡ªåŠ¨é‡Šæ”¾
             }
         }
     }

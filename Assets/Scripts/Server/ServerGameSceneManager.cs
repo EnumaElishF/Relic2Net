@@ -3,19 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// GameSceneManager Ïàµ±ÓÚÊÇ Æô¶¯Æ÷µÄ¹¦ÄÜ
-/// SeverGameSceneManager ÊÇ×¨ÃÅÆô¶¯·şÎñ¶ËµÄ
+/// GameSceneManager ç›¸å½“äºæ˜¯ å¯åŠ¨å™¨çš„åŠŸèƒ½
+/// SeverGameSceneManager æ˜¯ä¸“é—¨å¯åŠ¨æœåŠ¡ç«¯çš„
 /// </summary>
 public class ServerGameSceneManager : MonoBehaviour
 {
-    //Ëû×÷ÎªÒ»¶¨ÊÇ·şÎñ¶ËÔËĞĞµÄ½Å±¾
+    //ä»–ä½œä¸ºä¸€å®šæ˜¯æœåŠ¡ç«¯è¿è¡Œçš„è„šæœ¬
     void Start()
     {
+        AOIManager.Instance.Init();
         ClientsManager.Instance.Init();
-    }
-
-    void Update()
-    {
-        
+        //æš‚æ—¶æ˜¯ç«‹é©¬ç”Ÿæˆï¼Œä»¥åå¯èƒ½åŠ é€»è¾‘
+        ServerMapManager.Instance.Init();
     }
 }

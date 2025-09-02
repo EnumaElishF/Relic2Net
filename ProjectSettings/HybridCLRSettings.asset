@@ -30,6 +30,7 @@ MonoBehaviour:
   - JKFrame
   - Unity.Addressables
   - Aot
+  - mscorlib
   outputLinkFile: HybridCLRGenerate/link.xml
   outputAOTGenericReferenceFile: HybridCLRGenerate/AOTGenericReferences.cs
   maxGenericReferenceIteration: 10

@@ -19,9 +19,8 @@ public class AOIManager : SingletonMono<AOIManager>
         defaultCoord = new Vector2Int(int.MinValue, int.MinValue);
     }
 
-    protected override void Awake()
+    public void Init()
     {
-        base.Awake();
         //初始化，传chunkSize到公共程序
         AOIUtility.Init(chunkSize);
 

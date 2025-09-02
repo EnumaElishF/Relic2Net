@@ -41,13 +41,13 @@ public class ClientMapManager : SingletonMono<ClientMapManager>
         public void Load(Vector2Int coord)
         {
             Vector2Int resCoord = coord + ClientMapManager.Instance.mapConfig.terrainResKeyCoordOffset;
-            //°´ÕÕAddressablesµÄmapµØÍ¼ÎÄ¼şÃû³ÆÉè¼Æ£¬µØÍ¼¿é±àºÅ_µØÍ¼¿é±àºÅ
+            //æŒ‰ç…§Addressablesçš„mapåœ°å›¾æ–‡ä»¶åç§°è®¾è®¡ï¼Œåœ°å›¾å—ç¼–å·_åœ°å›¾å—ç¼–å·
             string resKey =  $"{resCoord.x}_{resCoord.y}";
             state = TerrainState.Request;
             ResSystem.InstantiateGameObjectAsync<Terrain>(resKey, (terrain) =>
             {
                 this.terrain = terrain;
-                //ÏÂÃæÉèÖÃ¶¼ÊÇ¹ØÓÚĞÔÄÜ·½ÃæµÄ¶«Î÷
+                //ä¸‹é¢è®¾ç½®éƒ½æ˜¯å…³äºæ€§èƒ½æ–¹é¢çš„ä¸œè¥¿
                 terrain.basemapDistance = 100;
                 terrain.heightmapPixelError = 50;
                 terrain.heightmapMaximumLOD = 1;
@@ -55,13 +55,13 @@ public class ClientMapManager : SingletonMono<ClientMapManager>
                 terrain.treeDistance = 10;
                 terrain.treeCrossFadeLength = 10;
                 terrain.treeMaximumFullLODCount = 10;
-                //µÃµ½terrainµÄÕıÈ·³ß´ç
+                //å¾—åˆ°terrainçš„æ­£ç¡®å°ºå¯¸
                 terrain.transform.position = new Vector3(coord.x * Instance.mapConfig.terrainSize, 0, coord.y * Instance.mapConfig.terrainSize);
                 if (state == TerrainState.Disable)
                 {
                     terrain.gameObject.SetActive(false);
                 }
-            }, ClientMapManager.Instance.transform, null, false); //false¹Ø±Õ×Ô¶¯ÊÍ·Å
+            }, ClientMapManager.Instance.transform, null, false); //falseå…³é—­è‡ªåŠ¨é‡Šæ”¾
         }
         public bool CheckAndDestroy()
         {
@@ -95,33 +95,31 @@ public class ClientMapManager : SingletonMono<ClientMapManager>
     public float destroyTerrainTime;
     private QuadTree quadTree;
     private Dictionary<Vector2Int, TerrainController> terrainControllDic = new Dictionary<Vector2Int, TerrainController>(300);
-    private List<Vector2Int> destroyTerrainCoords = new List<Vector2Int>(100);//Ïú»ÙTerrainµÄ×ø±ê
-    private Plane[] cameraPlanes = new Plane[6]; //Ïà»úµÄÊÓ×µÌåµÄËùÓĞÃæ£¬ÓĞ6¸öÃæ¶ÔÓ¦6¸öPanel
+    private List<Vector2Int> destroyTerrainCoords = new List<Vector2Int>(100);//é”€æ¯Terrainçš„åæ ‡
+    private Plane[] cameraPlanes = new Plane[6]; //ç›¸æœºçš„è§†æ¤ä½“çš„æ‰€æœ‰é¢ï¼Œæœ‰6ä¸ªé¢å¯¹åº”6ä¸ªPanel
     private Vector2Int playerTerrainCoord;
-    protected override void Awake()
+    public void Init()
     {
-        base.Awake();
-        //ËÄ²æÊ÷
+        //å››å‰æ ‘
         quadTree = new QuadTree(mapConfig,EnableTerrain,DisableTerrain,CheckVisibility);
     }
 
     private void Update()
     {
-        //Ïà»ú,Ãæ
+        if (camera == null) return;
+
+        //ç›¸æœº,é¢
         GeometryUtility.CalculateFrustumPlanes(camera, cameraPlanes);
 
-        //Íæ¼Ò×ø±êµÄÎÊÌâ£ºÈ·±£¼ÓÔØÍæ¼ÒµÄµ±Ç°ËùÔÚ¿é (Ã¿Ò»Ö¡Íæ¼ÒµÄÎ»ÖÃ»á±ä£¬ĞèÒªÈ·±£Íæ¼Òµ±Ç°ËùÔÚµÄ¿é£¬ÊÇ±»ÓÅÏÈ¼ÓÔØ½øÀ´µÄ£©
+        //ç©å®¶åæ ‡çš„é—®é¢˜ï¼šç¡®ä¿åŠ è½½ç©å®¶çš„å½“å‰æ‰€åœ¨å— (æ¯ä¸€å¸§ç©å®¶çš„ä½ç½®ä¼šå˜ï¼Œéœ€è¦ç¡®ä¿ç©å®¶å½“å‰æ‰€åœ¨çš„å—ï¼Œæ˜¯è¢«ä¼˜å…ˆåŠ è½½è¿›æ¥çš„ï¼‰
         quadTree.CheckVisibility();
-        if (camera != null)
-        {
-            //Íæ¼Òµ±Ç°×ø±êËùÔÚµØÍ¼¿é
-            playerTerrainCoord = GetTerrainCoordByWorldPos(camera.transform.position);
-            EnableTerrain(playerTerrainCoord);//Íæ¼Ò×ø±ê´©¸øEnableĞèÒªµÄTerrain
 
-        }
+        //ç©å®¶å½“å‰åæ ‡æ‰€åœ¨åœ°å›¾å—
+        playerTerrainCoord = GetTerrainCoordByWorldPos(camera.transform.position);
+        EnableTerrain(playerTerrainCoord);//ç©å®¶åæ ‡ç©¿ç»™Enableéœ€è¦çš„Terrain
 
 
-        //TerrainµÄ¹ÜÀí
+        //Terrainçš„ç®¡ç†
         foreach (KeyValuePair<Vector2Int, TerrainController> item in terrainControllDic)
         {
             if (item.Value.CheckAndDestroy())
@@ -135,7 +133,7 @@ public class ClientMapManager : SingletonMono<ClientMapManager>
         }
         destroyTerrainCoords.Clear();
     }
-    //Íâ½ç¸æËßÒªÏú»ÙËû
+    //å¤–ç•Œå‘Šè¯‰è¦é”€æ¯ä»–
     private void DisableTerrain(Vector2Int coord)
     {
         if(terrainControllDic.TryGetValue(coord,out TerrainController controller))
@@ -166,13 +164,13 @@ public class ClientMapManager : SingletonMono<ClientMapManager>
 
     private bool CheckVisibility(Bounds bounds)
     {
-        //Ï£ÍûÊµ¼ÊµÄ¿É¼û·¶Î§´óÒ»Ğ©,£¨ÒòÎªÊ¹ÓÃÒì²½¼ÓÔØ£¬ÈÃ¼ÓÔØµÄ·¶Î§´óÒ»Ğ©£¬·ÀÖ¹ÕæµÄÉãÏñ»ú¿´µÄÊ±ºò×ÊÔ´»¹Ã»¼ÓÔØºÃ
+        //å¸Œæœ›å®é™…çš„å¯è§èŒƒå›´å¤§ä¸€äº›,ï¼ˆå› ä¸ºä½¿ç”¨å¼‚æ­¥åŠ è½½ï¼Œè®©åŠ è½½çš„èŒƒå›´å¤§ä¸€äº›ï¼Œé˜²æ­¢çœŸçš„æ‘„åƒæœºçœ‹çš„æ—¶å€™èµ„æºè¿˜æ²¡åŠ è½½å¥½
         bounds.size *= 2;
 
         if (GeometryUtility.TestPlanesAABB(cameraPlanes, bounds)) return true;
-        // Íæ¼Òµ±Ç°µØ¿é¸½½üµÄµØ¿éÒªÏÔÊ¾£º£¨ÁíÍâÕâÀïµÄbounds.sizeÒòÎª´«µÄÊ±ºò³Ë2ÁË£¬ËùÒÔÍæ¼ÒÖÜÎ§µØ¿é»á³¬¹ı¾Å¹¬¸ñ£¬·¶Î§±ä´ó
+        // ç©å®¶å½“å‰åœ°å—é™„è¿‘çš„åœ°å—è¦æ˜¾ç¤ºï¼šï¼ˆå¦å¤–è¿™é‡Œçš„bounds.sizeå› ä¸ºä¼ çš„æ—¶å€™ä¹˜2äº†ï¼Œæ‰€ä»¥ç©å®¶å‘¨å›´åœ°å—ä¼šè¶…è¿‡ä¹å®«æ ¼ï¼ŒèŒƒå›´å˜å¤§
         Vector3 boundsCenter = GetWorldPosByTerrainCoord(playerTerrainCoord);
-        Bounds playerTerrainBounds = new Bounds(boundsCenter, new Vector3(mapConfig.terrainSize, mapConfig.terrainMaxHeight, mapConfig.terrainSize) * 3);//xz¶¼*3±¶£¬±äÎª¾Å¹¬¸ñµÄÑùÊ½
+        Bounds playerTerrainBounds = new Bounds(boundsCenter, new Vector3(mapConfig.terrainSize, mapConfig.terrainMaxHeight, mapConfig.terrainSize) * 3);//xzéƒ½*3å€ï¼Œå˜ä¸ºä¹å®«æ ¼çš„æ ·å¼
         return bounds.Intersects(playerTerrainBounds);
     }
 

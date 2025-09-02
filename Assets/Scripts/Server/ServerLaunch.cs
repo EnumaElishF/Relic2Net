@@ -8,7 +8,7 @@ public class ServerLaunch : MonoBehaviour
 {
     void Start()
     {
-        Application.targetFrameRate = 60; //帧数设置
+        Application.targetFrameRate = 30; //帧数设置
         InitServers();
         SceneManager.LoadScene("GameScene");
     }
