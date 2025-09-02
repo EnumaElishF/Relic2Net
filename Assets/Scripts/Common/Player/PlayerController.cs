@@ -7,6 +7,7 @@ using UnityEngine;
 /// </summary>
 public partial class PlayerController : NetworkBehaviour
 {
+    private NetworkVariable<PlayerState> currentState = new NetworkVariable<PlayerState>(PlayerState.None);
     //多个玩家，所以Player没有单例
     //public NetworkVariable<float> moveSpeed;   //网络变量：值类型，或者是结构体
 
@@ -48,16 +49,16 @@ public partial class PlayerController : NetworkBehaviour
         }
     }
 
-    //相当于调用服务端上自身的本体
+    //相当于调用 "服务端" 上自身的本体
     //---也就是说，完成上面的数据判断后，把最终的坐标移动交给了服务器。
     //这就是Rpc好用的地方。
     //这里的moveSpeed就算本地客户端作弊，修改了数据，但是服务端在使用的时候用的是服务端的moveSpeed，还达到了防作弊效果。
     [ServerRpc(RequireOwnership =false)]  //只会被服务端调用的方法
-    private void HandleMovementServerRpc(Vector3 inputDir)
+    private void SendInputMoveDirServerRpc(Vector3 inputDir)
     {
 
 #if UNITY_SERVER || UNITY_EDITOR
-        Movement(inputDir);
+        Server_ReceiveMoveInput(inputDir);
 #endif
 
     }
@@ -91,39 +92,52 @@ public partial class PlayerController : NetworkBehaviour
         float h = Input.GetAxisRaw("Horizontal");
         float v = Input.GetAxisRaw("Vertical");
         Vector3 inputDir = new Vector3(h, 0, v).normalized;
-        HandleMovementServerRpc(inputDir);
+        SendInputMoveDirServerRpc(inputDir);
 
     }
 }
 #endif
+
+
 /// <summary>
 /// 服务端
 /// </summary>
 #if UNITY_SERVER || UNITY_EDITOR
 public partial class PlayerController : NetworkBehaviour
 {
-   [SerializeField] public float moveSpeed = 3;
+    #region 内部类型
+    public class InputData
+    {
+        public Vector2 moveDir;
+    }
+    #endregion
+
+    [SerializeField] public float moveSpeed = 3;
     public float MoveSpeed  { get => moveSpeed; }
-    private Vector2Int currentAOICoord;
+    public Vector2Int currentAOICoord { get; set; }
+    public InputData inputData { get; private set; }
+    //框架，玩家使用的状态机
+    private StateMachine stateMachine;
+
+
     private void Server_OnNetworkSpawn()
     {
+        stateMachine = new StateMachine();
+        inputData = new InputData();
         //登录游戏后，所在的位置，对应当前的AOI的坐标
         currentAOICoord = AOIUtility.GetCoordByWorldPostion(transform.position);
         AOIUtility.AddPlayer(this, currentAOICoord);
+        ChangeState(PlayerState.Idle);
     }
-    private void Movement(Vector2 inputDir)
+    /// <summary>
+    /// 服务端 把输入保存起来
+    /// </summary>
+    /// <param name="inputDir"></param>
+    private void Server_ReceiveMoveInput(Vector2 inputDir)
     {
-        inputDir.Normalize();
-        //告诉服务端，有这个事情
-        transform.Translate(Time.deltaTime * moveSpeed * inputDir);
+        inputData.moveDir = inputDir.normalized; //序列化，可以避免客户端去作弊
+        //状态类中根据输入情况进行运算
 
-        Vector2Int newCoord = AOIUtility.GetCoordByWorldPostion(transform.position);
-        Vector2Int oldCoord = currentAOICoord;
-        if (newCoord != oldCoord) //发生了地图块的坐标变化
-        {
-            AOIUtility.UpdatePlayerCoord(this, oldCoord, newCoord);
-            currentAOICoord = newCoord;
-        }
     }
 
     /// <summary>
@@ -132,6 +146,21 @@ public partial class PlayerController : NetworkBehaviour
     private void Server_OnNetworkDespawn()
     {
         AOIUtility.RemovePlayer(this, currentAOICoord);
+    }
+
+    public void ChangeState(PlayerState newState)
+    {
+        currentState.Value = newState;
+        switch (newState)
+        {
+            case PlayerState.Idle:
+                stateMachine.ChangeState<PlayerIdleState>();
+                break;
+            case PlayerState.Move:
+                stateMachine.ChangeState<PlayerMoveState>();
+                break;
+
+        }
     }
 }
 #endif
