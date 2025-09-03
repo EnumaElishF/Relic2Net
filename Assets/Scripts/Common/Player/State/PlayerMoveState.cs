@@ -1,8 +1,12 @@
-
+#if UNITY_SERVER || UNITY_EDITOR
 using UnityEngine;
 
 public class PlayerMoveState : PlayerStateBase
 {
+    public override void Enter()
+    {
+        player.PlayAnimation("Move");
+    }
     public override void Update()
     {
         if(player.inputData.moveDir == Vector2.zero)
@@ -23,3 +27,4 @@ public class PlayerMoveState : PlayerStateBase
         }
     }
 }
+#endif 

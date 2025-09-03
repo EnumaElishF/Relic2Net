@@ -54,7 +54,7 @@ public partial class PlayerController : NetworkBehaviour
     //这就是Rpc好用的地方。
     //这里的moveSpeed就算本地客户端作弊，修改了数据，但是服务端在使用的时候用的是服务端的moveSpeed，还达到了防作弊效果。
     [ServerRpc(RequireOwnership =false)]  //只会被服务端调用的方法
-    private void SendInputMoveDirServerRpc(Vector3 inputDir)
+    private void SendInputMoveDirServerRpc(Vector2 inputDir)
     {
 
 #if UNITY_SERVER || UNITY_EDITOR
@@ -86,12 +86,20 @@ public partial class PlayerController : NetworkBehaviour
             this.AddUpdate(LocalClientUpdate);//添加一个Update的监听,框架做的
         }
     }
-
+    private Vector2 lastInputDir = Vector2.zero;
+    //玩家移动输入判断 （客户端）
     private void LocalClientUpdate()
     {
+        if (currentState.Value == PlayerState.None) return;
         float h = Input.GetAxisRaw("Horizontal");
         float v = Input.GetAxisRaw("Vertical");
-        Vector3 inputDir = new Vector3(h, 0, v).normalized;
+        Vector2 inputDir = new Vector2(h,v);
+        if(inputDir == lastInputDir)
+        {
+            return;
+        }
+        lastInputDir = inputDir;
+
         SendInputMoveDirServerRpc(inputDir);
 
     }
@@ -114,6 +122,10 @@ public partial class PlayerController : NetworkBehaviour
 
     [SerializeField] public float moveSpeed = 3;
     public float MoveSpeed  { get => moveSpeed; }
+
+    [SerializeField] public Animator animator;
+    public Animator Animator { get => animator; }
+
     public Vector2Int currentAOICoord { get; set; }
     public InputData inputData { get; private set; }
     //框架，玩家使用的状态机
@@ -162,5 +174,14 @@ public partial class PlayerController : NetworkBehaviour
 
         }
     }
+    /// <summary>
+    /// 采用自己管理的方式，状态切换的代码，控制动作状态改变。不使用常规的状态机的SetBool动作切换
+    /// </summary>
+    /// <param name="animationName"></param>
+    public void PlayAnimation(string animationName, float fixedTransitionDuration = 0.25f)
+    {
+        animator.CrossFadeInFixedTime(animationName, fixedTransitionDuration); //默认动作过渡时间0.25秒，基本不用动
+    }
+
 }
 #endif
