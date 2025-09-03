@@ -1,4 +1,5 @@
 #if UNITY_SERVER || UNITY_EDITOR
+using System;
 using UnityEngine;
 
 public class PlayerMoveState : PlayerStateBase
@@ -6,7 +7,10 @@ public class PlayerMoveState : PlayerStateBase
     public override void Enter()
     {
         player.PlayAnimation("Move");
+        player.View.SetRootMotionAction(OnRootMotion);
     }
+
+
     public override void Update()
     {
         if(player.inputData.moveDir == Vector2.zero)
@@ -15,15 +19,23 @@ public class PlayerMoveState : PlayerStateBase
             return;
         }
 
-        //玩家开始移动
+ 
+    }
+    public override void Exit()
+    {
+        player.View.CleanRootMotionAction();
+    }
 
-        player.transform.Translate(Time.deltaTime * player.MoveSpeed * player.inputData.moveDir);
-        Vector2Int newCoord = AOIUtility.GetCoordByWorldPostion(player.transform.position);
-        Vector2Int oldCoord = player.currentAOICoord;
-        if (newCoord != oldCoord) //发生了地图块的坐标变化
+    private void OnRootMotion(Vector3 deltaPosition, Quaternion deltaRotation)
+    {
+        player.Animator.speed = player.MoveSpeed;
+        deltaPosition.y -= 9.8f * Time.deltaTime;  //模拟重力
+        player.CharacterController.Move(deltaPosition);
+
+        //更新AOI :因为有位移，就要更新AOI
+        if(deltaPosition != Vector3.zero)
         {
-            AOIUtility.UpdatePlayerCoord(player, oldCoord, newCoord);
-            player.currentAOICoord = newCoord;
+            player.UpdateAOICoord();
         }
     }
 }

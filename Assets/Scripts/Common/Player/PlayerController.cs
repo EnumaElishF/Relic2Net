@@ -120,13 +120,22 @@ public partial class PlayerController : NetworkBehaviour
     }
     #endregion
 
-    [SerializeField] public float moveSpeed = 3;
+    #region  面板赋值
+    [SerializeField] private float moveSpeed = 3;
     public float MoveSpeed  { get => moveSpeed; }
 
-    [SerializeField] public Animator animator;
-    public Animator Animator { get => animator; }
+    [SerializeField] private CharacterController characterController;
+    public  CharacterController CharacterController { get => characterController; }
 
-    public Vector2Int currentAOICoord { get; set; }
+    [SerializeField] private Player_View view;
+    public Player_View View { get => view; }
+
+    [SerializeField] private Animator animator;
+    public Animator Animator { get => animator; }
+    #endregion
+
+
+    public Vector2Int currentAOICoord { get; private set; }
     public InputData inputData { get; private set; }
     //框架，玩家使用的状态机
     private StateMachine stateMachine;
@@ -183,5 +192,16 @@ public partial class PlayerController : NetworkBehaviour
         animator.CrossFadeInFixedTime(animationName, fixedTransitionDuration); //默认动作过渡时间0.25秒，基本不用动
     }
 
+    public void UpdateAOICoord()
+    {
+        //玩家开始移动
+        Vector2Int newCoord = AOIUtility.GetCoordByWorldPostion(transform.position);
+        Vector2Int oldCoord = currentAOICoord;
+        if (newCoord != oldCoord) //发生了地图块的坐标变化
+        {
+            AOIUtility.UpdatePlayerCoord(this, oldCoord, newCoord);
+            currentAOICoord = newCoord;
+        }
+    }
 }
 #endif

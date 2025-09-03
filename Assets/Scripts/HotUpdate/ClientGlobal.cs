@@ -9,10 +9,13 @@ public class ClientGlobal : SingletonMono<ClientGlobal>
     protected override void Awake()
     {
         base.Awake();
-        //GlobalÓĞ¸öÌØµã£¬¾ÍÊÇ²»ÄÜÏú»Ù
+        //Globalæœ‰ä¸ªç‰¹ç‚¹ï¼Œå°±æ˜¯ä¸èƒ½é”€æ¯
         DontDestroyOnLoad(gameObject);
 
-        ResSystem.InstantiateGameObject<NetManager>("NetworkManager").Init(true);//Ö±½ÓÓÃµÄÍ¬²½£¬ÒòÎªÎÄ¼şºÜĞ¡£¬Èç¹û´óÁË»¹ÊÇÒªÓÃÒì²½¼ÓÔØ
+        //å®ä¾‹åŒ–NetworkManagerä¹‹å‰ï¼Œå®Œæˆ ç½‘ç»œå˜é‡åºåˆ—åŒ–
+        NetworkVariableSerializationBinder.Init();
+
+        ResSystem.InstantiateGameObject<NetManager>("NetworkManager").Init(true);//ç›´æ¥ç”¨çš„åŒæ­¥ï¼Œå› ä¸ºæ–‡ä»¶å¾ˆå°ï¼Œå¦‚æœå¤§äº†è¿˜æ˜¯è¦ç”¨å¼‚æ­¥åŠ è½½
 
     }
 }
