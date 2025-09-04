@@ -54,11 +54,11 @@ public partial class PlayerController : NetworkBehaviour
     //这就是Rpc好用的地方。
     //这里的moveSpeed就算本地客户端作弊，修改了数据，但是服务端在使用的时候用的是服务端的moveSpeed，还达到了防作弊效果。
     [ServerRpc(RequireOwnership =false)]  //只会被服务端调用的方法
-    private void SendInputMoveDirServerRpc(Vector2 inputDir)
+    private void SendInputMoveDirServerRpc(Vector3 moveDir)
     {
 
 #if UNITY_SERVER || UNITY_EDITOR
-        Server_ReceiveMoveInput(inputDir);
+        Server_ReceiveMoveInput(moveDir);
 #endif
 
     }
@@ -86,21 +86,24 @@ public partial class PlayerController : NetworkBehaviour
             this.AddUpdate(LocalClientUpdate);//添加一个Update的监听,框架做的
         }
     }
-    private Vector2 lastInputDir = Vector2.zero;
+    //最后输入
+    private Vector3 lastInputDir = Vector3.zero;
     //玩家移动输入判断 （客户端）
     private void LocalClientUpdate()
     {
         if (currentState.Value == PlayerState.None) return;
         float h = Input.GetAxisRaw("Horizontal");
         float v = Input.GetAxisRaw("Vertical");
-        Vector2 inputDir = new Vector2(h,v);
-        if(inputDir == lastInputDir)
-        {
-            return;
-        }
-        lastInputDir = inputDir;
+        Vector3 inputDir = new Vector3(h,0,v);
+        if(inputDir == Vector3.zero && lastInputDir == Vector3.zero) return;//意味着没有动
 
-        SendInputMoveDirServerRpc(inputDir);
+        //输入方向
+        lastInputDir = inputDir;
+        //计算摄像机的旋转，和相对的角色WASD移动的 对应变化
+        float cameraEulerAngleY = Camera.main.transform.eulerAngles.y;
+        //四元数和向量相乘：让这个向量按照四元数所表达的角度进行旋转后得到一个新的向量
+        //移动方向：Quaternion.Euler(0, cameraEulerAngleY, 0) * inputDir
+        SendInputMoveDirServerRpc(Quaternion.Euler(0, cameraEulerAngleY, 0) * inputDir);
 
     }
 }
@@ -116,13 +119,16 @@ public partial class PlayerController : NetworkBehaviour
     #region 内部类型
     public class InputData
     {
-        public Vector2 moveDir;
+        public Vector3 moveDir;
     }
     #endregion
 
-    #region  面板赋值
-    [SerializeField] private float moveSpeed = 3;
+    #region  面板赋值 (理论上，下面这些值，包括移动速度旋转速度等，客户端都不需要知道，只要服务端知道就行)
+    [SerializeField] private float moveSpeed = 1;
     public float MoveSpeed  { get => moveSpeed; }
+
+    [SerializeField] private float rotateSpeed = 1000; //至少一秒要能转1000度
+    public float RotateSpeed { get => rotateSpeed; }
 
     [SerializeField] private CharacterController characterController;
     public  CharacterController CharacterController { get => characterController; }
@@ -153,10 +159,9 @@ public partial class PlayerController : NetworkBehaviour
     /// <summary>
     /// 服务端 把输入保存起来
     /// </summary>
-    /// <param name="inputDir"></param>
-    private void Server_ReceiveMoveInput(Vector2 inputDir)
+    private void Server_ReceiveMoveInput(Vector3 moveDir)
     {
-        inputData.moveDir = inputDir.normalized; //序列化，可以避免客户端去作弊
+        inputData.moveDir = moveDir.normalized; //序列化，可以避免客户端去作弊
         //状态类中根据输入情况进行运算
 
     }

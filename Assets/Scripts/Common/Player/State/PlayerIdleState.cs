@@ -9,7 +9,7 @@ public class PlayerIdleState : PlayerStateBase
     }
     public override void Update()
     {
-        if (player.inputData.moveDir != Vector2.zero)
+        if (player.inputData.moveDir != Vector3.zero)
         {
             player.ChangeState(PlayerState.Move);
             return;

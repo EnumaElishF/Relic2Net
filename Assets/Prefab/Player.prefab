@@ -136,6 +136,7 @@ MonoBehaviour:
   cameraFollowTarget: {fileID: 6117674719791029295}
   moveSpeed: 3
   characterController: {fileID: 6189258044268938541}
+  view: {fileID: 221965787477646425}
   animator: {fileID: 442357951897592354}
 --- !u!143 &6189258044268938541
 CharacterController:
@@ -251,6 +252,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d308baf8f485a2449bf740056bcb93e8, type: 3}
+--- !u!114 &221965787477646425 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6418124376921357162, guid: d308baf8f485a2449bf740056bcb93e8, type: 3}
+  m_PrefabInstance: {fileID: 6486686120272275251}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aafdf71bd80084841b5a78e8ecbffc3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!95 &442357951897592354 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 6640210884463805713, guid: d308baf8f485a2449bf740056bcb93e8, type: 3}

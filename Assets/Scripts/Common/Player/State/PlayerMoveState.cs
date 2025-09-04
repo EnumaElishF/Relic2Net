@@ -1,5 +1,4 @@
 #if UNITY_SERVER || UNITY_EDITOR
-using System;
 using UnityEngine;
 
 public class PlayerMoveState : PlayerStateBase
@@ -13,11 +12,13 @@ public class PlayerMoveState : PlayerStateBase
 
     public override void Update()
     {
-        if(player.inputData.moveDir == Vector2.zero)
+        if(player.inputData.moveDir == Vector3.zero)
         {
             player.ChangeState(PlayerState.Idle);
             return;
         }
+        //旋转
+        player.View.transform.rotation = Quaternion.RotateTowards(player.View.transform.rotation, Quaternion.LookRotation(player.inputData.moveDir), Time.deltaTime * player.RotateSpeed);
 
  
     }
