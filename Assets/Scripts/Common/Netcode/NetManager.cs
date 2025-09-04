@@ -42,7 +42,7 @@ public class NetManager : NetworkManager
         NetworkObject networkObject = Instantiate(prefab).GetComponent<NetworkObject>();
         networkObject.transform.position = position;
         networkObject.SpawnWithOwnership(clientID); //生成
-        // networkObject.NetworkShow(clientID);
+        networkObject.NetworkShow(clientID);
 
         return networkObject;
     }

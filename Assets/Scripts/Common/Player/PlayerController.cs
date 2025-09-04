@@ -7,7 +7,7 @@ using UnityEngine;
 /// </summary>
 public partial class PlayerController : NetworkBehaviour
 {
-    private NetworkVariable<PlayerState> currentState = new NetworkVariable<PlayerState>(PlayerState.None);
+    private NetVariable<PlayerState> currentState = new NetVariable<PlayerState>(PlayerState.None);
     //多个玩家，所以Player没有单例
     //public NetworkVariable<float> moveSpeed;   //网络变量：值类型，或者是结构体
 
@@ -166,6 +166,8 @@ public partial class PlayerController : NetworkBehaviour
     /// </summary>
     private void Server_OnNetworkDespawn()
     {
+        //玩家销毁时，StateMachine要销毁
+        stateMachine.Destroy();
         AOIUtility.RemovePlayer(this, currentAOICoord);
     }
 

@@ -6,12 +6,12 @@ using UnityEngine;
 
 public class ClientsManager : SingletonMono<ClientsManager>
 {
-    //SingletonMono¼ÓÈë¶ÔSingletonµÄÍ¨ÓÃ»ùÀà¸ÄÔì£¬
+    //SingletonMonoåŠ å…¥å¯¹Singletonçš„é€šç”¨åŸºç±»æ”¹é€ ï¼Œ
 
     public GameObject playerPrefab;
 
     /// <summary>
-    /// ³õÊ¼»¯   ĞèÒªÓÉ·şÎñÆ÷¿ªÆô£¬×÷Îª¿Í»§¶ËÃÇµÄ¹ÜÀíÕß£¨¿¼ÂÇÒ»¸öÎ»ÖÃ£¬Ë­È¥×öËûµÄ³õÊ¼»¯ÊÇ×îºÃµÄÇé¿ö£¿
+    /// åˆå§‹åŒ–   éœ€è¦ç”±æœåŠ¡å™¨å¼€å¯ï¼Œä½œä¸ºå®¢æˆ·ç«¯ä»¬çš„ç®¡ç†è€…ï¼ˆè€ƒè™‘ä¸€ä¸ªä½ç½®ï¼Œè°å»åšä»–çš„åˆå§‹åŒ–æ˜¯æœ€å¥½çš„æƒ…å†µï¼Ÿ
     /// </summary>
     public void Init()
     {
@@ -20,8 +20,7 @@ public class ClientsManager : SingletonMono<ClientsManager>
 
     private void OnClientConnectedCallback(ulong clientID)
     {
-        //TODO µÇÂ¼×¢²áÖ®ÀàµÄÁ÷³Ì
-        //TODO Ô¤ÖÆÌå¡¢×ø±êµÈºóĞø»ùÓÚÅäÖÃ
-        NetManager.Instance.SpawnObject(clientID, playerPrefab, Vector3.zero);
+        //TODO ç™»å½•æ³¨å†Œä¹‹ç±»çš„æµç¨‹
+        NetManager.Instance.SpawnObject(clientID, playerPrefab, ServerGlobal.Instance.ServerConfig.playerDefaultPosition);
     }
 }

@@ -1,12 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using JKFrame;
+using UnityEngine;
 /// <summary>
-/// ServerGlobal作为全局所做的，他是不会被销毁的
+/// ServerGlobal浣滀负鍏ㄥ眬鎵�鍋氱殑锛屼粬鏄笉浼氳閿�姣佺殑
 /// </summary>
 public class ServerGlobal : SingletonMono<ServerGlobal>
 {
+    [SerializeField] private ServerConfig serverConfig;
+    public ServerConfig ServerConfig { get => serverConfig; }
     protected override void Awake()
     {
         base.Awake();
