@@ -7,6 +7,7 @@
   <assembly fullname="JKFrame">
     <type fullname="JKFrame.ConfigBase" preserve="all" />
     <type fullname="JKFrame.EventSystem" preserve="all" />
+    <type fullname="JKFrame.IStateMachineOwner" preserve="all" />
     <type fullname="JKFrame.JKFrameExtension" preserve="all" />
     <type fullname="JKFrame.ResSystem" preserve="all" />
     <type fullname="JKFrame.SingletonMono`1" preserve="all" />
@@ -14,6 +15,7 @@
   <assembly fullname="Unity.Netcode.Runtime">
     <type fullname="Unity.Netcode.FastBufferReader" preserve="all" />
     <type fullname="Unity.Netcode.FastBufferWriter" preserve="all" />
+    <type fullname="Unity.Netcode.FastBufferWriter/ForEnums" preserve="all" />
     <type fullname="Unity.Netcode.NetworkBehaviour" preserve="all" />
     <type fullname="Unity.Netcode.NetworkBehaviour/RpcReceiveHandler" preserve="all" />
     <type fullname="Unity.Netcode.NetworkBehaviour/__RpcExecStage" preserve="all" />
@@ -21,10 +23,21 @@
     <type fullname="Unity.Netcode.NetworkObject" preserve="all" />
     <type fullname="Unity.Netcode.NetworkSpawnManager" preserve="all" />
     <type fullname="Unity.Netcode.NetworkTransport" preserve="all" />
+    <type fullname="Unity.Netcode.NetworkVariableBase" preserve="all" />
+    <type fullname="Unity.Netcode.NetworkVariableReadPermission" preserve="all" />
+    <type fullname="Unity.Netcode.NetworkVariableSerializationTypes" preserve="all" />
+    <type fullname="Unity.Netcode.NetworkVariableSerialization`1" preserve="all" />
+    <type fullname="Unity.Netcode.NetworkVariableSerialization`1/EqualsDelegate" preserve="all" />
+    <type fullname="Unity.Netcode.NetworkVariableWritePermission" preserve="all" />
+    <type fullname="Unity.Netcode.NetworkVariable`1" preserve="all" />
     <type fullname="Unity.Netcode.RpcDelivery" preserve="all" />
     <type fullname="Unity.Netcode.ServerRpcAttribute" preserve="all" />
     <type fullname="Unity.Netcode.ServerRpcParams" preserve="all" />
     <type fullname="Unity.Netcode.Transports.UTP.UnityTransport" preserve="all" />
+    <type fullname="Unity.Netcode.UserNetworkVariableSerialization`1" preserve="all" />
+    <type fullname="Unity.Netcode.UserNetworkVariableSerialization`1/DuplicateValueDelegate" preserve="all" />
+    <type fullname="Unity.Netcode.UserNetworkVariableSerialization`1/ReadValueDelegate" preserve="all" />
+    <type fullname="Unity.Netcode.UserNetworkVariableSerialization`1/WriteValueDelegate" preserve="all" />
     <type fullname="Unity.Netcode.__RpcParams" preserve="all" />
   </assembly>
   <assembly fullname="UnityEngine.CoreModule">
@@ -41,6 +54,7 @@
     <type fullname="UnityEngine.MonoBehaviour" preserve="all" />
     <type fullname="UnityEngine.Object" preserve="all" />
     <type fullname="UnityEngine.Plane" preserve="all" />
+    <type fullname="UnityEngine.Quaternion" preserve="all" />
     <type fullname="UnityEngine.RuntimeInitializeOnLoadMethodAttribute" preserve="all" />
     <type fullname="UnityEngine.SceneManagement.SceneManager" preserve="all" />
     <type fullname="UnityEngine.SerializeField" preserve="all" />
@@ -64,6 +78,7 @@
     <type fullname="System.Action" preserve="all" />
     <type fullname="System.Action`1" preserve="all" />
     <type fullname="System.Array" preserve="all" />
+    <type fullname="System.Attribute" preserve="all" />
     <type fullname="System.Byte" preserve="all" />
     <type fullname="System.CodeDom.Compiler.GeneratedCodeAttribute" preserve="all" />
     <type fullname="System.Collections.Generic.Dictionary`2" preserve="all" />
@@ -81,14 +96,17 @@
     <type fullname="System.Diagnostics.DebuggableAttribute" preserve="all" />
     <type fullname="System.Diagnostics.DebuggableAttribute/DebuggingModes" preserve="all" />
     <type fullname="System.Enum" preserve="all" />
+    <type fullname="System.Exception" preserve="all" />
     <type fullname="System.Func`2" preserve="all" />
     <type fullname="System.IDisposable" preserve="all" />
     <type fullname="System.Int32" preserve="all" />
     <type fullname="System.Object" preserve="all" />
     <type fullname="System.Runtime.CompilerServices.CompilationRelaxationsAttribute" preserve="all" />
     <type fullname="System.Runtime.CompilerServices.CompilerGeneratedAttribute" preserve="all" />
+    <type fullname="System.Runtime.CompilerServices.IsReadOnlyAttribute" preserve="all" />
     <type fullname="System.Runtime.CompilerServices.RuntimeCompatibilityAttribute" preserve="all" />
     <type fullname="System.Runtime.CompilerServices.RuntimeHelpers" preserve="all" />
+    <type fullname="System.Runtime.InteropServices.UnmanagedType" preserve="all" />
     <type fullname="System.RuntimeFieldHandle" preserve="all" />
     <type fullname="System.String" preserve="all" />
     <type fullname="System.ValueType" preserve="all" />

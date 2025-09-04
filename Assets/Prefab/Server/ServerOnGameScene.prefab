@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mapConfig: {fileID: 11400000, guid: d40c17d03978e5c4e98e415c8cc271b6, type: 2}
+  testRange: 36
 --- !u!1 &6183135768358698062
 GameObject:
   m_ObjectHideFlags: 0

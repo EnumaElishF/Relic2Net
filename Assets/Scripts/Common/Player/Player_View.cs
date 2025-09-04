@@ -26,4 +26,12 @@ public class Player_View : MonoBehaviour
         this.rootMotionAction = null;
     }
 #endif
+
+
+    #region 动画事件
+    private void FootStep()
+    {
+
+    }
+    #endregion
 }

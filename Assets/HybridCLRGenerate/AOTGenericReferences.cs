@@ -8,6 +8,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		"JKFrame.dll",
 		"System.Core.dll",
 		"System.dll",
+		"Unity.Netcode.Runtime.dll",
 		"Unity.ResourceManager.dll",
 		"UnityEngine.CoreModule.dll",
 		"mscorlib.dll",
@@ -36,7 +37,9 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Action<object>
 	// System.Action<ulong>
 	// System.Collections.Generic.ArraySortHelper<UnityEngine.Vector2Int>
+	// System.Collections.Generic.ArraySortHelper<object>
 	// System.Collections.Generic.Comparer<UnityEngine.Vector2Int>
+	// System.Collections.Generic.Comparer<object>
 	// System.Collections.Generic.Dictionary.Enumerator<UnityEngine.Vector2Int,object>
 	// System.Collections.Generic.Dictionary.Enumerator<object,object>
 	// System.Collections.Generic.Dictionary.Enumerator<ulong,object>
@@ -71,6 +74,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Collections.Generic.ICollection<object>
 	// System.Collections.Generic.ICollection<ulong>
 	// System.Collections.Generic.IComparer<UnityEngine.Vector2Int>
+	// System.Collections.Generic.IComparer<object>
 	// System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<UnityEngine.Vector2Int,object>>
 	// System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<object,object>>
 	// System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<ulong,object>>
@@ -87,6 +91,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Collections.Generic.IEqualityComparer<object>
 	// System.Collections.Generic.IEqualityComparer<ulong>
 	// System.Collections.Generic.IList<UnityEngine.Vector2Int>
+	// System.Collections.Generic.IList<object>
 	// System.Collections.Generic.KeyValuePair<UnityEngine.Vector2Int,object>
 	// System.Collections.Generic.KeyValuePair<object,object>
 	// System.Collections.Generic.KeyValuePair<ulong,object>
@@ -94,15 +99,20 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Collections.Generic.LinkedList<object>
 	// System.Collections.Generic.LinkedListNode<object>
 	// System.Collections.Generic.List.Enumerator<UnityEngine.Vector2Int>
+	// System.Collections.Generic.List.Enumerator<object>
 	// System.Collections.Generic.List<UnityEngine.Vector2Int>
+	// System.Collections.Generic.List<object>
 	// System.Collections.Generic.ObjectComparer<UnityEngine.Vector2Int>
+	// System.Collections.Generic.ObjectComparer<object>
 	// System.Collections.Generic.ObjectEqualityComparer<UnityEngine.Vector2Int>
 	// System.Collections.Generic.ObjectEqualityComparer<object>
 	// System.Collections.Generic.ObjectEqualityComparer<ulong>
 	// System.Collections.Generic.Queue.Enumerator<int>
 	// System.Collections.Generic.Queue<int>
 	// System.Collections.ObjectModel.ReadOnlyCollection<UnityEngine.Vector2Int>
+	// System.Collections.ObjectModel.ReadOnlyCollection<object>
 	// System.Comparison<UnityEngine.Vector2Int>
+	// System.Comparison<object>
 	// System.Func<UnityEngine.Bounds,byte>
 	// System.Func<object,object>
 	// System.Func<object>
@@ -114,6 +124,26 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Runtime.CompilerServices.TaskAwaiter<object>
 	// System.Threading.Tasks.Task<object>
 	// System.Threading.Tasks.TaskCompletionSource<object>
+	// Unity.Netcode.FallbackSerializer<int>
+	// Unity.Netcode.FallbackSerializer<object>
+	// Unity.Netcode.INetworkVariableSerializer<int>
+	// Unity.Netcode.INetworkVariableSerializer<object>
+	// Unity.Netcode.NetworkVariable.OnValueChangedDelegate<int>
+	// Unity.Netcode.NetworkVariable.OnValueChangedDelegate<object>
+	// Unity.Netcode.NetworkVariable<int>
+	// Unity.Netcode.NetworkVariable<object>
+	// Unity.Netcode.NetworkVariableSerialization.EqualsDelegate<int>
+	// Unity.Netcode.NetworkVariableSerialization.EqualsDelegate<object>
+	// Unity.Netcode.NetworkVariableSerialization<int>
+	// Unity.Netcode.NetworkVariableSerialization<object>
+	// Unity.Netcode.UnmanagedTypeSerializer<int>
+	// Unity.Netcode.UserNetworkVariableSerialization.DuplicateValueDelegate<int>
+	// Unity.Netcode.UserNetworkVariableSerialization.DuplicateValueDelegate<object>
+	// Unity.Netcode.UserNetworkVariableSerialization.ReadValueDelegate<int>
+	// Unity.Netcode.UserNetworkVariableSerialization.ReadValueDelegate<object>
+	// Unity.Netcode.UserNetworkVariableSerialization.WriteValueDelegate<int>
+	// Unity.Netcode.UserNetworkVariableSerialization.WriteValueDelegate<object>
+	// Unity.Netcode.UserNetworkVariableSerialization<object>
 	// UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationBase.<>c__DisplayClass60_0<object>
 	// UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationBase.<>c__DisplayClass61_0<object>
 	// UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationBase<object>
@@ -150,6 +180,14 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.Void JKFrame.ResSystem.InstantiateGameObjectAsync<object>(string,System.Action<object>,UnityEngine.Transform,string,bool)
 		// object System.Activator.CreateInstance<object>()
 		// object[] System.Array.Empty<object>()
+		// System.Void* Unity.Collections.LowLevel.Unsafe.UnsafeUtility.AddressOf<int>(int&)
+		// System.Void Unity.Netcode.FastBufferReader.ReadUnmanagedSafe<object>(object&)
+		// System.Void Unity.Netcode.FastBufferReader.ReadValueSafe<object>(object&,Unity.Netcode.FastBufferWriter.ForEnums)
+		// System.Void Unity.Netcode.FastBufferWriter.WriteUnmanagedSafe<object>(object&)
+		// System.Void Unity.Netcode.FastBufferWriter.WriteValueSafe<object>(object&,Unity.Netcode.FastBufferWriter.ForEnums)
+		// bool Unity.Netcode.NetworkVariableSerialization<int>.ValueEquals<int>(int&,int&)
+		// System.Void Unity.Netcode.NetworkVariableSerializationTypes.InitializeEqualityChecker_UnmanagedValueEquals<int>()
+		// System.Void Unity.Netcode.NetworkVariableSerializationTypes.InitializeSerializer_UnmanagedByMemcpy<int>()
 		// object UnityEngine.Component.GetComponent<object>()
 		// object UnityEngine.GameObject.GetComponent<object>()
 		// object UnityEngine.Object.Instantiate<object>(object)

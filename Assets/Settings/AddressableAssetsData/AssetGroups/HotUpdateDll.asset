@@ -22,11 +22,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 7494b09ff6f75a0419272a77f5836889
-    m_Address: GameObject
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 12e82f30c24aba545b54ff59d1047d9c
     m_Address: Common.dll
     m_ReadOnly: 0

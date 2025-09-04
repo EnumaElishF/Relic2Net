@@ -17,10 +17,10 @@ MonoBehaviour:
   hybridclrRepoURL: https://gitee.com/focus-creative-games/hybridclr
   il2cppPlusRepoURL: https://gitee.com/focus-creative-games/il2cpp_plus
   hotUpdateAssemblyDefinitions:
-  - {fileID: 5897886265953266890, guid: afeac09d821c29749be41a5c30466ccc, type: 3}
   - {fileID: 5897886265953266890, guid: ce0b89fb0ce692240b67d87988d9a024, type: 3}
-  - {fileID: 5897886265953266890, guid: a7c7c40fdba305645bc91687f966b152, type: 3}
+  - {fileID: 5897886265953266890, guid: afeac09d821c29749be41a5c30466ccc, type: 3}
   - {fileID: 5897886265953266890, guid: f7b8790b2f4dfaa45bf6efa45863e0d3, type: 3}
+  - {fileID: 5897886265953266890, guid: a7c7c40fdba305645bc91687f966b152, type: 3}
   hotUpdateAssemblies: []
   preserveHotUpdateAssemblies: []
   hotUpdateDllCompileOutputRootDir: HybridCLRData/HotUpdateDlls
@@ -31,6 +31,9 @@ MonoBehaviour:
   - Unity.Addressables
   - Aot
   - mscorlib
+  - Unity.Netcode.Runtime
+  - System
+  - System.Core
   outputLinkFile: HybridCLRGenerate/link.xml
   outputAOTGenericReferenceFile: HybridCLRGenerate/AOTGenericReferences.cs
   maxGenericReferenceIteration: 10

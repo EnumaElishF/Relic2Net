@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7191506655108644429}
   - component: {fileID: 6380886465569669860}
+  - component: {fileID: 1170900934295539061}
   m_Layer: 0
   m_Name: ServerGlobal
   m_TagString: Untagged
@@ -44,3 +45,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37791ed6bad6b57468b72bb0d6b23f39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serverConfig: {fileID: 0}
+--- !u!81 &1170900934295539061
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5830560838689005708}
+  m_Enabled: 1

@@ -196,6 +196,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ServerGlobal
       objectReference: {fileID: 0}
+    - target: {fileID: 6380886465569669860, guid: 85a35e6697ff23443b19fc94723e87dd, type: 3}
+      propertyPath: serverConfig
+      value: 
+      objectReference: {fileID: 11400000, guid: 6fc1f640bdadbed44ba9919ac65520ee, type: 2}
     - target: {fileID: 7191506655108644429, guid: 85a35e6697ff23443b19fc94723e87dd, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

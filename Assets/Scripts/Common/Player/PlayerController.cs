@@ -70,7 +70,7 @@ public partial class PlayerController : NetworkBehaviour
 /// 客户端
 /// </summary>
 #if !UNITY_SERVER || UNITY_EDITOR
-public partial class PlayerController : NetworkBehaviour
+public partial class PlayerController : NetworkBehaviour,IStateMachineOwner
 {
     public Transform cameraLookatTarget;
     public Transform cameraFollowTarget;
@@ -150,6 +150,7 @@ public partial class PlayerController : NetworkBehaviour
     private void Server_OnNetworkSpawn()
     {
         stateMachine = new StateMachine();
+        stateMachine.Init(this);
         inputData = new InputData();
         //登录游戏后，所在的位置，对应当前的AOI的坐标
         currentAOICoord = AOIUtility.GetCoordByWorldPostion(transform.position);
