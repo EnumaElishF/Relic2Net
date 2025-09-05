@@ -225,6 +225,7 @@ namespace JKFrame
         /// <param name="autoRelease">物体销毁时，会自动去调用一次Addressables.Release</param>
         public static GameObject InstantiateGameObject(string assetName, Transform parent = null, string keyName = null, bool autoRelease = true)
         {
+            Debug.Log($"[ResSystem] 检查尝试加载的资源名：{assetName}");
             GameObject go;
             if (keyName == null) go = PoolSystem.GetGameObject(assetName, parent);
             else go = PoolSystem.GetGameObject(keyName, parent);
@@ -238,6 +239,8 @@ namespace JKFrame
                 }
                 go.name = keyName != null ? keyName : assetName;
             }
+            Debug.Log($"[ResSystem] 资源加载成功：{assetName}");
+
             return go;
         }
 
@@ -419,6 +422,17 @@ namespace JKFrame
             return Addressables.ReleaseInstance(obj);
         }
         #endregion
+
+
+        /// <summary>
+        /// 框架修复:  规范化资源路径（统一分隔符为正斜杠，解决跨平台路径解析问题）
+        /// </summary>
+        private static string NormalizeAssetPath(string path)
+        {
+            if (string.IsNullOrEmpty(path)) return path;
+            // 将Windows风格的反斜杠替换为Unity推荐的正斜杠
+            return path.Replace("\\", "/").Trim();
+        }
     }
 }
 #endif
