@@ -36,6 +36,14 @@ public static class BuildMenuItems
 
         Debug.Log("开始构建服务端");
 
+        ServerBuildFilterAssemblies.enable = true;//服务端需要过滤处理
+
+        //关闭HybridCLR
+        //注: 虽然把华佗关闭了，但是华佗并不是什么事都不做，他只是不去生成dll以及不去过滤程序集
+        SettingsUtil.Enable = false;
+        //关闭Addressables
+        AddressableAssetSettingsDefaultObject.Settings.BuildAddressablesWithPlayerBuild = AddressableAssetSettings.PlayerBuildOption.DoNotBuildWithPlayer;
+
         //服务端不需要热更新：   对ProjectSetting的HybridCLR设置，取消勾选，HybridCLR插件的Enable
         HybridCLR.Editor.SettingsUtil.Enable = false;
 
@@ -59,6 +67,12 @@ public static class BuildMenuItems
         };
         BuildPipeline.BuildPlayer(buildPlayerOptions);
 
+        //还原HybridCLR
+        SettingsUtil.Enable = true;
+        //关闭Addressables
+        AddressableAssetSettingsDefaultObject.Settings.BuildAddressablesWithPlayerBuild = AddressableAssetSettings.PlayerBuildOption.PreferencesValue;
+
+
         HybridCLR.Editor.SettingsUtil.Enable = true;//关闭HybridCLR
 
 
@@ -69,6 +83,8 @@ public static class BuildMenuItems
     public static void NewClient()
     {
         Debug.Log("开始构建客户端");
+        
+        ServerBuildFilterAssemblies.enable = false;//不做过滤处理（只有服务端需要过滤处理
 
         //HybridCLR构建准备
         PrebuildCommand.GenerateAll();//进行华佗的GenerateAll
@@ -106,6 +122,9 @@ public static class BuildMenuItems
     {
         //UpdateClient是不需要像NewClient那样去重新产生exe的；但是需要把资源去重新走一遍
         Debug.Log("开始构建客户端更新包");
+
+        ServerBuildFilterAssemblies.enable = false;//不做过滤处理（只有服务端需要过滤处理
+
         //华佗不需要去更新所有，但是需要更新dll
         CompileDllCommand.CompileDllActiveBuildTarget();
         GenerateDllBytesFile();

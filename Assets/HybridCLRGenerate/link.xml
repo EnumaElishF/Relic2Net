@@ -7,7 +7,6 @@
   <assembly fullname="JKFrame">
     <type fullname="JKFrame.ConfigBase" preserve="all" />
     <type fullname="JKFrame.EventSystem" preserve="all" />
-    <type fullname="JKFrame.IStateMachineOwner" preserve="all" />
     <type fullname="JKFrame.JKFrameExtension" preserve="all" />
     <type fullname="JKFrame.ResSystem" preserve="all" />
     <type fullname="JKFrame.SingletonMono`1" preserve="all" />

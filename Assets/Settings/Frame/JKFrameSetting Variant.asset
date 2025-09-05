@@ -16,7 +16,7 @@ MonoBehaviour:
     SerializedFormat: 2
     SerializedBytes: 
     ReferencedUnityObjects:
-    - {fileID: 5576044810353654404, guid: 5149e26658d73b746a74d7f792571a42, type: 3}
+    - {fileID: 0}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
@@ -33,19 +33,19 @@ MonoBehaviour:
       Data: true
     - Name: writeTime
       Entry: 5
-      Data: false
+      Data: true
     - Name: writeThreadID
       Entry: 5
       Data: false
     - Name: writeTrace
       Entry: 5
-      Data: false
+      Data: true
     - Name: enableSave
       Entry: 5
       Data: true
     - Name: saveLogTypes
       Entry: 3
-      Data: 18446744073709551615
+      Data: 0
     - Name: savePath
       Entry: 1
       Data: /Log

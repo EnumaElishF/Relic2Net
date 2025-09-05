@@ -822,6 +822,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -44.46
       objectReference: {fileID: 0}
+    - target: {fileID: 3904012384145368623, guid: a589a8d767d6f494fa1a7c14466c0d14, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4567433376687152991, guid: a589a8d767d6f494fa1a7c14466c0d14, type: 3}
       propertyPath: m_Name
       value: GalaxySword

@@ -70,7 +70,7 @@ public partial class PlayerController : NetworkBehaviour
 /// 客户端
 /// </summary>
 #if !UNITY_SERVER || UNITY_EDITOR
-public partial class PlayerController : NetworkBehaviour,IStateMachineOwner
+public partial class PlayerController : NetworkBehaviour
 {
     public Transform cameraLookatTarget;
     public Transform cameraFollowTarget;
@@ -124,7 +124,7 @@ public partial class PlayerController : NetworkBehaviour,IStateMachineOwner
 /// 服务端
 /// </summary>
 #if UNITY_SERVER || UNITY_EDITOR
-public partial class PlayerController : NetworkBehaviour
+public partial class PlayerController : NetworkBehaviour,IStateMachineOwner
 {
     #region 内部类型
     public class InputData

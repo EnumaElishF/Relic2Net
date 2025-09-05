@@ -106,7 +106,7 @@ public class ClientMapManager : SingletonMono<ClientMapManager>
 
     private void Update()
     {
-        if (camera == null) return;
+        if (camera == null || quadTree == null) return;
 
         //相机,面
         GeometryUtility.CalculateFrustumPlanes(camera, cameraPlanes);

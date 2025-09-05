@@ -105,6 +105,12 @@ namespace HybridCLR.Editor.BuildProcessors
 
         public void OnPreprocessBuild(BuildReport report)
         {
+            // 我自定义修改：避免打包服务端导致自动删除了目录
+            if (!SettingsUtil.Enable)
+            {
+                Debug.Log("拦截HybridCLR,删除AssembliesPostIl2CppStrip目录");
+                return;
+            }
             BuildTarget target = EditorUserBuildSettings.activeBuildTarget;
             var dstPath = SettingsUtil.GetAssembliesPostIl2CppStripDir(target);
             BashUtil.RecreateDir(dstPath);
