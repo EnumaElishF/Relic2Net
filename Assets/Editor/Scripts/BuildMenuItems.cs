@@ -74,7 +74,11 @@ public static class BuildMenuItems
         PrebuildCommand.GenerateAll();//进行华佗的GenerateAll
         GenerateDllBytesFile();//搬运dll文本文件
 
-        List<string> sceneList = new List<string>(EditorSceneManager.sceneCountInBuildSettings);
+        // 清理可能存在的Addressables缓存( 主要是用于Git切换版本的时候，用来避免老的catalog导致问题，所以直接清理掉)
+        string catalogPath = $"{Application.persistentDataPath}/com.unity.addressables";
+        if (Directory.Exists(catalogPath)) Directory.Delete(catalogPath, true); //删掉上次热更的catalog文件夹，以做到，进行重新检查下载 (后续断点续传也是)
+
+    List<string> sceneList = new List<string>(EditorSceneManager.sceneCountInBuildSettings);
         for (int i = 0; i < EditorSceneManager.sceneCountInBuildSettings; i++)
         {
             string scenePath = SceneUtility.GetScenePathByBuildIndex(i);

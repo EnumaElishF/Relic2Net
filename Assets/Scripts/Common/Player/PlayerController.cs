@@ -74,6 +74,16 @@ public partial class PlayerController : NetworkBehaviour,IStateMachineOwner
 {
     public Transform cameraLookatTarget;
     public Transform cameraFollowTarget;
+    private void Start()
+    {
+        // Start 一定 在OnNetworkSpawn后执行，如果这个阶段IsSpawned = false 说明是个异常对象
+        if (!IsSpawned)
+        {
+            Destroy(gameObject); //TODO: 网络对象对象池
+        }
+    }
+
+
     private void Client_OnNetworkSpawn()
     {
         //IsOwner 是一个布尔值，用于判断当前本地客户端是否是该 Network Object 的 “所有者”（Owner）。

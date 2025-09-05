@@ -4,11 +4,14 @@ using UnityEngine;
 
 public class TestManager : MonoBehaviour
 {
-    public GameObject serverTestObjectPrefab;
+    //public GameObject serverTestObjectPrefab;
     private void Start()
     {
 #if UNITYSERVER || UNITY_EDITOR
-        NetManager.Instance.SpawnObject(NetManager.ServerClientId, serverTestObjectPrefab, Vector3.zero);
+        //if (NetManager.Instance.IsServer)
+        //{
+        //    NetManager.Instance.SpawnObject(NetManager.ServerClientId, serverTestObjectPrefab, Vector3.zero);
+        //}
 #endif
     }
 
@@ -16,14 +19,14 @@ public class TestManager : MonoBehaviour
     {
 #if UNITY_SERVER || UNITY_EDITOR
         //服务器
-        if (NetManager.Instance.IsServer)
-        {
-            if (ServerTestObject.Instance != null)
-            {
-                //Debug.Log("服务器对象Position的GUI展示问题");
-                GUILayout.Label("Server Object Position:" + ServerTestObject.Instance.transform.position);
-            }
-        }
+        //if (NetManager.Instance.IsServer)
+        //{
+        //    if (ServerTestObject.Instance != null)
+        //    {
+        //        //Debug.Log("服务器对象Position的GUI展示问题");
+        //        GUILayout.Label("Server Object Position:" + ServerTestObject.Instance.transform.position);
+        //    }
+        //}
 #endif
 
 #if !UNITY_SERVER || UNITY_EDITOR
