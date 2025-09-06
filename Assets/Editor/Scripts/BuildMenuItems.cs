@@ -22,14 +22,14 @@ public static class BuildMenuItems
     public const string serverFloderPath = "Server";
     public const string clientFloderPath = "Client";
     [MenuItem("Project/Build/All")]
-    public static void All()
-    {
-        //点击打包全部的时候，要先打包服务端Server，再打包客户端
-        //因为在打包过程中会切换平台。
-        //如果服务端是最后，那么在BuildSetting还要把Build做一个切换，从Dedicated Server改成Windows等。否则会出问题一直在服务端。
-        Server();
-        NewClient();
-    }
+    //public static void All()
+    //{
+    //    //点击打包全部的时候，要先打包服务端Server，再打包客户端
+    //    //因为在打包过程中会切换平台。
+    //    //如果服务端是最后，那么在BuildSetting还要把Build做一个切换，从Dedicated Server改成Windows等。否则会出问题一直在服务端。
+    //    Server();
+    //    NewClient();
+    //}
     [MenuItem("Project/Build/Server")]
     public static void Server()
     {

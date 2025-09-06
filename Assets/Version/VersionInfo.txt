@@ -1,1 +1,2 @@
 ﻿版本信息: Second Update Version
+等待修复的BUG: 两个客户端Player互相不可见; Player移动有问题，Run不能一直移动.

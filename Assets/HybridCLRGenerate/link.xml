@@ -1,5 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <linker>
+  <assembly fullname="Aot">
+    <type fullname="GameSceneLaunchEvent" preserve="all" />
+  </assembly>
   <assembly fullname="Cinemachine">
     <type fullname="Cinemachine.CinemachineFreeLook" preserve="all" />
     <type fullname="Cinemachine.CinemachineVirtualCameraBase" preserve="all" />
@@ -9,6 +12,7 @@
     <type fullname="JKFrame.EventSystem" preserve="all" />
     <type fullname="JKFrame.JKFrameExtension" preserve="all" />
     <type fullname="JKFrame.ResSystem" preserve="all" />
+    <type fullname="JKFrame.SceneSystem" preserve="all" />
     <type fullname="JKFrame.SingletonMono`1" preserve="all" />
   </assembly>
   <assembly fullname="Unity.Netcode.Runtime">
@@ -49,12 +53,14 @@
     <type fullname="UnityEngine.Debug" preserve="all" />
     <type fullname="UnityEngine.GameObject" preserve="all" />
     <type fullname="UnityEngine.GeometryUtility" preserve="all" />
+    <type fullname="UnityEngine.HeaderAttribute" preserve="all" />
     <type fullname="UnityEngine.Mathf" preserve="all" />
     <type fullname="UnityEngine.MonoBehaviour" preserve="all" />
     <type fullname="UnityEngine.Object" preserve="all" />
     <type fullname="UnityEngine.Plane" preserve="all" />
     <type fullname="UnityEngine.Quaternion" preserve="all" />
     <type fullname="UnityEngine.RuntimeInitializeOnLoadMethodAttribute" preserve="all" />
+    <type fullname="UnityEngine.SceneManagement.LoadSceneMode" preserve="all" />
     <type fullname="UnityEngine.SceneManagement.SceneManager" preserve="all" />
     <type fullname="UnityEngine.SerializeField" preserve="all" />
     <type fullname="UnityEngine.Time" preserve="all" />

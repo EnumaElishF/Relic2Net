@@ -28,6 +28,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Action<AOIAddPlayerEvent>
 	// System.Action<AOIRemovePlayerEvent>
 	// System.Action<AOIUpdatePlayerCoordEvent>
+	// System.Action<GameSceneLaunchEvent>
 	// System.Action<InitLocalPlayerEvent>
 	// System.Action<UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle,object>
 	// System.Action<UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<object>>
@@ -163,10 +164,12 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.Void JKFrame.EventSystem.AddEventListener<AOIAddPlayerEvent>(string,System.Action<AOIAddPlayerEvent>)
 		// System.Void JKFrame.EventSystem.AddEventListener<AOIRemovePlayerEvent>(string,System.Action<AOIRemovePlayerEvent>)
 		// System.Void JKFrame.EventSystem.AddEventListener<AOIUpdatePlayerCoordEvent>(string,System.Action<AOIUpdatePlayerCoordEvent>)
+		// System.Void JKFrame.EventSystem.AddEventListener<GameSceneLaunchEvent>(string,System.Action<GameSceneLaunchEvent>)
 		// System.Void JKFrame.EventSystem.AddEventListener<InitLocalPlayerEvent>(string,System.Action<InitLocalPlayerEvent>)
 		// System.Void JKFrame.EventSystem.AddTypeEventListener<AOIAddPlayerEvent>(System.Action<AOIAddPlayerEvent>)
 		// System.Void JKFrame.EventSystem.AddTypeEventListener<AOIRemovePlayerEvent>(System.Action<AOIRemovePlayerEvent>)
 		// System.Void JKFrame.EventSystem.AddTypeEventListener<AOIUpdatePlayerCoordEvent>(System.Action<AOIUpdatePlayerCoordEvent>)
+		// System.Void JKFrame.EventSystem.AddTypeEventListener<GameSceneLaunchEvent>(System.Action<GameSceneLaunchEvent>)
 		// System.Void JKFrame.EventSystem.AddTypeEventListener<InitLocalPlayerEvent>(System.Action<InitLocalPlayerEvent>)
 		// System.Void JKFrame.EventSystem.EventTrigger<AOIAddPlayerEvent>(string,AOIAddPlayerEvent)
 		// System.Void JKFrame.EventSystem.EventTrigger<AOIRemovePlayerEvent>(string,AOIRemovePlayerEvent)
@@ -191,5 +194,6 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// object UnityEngine.Component.GetComponent<object>()
 		// object UnityEngine.GameObject.GetComponent<object>()
 		// object UnityEngine.Object.Instantiate<object>(object)
+		// object UnityEngine.Object.Instantiate<object>(object,UnityEngine.Vector3,UnityEngine.Quaternion,UnityEngine.Transform)
 	}
 }
