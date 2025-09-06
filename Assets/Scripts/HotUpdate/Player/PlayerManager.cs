@@ -27,8 +27,14 @@ public class PlayerManager : SingletonMono<PlayerManager>
     {
         localPlayer = player;
         cinemachine.transform.position = localPlayer.transform.position;
+        //注: Unity虽然会把这部分热更在打包前把他们剔除不在包体里，但是Unity剔除前依然会检验这部分能不能用
+        //尤其是公共部分，一种打包成客户端，一种打包成服务端。需要考虑好这个东西在对立，比如服务端的热更新里会不会引用这个内容。反之，客户端也考虑一下。
+
+        //例如：如果是服务端版的热更新的打包，下面这个是纯客户端才存在的东西，如果不加限制为 客户端的#if,那就会报错
+#if !UNITY_SERVER || UNITY_EDITOR
         cinemachine.LookAt = localPlayer.cameraLookatTarget;
         cinemachine.Follow = localPlayer.cameraFollowTarget;
+#endif
     }
 }
 

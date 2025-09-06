@@ -28,16 +28,10 @@ public class ServerMapManager : SingletonMono<ServerMapManager>
             {
                 Vector2Int resCoord = new Vector2Int(x, y);
                 string resKey = $"{resCoord.x}_{resCoord.y}";
-                //用Lambda表达式来写一个回调函数
-                ResSystem.InstantiateGameObjectAsync<Terrain>(resKey, (terrain) =>
-                {
-                    //服务端的terrain如果要一口气把1600个terrain渲染下来，电脑负担很重，所以不建议开启这个，而且服务端也没有什么必要
-                    terrain.enabled = false;
-                    Vector2Int terrainCoord = resCoord - mapConfig.terrainResKeyCoordOffset;
-                    //世界坐标
-                    terrain.transform.position = new Vector3(terrainCoord.x * mapConfig.terrainSize, 0, terrainCoord.y * mapConfig.terrainSize);
+                Vector2Int terrainCoord = resCoord - mapConfig.terrainResKeyCoordOffset;
+                Vector3 pos = new Vector3(terrainCoord.x * mapConfig.terrainSize, 0, terrainCoord.y * mapConfig.terrainSize);
+                ServerResSystem.InstantiateTerrain(resKey, transform, pos);
 
-                }, transform, null, false); //false关闭自动释放
             }
         }
     }

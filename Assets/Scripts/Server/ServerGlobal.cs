@@ -11,5 +11,12 @@ public class ServerGlobal : SingletonMono<ServerGlobal>
     {
         base.Awake();
         DontDestroyOnLoad(gameObject);
+        EventSystem.AddTypeEventListener<GameSceneLaunchEvent>(OnGameSceneLaunchEvent);
+
+    }
+
+    private void OnGameSceneLaunchEvent(GameSceneLaunchEvent @event)
+    {
+        ServerResSystem.InstantiateServerOnGameScene();
     }
 }

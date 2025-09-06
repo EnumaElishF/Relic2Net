@@ -8,7 +8,6 @@ public class ClientsManager : SingletonMono<ClientsManager>
 {
     //SingletonMono加入对Singleton的通用基类改造，
 
-    public GameObject playerPrefab;
 
     /// <summary>
     /// 初始化   需要由服务器开启，作为客户端们的管理者（考虑一个位置，谁去做他的初始化是最好的情况？
@@ -21,6 +20,6 @@ public class ClientsManager : SingletonMono<ClientsManager>
     private void OnClientConnectedCallback(ulong clientID)
     {
         //TODO 登录注册之类的流程
-        NetManager.Instance.SpawnObject(clientID, playerPrefab, ServerGlobal.Instance.ServerConfig.playerDefaultPosition);
+        NetManager.Instance.SpawnObject(clientID, ServerResSystem.serverConfig.playerPrefab, ServerResSystem.serverConfig.playerDefaultPosition);
     }
 }
