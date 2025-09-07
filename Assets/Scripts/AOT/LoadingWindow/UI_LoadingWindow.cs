@@ -8,9 +8,8 @@ public class UI_LoadingWindow : UI_WindowBase
     [SerializeField] private Text descriptionText;
     [SerializeField] private Slider loadingBarSlider;
     [SerializeField] private Text progressText;
-    public void Init(string description)
+    public void Set(string description)
     {
-        //TODO 版本信息的本地化
         descriptionText.text = description;
     }
     public void UpdateDownloadProgress(float currentBytes, float maxBytes)

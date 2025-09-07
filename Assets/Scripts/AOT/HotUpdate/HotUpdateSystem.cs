@@ -14,7 +14,7 @@ public class HotUpdateSystem : MonoBehaviour
     [Serializable]
     private class HotUpdateSystemState
     {
-        //¼ÓÒ»¸öĞòÁĞ»¯Serializable£¬ÈÃËû¿ÉÒÔ±£´æ×¡Êı¾İ
+        //åŠ ä¸€ä¸ªåºåˆ—åŒ–Serializableï¼Œè®©ä»–å¯ä»¥ä¿å­˜ä½æ•°æ®
         public bool hotUpdateSucceed;
     }
 
@@ -25,35 +25,35 @@ public class HotUpdateSystem : MonoBehaviour
     private Action<bool> onEnd;
     public void StartHotUpdate(Action<float> onPercentageForEachFile, Action<bool> onEnd)
     {
-        //¸³ÖµÒ»ÏÂÈ«¾Ö²ÎÊıµÄÖµ£¬×÷Îª¸øµ±Ç°·½·¨´«²Î
+        //èµ‹å€¼ä¸€ä¸‹å…¨å±€å‚æ•°çš„å€¼ï¼Œä½œä¸ºç»™å½“å‰æ–¹æ³•ä¼ å‚
         this.onPercentageForEachFile = onPercentageForEachFile;
         this.onEnd = onEnd;
-        //¿ªÊ¼¸üĞÂ
+        //å¼€å§‹æ›´æ–°
         StartCoroutine(DoUpdateAddressables());
     }
     private bool succeed;
     private IEnumerator DoUpdateAddressables()
     {
-        //È·¶¨ÉÏÒ»´ÎÈÈ¸üĞÂµÄ×´Ì¬
+        //ç¡®å®šä¸Šä¸€æ¬¡çƒ­æ›´æ–°çš„çŠ¶æ€
         HotUpdateSystemState state = SaveSystem.LoadSetting<HotUpdateSystemState>();
-        if(state ==null || !state.hotUpdateSucceed) //´ÓÀ´Ã»ÓĞÈÈ¸ü¹ı || ÉÏ´ÎÈÈ¸üÃ»ÓĞ³É¹¦
+        if(state ==null || !state.hotUpdateSucceed) //ä»æ¥æ²¡æœ‰çƒ­æ›´è¿‡ || ä¸Šæ¬¡çƒ­æ›´æ²¡æœ‰æˆåŠŸ
         {
-            Debug.Log("¶ÏµãĞø´«");
+            Debug.Log("æ–­ç‚¹ç»­ä¼ ");
             string catalogPath = $"{Application.persistentDataPath}/com.unity.addressables";
-            if (Directory.Exists(catalogPath)) Directory.Delete(catalogPath, true); //É¾µôÉÏ´ÎÈÈ¸üµÄcatalogÎÄ¼ş¼Ğ£¬ÒÔ×öµ½£¬¶ÏµãĞø´«£¬½øĞĞÖØĞÂ¼ì²éÏÂÔØ
+            if (Directory.Exists(catalogPath)) Directory.Delete(catalogPath, true); //åˆ æ‰ä¸Šæ¬¡çƒ­æ›´çš„catalogæ–‡ä»¶å¤¹ï¼Œä»¥åšåˆ°ï¼Œæ–­ç‚¹ç»­ä¼ ï¼Œè¿›è¡Œé‡æ–°æ£€æŸ¥ä¸‹è½½
         }
 
-        //Addressables ÏµÍ³µÄ³õÊ¼»¯ :Addressables »á¼ì²é±¾µØÊÇ·ñ´æÔÚ»º´æÄ¿Â¼,²»´æÔÚ¾ÍÖØĞÂ´´½¨¡£
+        //Addressables ç³»ç»Ÿçš„åˆå§‹åŒ– :Addressables ä¼šæ£€æŸ¥æœ¬åœ°æ˜¯å¦å­˜åœ¨ç¼“å­˜ç›®å½•,ä¸å­˜åœ¨å°±é‡æ–°åˆ›å»ºã€‚
         yield return Addressables.InitializeAsync();
 
         succeed = true;
-        //¼ì²âÄ¿Â¼¸üĞÂ£ºCheckForCatalogUpdates»áÕÒ·şÎñÆ÷ÉÏµÄÄ¿Â¼£¬´Ó¶ø×öµ½±¾µØ´æµµµÄÄ¿Â¼catalogºÍ·şÎñÆ÷ÉÏÄ¿Â¼catalog±È½Ï£¬²»ÏàµÈ¾ÍĞèÒªÈÈ¸ü
+        //æ£€æµ‹ç›®å½•æ›´æ–°ï¼šCheckForCatalogUpdatesä¼šæ‰¾æœåŠ¡å™¨ä¸Šçš„ç›®å½•ï¼Œä»è€Œåšåˆ°æœ¬åœ°å­˜æ¡£çš„ç›®å½•catalogå’ŒæœåŠ¡å™¨ä¸Šç›®å½•catalogæ¯”è¾ƒï¼Œä¸ç›¸ç­‰å°±éœ€è¦çƒ­æ›´
         AsyncOperationHandle<List<string>> checkForCatalogUpdatesHandle  = Addressables.CheckForCatalogUpdates(false);
         yield return checkForCatalogUpdatesHandle;
         if (checkForCatalogUpdatesHandle.Status != AsyncOperationStatus.Succeeded)
         {
             succeed = false;
-            Debug.LogError($"CheckForCatalogUpdatesÊ§°Ü:{checkForCatalogUpdatesHandle.OperationException.Message}");
+            Debug.LogError($"CheckForCatalogUpdateså¤±è´¥:{checkForCatalogUpdatesHandle.OperationException.Message}");
             Addressables.Release(checkForCatalogUpdatesHandle);
 
         }
@@ -62,12 +62,12 @@ public class HotUpdateSystem : MonoBehaviour
             List<string> catalogResult = checkForCatalogUpdatesHandle.Result;
             Addressables.Release(checkForCatalogUpdatesHandle);
 
-            Debug.Log("ÏÂÔØ×îĞÂµÄÄ¿Â¼: catalog");
+            Debug.Log("ä¸‹è½½æœ€æ–°çš„ç›®å½•: catalog");
             if (catalogResult.Count > 0)
             {
                 ShowLoadingWindow();
 
-                //IResourceLocator¶¨Î»Æ÷
+                //IResourceLocatorå®šä½å™¨
                 AsyncOperationHandle<List<IResourceLocator>> updateCatalogsHandle = Addressables.UpdateCatalogs(catalogResult, false);
 
                 yield return updateCatalogsHandle;
@@ -75,77 +75,77 @@ public class HotUpdateSystem : MonoBehaviour
                 {
                     succeed = false;
                     Addressables.Release(updateCatalogsHandle);
-                    Debug.LogError($"CheckForCatalogUpdatesÊ§°Ü:{updateCatalogsHandle.OperationException.Message}");
+                    Debug.LogError($"CheckForCatalogUpdateså¤±è´¥:{updateCatalogsHandle.OperationException.Message}");
                 }
                 else
                 {
                     List<IResourceLocator> locatorList = updateCatalogsHandle.Result;
                     Addressables.Release(updateCatalogsHandle);
-                    JKLog.Log("ÏÂÔØÄ¿Â¼¸üĞÂ³É¹¦");
+                    JKLog.Log("ä¸‹è½½ç›®å½•æ›´æ–°æˆåŠŸ");
                     List<object> downloadKeys = new List<object>(1000);
                     foreach (IResourceLocator locator in locatorList)
                     {
                         downloadKeys.AddRange(locator.Keys);
                     }
-                    //SetLoadingWindow();
+                    SetLoadingWindow();
                     yield return DownloadAllAssets(downloadKeys);
                     CloseLoadingWindow();
                 }
             }
-            else Debug.Log("ÎŞĞè¸üĞÂ");
+            else Debug.Log("æ— éœ€æ›´æ–°");
         }
 
 
         if (state == null) state = new HotUpdateSystemState();
         state.hotUpdateSucceed = succeed;
-        SaveSystem.SaveSetting(state); //±£´æÎªÉèÖÃµÄ¶ş½øÖÆ»òÕßjson¸ñÊ½Êı¾İ£¬×÷ÎªÈÈ¸üÊÇ·ñÍêÈ«³É¹¦µÄ±êÖ¾£¬´Ó¶ø¾ö¶¨ÊÇ·ñĞèÒª½øĞĞ¶ÏµãĞø´« (¿ò¼ÜµÄ¹¤¾ßÉèÖÃ)
+        SaveSystem.SaveSetting(state); //ä¿å­˜ä¸ºè®¾ç½®çš„äºŒè¿›åˆ¶æˆ–è€…jsonæ ¼å¼æ•°æ®ï¼Œä½œä¸ºçƒ­æ›´æ˜¯å¦å®Œå…¨æˆåŠŸçš„æ ‡å¿—ï¼Œä»è€Œå†³å®šæ˜¯å¦éœ€è¦è¿›è¡Œæ–­ç‚¹ç»­ä¼  (æ¡†æ¶çš„å·¥å…·è®¾ç½®)
 
         if (succeed)
         {
             LoadHotUpdateDll();
             LoadMetaForAOTAssemblies();
 
-            // ÒòÎªAddressablesÔÚ³õÊ¼»¯Ä¿Â¼ºó²Å¼ÓÔØdll£¬Õâ»áµ¼ÖÂAD»áÈÏÎªÀàĞÍÎªÈÈ¸ü³ÌĞò¼¯ÖĞµÄÀàĞÍÊÇÎ´ÖªµÄ×ÊÔ´ ÈÏÎªÊÇSystem.Object
+            // å› ä¸ºAddressablesåœ¨åˆå§‹åŒ–ç›®å½•åæ‰åŠ è½½dllï¼Œè¿™ä¼šå¯¼è‡´ADä¼šè®¤ä¸ºç±»å‹ä¸ºçƒ­æ›´ç¨‹åºé›†ä¸­çš„ç±»å‹æ˜¯æœªçŸ¥çš„èµ„æº è®¤ä¸ºæ˜¯System.Object
             //Addressables.LoadContentCatalogAsync($"{Addressables.RuntimePath}/catalog.json");
         }
 
-        //ËùÓĞµÄÊÂÇé¶¼¸ÉÍê£¬²ÅÄÜ»Øµ÷
+        //æ‰€æœ‰çš„äº‹æƒ…éƒ½å¹²å®Œï¼Œæ‰èƒ½å›è°ƒ
         onEnd?.Invoke(succeed);
 
     }
 
     /// <summary>
-    /// ÏÂÔØËùÓĞ×ÊÔ´
+    /// ä¸‹è½½æ‰€æœ‰èµ„æº
     /// </summary>
     /// <returns></returns>
     private IEnumerator DownloadAllAssets(List<object> keys)
     {
-        //ÏÂÃæÈ«²¿µÄÄÚÈİ£¬Íê³ÉÁËÒ»´ÎÑ­»·£¬Ò²¾ÍÊÇÏÂÔØÍê³ÉÁË£ºÒ»¸ö×ÊÔ´
+        //ä¸‹é¢å…¨éƒ¨çš„å†…å®¹ï¼Œå®Œæˆäº†ä¸€æ¬¡å¾ªç¯ï¼Œä¹Ÿå°±æ˜¯ä¸‹è½½å®Œæˆäº†ï¼šä¸€ä¸ªèµ„æº
         AsyncOperationHandle<long> sizeHandle = Addressables.GetDownloadSizeAsync((IEnumerable<object>)keys);
         yield return sizeHandle;
         if (sizeHandle.Status != AsyncOperationStatus.Succeeded)
         {
             succeed = false;
-            Debug.LogError($"GetDownloadSizeAsyncÊ§°Ü:{sizeHandle.OperationException.Message}");
+            Debug.LogError($"GetDownloadSizeAsyncå¤±è´¥:{sizeHandle.OperationException.Message}");
         }
         else
         {
             long downloadSize = sizeHandle.Result;
             if (downloadSize > 0)
             {
-                //Êµ¼ÊµÄÏÂÔØ  : Addressables.MergeMode.NoneÖ»ÄÜÄÃµ½µÚÒ»¸ö°ü£¬ÒòÎªÎÒÃÇĞèÒªÈ«²¿µÄ°ü£¬ËùÒÔĞèÒªÓÃ²¢¼¯ Addressables.MergeMode.Union
+                //å®é™…çš„ä¸‹è½½  : Addressables.MergeMode.Noneåªèƒ½æ‹¿åˆ°ç¬¬ä¸€ä¸ªåŒ…ï¼Œå› ä¸ºæˆ‘ä»¬éœ€è¦å…¨éƒ¨çš„åŒ…ï¼Œæ‰€ä»¥éœ€è¦ç”¨å¹¶é›† Addressables.MergeMode.Union
                 AsyncOperationHandle downloadDependenciesHandle = Addressables.DownloadDependenciesAsync((IEnumerable<object>)keys, Addressables.MergeMode.Union, false);
 
-                //Ñ­»·²é¿´ÏÂÔØ½ø¶È
+                //å¾ªç¯æŸ¥çœ‹ä¸‹è½½è¿›åº¦
                 while (!downloadDependenciesHandle.IsDone)
                 {
-                    if (downloadDependenciesHandle.Status == AsyncOperationStatus.Failed) //ÒòÎª»¹ĞèÒª¿¼ÂÇÎªNoneµÄ×´Ì¬£¬ËùÒÔ²»ÓÃ£¡=Success
+                    if (downloadDependenciesHandle.Status == AsyncOperationStatus.Failed) //å› ä¸ºè¿˜éœ€è¦è€ƒè™‘ä¸ºNoneçš„çŠ¶æ€ï¼Œæ‰€ä»¥ä¸ç”¨ï¼=Success
                     {
                         succeed = false;
-                        Debug.LogError($"downloadDependenciesHanleÊ§°Ü:{downloadDependenciesHandle.OperationException.Message}");
+                        Debug.LogError($"downloadDependenciesHanleå¤±è´¥:{downloadDependenciesHandle.OperationException.Message}");
                         break;
                     }
-                    // ·Ö·¢ÏÂÔØ½ø¶È
+                    // åˆ†å‘ä¸‹è½½è¿›åº¦
                     float percentage = downloadDependenciesHandle.GetDownloadStatus().Percent;
                     onPercentageForEachFile?.Invoke(percentage);
                     UpdateLoadingWindowProgress(downloadSize * percentage, downloadSize);
@@ -154,7 +154,7 @@ public class HotUpdateSystem : MonoBehaviour
                 }
                 if (downloadDependenciesHandle.Status == AsyncOperationStatus.Succeeded)
                 {
-                    JKLog.Log($"È«²¿ÏÂÔØÍê³É");
+                    JKLog.Log($"å…¨éƒ¨ä¸‹è½½å®Œæˆ");
                 }
                 Addressables.Release(downloadDependenciesHandle);
             }
@@ -164,16 +164,16 @@ public class HotUpdateSystem : MonoBehaviour
 
 
     /// <summary>
-    /// »ñÈ¡°æ±¾ĞÅÏ¢
+    /// è·å–ç‰ˆæœ¬ä¿¡æ¯
     /// </summary>
     /// 
-    private string GetVersionInfo()
+    private string GetVersionInfo(LanguageType languageType)
     {
-        //ÕâÀï°æ±¾ĞÅÏ¢¾Í ²»×öÒì²½ ÁË£¬±ØĞëÒªµÈ£¬ÒòÎªÒªÄÃµ½°æ±¾ĞÅÏ¢²ÅÄÜ¼ÌĞøÈ¥¹¤×÷(ÒòÎªËûÎÄ¼şÒ²Ğ¡¸ĞÊÜ²»´ó£©
+        //è¿™é‡Œç‰ˆæœ¬ä¿¡æ¯å°± ä¸åšå¼‚æ­¥ äº†ï¼Œå¿…é¡»è¦ç­‰ï¼Œå› ä¸ºè¦æ‹¿åˆ°ç‰ˆæœ¬ä¿¡æ¯æ‰èƒ½ç»§ç»­å»å·¥ä½œ(å› ä¸ºä»–æ–‡ä»¶ä¹Ÿå°æ„Ÿå—ä¸å¤§ï¼‰
         Addressables.DownloadDependenciesAsync(versionInfoAddressableKey, true).WaitForCompletion();
-        TextAsset textAsset =  Addressables.LoadAssetAsync<TextAsset>(versionInfoAddressableKey).WaitForCompletion();
-        string info = textAsset.text;
-        Addressables.Release(textAsset);
+        VersionInfo versionInfo =  Addressables.LoadAssetAsync<VersionInfo>(versionInfoAddressableKey).WaitForCompletion();
+        string info = versionInfo.GetVersionData(languageType).info;
+        Addressables.Release(versionInfo);
         return info;
     }
 
@@ -183,11 +183,11 @@ public class HotUpdateSystem : MonoBehaviour
         {
             TextAsset dllTextAsset = Addressables.LoadAssetAsync<TextAsset>(hotUpdateDllNames[i]).WaitForCompletion();
             System.Reflection.Assembly.Load(dllTextAsset.bytes);
-            Debug.Log($"¼ÓÔØ{hotUpdateDllNames[i]}³ÌĞò¼¯");
+            Debug.Log($"åŠ è½½{hotUpdateDllNames[i]}ç¨‹åºé›†");
         }
     }
     /// <summary>
-    /// ¼ÓÔØÔªÊı¾İ
+    /// åŠ è½½å…ƒæ•°æ®
     /// </summary>
     private void LoadMetaForAOTAssemblies()
     {
@@ -200,10 +200,27 @@ public class HotUpdateSystem : MonoBehaviour
     }
 
     private UI_LoadingWindow loadingWindow;
+    /// <summary>
+    /// åŠ è½½çª—å£æ˜¾ç¤ºçš„æ—¶å€™åªæ˜¾ç¤ºäº†æ–‡æœ¬
+    /// </summary>
     private void ShowLoadingWindow()
     {
         loadingWindow = UISystem.Show<UI_LoadingWindow>();
-        loadingWindow.Init(GetVersionInfo());
+        //åªæ˜¯ä¸€ä¸ªLoadingç•Œé¢æç¤ºè¯
+        loadingWindow.Set("Loading...");
+    }
+    /// <summary>
+    /// åŠ è½½çª—å£æ—¶çš„å®é™…è¿›è¡Œäº†è®¾ç½®
+    /// </summary>
+    private void SetLoadingWindow()
+    {
+        //ç¡®å®šè¯­è¨€ï¼Œè·å–ç‰ˆæœ¬ä¿¡æ¯
+        //æ ¹æ®å½“å‰è®¾ç½®ç¡®å®šè¯­è¨€ç±»å‹
+        LanguageType languageType;
+        GameBasicSetting basicSetting = SaveSystem.LoadSetting<GameBasicSetting>();
+        if (basicSetting == null) languageType = Application.systemLanguage == SystemLanguage.ChineseSimplified ? LanguageType.SimplifiedChinese : LanguageType.English;
+        else languageType = basicSetting.languageType;
+        loadingWindow.Set(GetVersionInfo(languageType));
     }
 
     private void CloseLoadingWindow()
