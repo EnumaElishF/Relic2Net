@@ -175,6 +175,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: JKFrame Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 8165090602089906868, guid: 405dd55ce89c9bd4f89efcd8102d26e0, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8165090602089906868, guid: 405dd55ce89c9bd4f89efcd8102d26e0, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
