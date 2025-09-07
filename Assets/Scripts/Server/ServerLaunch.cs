@@ -26,7 +26,7 @@ public class ServerLaunch : MonoBehaviour
 {
     void Start()
     {
-        //连接 MongoDB
+/*        //连接 MongoDB
         string connstr = "mongodb://localhost:27017/";
         MongoClient mongoClient = new MongoClient(connstr);
         //查找或建立DataBase,如果没有会自动创建
@@ -58,7 +58,8 @@ public class ServerLaunch : MonoBehaviour
         //删除
         //userInfoCollection.DeleteOne(Builders<TestUseData>.Filter.Eq("useID", 1));
 
-        return;
+        return;*/
+
         Application.targetFrameRate = 30; //帧数设置
         InitServers();
         SceneManager.LoadScene("GameScene");

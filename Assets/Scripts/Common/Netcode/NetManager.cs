@@ -5,11 +5,9 @@ using UnityEngine;
 //NetManager作为两边通用的，不分客户端还是服务端。算是通用部分。
 public class NetManager : NetworkManager
 {
-    //
     public static NetManager Instance { get; private set; }
-
     public UnityTransport unityTransport { get; private set; }
-
+    public NetMessageManager netMessageManager { get; private set; }
 
     /// <summary>
     /// 最先进行的初始化，然后进行InitClient或者InitServer
@@ -18,11 +16,10 @@ public class NetManager : NetworkManager
     {
         Instance = this;
         unityTransport = GetComponent<UnityTransport>();
-        if (isClient)
-            InitClient();
-        else
-            InitServer();
-
+        netMessageManager = GetComponent<NetMessageManager>();
+        if (isClient) InitClient();
+        else InitServer();
+        netMessageManager.Init();
 
     }
 
