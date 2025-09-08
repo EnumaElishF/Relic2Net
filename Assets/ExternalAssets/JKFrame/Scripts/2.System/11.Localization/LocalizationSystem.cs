@@ -32,6 +32,17 @@ public class LocalizationSystem : MonoBehaviour
     /// </summary>
     [SerializeField] private LocalizationConfig globalConfig;
 
+    /// <summary>
+    /// 经过优化修改的->可以变更为手动修改
+    /// 全局的配置
+    /// 可以运行时修改此配置
+    /// </summary>
+    public static LocalizationConfig GlobalConfig
+    {
+        get => instance.globalConfig;
+        set => instance.globalConfig = value;
+    }
+
     [SerializeField] private LanguageType languageType;
 
     private void OnValidate()
