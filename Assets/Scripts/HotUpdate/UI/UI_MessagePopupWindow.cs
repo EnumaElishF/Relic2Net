@@ -11,17 +11,17 @@ public class UI_MessagePopupWindow : UI_WindowBase
     [SerializeField] private Image iconImage;
     [SerializeField] private new Animation animation;
 
-    public void ShowMessageByLocalizationKey(string localizationKey,bool error)
+    public void ShowMessageByLocalizationKey(string localizationKey,Color color)
     {
         //本地化
         string message = LocalizationSystem.GetContent<LocalizationStringData>(localizationKey, LocalizationSystem.LanguageType).content;
-        ShowMessage(message, error);
+        ShowMessage(message, color);
     }
     [Button]
-    public void ShowMessage(string message,bool error)
+    public void ShowMessage(string message, Color color)
     {
         messageText.text = message;
-        Color color = error ? Color.red : Color.yellow; //error的话还是用红色吧
+        //Color color = error ? Color.red : Color.yellow; //error的话还是用红色吧
         messageText.color = color;
         bglineImage.color = color;
         iconImage.color = color;

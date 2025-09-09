@@ -57,7 +57,8 @@ GameObject:
   - component: {fileID: 1087822298918571374}
   - component: {fileID: 4866195413057513746}
   - component: {fileID: 1633138158159204057}
-  - component: {fileID: 1299380982489183220}
+  - component: {fileID: 6206520359555016575}
+  - component: {fileID: 6158664731747789094}
   m_Layer: 0
   m_Name: ServerOnGameScene
   m_TagString: Untagged
@@ -108,7 +109,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   chunkSize: 50
   visualChunkRange: 1
---- !u!114 &1299380982489183220
+--- !u!114 &6206520359555016575
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -117,10 +118,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 6183135768358698062}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6552e125f0369f242b7f0e5649b6a7c6, type: 3}
+  m_Script: {fileID: 11500000, guid: 9b3e4b3525af79941a98743e07bb8aa2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerPrefab: {fileID: 2039334567599830296, guid: d1adee6bbc176af418dfe396816ca8e4, type: 3}
+--- !u!114 &6158664731747789094
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6183135768358698062}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 943f16c02212b3448872d6a79cbad744, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  connstr: mongodb://localhost:27017/
 --- !u!1001 &8206259740406140051
 PrefabInstance:
   m_ObjectHideFlags: 0

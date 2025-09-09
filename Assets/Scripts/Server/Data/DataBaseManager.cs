@@ -25,6 +25,11 @@ public class DataBaseManager: SingletonMono<DataBaseManager>
         PlayerData playerData = playerDataCollection.Find(Builders<PlayerData>.Filter.Eq(nameof(PlayerData.name),name)).FirstOrDefault();
         return playerData;
     }
+    public void CreatePlayerData(PlayerData playerData)
+    {
+        //创建
+        playerDataCollection.InsertOne(playerData);
+    }
     public void SavePlayerData(PlayerData newPlayerData)
     {
         //替换修改

@@ -9,6 +9,7 @@ public class ServerGameSceneManager : MonoBehaviour
     //他作为一定是服务端运行的脚本
     void Start()
     {
+        DataBaseManager.Instance.Init();
         AOIManager.Instance.Init();
         ClientsManager.Instance.Init();
         //暂时是立马生成，以后可能加逻辑

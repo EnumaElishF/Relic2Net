@@ -5,10 +5,23 @@ public enum MessageType : byte
     //用byte比int好处就是，缩短消息串的长度并提升性能。->尤其在高频消息传输场景下效果会更明显
     None,
     C_S_Register, 
+    S_C_Register,
     C_S_Login
 }
 /// <summary>
+/// 可以预知的完成的返回信息，做成Code的方式，做个可知的码。比如服务端返回码等
+/// 反之，像是装备码id或者账号返回信息不可预知那就不用这种，通过做数据去做,例如AccountInfo
+/// </summary>
+public enum ErrorCode : byte
+{
+    None,                //意味着成功
+    AccountFormat,       //账号格式错误
+    NameDuplication      //名称重复
+
+}
+/// <summary>
 /// 从Client发到Server的消息,C2S
+/// INetworkSerializable网络序列化请求
 /// </summary>
 public struct C_S_Register : INetworkSerializable
 {
@@ -16,6 +29,16 @@ public struct C_S_Register : INetworkSerializable
     public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
     {
         accountInfo.NetworkSerialize(serializer);//初始化，直接使用序列化
+    }
+}
+public struct S_C_Register : INetworkSerializable
+{
+    public ErrorCode errorCode;
+
+    public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+    {
+        serializer.SerializeValue(ref errorCode);
+
     }
 }
 public struct C_S_Login : INetworkSerializable

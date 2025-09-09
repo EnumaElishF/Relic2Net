@@ -1,4 +1,5 @@
 using JKFrame;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -24,11 +25,20 @@ public class UI_RegisterWindow : UI_WindowBase
     }
     public override void OnShow()
     {
-
         //重新展示的时候密码置空
         passwordInputField.text = "";
         rePasswordInputField.text = "";
+
+        //注册
+        NetMessageManager.Instance.RegisterMessageCallback(MessageType.S_C_Register, OnS_C_Register);
     }
+    public override void OnClose()
+    {
+        //取消注册，如果有注册那就一定要有关闭
+        NetMessageManager.Instance.UnRegisterMessageCallback(MessageType.S_C_Register, OnS_C_Register);
+
+    }
+
     private void CloseButtonClick()
     {
         UISystem.Close<UI_RegisterWindow>();
@@ -49,5 +59,32 @@ public class UI_RegisterWindow : UI_WindowBase
     private void SubmitButtonClick()
     {
         //TODO 
+        submitButton.interactable = false;
+        //客户端发给服务端
+        NetMessageManager.Instance.SendMessageToServer(MessageType.C_S_Register, new C_S_Register
+        {
+            accountInfo = new AccountInfo
+            {
+                playerName = nameInputField.text,
+                password = passwordInputField.text
+            }
+        });
+    }
+    private void OnS_C_Register(ulong clientID, INetworkSerializable serializable)
+    {
+        //接收
+        S_C_Register netMessage = (S_C_Register)serializable;
+        if (netMessage.errorCode == ErrorCode.None)
+        {
+            //直接用了color，正确用green，警告用yellow，错误用red
+            UISystem.Show<UI_MessagePopupWindow>().ShowMessageByLocalizationKey("注册已成功", Color.green);
+        }
+        else
+        {
+            //注册Error
+            UISystem.Show<UI_MessagePopupWindow>().ShowMessageByLocalizationKey(netMessage.errorCode.ToString(), Color.green);
+        }
+        submitButton.interactable = true;
+
     }
 }

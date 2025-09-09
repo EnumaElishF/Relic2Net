@@ -41,7 +41,9 @@ public class NetMessageManager : SingletonMono<NetMessageManager>
                 reader.ReadValueSafe(out C_S_Login C_S_Login);
                 TriggerMessageCallback(MessageType.C_S_Login, clientId, C_S_Login);
                 break;
-            default:
+            case MessageType.S_C_Register:
+                reader.ReadValueSafe(out S_C_Register S_C_Register);
+                TriggerMessageCallback(MessageType.S_C_Register, clientId, S_C_Register);
                 break;
         }
     }
