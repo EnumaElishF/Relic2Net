@@ -40,7 +40,6 @@ public class ClientsManager : SingletonMono<ClientsManager> //SingletonMono加�
     /// <summary>
     /// 连接成功
     /// </summary>
-    /// <param name="clientID"></param>
     private void OnClientConnected(ulong clientID)
     {
         //NetManager.Instance.SpawnObject(clientID, ServerResSystem.serverConfig.playerPrefab, ServerResSystem.serverConfig.playerDefaultPosition);

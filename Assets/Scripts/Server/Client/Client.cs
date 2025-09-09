@@ -2,7 +2,7 @@
 using JKFrame;
 
 /// <summary>
-/// Client的信息类
+/// Client的信息类_
 /// </summary>
 public class Client 
 {
