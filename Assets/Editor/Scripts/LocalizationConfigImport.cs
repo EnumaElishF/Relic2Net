@@ -8,7 +8,7 @@ using System.Collections.Generic;
 /// </summary>
 public static class LocalizationConfigImport 
 {
-    [MenuItem("ProjectTool/导入全局本地化",priority = 0)]
+    [MenuItem("Project/导入全局本地化",priority = 0)]
     public static void Import()
     {
         //获取SO资源并清空当前设置

@@ -24,7 +24,7 @@ public class ClientGlobal : SingletonMono<ClientGlobal>
 
     }
     /// <summary>
-    /// 注册Window数据
+    /// 注册Windows
     /// </summary>
     public void InitWindowData()
     {
@@ -33,6 +33,7 @@ public class ClientGlobal : SingletonMono<ClientGlobal>
         //弹窗的层级给高一些，给个4吧。
         //弹窗需要缓存，所以设置true,因为这个是高频使用的弹窗
         UISystem.AddUIWindowData<UI_MessagePopupWindow>(new UIWindowData(true, nameof(UI_MessagePopupWindow), 4));
+        UISystem.AddUIWindowData<UI_RegisterWindow>(new UIWindowData(false, nameof(UI_RegisterWindow), 1));
     }
     private void OnGameSceneLaunchEvent(GameSceneLaunchEvent @event)
     {

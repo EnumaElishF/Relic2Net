@@ -20,7 +20,7 @@ public class UI_MainMenuWindow : UI_WindowBase
     }
     private void RegisterButtonClick()
     {
-        
+        UISystem.Show<UI_RegisterWindow>();
     }
     private void QuitButtonClick()
     {

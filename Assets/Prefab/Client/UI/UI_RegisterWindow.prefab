@@ -78,7 +78,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u8BF7\u91CD\u590D\u8F93\u5165\u5BC6\u7801..."
+  m_Text: "\u8BF7\u518D\u6B21\u786E\u8BA4\u5BC6\u7801"
 --- !u!1 &794926025243114037
 GameObject:
   m_ObjectHideFlags: 0
@@ -137,7 +137,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.48235294, g: 0.45490196, b: 0.45490196, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -340,7 +340,7 @@ GameObject:
   - component: {fileID: 5815186326997346756}
   - component: {fileID: 7989782961262319047}
   m_Layer: 5
-  m_Name: RegisterButton
+  m_Name: LoginButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -485,8 +485,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 7.509308, y: -50.00003}
-  m_SizeDelta: {x: 737.2212, y: -100}
+  m_AnchoredPosition: {x: 3.7137146, y: -50.00003}
+  m_SizeDelta: {x: 208.6208, y: -100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5857290744125118936
 CanvasRenderer:
@@ -999,7 +999,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u8BF7\u8F93\u5165\u5BC6\u7801..."
+  m_Text: "\u8BF7\u8F93\u5165\u5BC6\u7801"
 --- !u!1 &4724314212508111204
 GameObject:
   m_ObjectHideFlags: 0
@@ -1034,8 +1034,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 326.39}
-  m_SizeDelta: {x: 0, y: -652.78}
+  m_AnchoredPosition: {x: -2, y: 326.39}
+  m_SizeDelta: {x: -218, y: -652.78}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1349867962143340992
 CanvasRenderer:
@@ -1230,6 +1230,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9187106573998912841}
+  - component: {fileID: 3449941224939566597}
+  - component: {fileID: 7234804878199692000}
   m_Layer: 5
   m_Name: UI_RegisterWindow
   m_TagString: Untagged
@@ -1257,6 +1259,137 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &3449941224939566597
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6153356923878288141}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10307c4e314960849b4f730a5073bf11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  localizationConfig: {fileID: 0}
+  closeButton: {fileID: 8691975459187203935}
+  submitButton: {fileID: 5590081861604646882}
+  loginButton: {fileID: 5815186326997346756}
+  nameInputField: {fileID: 3826809067547572088}
+  passwordInputField: {fileID: 8558557379652945954}
+  rePasswordInputField: {fileID: 7431151069672475588}
+--- !u!114 &7234804878199692000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6153356923878288141}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc81d42f7a5b0c444b4b0375837dc7b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects:
+    - {fileID: 1982695639073278729}
+    - {fileID: 1932927824297648126}
+    - {fileID: 4294669093048949742}
+    - {fileID: 7121204324270032997}
+    - {fileID: 2735453035671498692}
+    - {fileID: 7989782961262319047}
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: localizationDataList
+      Entry: 7
+      Data: 0|System.Collections.Generic.List`1[[UILocalizationData, JKFrame]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 6
+    - Name: 
+      Entry: 7
+      Data: 1|UILocalizationData, JKFrame
+    - Name: component
+      Entry: 10
+      Data: 0
+    - Name: key
+      Entry: 1
+      Data: "\u6CE8\u518C"
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 2|UILocalizationData, JKFrame
+    - Name: component
+      Entry: 10
+      Data: 1
+    - Name: key
+      Entry: 1
+      Data: "\u8BF7\u8F93\u5165\u8D26\u53F7"
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 3|UILocalizationData, JKFrame
+    - Name: component
+      Entry: 10
+      Data: 2
+    - Name: key
+      Entry: 1
+      Data: "\u8BF7\u8F93\u5165\u5BC6\u7801"
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 4|UILocalizationData, JKFrame
+    - Name: component
+      Entry: 10
+      Data: 3
+    - Name: key
+      Entry: 1
+      Data: "\u8BF7\u518D\u6B21\u786E\u8BA4\u5BC6\u7801"
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 5|UILocalizationData, JKFrame
+    - Name: component
+      Entry: 10
+      Data: 4
+    - Name: key
+      Entry: 1
+      Data: "\u6CE8\u518C"
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 6|UILocalizationData, JKFrame
+    - Name: component
+      Entry: 10
+      Data: 5
+    - Name: key
+      Entry: 1
+      Data: "\u767B\u5F55"
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+  localizationConfig: {fileID: 0}
 --- !u!1 &6476780423227275470
 GameObject:
   m_ObjectHideFlags: 0
@@ -1315,7 +1448,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.48235294, g: 0.45490196, b: 0.45490196, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1414,7 +1547,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u8BF7\u8F93\u5165\u8D26\u53F7..."
+  m_Text: "\u8BF7\u8F93\u5165\u8D26\u53F7"
 --- !u!1 &6894129955239561956
 GameObject:
   m_ObjectHideFlags: 0
@@ -1885,7 +2018,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -2.3}
+  m_AnchoredPosition: {x: 0, y: -2.300003}
   m_SizeDelta: {x: 514.61646, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5092808038844119614
@@ -1988,7 +2121,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.48235294, g: 0.45490196, b: 0.45490196, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2045,7 +2178,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -82, y: -70.60004}
+  m_AnchoredPosition: {x: -176, y: -56}
   m_SizeDelta: {x: 124, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7475298771991327783
