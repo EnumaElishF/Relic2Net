@@ -1,9 +1,5 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
-using System;
-using MongoDB.Driver;
-using System.Collections.Generic;
 
 public class ServerLaunch : MonoBehaviour
 {

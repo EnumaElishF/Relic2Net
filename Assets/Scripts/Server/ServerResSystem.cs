@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 /// <summary>
 /// 服务端配置管理器，一切资源由配置管理器通过一个SO文件引用关联到

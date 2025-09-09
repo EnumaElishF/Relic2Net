@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
-using JKFrame;
+﻿using JKFrame;
+using System.Collections.Generic;
 using Unity.Netcode;
-using System;
+using UnityEngine;
 public class AOIManager : SingletonMono<AOIManager>
 {
     private readonly static Vector2Int defaultCoord;
