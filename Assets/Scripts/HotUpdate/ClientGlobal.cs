@@ -23,10 +23,16 @@ public class ClientGlobal : SingletonMono<ClientGlobal>
         Debug.Log("InitClient 成功");
 
     }
+    /// <summary>
+    /// 注册Window数据
+    /// </summary>
     public void InitWindowData()
     {
         //做一个对框架上修改的窗口，不依赖于静态的配置
         UISystem.AddUIWindowData<UI_MainMenuWindow>(new UIWindowData(false, nameof(UI_MainMenuWindow), 0));
+        //弹窗的层级给高一些，给个4吧。
+        //弹窗需要缓存，所以设置true,因为这个是高频使用的弹窗
+        UISystem.AddUIWindowData<UI_MessagePopupWindow>(new UIWindowData(true, nameof(UI_MessagePopupWindow), 4));
     }
     private void OnGameSceneLaunchEvent(GameSceneLaunchEvent @event)
     {

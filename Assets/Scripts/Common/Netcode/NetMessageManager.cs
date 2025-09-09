@@ -1,69 +1,45 @@
-using Sirenix.OdinInspector;
+using JKFrame;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Netcode;
-using UnityEngine;
-public enum MessageType : byte
-{
-    //用byte比int好处就是，缩短消息串的长度并提升性能。->尤其在高频消息传输场景下效果会更明显
-    Test
-}
-public class TestData:INetworkSerializable
-{
-    public string name;
-    public int lv;
 
-    public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
-    {
-        serializer.SerializeValue(ref name);
-        serializer.SerializeValue(ref lv);
-    }
-}
+
 /// <summary>
 /// 网络消息管理: 网络消息序列化与回调
 /// </summary>
-public class NetMessageManager : MonoBehaviour
+public class NetMessageManager : SingletonMono<NetMessageManager>
 {
     private CustomMessagingManager messagingManager => NetManager.Instance.CustomMessagingManager;
     private Dictionary<MessageType, Action<ulong,INetworkSerializable>> receiveMessageCallbackDic = new Dictionary<MessageType, Action<ulong, INetworkSerializable>>();
     public void Init()
     {
         messagingManager.OnUnnamedMessage += ReceiveMessage; //使用的Action回调
-        NetManager.Instance.OnClientConnectedCallback += Instance_OnClientConnectedCallback;
-        RegisterMessageCallback(MessageType.Test, TestCallback);
     }
     /// <summary>
     /// 回调Callback，自定义回调方法内容
     /// </summary>
     /// <param name="clientID">客户端id，知道客户端是谁的</param>
     /// <param name="serializable"></param>
-    private void TestCallback(ulong clientID,INetworkSerializable serializable)
-    {
-        TestData testData = (TestData)serializable; //序列化的强制转换回
-        Debug.Log($"收到信息(回调):{clientID},{testData.name},{testData.lv}");
-    }
+    //private void TestCallback(ulong clientID,INetworkSerializable serializable)
+    //{
+    //    TestData testData = (TestData)serializable; //序列化的强制转换回
+    //    Debug.Log($"收到信息(回调):{clientID},{testData.name},{testData.lv}");
+    //}
 
-    private void Instance_OnClientConnectedCallback(ulong obj)
-    {
-        //登录以后发送一个消息给Server
-        SendMessageToServer(MessageType.Test, new TestData
-        {
-            name = "客户端登录了",
-            lv = 11
-        });
-    }
 
     private void ReceiveMessage(ulong clientId, FastBufferReader reader)
     {
         reader.ReadValueSafe(out MessageType messageType);
         switch (messageType)
         {
-            case MessageType.Test:
-                reader.ReadValueSafe(out TestData testData);
-                Debug.Log($"收到信息: {testData.name},{testData.lv}");
-                TriggerMessageCallback(messageType, clientId, testData); //接收到不同的消息以后，给他传出去
+            case MessageType.C_S_Register:
+                reader.ReadValueSafe(out C_S_Register C_S_Register);
+                TriggerMessageCallback(MessageType.C_S_Register, clientId, C_S_Register);
+                break;
+            case MessageType.C_S_Login:
+                reader.ReadValueSafe(out C_S_Login C_S_Login);
+                TriggerMessageCallback(MessageType.C_S_Login, clientId, C_S_Login);
                 break;
             default:
                 break;
@@ -86,19 +62,19 @@ public class NetMessageManager : MonoBehaviour
     }
 
     //几种不同的消息发送
-    private void SendMessageToServer<T>(MessageType messageType,T data) where T: INetworkSerializable //约束类型T为INetworkSerializable
+    public void SendMessageToServer<T>(MessageType messageType,T data) where T: INetworkSerializable //约束类型T为INetworkSerializable
     {
         messagingManager.SendUnnamedMessage(NetManager.ServerClientId, WriteData(messageType,data));
     }
-    private void SendMessageToClient<T>(MessageType messageType, T data,ulong clientID) where T : INetworkSerializable //约束类型T为INetworkSerializable
+    public void SendMessageToClient<T>(MessageType messageType, T data,ulong clientID) where T : INetworkSerializable //约束类型T为INetworkSerializable
     {
         messagingManager.SendUnnamedMessage(clientID, WriteData(messageType, data));
     }
-    private void SendMessageToClients<T>(MessageType messageType, T data, IReadOnlyList<ulong> clientIDS) where T : INetworkSerializable //约束类型T为INetworkSerializable
+    public void SendMessageToClients<T>(MessageType messageType, T data, IReadOnlyList<ulong> clientIDS) where T : INetworkSerializable //约束类型T为INetworkSerializable
     {
         messagingManager.SendUnnamedMessage(clientIDS, WriteData(messageType, data));
     }
-    private void SendMessageAllClients<T>(MessageType messageType, T data, IReadOnlyList<ulong> clientIDS) where T : INetworkSerializable //约束类型T为INetworkSerializable
+    public void SendMessageAllClients<T>(MessageType messageType, T data, IReadOnlyList<ulong> clientIDS) where T : INetworkSerializable //约束类型T为INetworkSerializable
     {
         messagingManager.SendUnnamedMessageToAll( WriteData(messageType, data));
     }
