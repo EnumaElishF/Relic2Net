@@ -1,5 +1,6 @@
 using JKFrame;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 public class ClientGlobal : SingletonMono<ClientGlobal>
 {
@@ -20,9 +21,8 @@ public class ClientGlobal : SingletonMono<ClientGlobal>
 
         ResSystem.InstantiateGameObject<NetManager>("NetworkManager").Init(true);//直接用的同步，因为文件很小，如果大了还是要用异步加载。
         EventSystem.AddTypeEventListener<GameSceneLaunchEvent>(OnGameSceneLaunchEvent);
-        //SceneSystem.LoadScene("GameScene");
-        UISystem.Show<UI_MainMenuWindow>();
         Debug.Log("InitClient 成功");
+        EnterLoginScene();
 
     }
     /// <summary>
@@ -62,5 +62,14 @@ public class ClientGlobal : SingletonMono<ClientGlobal>
         gameSetting.rememberPlayerName = name;
         gameSetting.rememberPassword = password;
         SaveGameSetting();
+    }
+    public void EnterLoginScene()
+    {
+        //LoginScene，我们通过Addressables来做加载
+        Addressables.LoadSceneAsync("LoginScene").WaitForCompletion();
+    }
+    public void EnterGameScene()
+    {
+        SceneSystem.LoadScene("GameScene");
     }
 }
