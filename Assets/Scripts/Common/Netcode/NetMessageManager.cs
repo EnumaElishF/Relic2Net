@@ -31,27 +31,39 @@ public class NetMessageManager : SingletonMono<NetMessageManager>
 
     private void ReceiveMessage(ulong clientId, FastBufferReader reader)
     {
-        reader.ReadValueSafe(out MessageType messageType);
-        Debug.Log("收到网络信息:" + messageType);
-        switch (messageType)
+        try
         {
-            case MessageType.C_S_Register:
-                reader.ReadValueSafe(out C_S_Register C_S_Register);
-                TriggerMessageCallback(MessageType.C_S_Register, clientId, C_S_Register);
-                break;
-            case MessageType.C_S_Login:
-                reader.ReadValueSafe(out C_S_Login C_S_Login);
-                TriggerMessageCallback(MessageType.C_S_Login, clientId, C_S_Login);
-                break;
-            case MessageType.S_C_Register:
-                reader.ReadValueSafe(out S_C_Register S_C_Register);
-                TriggerMessageCallback(MessageType.S_C_Register, clientId, S_C_Register);
-                break;
-            case MessageType.S_C_Login:
-                reader.ReadValueSafe(out S_C_Login S_C_Login);
-                TriggerMessageCallback(MessageType.S_C_Login, clientId, S_C_Login);
-                break;
+            reader.ReadValueSafe(out MessageType messageType);
+            Debug.Log("收到网络信息:" + messageType);
+            switch (messageType)
+            {
+                case MessageType.C_S_Register:
+                    reader.ReadValueSafe(out C_S_Register C_S_Register);
+                    TriggerMessageCallback(MessageType.C_S_Register, clientId, C_S_Register);
+                    break;
+                case MessageType.C_S_Login:
+                    reader.ReadValueSafe(out C_S_Login C_S_Login);
+                    TriggerMessageCallback(MessageType.C_S_Login, clientId, C_S_Login);
+                    break;
+                case MessageType.S_C_Register:
+                    reader.ReadValueSafe(out S_C_Register S_C_Register);
+                    TriggerMessageCallback(MessageType.S_C_Register, clientId, S_C_Register);
+                    break;
+                case MessageType.S_C_Login:
+                    reader.ReadValueSafe(out S_C_Login S_C_Login);
+                    TriggerMessageCallback(MessageType.S_C_Login, clientId, S_C_Login);
+                    break;
+                case MessageType.C_S_EnterGame:
+                    reader.ReadValueSafe(out C_S_EnterGame C_S_EnterGame);
+                    TriggerMessageCallback(MessageType.C_S_EnterGame, clientId, C_S_EnterGame);
+                    break;
+            }
         }
+        catch(Exception)
+        {
+            Debug.Log("消息接收失败!");
+        }
+
     }
     /// <summary>
     /// 做一个消息的包装，方便给SendMessageToServer使用

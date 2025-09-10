@@ -1,6 +1,7 @@
 using JKFrame;
 using System.Collections.Generic;
 using Unity.Netcode;
+using UnityEngine;
 
 public class ClientsManager : SingletonMono<ClientsManager> //SingletonMono加入对Singleton的通用基类改造，
 {
@@ -27,10 +28,9 @@ public class ClientsManager : SingletonMono<ClientsManager> //SingletonMono加�
         //NetMessageManager注册网络事件
         NetMessageManager.Instance.RegisterMessageCallback(MessageType.C_S_Register, OnClientRegister);
         NetMessageManager.Instance.RegisterMessageCallback(MessageType.C_S_Login, OnClientLogin);
+        NetMessageManager.Instance.RegisterMessageCallback(MessageType.C_S_EnterGame, OnClientEnterGame);
         
     }
-
-
 
 
     /// <summary>
@@ -38,7 +38,6 @@ public class ClientsManager : SingletonMono<ClientsManager> //SingletonMono加�
     /// </summary>
     private void OnClientConnected(ulong clientID)
     {
-        //NetManager.Instance.SpawnObject(clientID, ServerResSystem.serverConfig.playerPrefab, ServerResSystem.serverConfig.playerDefaultPosition);
 
         //用对象池去处理，构建一个Client
         Client client = ResSystem.GetOrNew<Client>();
@@ -123,6 +122,22 @@ public class ClientsManager : SingletonMono<ClientsManager> //SingletonMono加�
         }
         //回复客户端
         NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_Login, result, clientID);
+    }
+    /// <summary>
+    /// 玩家进入游戏
+    /// </summary>
+    private void OnClientEnterGame(ulong clientID, INetworkSerializable serializable)
+    {
+        //无需回复客户端，直接创建角色
+        Client client = clientIDDic[clientID];
+        if (client.playerController != null) return;
+        PlayerData playerData = client.playerData;
+        CharacterData characterData = playerData.characterData;
+        //生成游戏对象
+        NetworkObject playerObject = NetManager.Instance.SpawnObject(clientID, ServerResSystem.serverConfig.playerPrefab, characterData.position,Quaternion.Euler(0,characterData.rotation_Y,0));
+        client.playerController = playerObject.GetComponent<PlayerController>();
+        //TODO 玩家可能使用不同的武器之类的实例化
+
     }
 
 

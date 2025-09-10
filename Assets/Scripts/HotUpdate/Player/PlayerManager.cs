@@ -22,6 +22,11 @@ public class PlayerManager : SingletonMono<PlayerManager>
     {
         InitLocalPlayer(arg.localPlayer);
     }
+    public bool IsLoadingCompleted()
+    {
+        //不为null了，则说明玩家加载完成了
+        return localPlayer != null;
+    }
 
     public void InitLocalPlayer(PlayerController player)
     {

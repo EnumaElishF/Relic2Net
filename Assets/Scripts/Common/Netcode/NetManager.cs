@@ -7,7 +7,7 @@ using UnityEngine;
 public class NetManager : NetworkManager
 {
     public static NetManager Instance { get; private set; }
-    public UnityTransport unityTransport { get; private set; }
+    public UnityTransport unityTransport { get; private set; } //用到了NetCode的网络UTP
     public NetMessageManager netMessageManager { get; private set; }
     private Dictionary<GameObject, NetworkPrefabInstanceHandler> prefabHandlerDic;
 

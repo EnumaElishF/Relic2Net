@@ -151,6 +151,19 @@ public class ClientMapManager : SingletonMono<ClientMapManager>
         }
         controller.Enable();
     }
+    public bool IsLoadingCompleted()
+    {
+        if (terrainControllDic.Count == 0) return false;
+        foreach(TerrainController item in terrainControllDic.Values)
+        {
+            //字典中只要有一个 空的，就false
+            if(item.terrain == null)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
 
     private Vector2Int GetTerrainCoordByWorldPos(Vector3 worldPos)
     {

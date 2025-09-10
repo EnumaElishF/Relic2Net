@@ -1,6 +1,5 @@
-﻿using UnityEngine;
-using System.Collections;
-using JKFrame;
+﻿using JKFrame;
+using UnityEngine;
 
 public class LoginSceneManager : MonoBehaviour
 {

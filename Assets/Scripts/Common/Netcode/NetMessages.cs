@@ -7,7 +7,8 @@ public enum MessageType : byte
     C_S_Register, 
     S_C_Register,
     C_S_Login,
-    S_C_Login
+    S_C_Login,
+    C_S_EnterGame
 }
 /// <summary>
 /// 可以预知的完成的返回信息，做成Code的方式，做个可知的码。比如服务端返回码等
@@ -54,6 +55,16 @@ public struct C_S_Login : INetworkSerializable
 public struct S_C_Login : INetworkSerializable
 {
     public ErrorCode errorCode;
+
+    public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+    {
+        serializer.SerializeValue(ref errorCode);
+
+    }
+}
+public struct C_S_EnterGame : INetworkSerializable
+{
+    public ErrorCode errorCode; ///纯占位,以后还有可能再加一些需要的数据消息Code
 
     public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
     {

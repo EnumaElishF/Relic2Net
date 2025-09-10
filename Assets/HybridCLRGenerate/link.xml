@@ -2,20 +2,22 @@
 <linker>
   <assembly fullname="Aot">
     <type fullname="GameSceneLaunchEvent" preserve="all" />
+    <type fullname="UI_LoadingWindow" preserve="all" />
   </assembly>
   <assembly fullname="Cinemachine">
     <type fullname="Cinemachine.CinemachineFreeLook" preserve="all" />
+    <type fullname="Cinemachine.CinemachineVirtualCameraBase" preserve="all" />
   </assembly>
   <assembly fullname="JKFrame">
     <type fullname="JKFrame.ConfigBase" preserve="all" />
+    <type fullname="JKFrame.CoroutineTool" preserve="all" />
     <type fullname="JKFrame.EventSystem" preserve="all" />
-    <type fullname="JKFrame.IStateMachineOwner" preserve="all" />
     <type fullname="JKFrame.JKFrameExtension" preserve="all" />
+    <type fullname="JKFrame.PoolSystem" preserve="all" />
     <type fullname="JKFrame.ResSystem" preserve="all" />
     <type fullname="JKFrame.SaveSystem" preserve="all" />
+    <type fullname="JKFrame.SceneSystem" preserve="all" />
     <type fullname="JKFrame.SingletonMono`1" preserve="all" />
-    <type fullname="JKFrame.StateBase" preserve="all" />
-    <type fullname="JKFrame.StateMachine" preserve="all" />
     <type fullname="JKFrame.UISystem" preserve="all" />
     <type fullname="JKFrame.UIWindowData" preserve="all" />
     <type fullname="JKFrame.UI_WindowBase" preserve="all" />
@@ -23,6 +25,9 @@
     <type fullname="LocalizationConfig" preserve="all" />
     <type fullname="LocalizationStringData" preserve="all" />
     <type fullname="LocalizationSystem" preserve="all" />
+  </assembly>
+  <assembly fullname="Unity.Addressables">
+    <type fullname="UnityEngine.AddressableAssets.Addressables" preserve="all" />
   </assembly>
   <assembly fullname="Unity.Netcode.Runtime">
     <type fullname="Unity.Netcode.BufferSerializer`1" preserve="all" />
@@ -32,14 +37,20 @@
     <type fullname="Unity.Netcode.FastBufferWriter" preserve="all" />
     <type fullname="Unity.Netcode.FastBufferWriter/ForEnums" preserve="all" />
     <type fullname="Unity.Netcode.FastBufferWriter/ForNetworkSerializable" preserve="all" />
+    <type fullname="Unity.Netcode.INetworkPrefabInstanceHandler" preserve="all" />
     <type fullname="Unity.Netcode.INetworkSerializable" preserve="all" />
     <type fullname="Unity.Netcode.IReaderWriter" preserve="all" />
     <type fullname="Unity.Netcode.NetworkBehaviour" preserve="all" />
     <type fullname="Unity.Netcode.NetworkBehaviour/RpcReceiveHandler" preserve="all" />
     <type fullname="Unity.Netcode.NetworkBehaviour/__RpcExecStage" preserve="all" />
+    <type fullname="Unity.Netcode.NetworkConfig" preserve="all" />
     <type fullname="Unity.Netcode.NetworkDelivery" preserve="all" />
     <type fullname="Unity.Netcode.NetworkManager" preserve="all" />
     <type fullname="Unity.Netcode.NetworkObject" preserve="all" />
+    <type fullname="Unity.Netcode.NetworkPrefab" preserve="all" />
+    <type fullname="Unity.Netcode.NetworkPrefabHandler" preserve="all" />
+    <type fullname="Unity.Netcode.NetworkPrefabs" preserve="all" />
+    <type fullname="Unity.Netcode.NetworkSpawnManager" preserve="all" />
     <type fullname="Unity.Netcode.NetworkTransport" preserve="all" />
     <type fullname="Unity.Netcode.NetworkVariableBase" preserve="all" />
     <type fullname="Unity.Netcode.NetworkVariableReadPermission" preserve="all" />
@@ -58,9 +69,12 @@
     <type fullname="Unity.Netcode.UserNetworkVariableSerialization`1/WriteValueDelegate" preserve="all" />
     <type fullname="Unity.Netcode.__RpcParams" preserve="all" />
   </assembly>
+  <assembly fullname="Unity.ResourceManager">
+    <type fullname="UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle`1" preserve="all" />
+    <type fullname="UnityEngine.ResourceManagement.ResourceProviders.SceneInstance" preserve="all" />
+  </assembly>
   <assembly fullname="UnityEngine.AnimationModule">
     <type fullname="UnityEngine.Animation" preserve="all" />
-    <type fullname="UnityEngine.Animator" preserve="all" />
   </assembly>
   <assembly fullname="UnityEngine.CoreModule">
     <type fullname="Unity.Collections.Allocator" preserve="all" />
@@ -69,6 +83,7 @@
     <type fullname="UnityEngine.Camera" preserve="all" />
     <type fullname="UnityEngine.Color" preserve="all" />
     <type fullname="UnityEngine.Component" preserve="all" />
+    <type fullname="UnityEngine.Coroutine" preserve="all" />
     <type fullname="UnityEngine.CreateAssetMenuAttribute" preserve="all" />
     <type fullname="UnityEngine.Debug" preserve="all" />
     <type fullname="UnityEngine.Events.UnityAction" preserve="all" />
@@ -83,6 +98,7 @@
     <type fullname="UnityEngine.Plane" preserve="all" />
     <type fullname="UnityEngine.Quaternion" preserve="all" />
     <type fullname="UnityEngine.RuntimeInitializeOnLoadMethodAttribute" preserve="all" />
+    <type fullname="UnityEngine.SceneManagement.LoadSceneMode" preserve="all" />
     <type fullname="UnityEngine.SerializeField" preserve="all" />
     <type fullname="UnityEngine.Time" preserve="all" />
     <type fullname="UnityEngine.Transform" preserve="all" />
@@ -90,9 +106,12 @@
     <type fullname="UnityEngine.Vector2Int" preserve="all" />
     <type fullname="UnityEngine.Vector3" preserve="all" />
   </assembly>
-  <assembly fullname="UnityEngine.PhysicsModule">
-    <type fullname="UnityEngine.CharacterController" preserve="all" />
-    <type fullname="UnityEngine.CollisionFlags" preserve="all" />
+  <assembly fullname="UnityEngine.IMGUIModule">
+    <type fullname="UnityEngine.GUILayout" preserve="all" />
+    <type fullname="UnityEngine.GUILayoutOption" preserve="all" />
+  </assembly>
+  <assembly fullname="UnityEngine.InputLegacyModule">
+    <type fullname="UnityEngine.Input" preserve="all" />
   </assembly>
   <assembly fullname="UnityEngine.TerrainModule">
     <type fullname="UnityEngine.Terrain" preserve="all" />
@@ -109,6 +128,7 @@
     <type fullname="UnityEngine.UI.Toggle" preserve="all" />
   </assembly>
   <assembly fullname="netstandard">
+    <type fullname="System.Action" preserve="all" />
     <type fullname="System.Action`1" preserve="all" />
     <type fullname="System.Action`2" preserve="all" />
     <type fullname="System.Array" preserve="all" />
@@ -117,30 +137,40 @@
     <type fullname="System.CodeDom.Compiler.GeneratedCodeAttribute" preserve="all" />
     <type fullname="System.Collections.Generic.Dictionary`2" preserve="all" />
     <type fullname="System.Collections.Generic.Dictionary`2/Enumerator" preserve="all" />
+    <type fullname="System.Collections.Generic.Dictionary`2/ValueCollection" preserve="all" />
+    <type fullname="System.Collections.Generic.Dictionary`2/ValueCollection/Enumerator" preserve="all" />
+    <type fullname="System.Collections.Generic.IEnumerable`1" preserve="all" />
+    <type fullname="System.Collections.Generic.IEnumerator`1" preserve="all" />
+    <type fullname="System.Collections.Generic.IReadOnlyCollection`1" preserve="all" />
     <type fullname="System.Collections.Generic.IReadOnlyList`1" preserve="all" />
     <type fullname="System.Collections.Generic.KeyValuePair`2" preserve="all" />
     <type fullname="System.Collections.Generic.List`1" preserve="all" />
     <type fullname="System.Collections.Generic.List`1/Enumerator" preserve="all" />
     <type fullname="System.Collections.Generic.Queue`1" preserve="all" />
+    <type fullname="System.Collections.IEnumerator" preserve="all" />
     <type fullname="System.ComponentModel.EditorBrowsableAttribute" preserve="all" />
     <type fullname="System.ComponentModel.EditorBrowsableState" preserve="all" />
     <type fullname="System.Delegate" preserve="all" />
     <type fullname="System.Diagnostics.DebuggableAttribute" preserve="all" />
     <type fullname="System.Diagnostics.DebuggableAttribute/DebuggingModes" preserve="all" />
+    <type fullname="System.Diagnostics.DebuggerHiddenAttribute" preserve="all" />
     <type fullname="System.Enum" preserve="all" />
     <type fullname="System.Exception" preserve="all" />
     <type fullname="System.Func`2" preserve="all" />
     <type fullname="System.IDisposable" preserve="all" />
     <type fullname="System.Int32" preserve="all" />
+    <type fullname="System.NotSupportedException" preserve="all" />
     <type fullname="System.Object" preserve="all" />
     <type fullname="System.Runtime.CompilerServices.CompilationRelaxationsAttribute" preserve="all" />
     <type fullname="System.Runtime.CompilerServices.CompilerGeneratedAttribute" preserve="all" />
     <type fullname="System.Runtime.CompilerServices.IsReadOnlyAttribute" preserve="all" />
+    <type fullname="System.Runtime.CompilerServices.IteratorStateMachineAttribute" preserve="all" />
     <type fullname="System.Runtime.CompilerServices.RuntimeCompatibilityAttribute" preserve="all" />
     <type fullname="System.Runtime.CompilerServices.RuntimeHelpers" preserve="all" />
     <type fullname="System.Runtime.InteropServices.UnmanagedType" preserve="all" />
     <type fullname="System.RuntimeFieldHandle" preserve="all" />
     <type fullname="System.String" preserve="all" />
+    <type fullname="System.Type" preserve="all" />
     <type fullname="System.ValueType" preserve="all" />
   </assembly>
 </linker>

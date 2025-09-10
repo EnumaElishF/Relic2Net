@@ -1,5 +1,4 @@
 using JKFrame;
-using System;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
@@ -89,9 +88,8 @@ public class UI_LoginWindow : UI_WindowBase
         Debug.Log("errorCode是:" + netMessage.errorCode);
         if (netMessage.errorCode == ErrorCode.None)
         {
-            //TODO 登录成功后续有很多要加的，暂时用弹窗提醒显示注册成功
-            UISystem.Show<UI_MessagePopupWindow>().ShowMessageByLocalizationKey("注册已成功", Color.green);
-
+            //建游戏场景
+            ClientGlobal.Instance.EnterGameScene();
 
         }
         else

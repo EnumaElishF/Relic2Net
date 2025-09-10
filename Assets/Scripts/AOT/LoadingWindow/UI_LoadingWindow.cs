@@ -12,6 +12,12 @@ public class UI_LoadingWindow : UI_WindowBase
     {
         descriptionText.text = description;
     }
+    public void UpdateProgress(float current, float max)
+    {
+        loadingBarSlider.maxValue = max;
+        loadingBarSlider.value = current;
+        progressText.text = $"{Math.Round(current, 2)} / {Math.Round(max, 2)}";
+    }
     public void UpdateDownloadProgress(float currentBytes, float maxBytes)
     {
         float currentMB = currentBytes / 1024f / 1024f;
