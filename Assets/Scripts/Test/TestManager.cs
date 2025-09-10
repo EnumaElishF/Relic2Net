@@ -4,29 +4,32 @@ using UnityEngine;
 
 public class TestManager : MonoBehaviour
 {
-    //public GameObject serverTestObjectPrefab;
-    private void Start()
-    {
-#if UNITYSERVER || UNITY_EDITOR
-        //if (NetManager.Instance.IsServer)
-        //{
-        //    NetManager.Instance.SpawnObject(NetManager.ServerClientId, serverTestObjectPrefab, Vector3.zero);
-        //}
-#endif
-    }
+    public GameObject serverTestObjectPrefab;
+    public NetworkObject testInstance;
+
 
     private void OnGUI()
     {
 #if UNITY_SERVER || UNITY_EDITOR
         //服务器
-        //if (NetManager.Instance.IsServer)
-        //{
-        //    if (ServerTestObject.Instance != null)
-        //    {
-        //        //Debug.Log("服务器对象Position的GUI展示问题");
-        //        GUILayout.Label("Server Object Position:" + ServerTestObject.Instance.transform.position);
-        //    }
-        //}
+        if (NetManager.Instance.IsServer)
+        {
+            if (ServerTestObject.Instance != null)
+            {
+                //Debug.Log("服务器对象Position的GUI展示问题");
+                GUILayout.Label("Server Object Position:" + ServerTestObject.Instance.transform.position);
+            }
+            if(testInstance == null && Input.GetKeyDown(KeyCode.E))
+            {
+                testInstance = NetManager.Instance.SpawnObject(NetManager.ServerClientId, serverTestObjectPrefab, Vector3.zero, Quaternion.identity);
+            }
+            if (testInstance != null && Input.GetKeyDown(KeyCode.F))
+            {
+                NetManager.Instance.DestroyObject(testInstance);
+                testInstance = null;
+            }
+        }
+
 #endif
 
 #if !UNITY_SERVER || UNITY_EDITOR

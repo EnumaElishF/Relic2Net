@@ -105,7 +105,7 @@ MonoBehaviour:
   SceneMigrationSynchronization: 0
   SpawnWithObservers: 0
   DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
+  AutoObjectParentSync: 0
 --- !u!114 &5161394405187770857
 MonoBehaviour:
   m_ObjectHideFlags: 0
