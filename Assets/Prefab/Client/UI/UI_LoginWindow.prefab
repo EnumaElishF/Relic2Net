@@ -582,7 +582,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u8BF7\u8F93\u5165\u5BC6\u7801..."
+  m_Text: "\u8BF7\u8F93\u5165\u5BC6\u7801"
 --- !u!1 &3137219660186722167
 GameObject:
   m_ObjectHideFlags: 0
@@ -944,6 +944,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2737000736532859133}
+  - component: {fileID: 5320824720005458839}
+  - component: {fileID: 1119295893044736264}
   m_Layer: 5
   m_Name: UI_LoginWindow
   m_TagString: Untagged
@@ -971,6 +973,137 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &5320824720005458839
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3916111591773171795}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c153e2465006d3240913cb7d1861aa29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  localizationConfig: {fileID: 0}
+  closeButton: {fileID: 2897338801281325606}
+  submitButton: {fileID: 1971235771906069791}
+  registerButton: {fileID: 2710315885470824998}
+  nameInputField: {fileID: 1486145068952343215}
+  passwordInputField: {fileID: 2879357868232053424}
+  rememberAccountToggle: {fileID: 1716383938324939701}
+--- !u!114 &1119295893044736264
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3916111591773171795}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc81d42f7a5b0c444b4b0375837dc7b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects:
+    - {fileID: 4151363961137649433}
+    - {fileID: 431376526695898089}
+    - {fileID: 2676502976631647532}
+    - {fileID: 2921135029726472615}
+    - {fileID: 288924689000350484}
+    - {fileID: 6038012803723767135}
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: localizationDataList
+      Entry: 7
+      Data: 0|System.Collections.Generic.List`1[[UILocalizationData, JKFrame]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 6
+    - Name: 
+      Entry: 7
+      Data: 1|UILocalizationData, JKFrame
+    - Name: component
+      Entry: 10
+      Data: 0
+    - Name: key
+      Entry: 1
+      Data: "\u767B\u5F55"
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 2|UILocalizationData, JKFrame
+    - Name: component
+      Entry: 10
+      Data: 1
+    - Name: key
+      Entry: 1
+      Data: "\u8BF7\u8F93\u5165\u8D26\u53F7"
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 3|UILocalizationData, JKFrame
+    - Name: component
+      Entry: 10
+      Data: 2
+    - Name: key
+      Entry: 1
+      Data: "\u8BF7\u8F93\u5165\u5BC6\u7801"
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 4|UILocalizationData, JKFrame
+    - Name: component
+      Entry: 10
+      Data: 3
+    - Name: key
+      Entry: 1
+      Data: "\u767B\u5F55"
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 5|UILocalizationData, JKFrame
+    - Name: component
+      Entry: 10
+      Data: 4
+    - Name: key
+      Entry: 1
+      Data: "\u6CE8\u518C"
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 6|UILocalizationData, JKFrame
+    - Name: component
+      Entry: 10
+      Data: 5
+    - Name: key
+      Entry: 1
+      Data: "\u8BB0\u4F4F\u8D26\u53F7"
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+  localizationConfig: {fileID: 0}
 --- !u!1 &4548463385075924317
 GameObject:
   m_ObjectHideFlags: 0
@@ -1207,7 +1340,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u8BF7\u8F93\u5165\u8D26\u53F7..."
+  m_Text: "\u8BF7\u8F93\u5165\u8D26\u53F7"
 --- !u!1 &6114477837633360017
 GameObject:
   m_ObjectHideFlags: 0

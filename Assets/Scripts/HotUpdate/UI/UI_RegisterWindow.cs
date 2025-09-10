@@ -21,10 +21,11 @@ public class UI_RegisterWindow : UI_WindowBase
         passwordInputField.onValueChanged.AddListener(OnInputFieldsValueChanged);
         rePasswordInputField.onValueChanged.AddListener(OnInputFieldsValueChanged);
 
-        submitButton.interactable = false;//登录按钮不可交互
     }
     public override void OnShow()
     {
+        submitButton.interactable = false;//登录按钮不可交互
+
         //重新展示的时候密码置空
         passwordInputField.text = "";
         rePasswordInputField.text = "";
@@ -47,7 +48,8 @@ public class UI_RegisterWindow : UI_WindowBase
 
     private void LoginButtonClick()
     {
-        //TODO
+        UISystem.Close<UI_RegisterWindow>();
+        UISystem.Show<UI_LoginWindow>();
     }
 
     private void OnInputFieldsValueChanged(string arg0)
@@ -82,7 +84,7 @@ public class UI_RegisterWindow : UI_WindowBase
         else
         {
             //注册Error
-            UISystem.Show<UI_MessagePopupWindow>().ShowMessageByLocalizationKey(netMessage.errorCode.ToString(), Color.green);
+            UISystem.Show<UI_MessagePopupWindow>().ShowMessageByLocalizationKey(netMessage.errorCode.ToString(), Color.red);
         }
         submitButton.interactable = true;
 

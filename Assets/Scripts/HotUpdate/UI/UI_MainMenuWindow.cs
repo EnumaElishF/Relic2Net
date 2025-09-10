@@ -16,7 +16,8 @@ public class UI_MainMenuWindow : UI_WindowBase
 
     private void LoginButtonClick()
     {
-        
+        UISystem.Show<UI_LoginWindow>();
+
     }
     private void RegisterButtonClick()
     {

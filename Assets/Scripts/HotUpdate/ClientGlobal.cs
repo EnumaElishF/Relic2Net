@@ -3,11 +3,13 @@ using UnityEngine;
 
 public class ClientGlobal : SingletonMono<ClientGlobal>
 {
+    public GameSetting gameSetting { get; private set; }
     protected override void Awake()
     {
         base.Awake();
         //Global有个特点，就是不能销毁
         DontDestroyOnLoad(gameObject);
+        LoadGameSetting();
 
         //实例化NetworkManager之前，完成 网络变量序列化
         NetworkVariableSerializationBinder.Init();
@@ -34,10 +36,31 @@ public class ClientGlobal : SingletonMono<ClientGlobal>
         //弹窗需要缓存，所以设置true,因为这个是高频使用的弹窗
         UISystem.AddUIWindowData<UI_MessagePopupWindow>(new UIWindowData(true, nameof(UI_MessagePopupWindow), 4));
         UISystem.AddUIWindowData<UI_RegisterWindow>(new UIWindowData(false, nameof(UI_RegisterWindow), 1));
+        UISystem.AddUIWindowData<UI_LoginWindow>(new UIWindowData(false, nameof(UI_LoginWindow), 1));
     }
     private void OnGameSceneLaunchEvent(GameSceneLaunchEvent @event)
     {
         ResSystem.InstantiateGameObject("ClientOnGameScene");
     }
 
+    private void LoadGameSetting()
+    {
+        gameSetting = SaveSystem.LoadSetting<GameSetting>();
+        if (gameSetting == null)
+        {
+            gameSetting = new GameSetting();
+            SaveSystem.SaveSetting(gameSetting);
+        }
+    }
+    public void SaveGameSetting()
+    {
+        //低频的，写到磁盘里去
+        SaveSystem.SaveSetting(gameSetting);
+    }
+    public void RememberAccount(string name,string password)
+    {
+        gameSetting.rememberPlayerName = name;
+        gameSetting.rememberPassword = password;
+        SaveGameSetting();
+    }
 }
