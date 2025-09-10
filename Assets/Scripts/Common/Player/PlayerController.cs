@@ -38,7 +38,7 @@ public partial class PlayerController : NetworkBehaviour
         if (IsClient)
         {
 #if !UNITY_SERVER || UNITY_EDITOR
-            //Client_OnNetworkSpawn();
+            
 #endif
         }
         else
@@ -79,7 +79,9 @@ public partial class PlayerController : NetworkBehaviour
         // Start 一定 在OnNetworkSpawn后执行，如果这个阶段IsSpawned = false 说明是个异常对象
         if (!IsSpawned)
         {
-            Destroy(gameObject); //TODO: 网络对象对象池
+            //网络对象对象池
+            //玩家如果退出登录,用这个可以销毁，但是我们有AOI相关的东西，不能仅仅把游戏对象销毁就结束。 
+            NetManager.Instance.DestroyObject(this.NetworkObject);
         }
     }
 
@@ -92,7 +94,6 @@ public partial class PlayerController : NetworkBehaviour
             //客户端快速访问到 “自己控制的玩家对象”
             //PlayerManager.Instance.InitLocalPlayer(this);  替换为下方传事件
             EventSystem.TypeEventTrigger(new InitLocalPlayerEvent { localPlayer = this });
-
             this.AddUpdate(LocalClientUpdate);//添加一个Update的监听,框架做的
         }
     }

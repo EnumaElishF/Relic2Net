@@ -5,25 +5,27 @@ using UnityEngine;
 
 public class ClientsManager : SingletonMono<ClientsManager> //SingletonMono加入对Singleton的通用基类改造，
 {
-    private Dictionary<ClientState, HashSet<Client>> clientDic;
+    private Dictionary<ClientState, HashSet<Client>> clientStateDic;
     // Key : ClientID
     public Dictionary<ulong, Client> clientIDDic;
-
+    //Key:账号 Value:ClientID
+    private Dictionary<string, ulong> accountDic;
     /// <summary>
     /// 初始化   需要由服务器开启，作为客户端们的管理者（考虑一个位置，谁去做他的初始化是最好的情况？
     /// </summary>
     public void Init()
     {
-        clientDic = new Dictionary<ClientState, HashSet<Client>>()
+        clientStateDic = new Dictionary<ClientState, HashSet<Client>>()
         {
             {ClientState.Connected,new HashSet<Client>(100) },
             {ClientState.Logined,new HashSet<Client>(100) },
             {ClientState.Gaming,new HashSet<Client>(100) },
         };
         clientIDDic = new Dictionary<ulong, Client>(100);
+        accountDic = new Dictionary<string, ulong>(100);
 
         NetManager.Instance.OnClientConnectedCallback += OnClientConnected;
-        NetManager.Instance.OnClientDisconnectCallback += OnClientDisconnect;
+        NetManager.Instance.OnClientDisconnectCallback += OnClientNetCodeDisconnect;
 
         //NetMessageManager注册网络事件
         NetMessageManager.Instance.RegisterMessageCallback(MessageType.C_S_Register, OnClientRegister);
@@ -31,6 +33,19 @@ public class ClientsManager : SingletonMono<ClientsManager> //SingletonMono加�
         NetMessageManager.Instance.RegisterMessageCallback(MessageType.C_S_EnterGame, OnClientEnterGame);
         
     }
+    /// <summary>
+    /// 标准的状态切换的函数，方便管理后续状态切换
+    /// </summary>
+    private void SetClientState(ulong clientID,ClientState newState)
+    {
+        if (clientIDDic.TryGetValue(clientID,out Client client))
+        {
+            clientStateDic[client.clientState].Remove(client);
+            clientStateDic[newState].Add(client);
+            client.clientState = newState;
+        }
+    }
+
 
 
     /// <summary>
@@ -42,17 +57,23 @@ public class ClientsManager : SingletonMono<ClientsManager> //SingletonMono加�
         //用对象池去处理，构建一个Client
         Client client = ResSystem.GetOrNew<Client>();
         client.clientID = clientID;
-        clientDic[ClientState.Connected].Add(client);
         clientIDDic.Add(clientID, client);
+        SetClientState(clientID, ClientState.Connected);
+
     }
     /// <summary>
     /// 客户端退出，断开连接
     /// </summary>
-    private void OnClientDisconnect(ulong clientID)
+    private void OnClientNetCodeDisconnect(ulong clientID)
     {
         if(clientIDDic.Remove(clientID, out Client client))
         {
-            clientDic[client.clientState].Remove(client);
+            clientStateDic[client.clientState].Remove(client);
+            if(client.playerData != null) accountDic.Remove(client.playerData.name);
+            // 如果不使用下面这条，那么采用的是NetCode自己的管理，也就是客户端掉线会自动清除所属的网络对象
+            if (client.playerController != null) NetManager.Instance.DestroyObject(client.playerController.NetworkObject);
+            client.playerData = null;
+            client.playerController = null;
             client.OnDestroy();
         }
     }
@@ -117,7 +138,10 @@ public class ClientsManager : SingletonMono<ClientsManager> //SingletonMono加�
             else
             {
                 //玩家登录成功,关联Client和PlayerData
-                clientIDDic[clientID].playerData = playerData;
+                Client client = clientIDDic[clientID];
+                client.playerData = playerData;
+                SetClientState(clientID, ClientState.Logined);
+                accountDic.Add(accountInfo.playerName, clientID);
             }
         }
         //回复客户端
@@ -130,7 +154,9 @@ public class ClientsManager : SingletonMono<ClientsManager> //SingletonMono加�
     {
         //无需回复客户端，直接创建角色
         Client client = clientIDDic[clientID];
-        if (client.playerController != null) return;
+        if (client.clientState == ClientState.Gaming) return;
+        SetClientState(clientID, ClientState.Gaming);
+
         PlayerData playerData = client.playerData;
         CharacterData characterData = playerData.characterData;
         //生成游戏对象

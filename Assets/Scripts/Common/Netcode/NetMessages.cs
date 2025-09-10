@@ -8,7 +8,8 @@ public enum MessageType : byte
     S_C_Register,
     C_S_Login,
     S_C_Login,
-    C_S_EnterGame
+    C_S_EnterGame,
+    S_C_Disconnect
 }
 /// <summary>
 /// 可以预知的完成的返回信息，做成Code的方式，做个可知的码。比如服务端返回码等
@@ -19,7 +20,8 @@ public enum ErrorCode : byte
     None,                //意味着成功
     AccountFormat,       //账号格式错误
     NameDuplication,     //名称重复
-    NameOrPassword       //名称或密码错误
+    NameOrPassword,      //名称或密码错误
+    AccountRepeatLogin,  // 账号重复登录
 
 }
 /// <summary>
@@ -65,6 +67,16 @@ public struct S_C_Login : INetworkSerializable
 public struct C_S_EnterGame : INetworkSerializable
 {
     public ErrorCode errorCode; ///纯占位,以后还有可能再加一些需要的数据消息Code
+
+    public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+    {
+        serializer.SerializeValue(ref errorCode);
+
+    }
+}
+public struct S_C_Disconnect : INetworkSerializable
+{
+    public ErrorCode errorCode; 
 
     public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
     {
