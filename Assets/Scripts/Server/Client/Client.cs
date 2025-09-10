@@ -14,7 +14,7 @@ public class Client
     /// </summary>
     public void OnDestroy()
     {
-        playerData?.OnDestroy();
+        playerData = null;
         this.ObjectPushPool();//放进对象池
     }
 }

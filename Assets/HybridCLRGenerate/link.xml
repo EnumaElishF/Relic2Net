@@ -12,18 +12,32 @@
     <type fullname="JKFrame.IStateMachineOwner" preserve="all" />
     <type fullname="JKFrame.JKFrameExtension" preserve="all" />
     <type fullname="JKFrame.ResSystem" preserve="all" />
-    <type fullname="JKFrame.SceneSystem" preserve="all" />
+    <type fullname="JKFrame.SaveSystem" preserve="all" />
     <type fullname="JKFrame.SingletonMono`1" preserve="all" />
     <type fullname="JKFrame.StateBase" preserve="all" />
     <type fullname="JKFrame.StateMachine" preserve="all" />
+    <type fullname="JKFrame.UISystem" preserve="all" />
+    <type fullname="JKFrame.UIWindowData" preserve="all" />
+    <type fullname="JKFrame.UI_WindowBase" preserve="all" />
+    <type fullname="LanguageType" preserve="all" />
+    <type fullname="LocalizationConfig" preserve="all" />
+    <type fullname="LocalizationStringData" preserve="all" />
+    <type fullname="LocalizationSystem" preserve="all" />
   </assembly>
   <assembly fullname="Unity.Netcode.Runtime">
+    <type fullname="Unity.Netcode.BufferSerializer`1" preserve="all" />
+    <type fullname="Unity.Netcode.CustomMessagingManager" preserve="all" />
+    <type fullname="Unity.Netcode.CustomMessagingManager/UnnamedMessageDelegate" preserve="all" />
     <type fullname="Unity.Netcode.FastBufferReader" preserve="all" />
     <type fullname="Unity.Netcode.FastBufferWriter" preserve="all" />
     <type fullname="Unity.Netcode.FastBufferWriter/ForEnums" preserve="all" />
+    <type fullname="Unity.Netcode.FastBufferWriter/ForNetworkSerializable" preserve="all" />
+    <type fullname="Unity.Netcode.INetworkSerializable" preserve="all" />
+    <type fullname="Unity.Netcode.IReaderWriter" preserve="all" />
     <type fullname="Unity.Netcode.NetworkBehaviour" preserve="all" />
     <type fullname="Unity.Netcode.NetworkBehaviour/RpcReceiveHandler" preserve="all" />
     <type fullname="Unity.Netcode.NetworkBehaviour/__RpcExecStage" preserve="all" />
+    <type fullname="Unity.Netcode.NetworkDelivery" preserve="all" />
     <type fullname="Unity.Netcode.NetworkManager" preserve="all" />
     <type fullname="Unity.Netcode.NetworkObject" preserve="all" />
     <type fullname="Unity.Netcode.NetworkTransport" preserve="all" />
@@ -45,14 +59,22 @@
     <type fullname="Unity.Netcode.__RpcParams" preserve="all" />
   </assembly>
   <assembly fullname="UnityEngine.AnimationModule">
+    <type fullname="UnityEngine.Animation" preserve="all" />
     <type fullname="UnityEngine.Animator" preserve="all" />
   </assembly>
   <assembly fullname="UnityEngine.CoreModule">
+    <type fullname="Unity.Collections.Allocator" preserve="all" />
+    <type fullname="UnityEngine.Application" preserve="all" />
     <type fullname="UnityEngine.Bounds" preserve="all" />
     <type fullname="UnityEngine.Camera" preserve="all" />
+    <type fullname="UnityEngine.Color" preserve="all" />
     <type fullname="UnityEngine.Component" preserve="all" />
     <type fullname="UnityEngine.CreateAssetMenuAttribute" preserve="all" />
     <type fullname="UnityEngine.Debug" preserve="all" />
+    <type fullname="UnityEngine.Events.UnityAction" preserve="all" />
+    <type fullname="UnityEngine.Events.UnityAction`1" preserve="all" />
+    <type fullname="UnityEngine.Events.UnityEvent" preserve="all" />
+    <type fullname="UnityEngine.Events.UnityEvent`1" preserve="all" />
     <type fullname="UnityEngine.GameObject" preserve="all" />
     <type fullname="UnityEngine.GeometryUtility" preserve="all" />
     <type fullname="UnityEngine.Mathf" preserve="all" />
@@ -61,7 +83,6 @@
     <type fullname="UnityEngine.Plane" preserve="all" />
     <type fullname="UnityEngine.Quaternion" preserve="all" />
     <type fullname="UnityEngine.RuntimeInitializeOnLoadMethodAttribute" preserve="all" />
-    <type fullname="UnityEngine.SceneManagement.LoadSceneMode" preserve="all" />
     <type fullname="UnityEngine.SerializeField" preserve="all" />
     <type fullname="UnityEngine.Time" preserve="all" />
     <type fullname="UnityEngine.Transform" preserve="all" />
@@ -76,6 +97,17 @@
   <assembly fullname="UnityEngine.TerrainModule">
     <type fullname="UnityEngine.Terrain" preserve="all" />
   </assembly>
+  <assembly fullname="UnityEngine.UI">
+    <type fullname="UnityEngine.UI.Button" preserve="all" />
+    <type fullname="UnityEngine.UI.Button/ButtonClickedEvent" preserve="all" />
+    <type fullname="UnityEngine.UI.Graphic" preserve="all" />
+    <type fullname="UnityEngine.UI.Image" preserve="all" />
+    <type fullname="UnityEngine.UI.InputField" preserve="all" />
+    <type fullname="UnityEngine.UI.InputField/OnChangeEvent" preserve="all" />
+    <type fullname="UnityEngine.UI.Selectable" preserve="all" />
+    <type fullname="UnityEngine.UI.Text" preserve="all" />
+    <type fullname="UnityEngine.UI.Toggle" preserve="all" />
+  </assembly>
   <assembly fullname="netstandard">
     <type fullname="System.Action`1" preserve="all" />
     <type fullname="System.Action`2" preserve="all" />
@@ -85,12 +117,14 @@
     <type fullname="System.CodeDom.Compiler.GeneratedCodeAttribute" preserve="all" />
     <type fullname="System.Collections.Generic.Dictionary`2" preserve="all" />
     <type fullname="System.Collections.Generic.Dictionary`2/Enumerator" preserve="all" />
+    <type fullname="System.Collections.Generic.IReadOnlyList`1" preserve="all" />
     <type fullname="System.Collections.Generic.KeyValuePair`2" preserve="all" />
     <type fullname="System.Collections.Generic.List`1" preserve="all" />
     <type fullname="System.Collections.Generic.List`1/Enumerator" preserve="all" />
     <type fullname="System.Collections.Generic.Queue`1" preserve="all" />
     <type fullname="System.ComponentModel.EditorBrowsableAttribute" preserve="all" />
     <type fullname="System.ComponentModel.EditorBrowsableState" preserve="all" />
+    <type fullname="System.Delegate" preserve="all" />
     <type fullname="System.Diagnostics.DebuggableAttribute" preserve="all" />
     <type fullname="System.Diagnostics.DebuggableAttribute/DebuggingModes" preserve="all" />
     <type fullname="System.Enum" preserve="all" />

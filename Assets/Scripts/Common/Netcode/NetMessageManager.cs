@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Netcode;
+using UnityEngine;
 
 
 /// <summary>
@@ -31,6 +32,7 @@ public class NetMessageManager : SingletonMono<NetMessageManager>
     private void ReceiveMessage(ulong clientId, FastBufferReader reader)
     {
         reader.ReadValueSafe(out MessageType messageType);
+        Debug.Log("收到网络信息:" + messageType);
         switch (messageType)
         {
             case MessageType.C_S_Register:
@@ -44,6 +46,10 @@ public class NetMessageManager : SingletonMono<NetMessageManager>
             case MessageType.S_C_Register:
                 reader.ReadValueSafe(out S_C_Register S_C_Register);
                 TriggerMessageCallback(MessageType.S_C_Register, clientId, S_C_Register);
+                break;
+            case MessageType.S_C_Login:
+                reader.ReadValueSafe(out S_C_Login S_C_Login);
+                TriggerMessageCallback(MessageType.S_C_Login, clientId, S_C_Login);
                 break;
         }
     }
@@ -76,7 +82,7 @@ public class NetMessageManager : SingletonMono<NetMessageManager>
     {
         messagingManager.SendUnnamedMessage(clientIDS, WriteData(messageType, data));
     }
-    public void SendMessageAllClients<T>(MessageType messageType, T data, IReadOnlyList<ulong> clientIDS) where T : INetworkSerializable //约束类型T为INetworkSerializable
+    public void SendMessageAllClient<T>(MessageType messageType, T data, IReadOnlyList<ulong> clientIDS) where T : INetworkSerializable //约束类型T为INetworkSerializable
     {
         messagingManager.SendUnnamedMessageToAll( WriteData(messageType, data));
     }
@@ -118,7 +124,7 @@ public class NetMessageManager : SingletonMono<NetMessageManager>
     /// <param name="data"></param>
     private void TriggerMessageCallback(MessageType messageType, ulong clientID, INetworkSerializable data)
     {
-        if(receiveMessageCallbackDic.TryGetValue(messageType,out Action<ulong,INetworkSerializable> callback))
+        if (receiveMessageCallbackDic.TryGetValue(messageType, out Action<ulong, INetworkSerializable> callback))
         {
             callback?.Invoke(clientID, data);
         }

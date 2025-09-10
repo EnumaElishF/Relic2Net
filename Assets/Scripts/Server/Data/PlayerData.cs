@@ -16,10 +16,6 @@ public class PlayerData
         this.characterData.position = position;
     }
 
-    public void OnDestroy()
-    {
-        this.ObjectPushPool();
-    }
 
 }
 public class CharacterData

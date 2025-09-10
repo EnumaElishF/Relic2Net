@@ -96,9 +96,33 @@ public class ClientsManager : SingletonMono<ClientsManager> //SingletonMono加�
     /// <summary>
     /// 申请登录
     /// </summary>
-    private void OnClientLogin(ulong arg1, INetworkSerializable serializable)
+    private void OnClientLogin(ulong clientID, INetworkSerializable serializable)
     {
-        
+        C_S_Login netMessage = (C_S_Login)serializable;
+        AccountInfo accountInfo = netMessage.accountInfo;
+        S_C_Login result = new S_C_Login { errorCode = ErrorCode.None };
+        //校验格式
+        if (!AccountFormatUtility.CheckName(accountInfo.playerName)
+            || !AccountFormatUtility.CheckPassword(accountInfo.password))
+        {
+            result.errorCode = ErrorCode.AccountFormat;
+        }
+        else
+        {
+            //检查是否有这个玩家，并且账号信息正确
+            PlayerData playerData = DataBaseManager.Instance.GetPlayerData(accountInfo.playerName);
+            if(playerData==null || playerData.password != accountInfo.password)
+            {
+                result.errorCode = ErrorCode.NameOrPassword;
+            }
+            else
+            {
+                //玩家登录成功,关联Client和PlayerData
+                clientIDDic[clientID].playerData = playerData;
+            }
+        }
+        //回复客户端
+        NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_Login, result, clientID);
     }
 
 
