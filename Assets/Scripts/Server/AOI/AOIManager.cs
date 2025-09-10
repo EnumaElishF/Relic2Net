@@ -316,7 +316,7 @@ public class AOIManager : SingletonMono<AOIManager>
                 {
                     //虽然看着算法的时间复杂度比较大，但是因为面对的九个格子+客户端数量限制，实际上不会很大
                     Vector2Int hideChunkCoord = new Vector2Int(oldCoord.x + x, oldCoord.y + y);
-                    Vector2Int showChunkCoord = new Vector2Int(oldCoord.x + x, oldCoord.y + y);
+                    Vector2Int showChunkCoord = new Vector2Int(newCoord.x + x, newCoord.y + y);
                     ShowAndHideChunkClientsForServerObject(serverObject, hideChunkCoord, showChunkCoord);
                 }
             }
