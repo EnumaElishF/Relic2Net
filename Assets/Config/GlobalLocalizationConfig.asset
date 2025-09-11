@@ -34,13 +34,13 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 12
-      Data: 16
+      Data: 20
     - Name: 
       Entry: 7
       Data: 
     - Name: $k
       Entry: 1
-      Data: "\u767B\u5F55"
+      Data: AccountFormat
     - Name: $v
       Entry: 7
       Data: 2|System.Collections.Generic.Dictionary`2[[LanguageType, JKFrame],[LocalizationDataBase,
@@ -72,738 +72,6 @@ MonoBehaviour:
       Data: 4|LocalizationStringData, JKFrame
     - Name: content
       Entry: 1
-      Data: "\u767B\u5F55"
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 3
-      Data: 2
-    - Name: $v
-      Entry: 7
-      Data: 5|LocalizationStringData, JKFrame
-    - Name: content
-      Entry: 1
-      Data: Login
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 1
-      Data: "\u6CE8\u518C"
-    - Name: $v
-      Entry: 7
-      Data: 6|System.Collections.Generic.Dictionary`2[[LanguageType, JKFrame],[LocalizationDataBase,
-        JKFrame]], mscorlib
-    - Name: comparer
-      Entry: 9
-      Data: 3
-    - Name: 
-      Entry: 12
-      Data: 2
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 3
-      Data: 0
-    - Name: $v
-      Entry: 7
-      Data: 7|LocalizationStringData, JKFrame
-    - Name: content
-      Entry: 1
-      Data: "\u6CE8\u518C"
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 3
-      Data: 2
-    - Name: $v
-      Entry: 7
-      Data: 8|LocalizationStringData, JKFrame
-    - Name: content
-      Entry: 1
-      Data: Register
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 1
-      Data: "\u9000\u51FA"
-    - Name: $v
-      Entry: 7
-      Data: 9|System.Collections.Generic.Dictionary`2[[LanguageType, JKFrame],[LocalizationDataBase,
-        JKFrame]], mscorlib
-    - Name: comparer
-      Entry: 9
-      Data: 3
-    - Name: 
-      Entry: 12
-      Data: 2
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 3
-      Data: 0
-    - Name: $v
-      Entry: 7
-      Data: 10|LocalizationStringData, JKFrame
-    - Name: content
-      Entry: 1
-      Data: "\u9000\u51FA"
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 3
-      Data: 2
-    - Name: $v
-      Entry: 7
-      Data: 11|LocalizationStringData, JKFrame
-    - Name: content
-      Entry: 1
-      Data: Quit
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 1
-      Data: "\u8BF7\u8F93\u5165\u8D26\u53F7"
-    - Name: $v
-      Entry: 7
-      Data: 12|System.Collections.Generic.Dictionary`2[[LanguageType, JKFrame],[LocalizationDataBase,
-        JKFrame]], mscorlib
-    - Name: comparer
-      Entry: 9
-      Data: 3
-    - Name: 
-      Entry: 12
-      Data: 2
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 3
-      Data: 0
-    - Name: $v
-      Entry: 7
-      Data: 13|LocalizationStringData, JKFrame
-    - Name: content
-      Entry: 1
-      Data: "\u8BF7\u8F93\u5165\u8D26\u53F7"
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 3
-      Data: 2
-    - Name: $v
-      Entry: 7
-      Data: 14|LocalizationStringData, JKFrame
-    - Name: content
-      Entry: 1
-      Data: Please enter your account
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 1
-      Data: "\u8BF7\u8F93\u5165\u5BC6\u7801"
-    - Name: $v
-      Entry: 7
-      Data: 15|System.Collections.Generic.Dictionary`2[[LanguageType, JKFrame],[LocalizationDataBase,
-        JKFrame]], mscorlib
-    - Name: comparer
-      Entry: 9
-      Data: 3
-    - Name: 
-      Entry: 12
-      Data: 2
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 3
-      Data: 0
-    - Name: $v
-      Entry: 7
-      Data: 16|LocalizationStringData, JKFrame
-    - Name: content
-      Entry: 1
-      Data: "\u8BF7\u8F93\u5165\u5BC6\u7801"
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 3
-      Data: 2
-    - Name: $v
-      Entry: 7
-      Data: 17|LocalizationStringData, JKFrame
-    - Name: content
-      Entry: 1
-      Data: Please enter the password
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 1
-      Data: "\u8BF7\u518D\u6B21\u786E\u8BA4\u5BC6\u7801"
-    - Name: $v
-      Entry: 7
-      Data: 18|System.Collections.Generic.Dictionary`2[[LanguageType, JKFrame],[LocalizationDataBase,
-        JKFrame]], mscorlib
-    - Name: comparer
-      Entry: 9
-      Data: 3
-    - Name: 
-      Entry: 12
-      Data: 2
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 3
-      Data: 0
-    - Name: $v
-      Entry: 7
-      Data: 19|LocalizationStringData, JKFrame
-    - Name: content
-      Entry: 1
-      Data: "\u8BF7\u518D\u6B21\u786E\u8BA4\u5BC6\u7801"
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 3
-      Data: 2
-    - Name: $v
-      Entry: 7
-      Data: 20|LocalizationStringData, JKFrame
-    - Name: content
-      Entry: 1
-      Data: Please confirm the password again
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 1
-      Data: "\u6CE8\u518C\u6210\u529F"
-    - Name: $v
-      Entry: 7
-      Data: 21|System.Collections.Generic.Dictionary`2[[LanguageType, JKFrame],[LocalizationDataBase,
-        JKFrame]], mscorlib
-    - Name: comparer
-      Entry: 9
-      Data: 3
-    - Name: 
-      Entry: 12
-      Data: 2
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 3
-      Data: 0
-    - Name: $v
-      Entry: 7
-      Data: 22|LocalizationStringData, JKFrame
-    - Name: content
-      Entry: 1
-      Data: "\u6CE8\u518C\u6210\u529F"
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 3
-      Data: 2
-    - Name: $v
-      Entry: 7
-      Data: 23|LocalizationStringData, JKFrame
-    - Name: content
-      Entry: 1
-      Data: Registered successfully
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 1
-      Data: "\u8BB0\u4F4F\u8D26\u53F7"
-    - Name: $v
-      Entry: 7
-      Data: 24|System.Collections.Generic.Dictionary`2[[LanguageType, JKFrame],[LocalizationDataBase,
-        JKFrame]], mscorlib
-    - Name: comparer
-      Entry: 9
-      Data: 3
-    - Name: 
-      Entry: 12
-      Data: 2
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 3
-      Data: 0
-    - Name: $v
-      Entry: 7
-      Data: 25|LocalizationStringData, JKFrame
-    - Name: content
-      Entry: 1
-      Data: "\u8BB0\u4F4F\u8D26\u53F7"
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 3
-      Data: 2
-    - Name: $v
-      Entry: 7
-      Data: 26|LocalizationStringData, JKFrame
-    - Name: content
-      Entry: 1
-      Data: Remember the account
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 1
-      Data: "\u7EE7\u7EED\u6E38\u620F"
-    - Name: $v
-      Entry: 7
-      Data: 27|System.Collections.Generic.Dictionary`2[[LanguageType, JKFrame],[LocalizationDataBase,
-        JKFrame]], mscorlib
-    - Name: comparer
-      Entry: 9
-      Data: 3
-    - Name: 
-      Entry: 12
-      Data: 2
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 3
-      Data: 0
-    - Name: $v
-      Entry: 7
-      Data: 28|LocalizationStringData, JKFrame
-    - Name: content
-      Entry: 1
-      Data: "\u7EE7\u7EED\u6E38\u620F"
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 3
-      Data: 2
-    - Name: $v
-      Entry: 7
-      Data: 29|LocalizationStringData, JKFrame
-    - Name: content
-      Entry: 1
-      Data: Continue
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 1
-      Data: "\u6E38\u620F\u8BBE\u7F6E"
-    - Name: $v
-      Entry: 7
-      Data: 30|System.Collections.Generic.Dictionary`2[[LanguageType, JKFrame],[LocalizationDataBase,
-        JKFrame]], mscorlib
-    - Name: comparer
-      Entry: 9
-      Data: 3
-    - Name: 
-      Entry: 12
-      Data: 2
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 3
-      Data: 0
-    - Name: $v
-      Entry: 7
-      Data: 31|LocalizationStringData, JKFrame
-    - Name: content
-      Entry: 1
-      Data: "\u6E38\u620F\u8BBE\u7F6E"
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 3
-      Data: 2
-    - Name: $v
-      Entry: 7
-      Data: 32|LocalizationStringData, JKFrame
-    - Name: content
-      Entry: 1
-      Data: Settings
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 1
-      Data: "\u8FD4\u56DE\u83DC\u5355"
-    - Name: $v
-      Entry: 7
-      Data: 33|System.Collections.Generic.Dictionary`2[[LanguageType, JKFrame],[LocalizationDataBase,
-        JKFrame]], mscorlib
-    - Name: comparer
-      Entry: 9
-      Data: 3
-    - Name: 
-      Entry: 12
-      Data: 2
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 3
-      Data: 0
-    - Name: $v
-      Entry: 7
-      Data: 34|LocalizationStringData, JKFrame
-    - Name: content
-      Entry: 1
-      Data: "\u8FD4\u56DE\u83DC\u5355"
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 3
-      Data: 2
-    - Name: $v
-      Entry: 7
-      Data: 35|LocalizationStringData, JKFrame
-    - Name: content
-      Entry: 1
-      Data: Menu
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 1
-      Data: "\u9000\u51FA\u6E38\u620F"
-    - Name: $v
-      Entry: 7
-      Data: 36|System.Collections.Generic.Dictionary`2[[LanguageType, JKFrame],[LocalizationDataBase,
-        JKFrame]], mscorlib
-    - Name: comparer
-      Entry: 9
-      Data: 3
-    - Name: 
-      Entry: 12
-      Data: 2
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 3
-      Data: 0
-    - Name: $v
-      Entry: 7
-      Data: 37|LocalizationStringData, JKFrame
-    - Name: content
-      Entry: 1
-      Data: "\u9000\u51FA\u6E38\u620F"
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 3
-      Data: 2
-    - Name: $v
-      Entry: 7
-      Data: 38|LocalizationStringData, JKFrame
-    - Name: content
-      Entry: 1
-      Data: Quit
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 1
-      Data: AccountFormat
-    - Name: $v
-      Entry: 7
-      Data: 39|System.Collections.Generic.Dictionary`2[[LanguageType, JKFrame],[LocalizationDataBase,
-        JKFrame]], mscorlib
-    - Name: comparer
-      Entry: 9
-      Data: 3
-    - Name: 
-      Entry: 12
-      Data: 2
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 3
-      Data: 0
-    - Name: $v
-      Entry: 7
-      Data: 40|LocalizationStringData, JKFrame
-    - Name: content
-      Entry: 1
       Data: "\u8D26\u53F7\u683C\u5F0F\u5F02\u5E38"
     - Name: 
       Entry: 8
@@ -819,7 +87,7 @@ MonoBehaviour:
       Data: 2
     - Name: $v
       Entry: 7
-      Data: 41|LocalizationStringData, JKFrame
+      Data: 5|LocalizationStringData, JKFrame
     - Name: content
       Entry: 1
       Data: Account Format Abnormal
@@ -846,7 +114,7 @@ MonoBehaviour:
       Data: NameDuplication
     - Name: $v
       Entry: 7
-      Data: 42|System.Collections.Generic.Dictionary`2[[LanguageType, JKFrame],[LocalizationDataBase,
+      Data: 6|System.Collections.Generic.Dictionary`2[[LanguageType, JKFrame],[LocalizationDataBase,
         JKFrame]], mscorlib
     - Name: comparer
       Entry: 9
@@ -862,7 +130,7 @@ MonoBehaviour:
       Data: 0
     - Name: $v
       Entry: 7
-      Data: 43|LocalizationStringData, JKFrame
+      Data: 7|LocalizationStringData, JKFrame
     - Name: content
       Entry: 1
       Data: "\u7528\u6237\u540D\u91CD\u590D"
@@ -880,7 +148,7 @@ MonoBehaviour:
       Data: 2
     - Name: $v
       Entry: 7
-      Data: 44|LocalizationStringData, JKFrame
+      Data: 8|LocalizationStringData, JKFrame
     - Name: content
       Entry: 1
       Data: Use Name Duplication
@@ -907,7 +175,7 @@ MonoBehaviour:
       Data: NameOrPassword
     - Name: $v
       Entry: 7
-      Data: 45|System.Collections.Generic.Dictionary`2[[LanguageType, JKFrame],[LocalizationDataBase,
+      Data: 9|System.Collections.Generic.Dictionary`2[[LanguageType, JKFrame],[LocalizationDataBase,
         JKFrame]], mscorlib
     - Name: comparer
       Entry: 9
@@ -923,7 +191,7 @@ MonoBehaviour:
       Data: 0
     - Name: $v
       Entry: 7
-      Data: 46|LocalizationStringData, JKFrame
+      Data: 10|LocalizationStringData, JKFrame
     - Name: content
       Entry: 1
       Data: "\u8D26\u53F7\u6216\u5BC6\u7801\u9519\u8BEF"
@@ -941,7 +209,7 @@ MonoBehaviour:
       Data: 2
     - Name: $v
       Entry: 7
-      Data: 47|LocalizationStringData, JKFrame
+      Data: 11|LocalizationStringData, JKFrame
     - Name: content
       Entry: 1
       Data: The account number or password is incorrect
@@ -968,6 +236,738 @@ MonoBehaviour:
       Data: AccountRepeatLogin
     - Name: $v
       Entry: 7
+      Data: 12|System.Collections.Generic.Dictionary`2[[LanguageType, JKFrame],[LocalizationDataBase,
+        JKFrame]], mscorlib
+    - Name: comparer
+      Entry: 9
+      Data: 3
+    - Name: 
+      Entry: 12
+      Data: 2
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 0
+    - Name: $v
+      Entry: 7
+      Data: 13|LocalizationStringData, JKFrame
+    - Name: content
+      Entry: 1
+      Data: "\u8D26\u53F7\u91CD\u590D\u767B\u5F55"
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 2
+    - Name: $v
+      Entry: 7
+      Data: 14|LocalizationStringData, JKFrame
+    - Name: content
+      Entry: 1
+      Data: Account repeat login
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: "\u767B\u5F55"
+    - Name: $v
+      Entry: 7
+      Data: 15|System.Collections.Generic.Dictionary`2[[LanguageType, JKFrame],[LocalizationDataBase,
+        JKFrame]], mscorlib
+    - Name: comparer
+      Entry: 9
+      Data: 3
+    - Name: 
+      Entry: 12
+      Data: 2
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 0
+    - Name: $v
+      Entry: 7
+      Data: 16|LocalizationStringData, JKFrame
+    - Name: content
+      Entry: 1
+      Data: "\u767B\u5F55"
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 2
+    - Name: $v
+      Entry: 7
+      Data: 17|LocalizationStringData, JKFrame
+    - Name: content
+      Entry: 1
+      Data: Login
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: "\u6CE8\u518C"
+    - Name: $v
+      Entry: 7
+      Data: 18|System.Collections.Generic.Dictionary`2[[LanguageType, JKFrame],[LocalizationDataBase,
+        JKFrame]], mscorlib
+    - Name: comparer
+      Entry: 9
+      Data: 3
+    - Name: 
+      Entry: 12
+      Data: 2
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 0
+    - Name: $v
+      Entry: 7
+      Data: 19|LocalizationStringData, JKFrame
+    - Name: content
+      Entry: 1
+      Data: "\u6CE8\u518C"
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 2
+    - Name: $v
+      Entry: 7
+      Data: 20|LocalizationStringData, JKFrame
+    - Name: content
+      Entry: 1
+      Data: Register
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: "\u9000\u51FA"
+    - Name: $v
+      Entry: 7
+      Data: 21|System.Collections.Generic.Dictionary`2[[LanguageType, JKFrame],[LocalizationDataBase,
+        JKFrame]], mscorlib
+    - Name: comparer
+      Entry: 9
+      Data: 3
+    - Name: 
+      Entry: 12
+      Data: 2
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 0
+    - Name: $v
+      Entry: 7
+      Data: 22|LocalizationStringData, JKFrame
+    - Name: content
+      Entry: 1
+      Data: "\u9000\u51FA"
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 2
+    - Name: $v
+      Entry: 7
+      Data: 23|LocalizationStringData, JKFrame
+    - Name: content
+      Entry: 1
+      Data: Quit
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: "\u8BF7\u8F93\u5165\u8D26\u53F7"
+    - Name: $v
+      Entry: 7
+      Data: 24|System.Collections.Generic.Dictionary`2[[LanguageType, JKFrame],[LocalizationDataBase,
+        JKFrame]], mscorlib
+    - Name: comparer
+      Entry: 9
+      Data: 3
+    - Name: 
+      Entry: 12
+      Data: 2
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 0
+    - Name: $v
+      Entry: 7
+      Data: 25|LocalizationStringData, JKFrame
+    - Name: content
+      Entry: 1
+      Data: "\u8BF7\u8F93\u5165\u8D26\u53F7"
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 2
+    - Name: $v
+      Entry: 7
+      Data: 26|LocalizationStringData, JKFrame
+    - Name: content
+      Entry: 1
+      Data: Please enter your account
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: "\u8BF7\u8F93\u5165\u5BC6\u7801"
+    - Name: $v
+      Entry: 7
+      Data: 27|System.Collections.Generic.Dictionary`2[[LanguageType, JKFrame],[LocalizationDataBase,
+        JKFrame]], mscorlib
+    - Name: comparer
+      Entry: 9
+      Data: 3
+    - Name: 
+      Entry: 12
+      Data: 2
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 0
+    - Name: $v
+      Entry: 7
+      Data: 28|LocalizationStringData, JKFrame
+    - Name: content
+      Entry: 1
+      Data: "\u8BF7\u8F93\u5165\u5BC6\u7801"
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 2
+    - Name: $v
+      Entry: 7
+      Data: 29|LocalizationStringData, JKFrame
+    - Name: content
+      Entry: 1
+      Data: Please enter the password
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: "\u8BF7\u518D\u6B21\u786E\u8BA4\u5BC6\u7801"
+    - Name: $v
+      Entry: 7
+      Data: 30|System.Collections.Generic.Dictionary`2[[LanguageType, JKFrame],[LocalizationDataBase,
+        JKFrame]], mscorlib
+    - Name: comparer
+      Entry: 9
+      Data: 3
+    - Name: 
+      Entry: 12
+      Data: 2
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 0
+    - Name: $v
+      Entry: 7
+      Data: 31|LocalizationStringData, JKFrame
+    - Name: content
+      Entry: 1
+      Data: "\u8BF7\u518D\u6B21\u786E\u8BA4\u5BC6\u7801"
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 2
+    - Name: $v
+      Entry: 7
+      Data: 32|LocalizationStringData, JKFrame
+    - Name: content
+      Entry: 1
+      Data: Please confirm the password again
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: "\u6CE8\u518C\u6210\u529F"
+    - Name: $v
+      Entry: 7
+      Data: 33|System.Collections.Generic.Dictionary`2[[LanguageType, JKFrame],[LocalizationDataBase,
+        JKFrame]], mscorlib
+    - Name: comparer
+      Entry: 9
+      Data: 3
+    - Name: 
+      Entry: 12
+      Data: 2
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 0
+    - Name: $v
+      Entry: 7
+      Data: 34|LocalizationStringData, JKFrame
+    - Name: content
+      Entry: 1
+      Data: "\u6CE8\u518C\u6210\u529F"
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 2
+    - Name: $v
+      Entry: 7
+      Data: 35|LocalizationStringData, JKFrame
+    - Name: content
+      Entry: 1
+      Data: Registered successfully
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: "\u8BB0\u4F4F\u8D26\u53F7"
+    - Name: $v
+      Entry: 7
+      Data: 36|System.Collections.Generic.Dictionary`2[[LanguageType, JKFrame],[LocalizationDataBase,
+        JKFrame]], mscorlib
+    - Name: comparer
+      Entry: 9
+      Data: 3
+    - Name: 
+      Entry: 12
+      Data: 2
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 0
+    - Name: $v
+      Entry: 7
+      Data: 37|LocalizationStringData, JKFrame
+    - Name: content
+      Entry: 1
+      Data: "\u8BB0\u4F4F\u8D26\u53F7"
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 2
+    - Name: $v
+      Entry: 7
+      Data: 38|LocalizationStringData, JKFrame
+    - Name: content
+      Entry: 1
+      Data: Remember the account
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: "\u7EE7\u7EED\u6E38\u620F"
+    - Name: $v
+      Entry: 7
+      Data: 39|System.Collections.Generic.Dictionary`2[[LanguageType, JKFrame],[LocalizationDataBase,
+        JKFrame]], mscorlib
+    - Name: comparer
+      Entry: 9
+      Data: 3
+    - Name: 
+      Entry: 12
+      Data: 2
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 0
+    - Name: $v
+      Entry: 7
+      Data: 40|LocalizationStringData, JKFrame
+    - Name: content
+      Entry: 1
+      Data: "\u7EE7\u7EED\u6E38\u620F"
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 2
+    - Name: $v
+      Entry: 7
+      Data: 41|LocalizationStringData, JKFrame
+    - Name: content
+      Entry: 1
+      Data: Continue
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: "\u6E38\u620F\u8BBE\u7F6E"
+    - Name: $v
+      Entry: 7
+      Data: 42|System.Collections.Generic.Dictionary`2[[LanguageType, JKFrame],[LocalizationDataBase,
+        JKFrame]], mscorlib
+    - Name: comparer
+      Entry: 9
+      Data: 3
+    - Name: 
+      Entry: 12
+      Data: 2
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 0
+    - Name: $v
+      Entry: 7
+      Data: 43|LocalizationStringData, JKFrame
+    - Name: content
+      Entry: 1
+      Data: "\u6E38\u620F\u8BBE\u7F6E"
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 2
+    - Name: $v
+      Entry: 7
+      Data: 44|LocalizationStringData, JKFrame
+    - Name: content
+      Entry: 1
+      Data: Settings
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: "\u8FD4\u56DE\u83DC\u5355"
+    - Name: $v
+      Entry: 7
+      Data: 45|System.Collections.Generic.Dictionary`2[[LanguageType, JKFrame],[LocalizationDataBase,
+        JKFrame]], mscorlib
+    - Name: comparer
+      Entry: 9
+      Data: 3
+    - Name: 
+      Entry: 12
+      Data: 2
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 0
+    - Name: $v
+      Entry: 7
+      Data: 46|LocalizationStringData, JKFrame
+    - Name: content
+      Entry: 1
+      Data: "\u8FD4\u56DE\u83DC\u5355"
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 2
+    - Name: $v
+      Entry: 7
+      Data: 47|LocalizationStringData, JKFrame
+    - Name: content
+      Entry: 1
+      Data: Menu
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: "\u9000\u51FA\u6E38\u620F"
+    - Name: $v
+      Entry: 7
       Data: 48|System.Collections.Generic.Dictionary`2[[LanguageType, JKFrame],[LocalizationDataBase,
         JKFrame]], mscorlib
     - Name: comparer
@@ -987,7 +987,7 @@ MonoBehaviour:
       Data: 49|LocalizationStringData, JKFrame
     - Name: content
       Entry: 1
-      Data: "\u8D26\u53F7\u91CD\u590D\u767B\u5F55"
+      Data: "\u9000\u51FA\u6E38\u620F"
     - Name: 
       Entry: 8
       Data: 
@@ -1005,7 +1005,251 @@ MonoBehaviour:
       Data: 50|LocalizationStringData, JKFrame
     - Name: content
       Entry: 1
-      Data: Account repeat login
+      Data: Quit
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: "\u97F3\u4E50"
+    - Name: $v
+      Entry: 7
+      Data: 51|System.Collections.Generic.Dictionary`2[[LanguageType, JKFrame],[LocalizationDataBase,
+        JKFrame]], mscorlib
+    - Name: comparer
+      Entry: 9
+      Data: 3
+    - Name: 
+      Entry: 12
+      Data: 2
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 0
+    - Name: $v
+      Entry: 7
+      Data: 52|LocalizationStringData, JKFrame
+    - Name: content
+      Entry: 1
+      Data: "\u97F3\u4E50"
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 2
+    - Name: $v
+      Entry: 7
+      Data: 53|LocalizationStringData, JKFrame
+    - Name: content
+      Entry: 1
+      Data: Music
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: "\u97F3\u6548"
+    - Name: $v
+      Entry: 7
+      Data: 54|System.Collections.Generic.Dictionary`2[[LanguageType, JKFrame],[LocalizationDataBase,
+        JKFrame]], mscorlib
+    - Name: comparer
+      Entry: 9
+      Data: 3
+    - Name: 
+      Entry: 12
+      Data: 2
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 0
+    - Name: $v
+      Entry: 7
+      Data: 55|LocalizationStringData, JKFrame
+    - Name: content
+      Entry: 1
+      Data: "\u97F3\u6548"
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 2
+    - Name: $v
+      Entry: 7
+      Data: 56|LocalizationStringData, JKFrame
+    - Name: content
+      Entry: 1
+      Data: Sound Effect
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: "\u8BED\u8A00"
+    - Name: $v
+      Entry: 7
+      Data: 57|System.Collections.Generic.Dictionary`2[[LanguageType, JKFrame],[LocalizationDataBase,
+        JKFrame]], mscorlib
+    - Name: comparer
+      Entry: 9
+      Data: 3
+    - Name: 
+      Entry: 12
+      Data: 2
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 0
+    - Name: $v
+      Entry: 7
+      Data: 58|LocalizationStringData, JKFrame
+    - Name: content
+      Entry: 1
+      Data: "\u8BED\u8A00"
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 2
+    - Name: $v
+      Entry: 7
+      Data: 59|LocalizationStringData, JKFrame
+    - Name: content
+      Entry: 1
+      Data: Language
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: "\u8BBE\u7F6E"
+    - Name: $v
+      Entry: 7
+      Data: 60|System.Collections.Generic.Dictionary`2[[LanguageType, JKFrame],[LocalizationDataBase,
+        JKFrame]], mscorlib
+    - Name: comparer
+      Entry: 9
+      Data: 3
+    - Name: 
+      Entry: 12
+      Data: 2
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 0
+    - Name: $v
+      Entry: 7
+      Data: 61|LocalizationStringData, JKFrame
+    - Name: content
+      Entry: 1
+      Data: "\u8BBE\u7F6E"
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 2
+    - Name: $v
+      Entry: 7
+      Data: 62|LocalizationStringData, JKFrame
+    - Name: content
+      Entry: 1
+      Data: Settings
     - Name: 
       Entry: 8
       Data: 

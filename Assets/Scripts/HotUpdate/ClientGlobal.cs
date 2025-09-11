@@ -6,6 +6,7 @@ using UnityEngine.AddressableAssets;
 public class ClientGlobal : SingletonMono<ClientGlobal>
 {
     public GameSetting gameSetting { get; private set; }
+    public GameBasicSetting basicSetting { get; private set; }
     protected override void Awake()
     {
         base.Awake();
@@ -52,16 +53,28 @@ public class ClientGlobal : SingletonMono<ClientGlobal>
     private void LoadGameSetting()
     {
         gameSetting = SaveSystem.LoadSetting<GameSetting>();
+        basicSetting= SaveSystem.LoadSetting<GameBasicSetting>();
         if (gameSetting == null)
         {
             gameSetting = new GameSetting();
-            SaveSystem.SaveSetting(gameSetting);
+            SaveGameSetting();
+        }
+        if (basicSetting == null)
+        {
+            //初始化
+            basicSetting = new GameBasicSetting();
+            basicSetting.languageType = Application.systemLanguage == SystemLanguage.ChineseSimplified ? LanguageType.SimplifiedChinese : LanguageType.English;
+            SaveGameSetting();
         }
     }
     public void SaveGameSetting()
     {
         //低频的，写到磁盘里去
         SaveSystem.SaveSetting(gameSetting);
+    }
+    public void SaveGameBasicSetting()
+    {
+        SaveSystem.SaveSetting(basicSetting);
     }
     public void RememberAccount(string name,string password)
     {
