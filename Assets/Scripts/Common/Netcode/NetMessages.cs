@@ -9,6 +9,7 @@ public enum MessageType : byte
     C_S_Login,
     S_C_Login,
     C_S_EnterGame,
+    C_S_Disconnect,
     S_C_Disconnect
 }
 /// <summary>
@@ -67,6 +68,16 @@ public struct S_C_Login : INetworkSerializable
 public struct C_S_EnterGame : INetworkSerializable
 {
     public ErrorCode errorCode; ///纯占位,以后还有可能再加一些需要的数据消息Code
+
+    public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+    {
+        serializer.SerializeValue(ref errorCode);
+
+    }
+}
+public struct C_S_Disconnect : INetworkSerializable
+{
+    public ErrorCode errorCode;///纯占位
 
     public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
     {

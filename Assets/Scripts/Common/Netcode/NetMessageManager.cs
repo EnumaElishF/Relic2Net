@@ -57,6 +57,10 @@ public class NetMessageManager : SingletonMono<NetMessageManager>
                     reader.ReadValueSafe(out C_S_EnterGame C_S_EnterGame);
                     TriggerMessageCallback(MessageType.C_S_EnterGame, clientId, C_S_EnterGame);
                     break;
+                case MessageType.C_S_Disconnect:
+                    reader.ReadValueSafe(out C_S_Disconnect C_S_Disconnect);
+                    TriggerMessageCallback(MessageType.C_S_Disconnect, clientId, C_S_Disconnect);
+                    break;
                 case MessageType.S_C_Disconnect:
                     reader.ReadValueSafe(out S_C_Disconnect S_C_Disconnect);
                     TriggerMessageCallback(MessageType.S_C_Disconnect, clientId, S_C_Disconnect);

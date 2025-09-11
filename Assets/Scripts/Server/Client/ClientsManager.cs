@@ -31,8 +31,11 @@ public class ClientsManager : SingletonMono<ClientsManager> //SingletonMono加�
         NetMessageManager.Instance.RegisterMessageCallback(MessageType.C_S_Register, OnClientRegister);
         NetMessageManager.Instance.RegisterMessageCallback(MessageType.C_S_Login, OnClientLogin);
         NetMessageManager.Instance.RegisterMessageCallback(MessageType.C_S_EnterGame, OnClientEnterGame);
+        NetMessageManager.Instance.RegisterMessageCallback(MessageType.C_S_Disconnect, OnClientDisconnect);
         
     }
+
+
     /// <summary>
     /// 标准的状态切换的函数，方便管理后续状态切换
     /// </summary>
@@ -62,7 +65,7 @@ public class ClientsManager : SingletonMono<ClientsManager> //SingletonMono加�
 
     }
     /// <summary>
-    /// 客户端退出，断开连接
+    /// 客户端完全退出，断开连接
     /// </summary>
     private void OnClientNetCodeDisconnect(ulong clientID)
     {
@@ -76,6 +79,29 @@ public class ClientsManager : SingletonMono<ClientsManager> //SingletonMono加�
             client.playerController = null;
             client.OnDestroy();
         }
+    }
+
+    /// <summary>
+    /// 客户端退出到开始菜单场景
+    /// </summary>
+    private void OnClientDisconnect(ulong clientID, INetworkSerializable serializable)
+    {
+        Client client = clientIDDic[clientID];
+        //设置旧客户端为已连接但是未登录状态
+        SetClientState(clientID, ClientState.Connected);
+        //销毁角色
+        if (client.playerController != null)
+        {
+            NetManager.Instance.DestroyObject(client.playerController.NetworkObject);
+            client.playerController = null;
+        }
+        if(client.playerData != null)
+        {
+            //退出账号
+            accountDic.Remove(client.playerData.name);
+            client.playerData = null;
+        }
+        //注：这里对于client是存在的，不会移除
     }
     /// <summary>
     /// 申请注册

@@ -25,13 +25,14 @@ public class UI_GamePopupWindow : UI_WindowBase
     private void SettingButtonClick()
     {
         //UISystem.Show<UI_GameSettingsWindow>();
+        //游戏设置UI窗口
     }
 
     private void BackButtonClick()
     {
         // 退出到菜单场景
-        //NetManager.Instance.StopClient();
-        //ClientGlobal.Instance.EnterLoginScene();
+        NetMessageManager.Instance.SendMessageToServer<C_S_Disconnect>(MessageType.C_S_Disconnect, default);
+        ClientGlobal.Instance.EnterLoginScene();
     }
 
     private void QuitButtonClick()
