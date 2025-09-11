@@ -17,10 +17,32 @@ public class PlayerManager : SingletonMono<PlayerManager>
     {
         EventSystem.AddTypeEventListener<InitLocalPlayerEvent>(OnInitLocalPlayerEvent);
     }
+    private void OnDestroy()
+    {
+        //检查所有的的EventSystem的事件绑定，因为PlayerManager脚本并不是全局的，他会因为场景卸载而关闭
+        //那么就需要把事件取消掉，所以加了下面这个RemoveTypeEventListener移除事件监听
+        //以此类似的还有很多，但是像是ClientGlobal这种一直存在，就不需要加下面的处理
+        EventSystem.RemoveTypeEventListener<InitLocalPlayerEvent>(OnInitLocalPlayerEvent);
+    }
 
     private void OnInitLocalPlayerEvent(InitLocalPlayerEvent arg)
     {
         InitLocalPlayer(arg.localPlayer);
+    }
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            UI_GamePopupWindow gamePopupWindow = UISystem.GetWindow<UI_GamePopupWindow>();
+            if (gamePopupWindow == null || !gamePopupWindow.gameObject.activeInHierarchy)
+            {
+                UISystem.Show<UI_GamePopupWindow>();
+            }
+            else
+            {
+                UISystem.Close<UI_GamePopupWindow>();
+            }
+        }
     }
     public bool IsLoadingCompleted()
     {

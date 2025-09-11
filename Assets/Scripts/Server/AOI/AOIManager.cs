@@ -29,6 +29,13 @@ public class AOIManager : SingletonMono<AOIManager>
         EventSystem.AddTypeEventListener<AOIRemovePlayerEvent>(OnAOIRemovePlayerEvent);
 
     }
+    private void OnDestroy()
+    {
+        //卸载此脚本的同时，取消监听
+        EventSystem.RemoveTypeEventListener<AOIAddPlayerEvent>(OnAOIAddPlayerEvent);
+        EventSystem.RemoveTypeEventListener<AOIUpdatePlayerCoordEvent>(OnAOIUpdatePlayerCoordEvent);
+        EventSystem.RemoveTypeEventListener<AOIRemovePlayerEvent>(OnAOIRemovePlayerEvent);
+    }
 
 
     private void OnAOIAddPlayerEvent(AOIAddPlayerEvent arg)
