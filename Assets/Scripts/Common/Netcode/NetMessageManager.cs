@@ -63,9 +63,9 @@ public class NetMessageManager : SingletonMono<NetMessageManager>
                     break;
             }
         }
-        catch(Exception)
+        catch(Exception e)
         {
-            Debug.Log("消息接收失败!");
+            Debug.Log("消息接收失败!"+e.Message);
         }
 
     }

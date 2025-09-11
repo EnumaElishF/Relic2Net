@@ -1,4 +1,5 @@
 using JKFrame;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
@@ -21,10 +22,14 @@ public class ClientGlobal : SingletonMono<ClientGlobal>
 
         ResSystem.InstantiateGameObject<NetManager>("NetworkManager").Init(true);//直接用的同步，因为文件很小，如果大了还是要用异步加载。
         EventSystem.AddTypeEventListener<GameSceneLaunchEvent>(OnGameSceneLaunchEvent);
+        NetMessageManager.Instance.RegisterMessageCallback(MessageType.S_C_Disconnect, OnDisconnect); //注册使用OnDisconnect方法
         Debug.Log("InitClient 成功");
         EnterLoginScene();
 
     }
+
+
+
     /// <summary>
     /// 注册Windows
     /// </summary>
@@ -65,11 +70,21 @@ public class ClientGlobal : SingletonMono<ClientGlobal>
     }
     public void EnterLoginScene()
     {
+        UISystem.CloseAllWindow();
         //LoginScene，我们通过Addressables来做加载
         Addressables.LoadSceneAsync("LoginScene").WaitForCompletion();
     }
     public void EnterGameScene()
     {
+        UISystem.CloseAllWindow();
         SceneSystem.LoadScene("GameScene");
+    }
+    private void OnDisconnect(ulong clientID, INetworkSerializable serializable)
+    {
+        S_C_Disconnect message = (S_C_Disconnect)serializable;
+        UISystem.Show<UI_MessagePopupWindow>().ShowMessageByLocalizationKey(message.errorCode.ToString(), Color.red);
+        //延迟1秒，进入登录场景
+        Invoke(nameof(EnterLoginScene), 1);
+        Debug.Log("退出到登录场景");
     }
 }

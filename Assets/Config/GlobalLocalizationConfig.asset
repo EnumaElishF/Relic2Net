@@ -34,7 +34,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 12
-      Data: 11
+      Data: 12
     - Name: 
       Entry: 7
       Data: 
@@ -701,6 +701,67 @@ MonoBehaviour:
     - Name: content
       Entry: 1
       Data: The account number or password is incorrect
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: AccountRepeatLogin
+    - Name: $v
+      Entry: 7
+      Data: 36|System.Collections.Generic.Dictionary`2[[LanguageType, JKFrame],[LocalizationDataBase,
+        JKFrame]], mscorlib
+    - Name: comparer
+      Entry: 9
+      Data: 3
+    - Name: 
+      Entry: 12
+      Data: 2
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 0
+    - Name: $v
+      Entry: 7
+      Data: 37|LocalizationStringData, JKFrame
+    - Name: content
+      Entry: 1
+      Data: "\u8D26\u53F7\u91CD\u590D\u767B\u5F55"
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 2
+    - Name: $v
+      Entry: 7
+      Data: 38|LocalizationStringData, JKFrame
+    - Name: content
+      Entry: 1
+      Data: Account repeat login
     - Name: 
       Entry: 8
       Data: 

@@ -137,11 +137,34 @@ public class ClientsManager : SingletonMono<ClientsManager> //SingletonMono加�
             }
             else
             {
+                //检查 挤号
+                if(accountDic.TryGetValue(accountInfo.playerName,out ulong oldClientID))
+                {
+                    //通知旧客户端
+                    NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_Disconnect, new S_C_Disconnect
+                    {
+                        errorCode = ErrorCode.AccountRepeatLogin
+                    },oldClientID);
+                    //设置旧客户端为已连接但是未登录状态
+                    SetClientState(oldClientID, ClientState.Connected);
+                    //可能存在的角色需要销毁,因为登录的人还不一定产生了角色
+                    if(clientIDDic.TryGetValue(oldClientID,out Client oldClient))
+                    {
+                        if (oldClient.playerController != null)
+                        {
+                            NetManager.Instance.DestroyObject(oldClient.playerController.NetworkObject);
+                            oldClient.playerController = null;
+                        }
+                        oldClient.playerData = null;
+                    }
+                }
+                //修改当前值，能自动新增或修改。accountDic[key] = value 的方式赋值时，如果这个键不存在，会自动新增一个键值对
+                accountDic[accountInfo.playerName] = clientID;
+
                 //玩家登录成功,关联Client和PlayerData
                 Client client = clientIDDic[clientID];
                 client.playerData = playerData;
                 SetClientState(clientID, ClientState.Logined);
-                accountDic.Add(accountInfo.playerName, clientID);
             }
         }
         //回复客户端
