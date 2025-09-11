@@ -44,6 +44,7 @@ public class ClientGlobal : SingletonMono<ClientGlobal>
         UISystem.AddUIWindowData<UI_RegisterWindow>(new UIWindowData(false, nameof(UI_RegisterWindow), 1));
         UISystem.AddUIWindowData<UI_LoginWindow>(new UIWindowData(false, nameof(UI_LoginWindow), 1));
         UISystem.AddUIWindowData<UI_GamePopupWindow>(new UIWindowData(false, nameof(UI_GamePopupWindow), 4));
+        UISystem.AddUIWindowData<UI_GameSettingsWindow>(new UIWindowData(false, nameof(UI_GameSettingsWindow), 3));
     }
     private void OnGameSceneLaunchEvent(GameSceneLaunchEvent @event)
     {
@@ -53,7 +54,7 @@ public class ClientGlobal : SingletonMono<ClientGlobal>
     private void LoadGameSetting()
     {
         gameSetting = SaveSystem.LoadSetting<GameSetting>();
-        basicSetting= SaveSystem.LoadSetting<GameBasicSetting>();
+        basicSetting = SaveSystem.LoadSetting<GameBasicSetting>();
         if (gameSetting == null)
         {
             gameSetting = new GameSetting();
@@ -66,6 +67,8 @@ public class ClientGlobal : SingletonMono<ClientGlobal>
             basicSetting.languageType = Application.systemLanguage == SystemLanguage.ChineseSimplified ? LanguageType.SimplifiedChinese : LanguageType.English;
             SaveGameSetting();
         }
+        //本地化的语言在初始化游戏的时候重新检测赋值为本地化语言类型
+        LocalizationSystem.LanguageType = basicSetting.languageType;
     }
     public void SaveGameSetting()
     {

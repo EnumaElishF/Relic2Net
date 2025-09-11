@@ -24,8 +24,8 @@ public class UI_GamePopupWindow : UI_WindowBase
 
     private void SettingButtonClick()
     {
-        //UISystem.Show<UI_GameSettingsWindow>();
         //游戏设置UI窗口
+        UISystem.Show<UI_GameSettingsWindow>();
     }
 
     private void BackButtonClick()

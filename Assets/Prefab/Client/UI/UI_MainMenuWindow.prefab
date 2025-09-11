@@ -6355,6 +6355,7 @@ MonoBehaviour:
   localizationConfig: {fileID: 0}
   loginButton: {fileID: 4677767999607711621}
   registerButton: {fileID: 8358354383396633943}
+  settingsButton: {fileID: 4260963566234117158}
   quitButton: {fileID: 1314401071499679937}
 --- !u!114 &8625364820645550819
 MonoBehaviour:

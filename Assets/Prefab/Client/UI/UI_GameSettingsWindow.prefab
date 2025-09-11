@@ -765,6 +765,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf8ddc4d6d88c37499163700d0adb110, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  localizationConfig: {fileID: 0}
+  closeButton: {fileID: 3732497203037208461}
+  languagePrevButton: {fileID: 3732497203204454423}
+  languageNextButton: {fileID: 3732497202186438029}
+  languageImage: {fileID: 3732497202789404568}
+  englishIcon: {fileID: 21300000, guid: d562dcfff43c22d469e5e5bb754559c5, type: 3}
+  chineseIcon: {fileID: 21300000, guid: 36e8bf3a941308f49a79589922ff7022, type: 3}
+  musicVolumeSlider: {fileID: 3732497202113655908}
+  soundEffectVolumeSlider: {fileID: 4583594542086107053}
 --- !u!1 &3732497202444982018
 GameObject:
   m_ObjectHideFlags: 0
