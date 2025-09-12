@@ -45,6 +45,8 @@ public class ClientGlobal : SingletonMono<ClientGlobal>
         UISystem.AddUIWindowData<UI_LoginWindow>(new UIWindowData(false, nameof(UI_LoginWindow), 1));
         UISystem.AddUIWindowData<UI_GamePopupWindow>(new UIWindowData(false, nameof(UI_GamePopupWindow), 3));
         UISystem.AddUIWindowData<UI_GameSettingsWindow>(new UIWindowData(false, nameof(UI_GameSettingsWindow), 3));
+        //把框架的2层，设置为2层 之间的ui互相不会遮挡， 比如商店背包互相拖拽，还有聊天
+        UISystem.AddUIWindowData<UI_ChatWindow>(new UIWindowData(false, nameof(UI_ChatWindow), 2));
     }
     private void OnGameSceneLaunchEvent(GameSceneLaunchEvent @event)
     {
