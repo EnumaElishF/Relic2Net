@@ -102,6 +102,9 @@ public class ClientsManager : SingletonMono<ClientsManager> //SingletonMono加�
             client.playerData = null;
         }
         //注：这里对于client是存在的，不会移除
+
+        //回复消息
+        NetMessageManager.Instance.SendMessageToClient<S_C_Disconnect>(MessageType.S_C_Disconnect, default, clientID);
     }
     /// <summary>
     /// 申请注册

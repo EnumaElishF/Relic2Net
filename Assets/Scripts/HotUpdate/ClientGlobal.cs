@@ -43,7 +43,7 @@ public class ClientGlobal : SingletonMono<ClientGlobal>
         UISystem.AddUIWindowData<UI_MessagePopupWindow>(new UIWindowData(true, nameof(UI_MessagePopupWindow), 4));
         UISystem.AddUIWindowData<UI_RegisterWindow>(new UIWindowData(false, nameof(UI_RegisterWindow), 1));
         UISystem.AddUIWindowData<UI_LoginWindow>(new UIWindowData(false, nameof(UI_LoginWindow), 1));
-        UISystem.AddUIWindowData<UI_GamePopupWindow>(new UIWindowData(false, nameof(UI_GamePopupWindow), 4));
+        UISystem.AddUIWindowData<UI_GamePopupWindow>(new UIWindowData(false, nameof(UI_GamePopupWindow), 3));
         UISystem.AddUIWindowData<UI_GameSettingsWindow>(new UIWindowData(false, nameof(UI_GameSettingsWindow), 3));
     }
     private void OnGameSceneLaunchEvent(GameSceneLaunchEvent @event)
@@ -69,6 +69,9 @@ public class ClientGlobal : SingletonMono<ClientGlobal>
         }
         //本地化的语言在初始化游戏的时候重新检测赋值为本地化语言类型
         LocalizationSystem.LanguageType = basicSetting.languageType;
+
+        AudioSystem.BGVolume = gameSetting.musicVolume;
+        AudioSystem.EffectVolume = gameSetting.soundEffectVolume;
     }
     public void SaveGameSetting()
     {
@@ -99,9 +102,13 @@ public class ClientGlobal : SingletonMono<ClientGlobal>
     private void OnDisconnect(ulong clientID, INetworkSerializable serializable)
     {
         S_C_Disconnect message = (S_C_Disconnect)serializable;
-        UISystem.Show<UI_MessagePopupWindow>().ShowMessageByLocalizationKey(message.errorCode.ToString(), Color.red);
-        //延迟1秒，进入登录场景
-        Invoke(nameof(EnterLoginScene), 1);
+        if (message.errorCode != ErrorCode.None)
+        {
+            UISystem.Show<UI_MessagePopupWindow>().ShowMessageByLocalizationKey(message.errorCode.ToString(), Color.red);
+            //延迟1秒，进入登录场景
+            Invoke(nameof(EnterLoginScene), 1);
+        }
+        else EnterLoginScene();
         Debug.Log("退出到登录场景");
     }
 }

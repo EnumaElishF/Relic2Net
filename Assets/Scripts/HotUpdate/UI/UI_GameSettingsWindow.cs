@@ -50,14 +50,16 @@ public class UI_GameSettingsWindow : UI_WindowBase
     private void MusicVolumeSliderValueChanged(float newValue)
     {
         ClientGlobal.Instance.gameSetting.musicVolume = newValue;
-        //AudioSystem.BGVolume = newValue;
-        //EventSystem.TypeEventTrigger<MusicVolumeChangedEvent>(default);
+        AudioSystem.BGVolume = newValue;
+        EventSystem.TypeEventTrigger<MusicVolumeChangedEvent>(default);
     }
-
+    /// <summary>
+    /// 特效音乐
+    /// </summary>
     private void SoundEffectVolumeSliderValueChanged(float newValue)
     {
         ClientGlobal.Instance.gameSetting.soundEffectVolume = newValue;
-        //AudioSystem.EffectVolume = newValue;
+        AudioSystem.EffectVolume = newValue;
     }
     public override void OnClose()
     {
