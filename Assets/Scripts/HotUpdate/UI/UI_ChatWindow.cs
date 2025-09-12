@@ -17,15 +17,20 @@ public class UI_ChatWindow : UI_CustomWindowBase
     private Image scrollRectImage;
     //itemCount条消息满后，有新消息会把旧的顶出队列
     private Queue<UI_ChatWindowItem> itemQueue = new Queue<UI_ChatWindowItem>(itemCount);
-
+    private void Start()
+    {
+        Init();
+    }
     public override void Init()
     {
-        //scrollRectImage = scrollRect.GetComponent<Image>();
+        scrollRectImage = scrollRect.GetComponent<Image>();
         //回车输入框
         chatInputField.onSubmit.AddListener(OnChatInputFieldSubmit);
-        //main.OnMouseEnter(OnEnter);
-        //main.OnMouseExit(OnExit);
-        //OnExit(null);
+        //改变聊天窗口的Main里组件有图片，控制透明色
+        main.OnMouseEnter(OnEnter);
+        main.OnMouseExit(OnExit);
+        //默认退出聊天框
+        OnExit(null);
     }
     //public override void OnShow()
     //{
@@ -38,14 +43,19 @@ public class UI_ChatWindow : UI_CustomWindowBase
     //    S_C_ChatMessage message = (S_C_ChatMessage)serializable;
     //    AddItem(message.playerName, message.message);
     //}
-
+    /// <summary>
+    /// 做到鼠标进入强化显示
+    /// </summary>
     private void OnEnter(PointerEventData data)
     {
         chatInputField.gameObject.SetActive(true);
         scrollRect.vertical = true;
+        //背景图透明度修改
         scrollRectImage.color = new Color(0, 0, 0, 0.2f);
     }
-
+    /// <summary>
+    /// 鼠标离开弱化显示
+    /// </summary>
     private void OnExit(PointerEventData data)
     {
         chatInputField.gameObject.SetActive(false);
