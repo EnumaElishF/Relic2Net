@@ -249,18 +249,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2111969700}
     m_Modifications:
-    - target: {fileID: 331405809643223812, guid: 9c5797f989330e945975c32549e2643e, type: 3}
-      propertyPath: itemRoot
-      value: 
-      objectReference: {fileID: 568559546}
-    - target: {fileID: 331405809643223812, guid: 9c5797f989330e945975c32549e2643e, type: 3}
-      propertyPath: scrollRect
-      value: 
-      objectReference: {fileID: 568559547}
-    - target: {fileID: 331405809643223812, guid: 9c5797f989330e945975c32549e2643e, type: 3}
-      propertyPath: chatInputField
-      value: 
-      objectReference: {fileID: 568559545}
     - target: {fileID: 707550475811246268, guid: 9c5797f989330e945975c32549e2643e, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -395,33 +383,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 7724116725607314147, guid: 9c5797f989330e945975c32549e2643e, type: 3}
   m_PrefabInstance: {fileID: 568559543}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &568559545 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8526526479854569866, guid: 9c5797f989330e945975c32549e2643e, type: 3}
-  m_PrefabInstance: {fileID: 568559543}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d199490a83bb2b844b9695cbf13b01ef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!224 &568559546 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 4373703603263137546, guid: 9c5797f989330e945975c32549e2643e, type: 3}
-  m_PrefabInstance: {fileID: 568559543}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &568559547 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 733537165895568832, guid: 9c5797f989330e945975c32549e2643e, type: 3}
-  m_PrefabInstance: {fileID: 568559543}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1aa08ab6e0800fa44ae55d278d1423e3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &961739749
 GameObject:
   m_ObjectHideFlags: 0

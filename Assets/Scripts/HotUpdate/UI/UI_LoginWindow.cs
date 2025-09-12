@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-public class UI_LoginWindow : UI_WindowBase
+public class UI_LoginWindow : UI_CustomWindowBase
 {
     [SerializeField] private Button closeButton;
     [SerializeField] private Button submitButton;

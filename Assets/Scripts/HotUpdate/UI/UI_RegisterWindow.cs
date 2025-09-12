@@ -3,7 +3,7 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UI_RegisterWindow : UI_WindowBase
+public class UI_RegisterWindow : UI_CustomWindowBase
 {
     [SerializeField] private Button closeButton;
     [SerializeField] private Button submitButton;
@@ -24,6 +24,7 @@ public class UI_RegisterWindow : UI_WindowBase
     }
     public override void OnShow()
     {
+        base.OnShow();
         submitButton.interactable = false;//登录按钮不可交互
 
         //重新展示的时候密码置空
@@ -35,6 +36,7 @@ public class UI_RegisterWindow : UI_WindowBase
     }
     public override void OnClose()
     {
+        base.OnClose();
         //取消注册，如果有注册那就一定要有关闭
         NetMessageManager.Instance.UnRegisterMessageCallback(MessageType.S_C_Register, OnS_C_Register);
 

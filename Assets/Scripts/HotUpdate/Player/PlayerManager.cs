@@ -15,6 +15,7 @@ public class PlayerManager : SingletonMono<PlayerManager>
     /// </summary>
     public void Init()
     {
+        ClientGlobal.Instance.ActiveMouse = false;
         EventSystem.AddTypeEventListener<InitLocalPlayerEvent>(OnInitLocalPlayerEvent);
     }
     private void OnDestroy()

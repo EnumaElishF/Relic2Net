@@ -1,8 +1,6 @@
-using UnityEngine;
 using JKFrame;
+using UnityEngine;
 using UnityEngine.UI;
-using System;
-using Sirenix.OdinInspector;
 
 public class UI_MessagePopupWindow : UI_WindowBase
 {
@@ -17,7 +15,6 @@ public class UI_MessagePopupWindow : UI_WindowBase
         string message = LocalizationSystem.GetContent<LocalizationStringData>(localizationKey, LocalizationSystem.LanguageType).content;
         ShowMessage(message, color);
     }
-    [Button]
     public void ShowMessage(string message, Color color)
     {
         messageText.text = message;

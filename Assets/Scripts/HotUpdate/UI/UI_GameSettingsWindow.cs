@@ -2,7 +2,7 @@ using JKFrame;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UI_GameSettingsWindow : UI_WindowBase
+public class UI_GameSettingsWindow : UI_CustomWindowBase
 {
     [SerializeField] private Button closeButton;
     [SerializeField] private Button languagePrevButton;

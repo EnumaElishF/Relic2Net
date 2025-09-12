@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class UI_ChatWindow : UI_WindowBase
+public class UI_ChatWindow : UI_CustomWindowBase
 {
     private const int itemCount = 15;
     [SerializeField] private Transform main;
@@ -17,10 +17,7 @@ public class UI_ChatWindow : UI_WindowBase
     private Image scrollRectImage;
     //itemCount条消息满后，有新消息会把旧的顶出队列
     private Queue<UI_ChatWindowItem> itemQueue = new Queue<UI_ChatWindowItem>(itemCount);
-    private void Start()
-    {
-        Init();
-    }
+
     public override void Init()
     {
         //scrollRectImage = scrollRect.GetComponent<Image>();

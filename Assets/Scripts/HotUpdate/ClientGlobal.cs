@@ -7,6 +7,20 @@ public class ClientGlobal : SingletonMono<ClientGlobal>
 {
     public GameSetting gameSetting { get; private set; }
     public GameBasicSetting basicSetting { get; private set; }
+
+    private bool activeMouse;
+    /// <summary>
+    /// 鼠标指针显示和关闭的控制
+    /// </summary>
+    public bool ActiveMouse
+    {
+        get => activeMouse;
+        set
+        {
+            activeMouse = value;
+            Cursor.lockState = activeMouse ? CursorLockMode.None : CursorLockMode.Locked;
+        }
+    }
     protected override void Awake()
     {
         base.Awake();
@@ -29,7 +43,14 @@ public class ClientGlobal : SingletonMono<ClientGlobal>
 
     }
 
-
+    private void Update()
+    {
+        //Tab 鼠标取反
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            ActiveMouse = !ActiveMouse;
+        }
+    }
 
     /// <summary>
     /// 注册Windows

@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-public class UI_GamePopupWindow : UI_WindowBase
+public class UI_GamePopupWindow : UI_CustomWindowBase
 {
     [SerializeField] private Button continueButton;
     [SerializeField] private Button settingButton;

@@ -664,6 +664,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46b2f6f419442174db618908de9cd01f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  localizationConfig: {fileID: 0}
+  activeMouse: 1
+  activeMouseConstraint: 0
+  main: {fileID: 0}
+  scrollRect: {fileID: 733537165895568832}
+  itemRoot: {fileID: 4373703603263137546}
+  chatInputField: {fileID: 8526526479854569866}
 --- !u!1 &5283483917229245929
 GameObject:
   m_ObjectHideFlags: 0

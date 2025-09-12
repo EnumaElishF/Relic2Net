@@ -1,7 +1,7 @@
 using JKFrame;
 using UnityEngine;
 using UnityEngine.UI;
-public class UI_MainMenuWindow : UI_WindowBase
+public class UI_MainMenuWindow : UI_CustomWindowBase
 {
     [SerializeField] private Button loginButton;
     [SerializeField] private Button registerButton;

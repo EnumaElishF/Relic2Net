@@ -34,6 +34,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Action<AOIUpdatePlayerCoordEvent>
 	// System.Action<GameSceneLaunchEvent>
 	// System.Action<InitLocalPlayerEvent>
+	// System.Action<MusicVolumeChangedEvent>
 	// System.Action<UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle,object>
 	// System.Action<UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<UnityEngine.ResourceManagement.ResourceProviders.SceneInstance>>
 	// System.Action<UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<object>>
@@ -144,7 +145,9 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Collections.Generic.ObjectEqualityComparer<object>
 	// System.Collections.Generic.ObjectEqualityComparer<ulong>
 	// System.Collections.Generic.Queue.Enumerator<int>
+	// System.Collections.Generic.Queue.Enumerator<object>
 	// System.Collections.Generic.Queue<int>
+	// System.Collections.Generic.Queue<object>
 	// System.Collections.ObjectModel.ReadOnlyCollection<UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle>
 	// System.Collections.ObjectModel.ReadOnlyCollection<UnityEngine.Vector2Int>
 	// System.Collections.ObjectModel.ReadOnlyCollection<object>
@@ -194,8 +197,11 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// Unity.Netcode.UserNetworkVariableSerialization.WriteValueDelegate<object>
 	// Unity.Netcode.UserNetworkVariableSerialization<object>
 	// UnityEngine.AddressableAssets.AddressablesImpl.<>c__DisplayClass79_0<object>
+	// UnityEngine.Events.InvokableCall<float>
 	// UnityEngine.Events.InvokableCall<object>
+	// UnityEngine.Events.UnityAction<float>
 	// UnityEngine.Events.UnityAction<object>
+	// UnityEngine.Events.UnityEvent<float>
 	// UnityEngine.Events.UnityEvent<object>
 	// UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationBase.<>c__DisplayClass60_0<UnityEngine.ResourceManagement.ResourceProviders.SceneInstance>
 	// UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationBase.<>c__DisplayClass60_0<object>
@@ -219,20 +225,26 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.Void JKFrame.EventModule.EventTrigger<AOIRemovePlayerEvent>(string,AOIRemovePlayerEvent)
 		// System.Void JKFrame.EventModule.EventTrigger<AOIUpdatePlayerCoordEvent>(string,AOIUpdatePlayerCoordEvent)
 		// System.Void JKFrame.EventModule.EventTrigger<InitLocalPlayerEvent>(string,InitLocalPlayerEvent)
+		// System.Void JKFrame.EventModule.EventTrigger<MusicVolumeChangedEvent>(string,MusicVolumeChangedEvent)
 		// System.Void JKFrame.EventModule.RemoveEventListener<object>(string,object)
 		// System.Void JKFrame.EventSystem.AddEventListener<GameSceneLaunchEvent>(string,System.Action<GameSceneLaunchEvent>)
 		// System.Void JKFrame.EventSystem.AddEventListener<InitLocalPlayerEvent>(string,System.Action<InitLocalPlayerEvent>)
+		// System.Void JKFrame.EventSystem.AddEventListener<MusicVolumeChangedEvent>(string,System.Action<MusicVolumeChangedEvent>)
 		// System.Void JKFrame.EventSystem.AddTypeEventListener<GameSceneLaunchEvent>(System.Action<GameSceneLaunchEvent>)
 		// System.Void JKFrame.EventSystem.AddTypeEventListener<InitLocalPlayerEvent>(System.Action<InitLocalPlayerEvent>)
+		// System.Void JKFrame.EventSystem.AddTypeEventListener<MusicVolumeChangedEvent>(System.Action<MusicVolumeChangedEvent>)
 		// System.Void JKFrame.EventSystem.EventTrigger<AOIAddPlayerEvent>(string,AOIAddPlayerEvent)
 		// System.Void JKFrame.EventSystem.EventTrigger<AOIRemovePlayerEvent>(string,AOIRemovePlayerEvent)
 		// System.Void JKFrame.EventSystem.EventTrigger<AOIUpdatePlayerCoordEvent>(string,AOIUpdatePlayerCoordEvent)
 		// System.Void JKFrame.EventSystem.EventTrigger<InitLocalPlayerEvent>(string,InitLocalPlayerEvent)
+		// System.Void JKFrame.EventSystem.EventTrigger<MusicVolumeChangedEvent>(string,MusicVolumeChangedEvent)
 		// System.Void JKFrame.EventSystem.RemoveTypeEventListener<InitLocalPlayerEvent>(System.Action<InitLocalPlayerEvent>)
+		// System.Void JKFrame.EventSystem.RemoveTypeEventListener<MusicVolumeChangedEvent>(System.Action<MusicVolumeChangedEvent>)
 		// System.Void JKFrame.EventSystem.TypeEventTrigger<AOIAddPlayerEvent>(AOIAddPlayerEvent)
 		// System.Void JKFrame.EventSystem.TypeEventTrigger<AOIRemovePlayerEvent>(AOIRemovePlayerEvent)
 		// System.Void JKFrame.EventSystem.TypeEventTrigger<AOIUpdatePlayerCoordEvent>(AOIUpdatePlayerCoordEvent)
 		// System.Void JKFrame.EventSystem.TypeEventTrigger<InitLocalPlayerEvent>(InitLocalPlayerEvent)
+		// System.Void JKFrame.EventSystem.TypeEventTrigger<MusicVolumeChangedEvent>(MusicVolumeChangedEvent)
 		// object JKFrame.PoolSystem.GetGameObject<object>(string,UnityEngine.Transform)
 		// object JKFrame.ResSystem.InstantiateGameObject<object>(string,UnityEngine.Transform,string,bool)
 		// System.Void JKFrame.ResSystem.InstantiateGameObjectAsync<object>(string,System.Action<object>,UnityEngine.Transform,string,bool)
@@ -298,7 +310,10 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<object> UnityEngine.AddressableAssets.AddressablesImpl.LoadAssetWithChain<object>(UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle,object)
 		// UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<object> UnityEngine.AddressableAssets.AddressablesImpl.TrackHandle<object>(UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<object>)
 		// object UnityEngine.Component.GetComponent<object>()
+		// object[] UnityEngine.Component.GetComponentsInChildren<object>()
+		// object[] UnityEngine.Component.GetComponentsInChildren<object>(bool)
 		// object UnityEngine.GameObject.GetComponent<object>()
+		// object[] UnityEngine.GameObject.GetComponentsInChildren<object>(bool)
 		// object UnityEngine.JsonUtility.FromJson<object>(string)
 		// object UnityEngine.Object.Instantiate<object>(object)
 		// UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<object> UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle.Convert<object>()
