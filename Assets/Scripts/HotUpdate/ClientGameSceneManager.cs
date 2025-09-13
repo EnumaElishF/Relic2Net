@@ -41,6 +41,7 @@ public class ClientGameSceneManager : MonoBehaviour
         progress = 100;
         loadingWindow.UpdateProgress(progress, 100);
         UISystem.Close<UI_LoadingWindow>();
+        UISystem.Show<UI_ChatWindow>();
     }
 
 

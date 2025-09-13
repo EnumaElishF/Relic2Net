@@ -1,5 +1,4 @@
 using JKFrame;
-using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
@@ -17,10 +16,7 @@ public class UI_ChatWindow : UI_CustomWindowBase
     private Image scrollRectImage;
     //itemCount条消息满后，有新消息会把旧的顶出队列
     private Queue<UI_ChatWindowItem> itemQueue = new Queue<UI_ChatWindowItem>(itemCount);
-    private void Start()
-    {
-        Init();
-    }
+
     public override void Init()
     {
         scrollRectImage = scrollRect.GetComponent<Image>();
@@ -32,17 +28,20 @@ public class UI_ChatWindow : UI_CustomWindowBase
         //默认退出聊天框
         OnExit(null);
     }
-    //public override void OnShow()
-    //{
-    //    base.OnShow();
-    //    NetMessageManager.Instance.RegisterMessageCallback(MessageType.S_C_ChatMessage, OnChatMessage);
-    //}
-
-    //private void OnChatMessage(ulong serverID, INetworkSerializable serializable)
-    //{
-    //    S_C_ChatMessage message = (S_C_ChatMessage)serializable;
-    //    AddItem(message.playerName, message.message);
-    //}
+    public override void OnShow()
+    {
+        base.OnShow();
+        //服务端接收到消息后，把消息发回来
+        NetMessageManager.Instance.RegisterMessageCallback(MessageType.S_C_ChatMessage, OnChatMessage);
+    }
+    /// <summary>
+    /// 服务端发给玩家的信息serializable
+    /// </summary>
+    private void OnChatMessage(ulong serverID, INetworkSerializable serializable)
+    {
+        S_C_ChatMessage message = (S_C_ChatMessage)serializable;
+        AddItem(message.playerName, message.message);
+    }
     /// <summary>
     /// 做到鼠标进入强化显示
     /// </summary>
@@ -66,16 +65,16 @@ public class UI_ChatWindow : UI_CustomWindowBase
     private void OnChatInputFieldSubmit(string content)
     {
         if (string.IsNullOrWhiteSpace(content)) return; // 避免发送纯空格
-        // 发送聊天消息
-        //NetMessageManager.Instance.SendMessageToServer(MessageType.C_S_ChatMessage, new C_S_ChatMessage
-        //{
-        //    message = content
-        //});
+        // 发送网络消息给服务端，发送聊天消息
+        NetMessageManager.Instance.SendMessageToServer(MessageType.C_S_ChatMessage, new C_S_ChatMessage
+        {
+            message = content
+        });
         chatInputField.text = "";
         chatInputField.Select();
         chatInputField.ActivateInputField();    // 让输入框重新成为焦点
     }
-    [Button]
+
     public void AddItem(string name, string content)
     {
         // 滚动条：如果原本就在最下方，在收到新消息时，要自动滑到最下方。scrollRect的垂直方向数值
@@ -124,7 +123,8 @@ public class UI_ChatWindow : UI_CustomWindowBase
     public override void OnClose()
     {
         base.OnClose();
-        //NetMessageManager.Instance.UnRegisterMessageCallback(MessageType.S_C_ChatMessage, OnChatMessage);
+        //取消注册，服务端对玩家发送的消息反馈
+        NetMessageManager.Instance.UnRegisterMessageCallback(MessageType.S_C_ChatMessage, OnChatMessage);
         PoolSystem.ClearGameObject(nameof(UI_ChatWindowItem));
     }
 }

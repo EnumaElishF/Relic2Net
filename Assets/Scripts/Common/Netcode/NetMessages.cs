@@ -10,7 +10,9 @@ public enum MessageType : byte
     S_C_Login,
     C_S_EnterGame,
     C_S_Disconnect,
-    S_C_Disconnect
+    S_C_Disconnect,
+    C_S_ChatMessage,
+    S_C_ChatMessage
 }
 /// <summary>
 /// 可以预知的完成的返回信息，做成Code的方式，做个可知的码。比如服务端返回码等
@@ -25,6 +27,22 @@ public enum ErrorCode : byte
     AccountRepeatLogin,  // 账号重复登录
 
 }
+
+/// <summary>
+/// 账号信息
+/// </summary>
+public struct AccountInfo : INetworkSerializable
+{
+    public string playerName;
+    public string password;
+
+    public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+    {
+        serializer.SerializeValue(ref playerName);
+        serializer.SerializeValue(ref password);
+    }
+}
+
 /// <summary>
 /// 从Client发到Server的消息,C2S
 /// INetworkSerializable网络序列化请求
@@ -95,14 +113,25 @@ public struct S_C_Disconnect : INetworkSerializable
 
     }
 }
-public struct AccountInfo: INetworkSerializable
-{
-    public string playerName;
-    public string password;
 
+public struct C_S_ChatMessage : INetworkSerializable
+{
+    public string message;
+    public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+    {
+        serializer.SerializeValue(ref message);
+
+    }
+}
+public struct S_C_ChatMessage : INetworkSerializable
+{
+    //服务端发给客户端是广播的形式，需要知道让其他人是哪个玩家发的，加上playerName
+    public string playerName;
+    public string message;
     public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
     {
         serializer.SerializeValue(ref playerName);
-        serializer.SerializeValue(ref password);
+        serializer.SerializeValue(ref message);
+
     }
 }

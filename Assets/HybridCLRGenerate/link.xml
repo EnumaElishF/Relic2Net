@@ -14,6 +14,7 @@
     <type fullname="JKFrame.ConfigBase" preserve="all" />
     <type fullname="JKFrame.CoroutineTool" preserve="all" />
     <type fullname="JKFrame.EventSystem" preserve="all" />
+    <type fullname="JKFrame.JKEventListenerExtend" preserve="all" />
     <type fullname="JKFrame.JKFrameExtension" preserve="all" />
     <type fullname="JKFrame.PoolSystem" preserve="all" />
     <type fullname="JKFrame.ResSystem" preserve="all" />
@@ -90,6 +91,8 @@
     <type fullname="UnityEngine.Component" preserve="all" />
     <type fullname="UnityEngine.Coroutine" preserve="all" />
     <type fullname="UnityEngine.CreateAssetMenuAttribute" preserve="all" />
+    <type fullname="UnityEngine.Cursor" preserve="all" />
+    <type fullname="UnityEngine.CursorLockMode" preserve="all" />
     <type fullname="UnityEngine.Debug" preserve="all" />
     <type fullname="UnityEngine.Events.UnityAction" preserve="all" />
     <type fullname="UnityEngine.Events.UnityAction`1" preserve="all" />

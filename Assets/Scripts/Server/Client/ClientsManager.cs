@@ -32,8 +32,11 @@ public class ClientsManager : SingletonMono<ClientsManager> //SingletonMono加�
         NetMessageManager.Instance.RegisterMessageCallback(MessageType.C_S_Login, OnClientLogin);
         NetMessageManager.Instance.RegisterMessageCallback(MessageType.C_S_EnterGame, OnClientEnterGame);
         NetMessageManager.Instance.RegisterMessageCallback(MessageType.C_S_Disconnect, OnClientDisconnect);
+        NetMessageManager.Instance.RegisterMessageCallback(MessageType.C_S_ChatMessage, OnClientChatMessage);
         
     }
+
+
 
 
     /// <summary>
@@ -217,6 +220,24 @@ public class ClientsManager : SingletonMono<ClientsManager> //SingletonMono加�
         //TODO 玩家可能使用不同的武器之类的实例化
 
     }
+    /// <summary>
+    /// 服务器对客户端的聊天消息发送: 广播给全部的游戏中玩家
+    /// </summary>
+    private void OnClientChatMessage(ulong clientID, INetworkSerializable serializable)
+    {
+        string chatMessage = ((C_S_ChatMessage)serializable).message;
+        if (string.IsNullOrWhiteSpace(chatMessage)) return; //消息有效性验证
+        if (!clientIDDic.TryGetValue(clientID, out Client sourceClient) && sourceClient.playerData == null) return;//检查源头客户端的有效性
+        //发送给所有游戏状态下的客户端
+        if(clientStateDic.TryGetValue(ClientState.Gaming,out HashSet<Client> clients))
+        {
+            S_C_ChatMessage message = new S_C_ChatMessage { playerName = sourceClient.playerData.name, message = chatMessage };
+            foreach(Client client in clients)
+            {
+                //这样就把消息转发出去了
+                NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_ChatMessage, message, client.clientID);
+            }
+        }
 
-
+    }
 }
