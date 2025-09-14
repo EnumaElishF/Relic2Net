@@ -58,12 +58,11 @@ public struct C_S_Register : INetworkSerializable
 public struct S_C_Register : INetworkSerializable
 {
     public ErrorCode errorCode;
-
     public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
     {
         serializer.SerializeValue(ref errorCode);
-
     }
+
 }
 public struct C_S_Login : INetworkSerializable
 {

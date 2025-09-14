@@ -62,7 +62,6 @@ public class UI_RegisterWindow : UI_CustomWindowBase
     }
     private void SubmitButtonClick()
     {
-        //TODO 
         submitButton.interactable = false;
         //客户端发给服务端
         NetMessageManager.Instance.SendMessageToServer(MessageType.C_S_Register, new C_S_Register
@@ -81,7 +80,8 @@ public class UI_RegisterWindow : UI_CustomWindowBase
         if (netMessage.errorCode == ErrorCode.None)
         {
             //直接用了color，正确用green，警告用yellow，错误用red
-            UISystem.Show<UI_MessagePopupWindow>().ShowMessageByLocalizationKey("注册已成功", Color.green);
+            //!!!检查本地化：是否加入“注册成功”
+            UISystem.Show<UI_MessagePopupWindow>().ShowMessageByLocalizationKey("注册成功", Color.green);
         }
         else
         {

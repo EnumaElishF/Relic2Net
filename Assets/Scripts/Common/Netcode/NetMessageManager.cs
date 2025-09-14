@@ -86,8 +86,8 @@ public class NetMessageManager : SingletonMono<NetMessageManager>
     /// </summary>
     private FastBufferWriter WriteData<T>(MessageType messageType, T data) where T : INetworkSerializable
     {
-        //默认1024字节，不足时内部会自动扩展
-        FastBufferWriter writer = new FastBufferWriter(1024, Allocator.Temp);
+        // 默认1024字节，当不足时候会在10240范围内自动扩容
+        FastBufferWriter writer = new FastBufferWriter(1024, Allocator.Temp, 10240);
         using (writer)
         {
             writer.WriteValueSafe(messageType); //协议头

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class DataBaseManager: SingletonMono<DataBaseManager>
 {
-    [SerializeField] private string connstr = "mongodb://localhost:27017/";
+    [SerializeField] private string connstr = "mongodb://localhost:27017";
     private MongoClient mongoClient;
     private IMongoDatabase mmoDatabase;
     private IMongoCollection<PlayerData> playerDataCollection;
@@ -19,10 +19,10 @@ public class DataBaseManager: SingletonMono<DataBaseManager>
 
     }
 
-    public PlayerData GetPlayerData(string name)
+    public PlayerData GetPlayerData(string playerName)
     {
         //查找
-        PlayerData playerData = playerDataCollection.Find(Builders<PlayerData>.Filter.Eq(nameof(PlayerData.name),name)).FirstOrDefault();
+        PlayerData playerData = playerDataCollection.Find(Builders<PlayerData>.Filter.Eq(nameof(PlayerData.name),playerName)).FirstOrDefault();
         return playerData;
     }
     public void CreatePlayerData(PlayerData playerData)
@@ -33,6 +33,6 @@ public class DataBaseManager: SingletonMono<DataBaseManager>
     public void SavePlayerData(PlayerData newPlayerData)
     {
         //替换修改
-        playerDataCollection.ReplaceOne(Builders<PlayerData>.Filter.Eq(nameof(PlayerData.name), name),newPlayerData);
+        playerDataCollection.ReplaceOne(Builders<PlayerData>.Filter.Eq(nameof(PlayerData.name), newPlayerData.name), newPlayerData);
     }
 }

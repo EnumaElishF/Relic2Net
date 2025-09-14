@@ -126,7 +126,6 @@ public class ClientsManager : SingletonMono<ClientsManager> //SingletonMono加�
         //校验是否已有玩家
         else if (DataBaseManager.Instance.GetPlayerData(accountInfo.playerName) != null)
         {
-            
             result.errorCode = ErrorCode.NameDuplication;
         }
         else
@@ -142,7 +141,8 @@ public class ClientsManager : SingletonMono<ClientsManager> //SingletonMono加�
             DataBaseManager.Instance.CreatePlayerData(playerData);
         }
         //回复客户端
-        NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_Register, result,clientID);
+        NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_Register, result, clientID);
+
     }
 
     /// <summary>
