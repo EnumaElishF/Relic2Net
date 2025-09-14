@@ -194,6 +194,10 @@ public class AOIManager : SingletonMono<AOIManager>
     /// <param name="clientB"></param>
     private void ClientMutualShow(ulong clientA, ulong clientB)
     {
+        //测试
+        bool checkPlayer = clientA == clientB;
+        Debug.Log("clientA == clientB" + checkPlayer);
+        //暂时注释掉这一行
         if (clientA == clientB) return;
         if (NetManager.Instance.SpawnManager.OwnershipToObjectsTable.TryGetValue(clientA, out Dictionary<ulong, NetworkObject> aNetWorObjectDic)
             && NetManager.Instance.SpawnManager.OwnershipToObjectsTable.TryGetValue(clientB, out Dictionary<ulong, NetworkObject> bNetWorObjectDic))
@@ -201,7 +205,7 @@ public class AOIManager : SingletonMono<AOIManager>
             // A可见B
             foreach (NetworkObject aItem in aNetWorObjectDic.Values)
             {
-                if (!aItem.IsNetworkVisibleTo(clientB)) aItem.NetworkShow(clientB);//如果不可见就展示
+                if (!aItem.IsNetworkVisibleTo(clientB)) aItem.NetworkShow(clientB);
             }
             // B可见A
             foreach (NetworkObject bItem in bNetWorObjectDic.Values)

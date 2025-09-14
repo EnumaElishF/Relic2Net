@@ -85,6 +85,7 @@
   <assembly fullname="UnityEngine.CoreModule">
     <type fullname="Unity.Collections.Allocator" preserve="all" />
     <type fullname="UnityEngine.Application" preserve="all" />
+    <type fullname="UnityEngine.Behaviour" preserve="all" />
     <type fullname="UnityEngine.Bounds" preserve="all" />
     <type fullname="UnityEngine.Camera" preserve="all" />
     <type fullname="UnityEngine.Color" preserve="all" />

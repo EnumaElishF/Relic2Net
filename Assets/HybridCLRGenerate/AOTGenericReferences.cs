@@ -34,6 +34,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Action<AOIUpdatePlayerCoordEvent>
 	// System.Action<GameSceneLaunchEvent>
 	// System.Action<InitLocalPlayerEvent>
+	// System.Action<MouseActiveStateChangedEvent>
 	// System.Action<MusicVolumeChangedEvent>
 	// System.Action<UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle,object>
 	// System.Action<UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<UnityEngine.ResourceManagement.ResourceProviders.SceneInstance>>
@@ -225,25 +226,31 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.Void JKFrame.EventModule.EventTrigger<AOIRemovePlayerEvent>(string,AOIRemovePlayerEvent)
 		// System.Void JKFrame.EventModule.EventTrigger<AOIUpdatePlayerCoordEvent>(string,AOIUpdatePlayerCoordEvent)
 		// System.Void JKFrame.EventModule.EventTrigger<InitLocalPlayerEvent>(string,InitLocalPlayerEvent)
+		// System.Void JKFrame.EventModule.EventTrigger<MouseActiveStateChangedEvent>(string,MouseActiveStateChangedEvent)
 		// System.Void JKFrame.EventModule.EventTrigger<MusicVolumeChangedEvent>(string,MusicVolumeChangedEvent)
 		// System.Void JKFrame.EventModule.RemoveEventListener<object>(string,object)
 		// System.Void JKFrame.EventSystem.AddEventListener<GameSceneLaunchEvent>(string,System.Action<GameSceneLaunchEvent>)
 		// System.Void JKFrame.EventSystem.AddEventListener<InitLocalPlayerEvent>(string,System.Action<InitLocalPlayerEvent>)
+		// System.Void JKFrame.EventSystem.AddEventListener<MouseActiveStateChangedEvent>(string,System.Action<MouseActiveStateChangedEvent>)
 		// System.Void JKFrame.EventSystem.AddEventListener<MusicVolumeChangedEvent>(string,System.Action<MusicVolumeChangedEvent>)
 		// System.Void JKFrame.EventSystem.AddTypeEventListener<GameSceneLaunchEvent>(System.Action<GameSceneLaunchEvent>)
 		// System.Void JKFrame.EventSystem.AddTypeEventListener<InitLocalPlayerEvent>(System.Action<InitLocalPlayerEvent>)
+		// System.Void JKFrame.EventSystem.AddTypeEventListener<MouseActiveStateChangedEvent>(System.Action<MouseActiveStateChangedEvent>)
 		// System.Void JKFrame.EventSystem.AddTypeEventListener<MusicVolumeChangedEvent>(System.Action<MusicVolumeChangedEvent>)
 		// System.Void JKFrame.EventSystem.EventTrigger<AOIAddPlayerEvent>(string,AOIAddPlayerEvent)
 		// System.Void JKFrame.EventSystem.EventTrigger<AOIRemovePlayerEvent>(string,AOIRemovePlayerEvent)
 		// System.Void JKFrame.EventSystem.EventTrigger<AOIUpdatePlayerCoordEvent>(string,AOIUpdatePlayerCoordEvent)
 		// System.Void JKFrame.EventSystem.EventTrigger<InitLocalPlayerEvent>(string,InitLocalPlayerEvent)
+		// System.Void JKFrame.EventSystem.EventTrigger<MouseActiveStateChangedEvent>(string,MouseActiveStateChangedEvent)
 		// System.Void JKFrame.EventSystem.EventTrigger<MusicVolumeChangedEvent>(string,MusicVolumeChangedEvent)
 		// System.Void JKFrame.EventSystem.RemoveTypeEventListener<InitLocalPlayerEvent>(System.Action<InitLocalPlayerEvent>)
+		// System.Void JKFrame.EventSystem.RemoveTypeEventListener<MouseActiveStateChangedEvent>(System.Action<MouseActiveStateChangedEvent>)
 		// System.Void JKFrame.EventSystem.RemoveTypeEventListener<MusicVolumeChangedEvent>(System.Action<MusicVolumeChangedEvent>)
 		// System.Void JKFrame.EventSystem.TypeEventTrigger<AOIAddPlayerEvent>(AOIAddPlayerEvent)
 		// System.Void JKFrame.EventSystem.TypeEventTrigger<AOIRemovePlayerEvent>(AOIRemovePlayerEvent)
 		// System.Void JKFrame.EventSystem.TypeEventTrigger<AOIUpdatePlayerCoordEvent>(AOIUpdatePlayerCoordEvent)
 		// System.Void JKFrame.EventSystem.TypeEventTrigger<InitLocalPlayerEvent>(InitLocalPlayerEvent)
+		// System.Void JKFrame.EventSystem.TypeEventTrigger<MouseActiveStateChangedEvent>(MouseActiveStateChangedEvent)
 		// System.Void JKFrame.EventSystem.TypeEventTrigger<MusicVolumeChangedEvent>(MusicVolumeChangedEvent)
 		// object JKFrame.PoolSystem.GetGameObject<object>(string,UnityEngine.Transform)
 		// object JKFrame.ResSystem.InstantiateGameObject<object>(string,UnityEngine.Transform,string,bool)
