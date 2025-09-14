@@ -3,6 +3,7 @@
 using JKFrame;
 using Cinemachine;
 using UnityEngine;
+using System;
 /// <summary>
 /// PlayerManager放到了热更新程序集HotUpdate里，那么就作为 只有客户端使用
 /// </summary>
@@ -10,25 +11,46 @@ public class PlayerManager : SingletonMono<PlayerManager>
 {
     [SerializeField] private CinemachineFreeLook cinemachine;
     public static PlayerController localPlayer { get; private set; }
+    //玩家是否可以控制角色，以后可能受到多个方面的影响，目前只和鼠标显示关联
+    public bool playerControlEnable { get; private set; }
     /// <summary>
     /// PlayerManaget在Awake里触发xxx改为手动Init，然后要求PlayerController才在后续方法里面触发
     /// </summary>
     public void Init()
     {
-        ClientGlobal.Instance.ActiveMouse = false;
+        //事件的监听开始
         EventSystem.AddTypeEventListener<InitLocalPlayerEvent>(OnInitLocalPlayerEvent);
+        EventSystem.AddTypeEventListener<MouseActiveStateChangedEvent>(OnMouseActiveStateChangedEvent);
+
+        ClientGlobal.Instance.ActiveMouse = false;
     }
+
+
+
     private void OnDestroy()
     {
+        //事件监听取消，针对内部方法
         //检查所有的的EventSystem的事件绑定，因为PlayerManager脚本并不是全局的，他会因为场景卸载而关闭
         //那么就需要把事件取消掉，所以加了下面这个RemoveTypeEventListener移除事件监听
         //以此类似的还有很多，但是像是ClientGlobal这种一直存在，就不需要加下面的处理
         EventSystem.RemoveTypeEventListener<InitLocalPlayerEvent>(OnInitLocalPlayerEvent);
+        EventSystem.RemoveTypeEventListener<MouseActiveStateChangedEvent>(OnMouseActiveStateChangedEvent);//每次在ClientGlobal的ActiveMouse触发
     }
 
     private void OnInitLocalPlayerEvent(InitLocalPlayerEvent arg)
     {
         InitLocalPlayer(arg.localPlayer);
+    }
+    private void OnMouseActiveStateChangedEvent(MouseActiveStateChangedEvent arg)
+    {
+        //目前只和鼠标是否显示关联
+        playerControlEnable = !arg.activeState;
+        //cinemachine转向的相机控制
+        cinemachine.enabled = playerControlEnable;
+        if (localPlayer != null)
+        {
+            localPlayer.canControl = playerControlEnable;
+        }
     }
     private void Update()
     {
@@ -62,6 +84,7 @@ public class PlayerManager : SingletonMono<PlayerManager>
 #if !UNITY_SERVER || UNITY_EDITOR
         cinemachine.LookAt = localPlayer.cameraLookatTarget;
         cinemachine.Follow = localPlayer.cameraFollowTarget;
+        localPlayer.canControl = playerControlEnable;
 #endif
     }
 }

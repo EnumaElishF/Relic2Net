@@ -19,6 +19,8 @@ public class ClientGlobal : SingletonMono<ClientGlobal>
         {
             activeMouse = value;
             Cursor.lockState = activeMouse ? CursorLockMode.None : CursorLockMode.Locked;
+            //鼠标显示的修改事件_触发类型事件
+            EventSystem.TypeEventTrigger(new MouseActiveStateChangedEvent { activeState = activeMouse });
         }
     }
     protected override void Awake()

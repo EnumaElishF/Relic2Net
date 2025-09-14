@@ -53,7 +53,8 @@ public partial class PlayerController : NetworkBehaviour
     //---也就是说，完成上面的数据判断后，把最终的坐标移动交给了服务器。
     //这就是Rpc好用的地方。
     //这里的moveSpeed就算本地客户端作弊，修改了数据，但是服务端在使用的时候用的是服务端的moveSpeed，还达到了防作弊效果。
-    [ServerRpc(RequireOwnership =false)]  //只会被服务端调用的方法
+    //???是true还是false
+    [ServerRpc(RequireOwnership = false)]  //只会被服务端调用的方法
     private void SendInputMoveDirServerRpc(Vector3 moveDir)
     {
 
@@ -74,6 +75,7 @@ public partial class PlayerController : NetworkBehaviour
 {
     public Transform cameraLookatTarget;
     public Transform cameraFollowTarget;
+    public bool canControl; //玩家是否可以控制
     private void Start()
     {
         // Start 一定 在OnNetworkSpawn后执行，如果这个阶段IsSpawned = false 说明是个异常对象
@@ -103,10 +105,19 @@ public partial class PlayerController : NetworkBehaviour
     private void LocalClientUpdate()
     {
         if (currentState.Value == PlayerState.None) return;
-        float h = Input.GetAxisRaw("Horizontal");
-        float v = Input.GetAxisRaw("Vertical");
-        Vector3 inputDir = new Vector3(h,0,v);
-        if(inputDir == Vector3.zero && lastInputDir == Vector3.zero) return;//意味着没有动
+
+        //因为玩家发像服务端的移动是如果一个键没有变化就一直向服务端发，
+        //---(我们的移动指令设计是这样的，所以鼠标暂停移动，不能直接在这里return断掉键位消息的发送情况，需要下面逻辑判断为不移动)
+        Vector3 inputDir = Vector3.zero;
+        if (canControl)
+        {
+            //如果true可以控制，就使用玩家键入的按键。如果false不能控制，那么就等于没按
+            float h = Input.GetAxisRaw("Horizontal");
+            float v = Input.GetAxisRaw("Vertical");
+            inputDir = new Vector3(h, 0, v);
+        }
+
+        if(inputDir == Vector3.zero && lastInputDir == Vector3.zero) return;//上一次没按，这一次也没按，就直接不用传消息了
 
         //输入方向
         lastInputDir = inputDir;
