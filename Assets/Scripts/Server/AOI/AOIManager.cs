@@ -20,6 +20,7 @@ public class AOIManager : SingletonMono<AOIManager>
 
     public void Init()
     {
+        Debug.Log("初始化AOI");
         //初始化，传chunkSize到公共程序
         AOIUtility.Init(chunkSize);
 
@@ -48,6 +49,7 @@ public class AOIManager : SingletonMono<AOIManager>
     }
     private void OnAOIRemovePlayerEvent(AOIRemovePlayerEvent arg)
     {
+        Debug.Log("移除玩家");
         RemoveClient(arg.player.OwnerClientId, arg.coord);
     }
 
@@ -71,7 +73,10 @@ public class AOIManager : SingletonMono<AOIManager>
     /// <param name="newCoord"></param>
     public void UpdateClientChunkCoord(ulong clientID, Vector2Int oldCoord, Vector2Int newCoord)
     {
+        Debug.Log("更新玩家在AOI地图上的坐标 :一");
         if (oldCoord == newCoord) return;
+        Debug.Log("更新玩家在AOI地图上的坐标 :二：通过return");
+
         // 从旧的地图块中移除
         RemoveClient(clientID, oldCoord);
 
@@ -84,6 +89,8 @@ public class AOIManager : SingletonMono<AOIManager>
             {
                 for (int y = -visualChunkRange; y <= visualChunkRange; y++)
                 {
+                    Debug.Log("跨地图块移动");
+
                     //虽然看着算法的时间复杂度比较大，但是因为面对的九个格子+客户端数量限制，实际上不会很大
                     Vector2Int hideChunkCoord = new Vector2Int(oldCoord.x + x, oldCoord.y + y);
                     Vector2Int showChunkCoord = new Vector2Int(oldCoord.x + x, oldCoord.y + y);
@@ -93,6 +100,7 @@ public class AOIManager : SingletonMono<AOIManager>
         }
         else //正常一个格子的移动距离
         {
+            Debug.Log("正常一个格子的移动距离");
             //非跨块移动，考虑上下左右，以及多个斜方向移动（注：斜方向的则会被分解掉，像是为组合的左上，这种情况)
             // 上，旧的最下面一行隐藏，新的最上一行显示
             if (newCoord.y > oldCoord.y)
@@ -154,6 +162,7 @@ public class AOIManager : SingletonMono<AOIManager>
         {
             foreach (ulong newClientID in clientIDs)
             {
+
                 ClientMutualShow(clientID, newClientID);
             }
         }
@@ -282,6 +291,8 @@ public class AOIManager : SingletonMono<AOIManager>
     /// </summary>
     private void ShowAndHideForChunk(ulong clientID, Vector2Int hideChunkCoord, Vector2Int showChunkCoord)
     {
+        Debug.Log("展示或隐藏的控制");
+
         ShowClientForChunkClients(clientID, showChunkCoord);
         HideClientForChunkClients(clientID, hideChunkCoord);
         ShowChunkServerObjectForClient(clientID, showChunkCoord);

@@ -145,7 +145,7 @@ public partial class PlayerController : NetworkBehaviour,IStateMachineOwner
     }
     #endregion
 
-    #region  面板赋值 (理论上，下面这些值，包括移动速度旋转速度等，客户端都不需要知道，只要服务端知道就行)
+    #region  面板赋值 (理论上，下面这些值，包括移动速度旋转速度等，客户端都不需要知道，只要服务端知道就行) 服务端基于根运动移动
     [SerializeField] private float moveSpeed = 1;
     public float MoveSpeed  { get => moveSpeed; }
 
@@ -176,6 +176,7 @@ public partial class PlayerController : NetworkBehaviour,IStateMachineOwner
         inputData = new InputData();
         //登录游戏后，所在的位置，对应当前的AOI的坐标
         currentAOICoord = AOIUtility.GetCoordByWorldPostion(transform.position);
+        Debug.Log("Server产生玩家");
         AOIUtility.AddPlayer(this, currentAOICoord);
         ChangeState(PlayerState.Idle);
     }
@@ -224,12 +225,13 @@ public partial class PlayerController : NetworkBehaviour,IStateMachineOwner
 
     public void UpdateAOICoord()
     {
+        Debug.Log("玩家开始移动,坐标:"+ transform.position);
         //玩家开始移动
         Vector2Int newCoord = AOIUtility.GetCoordByWorldPostion(transform.position);
-        Vector2Int oldCoord = currentAOICoord;
-        if (newCoord != oldCoord) //发生了地图块的坐标变化
+        Debug.Log("newCoord,坐标:" + newCoord+ "currentAOICoord:" + currentAOICoord);
+        if (newCoord != currentAOICoord) // 发生了地图块坐标变化
         {
-            AOIUtility.UpdatePlayerCoord(this, oldCoord, newCoord);
+            AOIUtility.UpdatePlayerCoord(this, currentAOICoord, newCoord);
             currentAOICoord = newCoord;
         }
     }
