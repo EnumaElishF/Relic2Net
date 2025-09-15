@@ -17,6 +17,8 @@ public static class AOIUtility
     public static void AddPlayer(PlayerController player,Vector2Int AOICoord)
     {
         Debug.Log("触发添加玩家");
+        //player未赋值的默认值为null
+        //Vector2Int未赋值的默认值是(0,0)
         //类型事件的触发
         EventSystem.TypeEventTrigger(new AOIAddPlayerEvent 
         { player = player, 

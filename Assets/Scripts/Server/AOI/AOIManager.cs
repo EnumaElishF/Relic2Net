@@ -15,6 +15,7 @@ public class AOIManager : SingletonMono<AOIManager>
 
     static AOIManager()
     {
+        // int.MinValue（即 -2147483648） defaultCoord作为一个不可能有的地图块逻辑，用在初始化的时候
         defaultCoord = new Vector2Int(int.MinValue, int.MinValue);
     }
 
@@ -62,6 +63,7 @@ public class AOIManager : SingletonMono<AOIManager>
     /// <param name="chunkCoord"></param>
     public void InitClient(ulong clientID, Vector2Int chunkCoord)
     {
+        //这里的实际决定权取决于后续代码的oldCoord，也就是这里的defaultCoord
         UpdateClientChunkCoord(clientID, defaultCoord, chunkCoord);
     }
 
@@ -73,9 +75,8 @@ public class AOIManager : SingletonMono<AOIManager>
     /// <param name="newCoord"></param>
     public void UpdateClientChunkCoord(ulong clientID, Vector2Int oldCoord, Vector2Int newCoord)
     {
-        Debug.Log("更新玩家在AOI地图上的坐标 :一");
+        Debug.Log("!!!开始进行了更新玩家在AOI地图上的坐标");
         if (oldCoord == newCoord) return;
-        Debug.Log("更新玩家在AOI地图上的坐标 :二：通过return");
 
         // 从旧的地图块中移除
         RemoveClient(clientID, oldCoord);
@@ -84,23 +85,23 @@ public class AOIManager : SingletonMono<AOIManager>
         if (Vector2Int.Distance(oldCoord, newCoord) > 1.5f) //超过单个格子移动的极限距离,所以是传送性质的位移
         {
             //跨块移动
+            Debug.Log("跨块移动");
             //单个格子的斜角度位移肯定是小于1.5f的，超过了就说明超出格子的极限距离 √2 = 1.414
             for (int x = -visualChunkRange; x <= visualChunkRange; x++) //-1,0,1的九宫格
             {
                 for (int y = -visualChunkRange; y <= visualChunkRange; y++)
                 {
-                    Debug.Log("跨地图块移动");
-
                     //虽然看着算法的时间复杂度比较大，但是因为面对的九个格子+客户端数量限制，实际上不会很大
                     Vector2Int hideChunkCoord = new Vector2Int(oldCoord.x + x, oldCoord.y + y);
-                    Vector2Int showChunkCoord = new Vector2Int(oldCoord.x + x, oldCoord.y + y);
+                    Vector2Int showChunkCoord = new Vector2Int(newCoord.x + x, newCoord.y + y); //!!注意这里构成了 初始的跨快初始化没能看到互相的客户端 的错误原因，写成oldCoord.x了。另外newCoord最外层方法没有赋值默认取V2的(0,0)
                     ShowAndHideForChunk(clientID, hideChunkCoord, showChunkCoord);
                 }
             }
+
         }
         else //正常一个格子的移动距离
         {
-            Debug.Log("正常一个格子的移动距离");
+            Debug.Log("非跨块移动");
             //非跨块移动，考虑上下左右，以及多个斜方向移动（注：斜方向的则会被分解掉，像是为组合的左上，这种情况)
             // 上，旧的最下面一行隐藏，新的最上一行显示
             if (newCoord.y > oldCoord.y)
@@ -145,10 +146,12 @@ public class AOIManager : SingletonMono<AOIManager>
             }
         }
 
+        Debug.Log("!chunkClientDic.TryGetValue(newCoord, out HashSet<ulong> newCoordClientIDs)为" + (!chunkClientDic.TryGetValue(newCoord, out HashSet<ulong> newCoordClientIDsTest)));
         //把客户端加入当前新的块----先从旧的地图块中移除，又把客户端加入当前新的块。这样最内侧的方法也保证了自己不会存自己的情况
         if (!chunkClientDic.TryGetValue(newCoord, out HashSet<ulong> newCoordClientIDs))
         {
             newCoordClientIDs = ResSystem.GetOrNew<HashSet<ulong>>();
+            Debug.Log("chunkClientDic.Add(newCoord, newCoordClientIDs); newCoord为"+ newCoord+ "newCoordClientIDs为"+ newCoordClientIDs);
             chunkClientDic.Add(newCoord, newCoordClientIDs);
         }
         newCoordClientIDs.Add(clientID);
@@ -158,11 +161,13 @@ public class AOIManager : SingletonMono<AOIManager>
     // 某个客户端和某个区域的客户端们全部互相 可见
     private void ShowClientForChunkClients(ulong clientID, Vector2Int chunkCoord)
     {
+        //clientID测试没有问题，玩家1和玩家2的ID按从1到2升序
         if (chunkClientDic.TryGetValue(chunkCoord, out HashSet<ulong> clientIDs))
         {
             foreach (ulong newClientID in clientIDs)
             {
-
+                Debug.Log("newClientID为" + newClientID);
+                //本人的clientID对比，遍历到的每个其他客户端的ID。然后走互相可见的逻辑
                 ClientMutualShow(clientID, newClientID);
             }
         }
@@ -203,14 +208,14 @@ public class AOIManager : SingletonMono<AOIManager>
     /// <param name="clientB"></param>
     private void ClientMutualShow(ulong clientA, ulong clientB)
     {
-        //测试
-        bool checkPlayer = clientA == clientB;
-        Debug.Log("clientA == clientB" + checkPlayer);
-        //暂时注释掉这一行
+        Debug.Log("clientA == clientB测试" + (clientA == clientB));
         if (clientA == clientB) return;
+        //检查NetManager.Instance.SpawnManager.OwnershipToObjectsTable
+        Debug.Log("NetManager.Instance.SpawnManager.OwnershipToObjectsTable为" + NetManager.Instance.SpawnManager.OwnershipToObjectsTable.TryGetValue(clientA, out Dictionary<ulong, NetworkObject> aNetWorObjectDicTest));
         if (NetManager.Instance.SpawnManager.OwnershipToObjectsTable.TryGetValue(clientA, out Dictionary<ulong, NetworkObject> aNetWorObjectDic)
             && NetManager.Instance.SpawnManager.OwnershipToObjectsTable.TryGetValue(clientB, out Dictionary<ulong, NetworkObject> bNetWorObjectDic))
         {
+            Debug.Log("进入A可见B执行逻辑前");
             // A可见B
             foreach (NetworkObject aItem in aNetWorObjectDic.Values)
             {
@@ -291,8 +296,6 @@ public class AOIManager : SingletonMono<AOIManager>
     /// </summary>
     private void ShowAndHideForChunk(ulong clientID, Vector2Int hideChunkCoord, Vector2Int showChunkCoord)
     {
-        Debug.Log("展示或隐藏的控制");
-
         ShowClientForChunkClients(clientID, showChunkCoord);
         HideClientForChunkClients(clientID, hideChunkCoord);
         ShowChunkServerObjectForClient(clientID, showChunkCoord);
@@ -392,6 +395,7 @@ public class AOIManager : SingletonMono<AOIManager>
         // 把服务端对象加入到当前新块
         if (!chunkServerObjectDic.TryGetValue(newCoord, out HashSet<NetworkObject> serverObjects))
         {
+            Debug.Log("把未加入的服务端对象加入到当前新块"); //！注意区分chunkClientDic.Add 服务器上的客户端对象字典 和 chunkServerObjectDic.Add 服务器上的一般对象字典
             serverObjects = ResSystem.GetOrNew<HashSet<NetworkObject>>();
             chunkServerObjectDic.Add(newCoord, serverObjects);
         }

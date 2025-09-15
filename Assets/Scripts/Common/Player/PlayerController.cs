@@ -225,10 +225,8 @@ public partial class PlayerController : NetworkBehaviour,IStateMachineOwner
 
     public void UpdateAOICoord()
     {
-        Debug.Log("玩家开始移动,坐标:"+ transform.position);
         //玩家开始移动
         Vector2Int newCoord = AOIUtility.GetCoordByWorldPostion(transform.position);
-        Debug.Log("newCoord,坐标:" + newCoord+ "currentAOICoord:" + currentAOICoord);
         if (newCoord != currentAOICoord) // 发生了地图块坐标变化
         {
             AOIUtility.UpdatePlayerCoord(this, currentAOICoord, newCoord);
