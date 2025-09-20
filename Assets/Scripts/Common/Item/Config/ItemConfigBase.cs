@@ -9,8 +9,8 @@ public abstract class ItemConfigBase : ConfigBase
 {
 #if !UNITY_SERVER || UNITY_EDITOR
     public Sprite icon;
-    public Dictionary<LanguageType, string> nameDic = new Dictionary<LanguageType, string>();
-    public Dictionary<LanguageType, string> descriptionDic = new Dictionary<LanguageType, string>();
+    public Dictionary<LanguageType, string> nameDic;
+    public Dictionary<LanguageType, string> descriptionDic;
     public string GetName(LanguageType languageType)
     {
         return nameDic[languageType];
