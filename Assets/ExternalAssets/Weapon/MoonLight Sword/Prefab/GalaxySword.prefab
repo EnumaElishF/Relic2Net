@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 3904012384145368623}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.7427506, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -97,13 +97,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -3239114033158028949, guid: c4306788b11ebbf428aaadb0867ad530, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.0540617
+      objectReference: {fileID: 0}
     - target: {fileID: -176393540092437691, guid: c4306788b11ebbf428aaadb0867ad530, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 32972a291dc4e494a9d846be5d183adc, type: 2}
     - target: {fileID: 919132149155446097, guid: c4306788b11ebbf428aaadb0867ad530, type: 3}
       propertyPath: m_Name
-      value: LunarSword_Full
+      value: GalaxySword
       objectReference: {fileID: 0}
     - target: {fileID: 942845851615536871, guid: c4306788b11ebbf428aaadb0867ad530, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -113,6 +117,14 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[1]
       value: 
       objectReference: {fileID: 2100000, guid: 0f88e3d0fe3bf0e4e820e3e830c1e915, type: 2}
+    - target: {fileID: 5338957702015829616, guid: c4306788b11ebbf428aaadb0867ad530, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5338957702015829616, guid: c4306788b11ebbf428aaadb0867ad530, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.212
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
