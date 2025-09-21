@@ -1,4 +1,4 @@
-﻿public class MaterialData : ItemDataBase
+﻿public class MaterialData : StackableItemDataBase
 {
     //public override ItemDataBase Copy()
     //{

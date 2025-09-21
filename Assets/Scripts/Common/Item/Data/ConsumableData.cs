@@ -1,5 +1,5 @@
 ﻿
-public class ConsumableData : ItemDataBase
+public class ConsumableData : StackableItemDataBase
 {
     //public override ItemDataBase Copy()
     //{

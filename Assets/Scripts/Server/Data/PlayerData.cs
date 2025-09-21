@@ -8,6 +8,7 @@ public class PlayerData
     public string name;
     public string password;
     public CharacterData characterData = new CharacterData();
+    public BagData bagData = new BagData();
 
     public void Init(string name, string password,Vector3 position)
     {
