@@ -6,7 +6,7 @@ public class UI_WeaponSlot : UI_SlotBase<WeaponData, WeaponConfig>
     private bool usedState = false;
     public override void Init(ItemDataBase data,ItemConfigBase config)
     {
-        base.Init();
+        base.Init(data,config);
         SetUseState(false);
     }
 

@@ -13,19 +13,21 @@ public abstract class UI_SlotBase : MonoBehaviour,IPointerEnterHandler,IPointerE
     [SerializeField] protected Sprite normalFrame;
     [SerializeField] protected Sprite selectedFrame;
 
-    public virtual void Init()
+    //默认data，config为null，可以表示不传入值是没有问题的
+    public virtual void Init(ItemDataBase data = null, ItemConfigBase config = null)
     {
         OnPointerExit(null);
+
     }
     public void OnPointerEnter(PointerEventData eventData)
     {
         //鼠标选中后，修改图标边框
-        frameImage.sprite = normalFrame;
+        frameImage.sprite = selectedFrame;
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        frameImage.sprite = selectedFrame;
+        frameImage.sprite = normalFrame;
     }
     public virtual void Destroy()
     {
@@ -42,12 +44,12 @@ public abstract class UI_SlotBase<D,C> : UI_SlotBase where D : ItemDataBase wher
     /// </summary>
     /// <param name="data"></param>
     /// <param name="config"></param>
-    public virtual void Init(ItemDataBase data, ItemConfigBase config)
+    public override void Init(ItemDataBase data, ItemConfigBase config)
     {
-        base.Init();
+        base.Init(data,config);
         this.itemData = (D)data;
         this.itemConfig = (C)config;
-
+        iconImage.sprite = config.icon;
     }
     public override void Destroy()
     {
