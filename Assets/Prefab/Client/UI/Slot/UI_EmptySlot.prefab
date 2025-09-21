@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6024933523558876908}
   - component: {fileID: 6876199825657032739}
   - component: {fileID: 8487473555267838301}
+  - component: {fileID: 6039274914751878198}
   m_Layer: 5
   m_Name: UI_EmptySlot
   m_TagString: Untagged
@@ -65,7 +66,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 38b5dbcdbb36e4957abdff78cfe48537, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c307cdb5ca186432385504b260ed5fa2, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -75,3 +76,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &6039274914751878198
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 563788492107070625}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d96a35c5dd1d8984382076e7dd8b0552, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  frameImage: {fileID: 8487473555267838301}
+  normalFrame: {fileID: 21300000, guid: c307cdb5ca186432385504b260ed5fa2, type: 3}
+  selectedFrame: {fileID: 21300000, guid: fa205d705098b4c459007964f14d991e, type: 3}

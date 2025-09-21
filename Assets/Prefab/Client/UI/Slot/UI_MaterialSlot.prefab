@@ -65,7 +65,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: a0dd1a56e66754fc4887580637e1e1f2, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a938c2dc75e47c7469ce644250a6c8fa, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -86,6 +86,7 @@ GameObject:
   - component: {fileID: 7759278921346097089}
   - component: {fileID: 4796181655280706645}
   - component: {fileID: 64297259386432068}
+  - component: {fileID: 6114480527317235990}
   m_Layer: 5
   m_Name: UI_MaterialSlot
   m_TagString: Untagged
@@ -142,7 +143,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 38b5dbcdbb36e4957abdff78cfe48537, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c307cdb5ca186432385504b260ed5fa2, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -152,6 +153,23 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &6114480527317235990
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1221852703839341018}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91cf501730deed24b888a5f8cf4aaded, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  frameImage: {fileID: 64297259386432068}
+  normalFrame: {fileID: 21300000, guid: c307cdb5ca186432385504b260ed5fa2, type: 3}
+  selectedFrame: {fileID: 21300000, guid: fa205d705098b4c459007964f14d991e, type: 3}
+  iconImage: {fileID: 406093914518038394}
+  countText: {fileID: 3620118433086176366}
 --- !u!1 &8330612267077626053
 GameObject:
   m_ObjectHideFlags: 0

@@ -65,7 +65,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 9a99d085bb9cc4e72972e075606cf4b9, type: 3}
+  m_Sprite: {fileID: 21300000, guid: b7d19ec039fa7b141bd165aa95496c75, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -165,6 +165,7 @@ GameObject:
   - component: {fileID: 6755341578848151845}
   - component: {fileID: 3639656254674293847}
   - component: {fileID: 3851454109548675158}
+  - component: {fileID: 374400559310253089}
   m_Layer: 5
   m_Name: UI_ConsumableSlot
   m_TagString: Untagged
@@ -221,7 +222,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 1757479cd707b4180a861faf78aeccb2, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c307cdb5ca186432385504b260ed5fa2, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -231,3 +232,20 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &374400559310253089
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6552074094263133135}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 927955338e833be4cbbe315a6431c802, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  frameImage: {fileID: 3851454109548675158}
+  normalFrame: {fileID: 21300000, guid: c307cdb5ca186432385504b260ed5fa2, type: 3}
+  selectedFrame: {fileID: 21300000, guid: fa205d705098b4c459007964f14d991e, type: 3}
+  iconImage: {fileID: 8738177337141065821}
+  countText: {fileID: 5826721695588225822}
