@@ -60,6 +60,7 @@ public struct S_C_Register : INetworkSerializable
     public ErrorCode errorCode;
     public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
     {
+        //序列化 / 反序列化 NetCode支持的一种可以两个都进行的方法功能
         serializer.SerializeValue(ref errorCode);
     }
 
