@@ -16,72 +16,7 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: 1325be12e2807ec458b5cb5923f0b64f
-  m_SerializeEntries:
-  - m_GUID: 4f1c82b8ba416ea4eb755ff60365c6ba
-    m_Address: ClientOnGameScene
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: c98bdd69e0941bb4193d797f0f64b6ae
-    m_Address: ClientGlobal
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: a640b579c4cbcb0418ae9ac63a4beadf
-    m_Address: NetworkManager
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 8222f70661010d246b729ae7bea572b0
-    m_Address: GlobalLocalizationConfig
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 647661fa9eac8d54491dc4920e1391b9
-    m_Address: UI_MainMenuWindow
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 711bcebc19fa01740842a46e798e9793
-    m_Address: UI_MessagePopupWindow
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 70d44056fc9e55f46ac718554f20dd52
-    m_Address: UI_RegisterWindow
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 4ce32f22c10d9b642b099a3b2e1f74ee
-    m_Address: UI_LoginWindow
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: f6c32fdd0201df149b2e41d9df3ea8b3
-    m_Address: LoginScene
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 396ff722e4d8be245adc22c5d8823ef8
-    m_Address: UI_GamePopupWindow
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 0b27afd090178fa46852b7d2cbdfeb6f
-    m_Address: UI_GameSettingsWindow
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: f655013f82b4fa04a94923fe840773ae
-    m_Address: UI_ChatWindowItem
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 9c5797f989330e945975c32549e2643e
-    m_Address: UI_ChatWindow
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
+  m_SerializeEntries: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 5acaa973be4686f40904af89ab5043c2, type: 2}
   m_SchemaSet:

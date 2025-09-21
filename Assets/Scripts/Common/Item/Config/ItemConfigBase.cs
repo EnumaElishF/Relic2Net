@@ -8,6 +8,7 @@ using System.Collections.Generic;
 public abstract class ItemConfigBase : ConfigBase
 {
 #if !UNITY_SERVER || UNITY_EDITOR
+    public string slotPrafabPath;
     public Sprite icon;
     public Dictionary<LanguageType, string> nameDic;
     public Dictionary<LanguageType, string> descriptionDic;

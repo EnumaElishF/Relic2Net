@@ -111,5 +111,6 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
+  slotPrafabPath: UI_MaterialSlot
   icon: {fileID: 21300000, guid: d0ea2ec653dd331458a02626c7a02955, type: 3}
   defaultCountInShop: 0

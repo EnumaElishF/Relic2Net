@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Global
+  m_EditorClassIdentifier: 
+  m_GroupName: Global
+  m_Data:
+    m_SerializedData: []
+  m_GUID: cc862783750daa049b767d5fb467c9d9
+  m_SerializeEntries:
+  - m_GUID: c98bdd69e0941bb4193d797f0f64b6ae
+    m_Address: ClientGlobal
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8222f70661010d246b729ae7bea572b0
+    m_Address: GlobalLocalizationConfig
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a640b579c4cbcb0418ae9ac63a4beadf
+    m_Address: NetworkManager
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 711bcebc19fa01740842a46e798e9793
+    m_Address: UI_MessagePopupWindow
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f6c32fdd0201df149b2e41d9df3ea8b3
+    m_Address: LoginScene
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 5acaa973be4686f40904af89ab5043c2, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 540f4b31e3e51c14487ffad74cf39a16, type: 2}
+    - {fileID: 11400000, guid: aa182b74bcada4047955dab2f04cfff9, type: 2}

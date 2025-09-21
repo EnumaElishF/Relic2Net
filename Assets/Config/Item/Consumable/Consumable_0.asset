@@ -111,6 +111,7 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
+  slotPrafabPath: UI_ConsumableSlot
   icon: {fileID: 21300000, guid: 60c1d42986dc0094c808b9e135f31ba2, type: 3}
   HPRegeneration: 10
   defaultCountInShop: 0

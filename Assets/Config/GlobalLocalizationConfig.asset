@@ -34,7 +34,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 12
-      Data: 20
+      Data: 21
     - Name: 
       Entry: 7
       Data: 
@@ -1250,6 +1250,67 @@ MonoBehaviour:
     - Name: content
       Entry: 1
       Data: Settings
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: "\u80CC\u5305"
+    - Name: $v
+      Entry: 7
+      Data: 63|System.Collections.Generic.Dictionary`2[[LanguageType, JKFrame],[LocalizationDataBase,
+        JKFrame]], mscorlib
+    - Name: comparer
+      Entry: 9
+      Data: 3
+    - Name: 
+      Entry: 12
+      Data: 2
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 0
+    - Name: $v
+      Entry: 7
+      Data: 64|LocalizationStringData, JKFrame
+    - Name: content
+      Entry: 1
+      Data: "\u80CC\u5305"
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 2
+    - Name: $v
+      Entry: 7
+      Data: 65|LocalizationStringData, JKFrame
+    - Name: content
+      Entry: 1
+      Data: Bag
     - Name: 
       Entry: 8
       Data: 
