@@ -29,6 +29,10 @@
     <type fullname="LocalizationStringData" preserve="all" />
     <type fullname="LocalizationSystem" preserve="all" />
   </assembly>
+  <assembly fullname="MongoDB.Bson">
+    <type fullname="MongoDB.Bson.Serialization.Attributes.BsonIgnoreAttribute" preserve="all" />
+    <type fullname="MongoDB.Bson.Serialization.Attributes.BsonKnownTypesAttribute" preserve="all" />
+  </assembly>
   <assembly fullname="Unity.Addressables">
     <type fullname="UnityEngine.AddressableAssets.Addressables" preserve="all" />
   </assembly>
@@ -40,6 +44,7 @@
     <type fullname="Unity.Netcode.FastBufferWriter" preserve="all" />
     <type fullname="Unity.Netcode.FastBufferWriter/ForEnums" preserve="all" />
     <type fullname="Unity.Netcode.FastBufferWriter/ForNetworkSerializable" preserve="all" />
+    <type fullname="Unity.Netcode.FastBufferWriter/ForPrimitives" preserve="all" />
     <type fullname="Unity.Netcode.INetworkPrefabInstanceHandler" preserve="all" />
     <type fullname="Unity.Netcode.INetworkSerializable" preserve="all" />
     <type fullname="Unity.Netcode.IReaderWriter" preserve="all" />
@@ -129,6 +134,9 @@
     <type fullname="UnityEngine.Terrain" preserve="all" />
   </assembly>
   <assembly fullname="UnityEngine.UI">
+    <type fullname="UnityEngine.EventSystems.IEventSystemHandler" preserve="all" />
+    <type fullname="UnityEngine.EventSystems.IPointerEnterHandler" preserve="all" />
+    <type fullname="UnityEngine.EventSystems.IPointerExitHandler" preserve="all" />
     <type fullname="UnityEngine.EventSystems.PointerEventData" preserve="all" />
     <type fullname="UnityEngine.UI.Button" preserve="all" />
     <type fullname="UnityEngine.UI.Button/ButtonClickedEvent" preserve="all" />

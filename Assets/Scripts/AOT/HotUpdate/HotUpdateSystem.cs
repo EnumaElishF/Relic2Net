@@ -39,6 +39,7 @@ public class HotUpdateSystem : MonoBehaviour
         if(state ==null || !state.hotUpdateSucceed) //从来没有热更过 || 上次热更没有成功
         {
             Debug.Log("断点续传");
+            //这里删的是整个文件夹，其下方还有个目录"{Addressables.RuntimePath}/catalog.json"
             string catalogPath = $"{Application.persistentDataPath}/com.unity.addressables";
             if (Directory.Exists(catalogPath)) Directory.Delete(catalogPath, true); //删掉上次热更的catalog文件夹，以做到，断点续传，进行重新检查下载
         }
@@ -104,9 +105,10 @@ public class HotUpdateSystem : MonoBehaviour
         {
             LoadHotUpdateDll();
             LoadMetaForAOTAssemblies();
-
-            // 因为Addressables在初始化目录后才加载dll，这会导致AD会认为类型为热更程序集中的类型是未知的资源 认为是System.Object
-            //Addressables.LoadContentCatalogAsync($"{Addressables.RuntimePath}/catalog.json");
+            //!!!
+            //重新加载一次目录，下面是原因->认为是System.Object的认知错误
+            // 因为Addressables在初始化目录后才加载dll，这导致Addressables会认为类型为热更程序集中的类型是未知的资源 
+            Addressables.LoadContentCatalogAsync($"{Addressables.RuntimePath}/catalog.json");
         }
 
         //所有的事情都干完，才能回调

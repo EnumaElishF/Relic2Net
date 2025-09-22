@@ -12,7 +12,9 @@ public enum MessageType : byte
     C_S_Disconnect,
     S_C_Disconnect,
     C_S_ChatMessage,
-    S_C_ChatMessage
+    S_C_ChatMessage,
+    C_S_GetBagData,
+    S_C_GetBagData
 }
 /// <summary>
 /// 可以预知的完成的返回信息，做成Code的方式，做个可知的码。比如服务端返回码等
@@ -133,5 +135,36 @@ public struct S_C_ChatMessage : INetworkSerializable
         serializer.SerializeValue(ref playerName);
         serializer.SerializeValue(ref message);
 
+    }
+}
+
+
+public struct C_S_GetBagData : INetworkSerializable
+{
+    public int dataVersion;
+
+    public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+    {
+        serializer.SerializeValue(ref dataVersion);
+    }
+}
+
+public struct S_C_GetBagData : INetworkSerializable
+{
+    public bool haveBagData;
+    public BagData bagData;
+    public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+    {
+        serializer.SerializeValue(ref haveBagData);
+        if (!haveBagData) return;
+        if(serializer.IsReader || haveBagData) //反序列化,这时如果haveBagData = true，意味着要保存背包数据
+        {
+            if (bagData == null) bagData = new BagData();
+            bagData.NetworkSerialize(serializer);
+        }
+        else //if (serializer.IsWriter) //序列化，对象转数据
+        {
+            bagData.NetworkSerialize(serializer);
+        }
     }
 }

@@ -1,10 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using MongoDB.Bson.Serialization.Attributes;
+using System.Collections.Generic;
 using Unity.Netcode;
 
 public class BagData: INetworkSerializable
 {
     //背包的格子是有固定的数量上限，空格子的表现为 itemList[i] = null
     public const int itemCount = 30;
+    [BsonIgnore] //避免保存到数据库标志
+    public int dataVersion; // 背包数据的版本
     public List<ItemDataBase> itemList = new List<ItemDataBase>(itemCount);
 
     public BagData()
@@ -61,6 +64,7 @@ public class BagData: INetworkSerializable
                 }
                 else
                 {
+                    //写入使用WriteValueSafe方法比 WriteValue要安全，内部多了TryBeginWrite开始写入的检测
                     if (itemData is WeaponData) writer.WriteValueSafe(ItemType.Weapon);
                     else if (itemData is ConsumableData) writer.WriteValueSafe(ItemType.Consumable);
                     else if (itemData is MaterialData) writer.WriteValueSafe(ItemType.Material);

@@ -73,6 +73,14 @@ public class NetMessageManager : SingletonMono<NetMessageManager>
                     reader.ReadValueSafe(out S_C_ChatMessage S_C_ChatMessage);
                     TriggerMessageCallback(MessageType.S_C_ChatMessage, clientId, S_C_ChatMessage);
                     break;
+                case MessageType.C_S_GetBagData:
+                    reader.ReadValueSafe(out C_S_GetBagData C_S_GetBagData);
+                    TriggerMessageCallback(MessageType.C_S_GetBagData, clientId, C_S_GetBagData);
+                    break;
+                case MessageType.S_C_GetBagData:
+                    reader.ReadValueSafe(out S_C_GetBagData S_C_GetBagData);
+                    TriggerMessageCallback(MessageType.S_C_GetBagData, clientId, S_C_GetBagData);
+                    break;
             }
         }
         catch(Exception e)

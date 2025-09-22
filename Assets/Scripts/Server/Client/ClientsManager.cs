@@ -33,8 +33,11 @@ public class ClientsManager : SingletonMono<ClientsManager> //SingletonMono加�
         NetMessageManager.Instance.RegisterMessageCallback(MessageType.C_S_EnterGame, OnClientEnterGame);
         NetMessageManager.Instance.RegisterMessageCallback(MessageType.C_S_Disconnect, OnClientDisconnect);
         NetMessageManager.Instance.RegisterMessageCallback(MessageType.C_S_ChatMessage, OnClientChatMessage);
+        NetMessageManager.Instance.RegisterMessageCallback(MessageType.C_S_GetBagData, OnClientGetBagData);
         
     }
+
+
 
 
 
@@ -130,21 +133,40 @@ public class ClientsManager : SingletonMono<ClientsManager> //SingletonMono加�
         }
         else
         {
-            //生成实际的账号数据
-            PlayerData playerData = ResSystem.GetOrNew<PlayerData>();
-            playerData.characterData = new CharacterData
-            {
-                position = ServerResSystem.serverConfig.playerDefaultPosition,
-            };
-            playerData.name = accountInfo.playerName;
-            playerData.password = accountInfo.password;
-            DataBaseManager.Instance.CreatePlayerData(playerData);
+            CreateDefaultPlayerData(accountInfo);
         }
         //回复客户端
         NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_Register, result, clientID);
 
     }
+    /// <summary>
+    /// 生成默认的账号数据
+    /// </summary>
+    private PlayerData CreateDefaultPlayerData(AccountInfo accountInfo)
+    {
+        PlayerData playerData = ResSystem.GetOrNew<PlayerData>();
+        playerData.characterData = new CharacterData
+        {
+            position = ServerResSystem.serverConfig.playerDefaultPosition,
+        };
+        playerData.name = accountInfo.playerName;
+        playerData.password = accountInfo.password;
+        playerData.bagData = new BagData();
 
+        playerData.bagData.itemList[0] = (new WeaponData() { id = "Weapon_0" });
+        playerData.bagData.itemList[1] = (new WeaponData() { id = "Weapon_1" });
+        playerData.bagData.itemList[2] = (new ConsumableData() { id = "Consumable_0", count = 1 });
+        playerData.bagData.itemList[3] = (new ConsumableData() { id = "Consumable_1", count = 2 });
+        playerData.bagData.itemList[4] = (new ConsumableData() { id = "Consumable_2", count = 3 });
+        playerData.bagData.itemList[5] = (new ConsumableData() { id = "Consumable_3", count = 4 });
+        playerData.bagData.itemList[6] = (new ConsumableData() { id = "Consumable_4", count = 5 });
+        playerData.bagData.itemList[7] = (new MaterialData() { id = "Material_0", count = 5 });
+        playerData.bagData.itemList[8] = (new MaterialData() { id = "Material_1", count = 7 });
+        playerData.bagData.itemList[9] = (new MaterialData() { id = "Material_2", count = 8 });
+
+        DataBaseManager.Instance.CreatePlayerData(playerData);
+        return playerData;
+    }
     /// <summary>
     /// 申请登录
     /// </summary>
@@ -196,6 +218,7 @@ public class ClientsManager : SingletonMono<ClientsManager> //SingletonMono加�
                 //玩家登录成功,关联Client和PlayerData
                 Client client = clientIDDic[clientID];
                 client.playerData = playerData;
+                client.playerData.bagData.dataVersion = 0; //背包版本号默认为0
                 SetClientState(clientID, ClientState.Logined);
             }
         }
@@ -239,5 +262,20 @@ public class ClientsManager : SingletonMono<ClientsManager> //SingletonMono加�
             }
         }
 
+    }
+    private void OnClientGetBagData(ulong clientID, INetworkSerializable serializable)
+    {
+        C_S_GetBagData message = (C_S_GetBagData)serializable;
+        S_C_GetBagData result = new S_C_GetBagData { haveBagData = false };
+        if(clientIDDic.TryGetValue(clientID,out Client client))
+        {
+            if (client.playerData != null && client.playerData.bagData.dataVersion != message.dataVersion)
+            {
+                //客户端这边新版背包数据不为空，且客户端的背包版本发生变化，才会执行
+                result.haveBagData = true;
+                result.bagData = client.playerData.bagData;
+            }
+        }
+        NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_GetBagData, result, clientID);
     }
 }
