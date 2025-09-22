@@ -19,13 +19,13 @@ public abstract class UI_SlotBase : MonoBehaviour,IPointerEnterHandler,IPointerE
         OnPointerExit(null);
 
     }
-    public void OnPointerEnter(PointerEventData eventData)
+    public virtual void OnPointerEnter(PointerEventData eventData)
     {
         //鼠标选中后，修改图标边框
         frameImage.sprite = selectedFrame;
     }
 
-    public void OnPointerExit(PointerEventData eventData)
+    public virtual void OnPointerExit(PointerEventData eventData)
     {
         frameImage.sprite = normalFrame;
     }
@@ -57,6 +57,29 @@ public abstract class UI_SlotBase<D,C> : UI_SlotBase where D : ItemDataBase wher
         itemData = null;
         itemConfig = null;
     }
+    /// <summary>
+    /// 鼠标进入
+    /// </summary>
+    public override void OnPointerEnter(PointerEventData eventData)
+    {
+        base.OnPointerEnter(eventData);
+        if (itemConfig != null)
+        {
+            UISystem.Show<UI_ItemInfoPopupWindow>().Show(transform.position, ((RectTransform)transform).sizeDelta.y / 2, itemConfig);
+        }
+    }
+    /// <summary>
+    /// 鼠标出去
+    /// </summary>
+    public override void OnPointerExit(PointerEventData eventData)
+    {
+        if (itemConfig != null)
+        {
+            UISystem.Close<UI_ItemInfoPopupWindow>();
+        }
+        base.OnPointerExit(eventData);
+    }
+
 }
 
 
