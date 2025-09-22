@@ -16,9 +16,10 @@ public abstract class ItemConfigBase : ConfigBase
     {
         return nameDic[languageType];
     }
-    public string GetDescription(LanguageType languageType)
+    public virtual string GetDescription(LanguageType languageType)
     {
         return descriptionDic[languageType];
     }
+    public abstract string GetType(LanguageType languageType);
 #endif
 }

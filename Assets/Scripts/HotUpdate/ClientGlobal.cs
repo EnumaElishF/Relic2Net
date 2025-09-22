@@ -72,6 +72,7 @@ public class ClientGlobal : SingletonMono<ClientGlobal>
         UISystem.AddUIWindowData<UI_ChatWindow>(new UIWindowData(false, nameof(UI_ChatWindow), 2));
         //背包内容多，还需要高频使用，所以开缓存true
         UISystem.AddUIWindowData<UI_BagWindow>(new UIWindowData(true, nameof(UI_BagWindow), 2));
+        UISystem.AddUIWindowData<UI_ItemInfoPopupWindow>(new UIWindowData(true, nameof(UI_ItemInfoPopupWindow), 2));
     }
     private void OnGameSceneLaunchEvent(GameSceneLaunchEvent @event)
     {
