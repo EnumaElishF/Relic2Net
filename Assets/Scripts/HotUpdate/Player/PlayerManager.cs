@@ -24,6 +24,7 @@ public class PlayerManager : SingletonMono<PlayerManager>
         EventSystem.AddTypeEventListener<InitLocalPlayerEvent>(OnInitLocalPlayerEvent);
         EventSystem.AddTypeEventListener<MouseActiveStateChangedEvent>(OnMouseActiveStateChangedEvent);
         NetMessageManager.Instance.RegisterMessageCallback(MessageType.S_C_GetBagData, OnS_C_GetBagData);
+        NetMessageManager.Instance.RegisterMessageCallback(MessageType.S_C_UpdateItem, OnS_C_UpdateItem);
 
         ClientGlobal.Instance.ActiveMouse = false;
     }
@@ -39,6 +40,8 @@ public class PlayerManager : SingletonMono<PlayerManager>
         EventSystem.RemoveTypeEventListener<InitLocalPlayerEvent>(OnInitLocalPlayerEvent);
         EventSystem.RemoveTypeEventListener<MouseActiveStateChangedEvent>(OnMouseActiveStateChangedEvent);//每次在ClientGlobal的ActiveMouse触发
         NetMessageManager.Instance.UnRegisterMessageCallback(MessageType.S_C_GetBagData, OnS_C_GetBagData);
+        NetMessageManager.Instance.UnRegisterMessageCallback(MessageType.S_C_UpdateItem, OnS_C_UpdateItem);
+
     }
 
     private void OnInitLocalPlayerEvent(InitLocalPlayerEvent arg)
@@ -60,8 +63,7 @@ public class PlayerManager : SingletonMono<PlayerManager>
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            UI_GamePopupWindow gamePopupWindow = UISystem.GetWindow<UI_GamePopupWindow>();
-            if (gamePopupWindow == null || !gamePopupWindow.gameObject.activeInHierarchy)
+            if (!ClientUtility.GetWindowActiveState(out UI_GamePopupWindow gamePopupWindow))
             {
                 UISystem.Show<UI_GamePopupWindow>();
             }
@@ -74,19 +76,18 @@ public class PlayerManager : SingletonMono<PlayerManager>
         //把背包消息发给服务器
         if (Input.GetKeyDown(KeyCode.B))
         {
-            UI_BagWindow bagWindow = UISystem.GetWindow<UI_BagWindow>();
-            if (bagWindow == null || !bagWindow.gameObject.activeInHierarchy) 
+            if (!ClientUtility.GetWindowActiveState(out UI_BagWindow bagWindow))
             {
                 //请求网络
                 int dataVersion = bagData == null ? -1 : bagData.dataVersion;
                 NetMessageManager.Instance.SendMessageToServer(MessageType.C_S_GetBagData, new C_S_GetBagData { dataVersion = dataVersion });
                 //等网络消息回发
-
             }
             else
             {
                 UISystem.Close<UI_BagWindow>();
             }
+
         }
     }
     /// <summary>
@@ -125,7 +126,23 @@ public class PlayerManager : SingletonMono<PlayerManager>
 
     public void UseItem(int slotIndex)
     {
-        //TODO 构建消息
+        // 构建使用物品的消息
+        C_S_UseItem message = new C_S_UseItem { itemIndex = slotIndex };
+        NetMessageManager.Instance.SendMessageToServer(MessageType.C_S_UseItem, message);
+    }
+    private void OnS_C_UpdateItem(ulong serverID, INetworkSerializable serializable)
+    {
+        S_C_UpdateItem message = (S_C_UpdateItem)serializable;
+        // 版本一致则不需要考虑，背包没有数据也不用考虑
+        if (bagData == null || bagData.dataVersion == message.bagDataVersion) return;
+        ItemDataBase itemData = message.newItemData;
+        bagData.itemList[message.itemIndex] = itemData;
+        bagData.dataVersion = message.bagDataVersion;
+        //如果背包是打开状态则同步给背包
+        if(ClientUtility.GetWindowActiveState(out UI_BagWindow bagWindow))
+        {
+            bagWindow.UpdateItem(message.itemIndex, itemData);
+        }
     }
 }
 

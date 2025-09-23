@@ -4,17 +4,25 @@ public enum MessageType : byte
 {
     //用byte比int好处就是，缩短消息串的长度并提升性能。->尤其在高频消息传输场景下效果会更明显
     None,
+    //注册
     C_S_Register, 
     S_C_Register,
+    //登录
     C_S_Login,
     S_C_Login,
     C_S_EnterGame,
+    //断开
     C_S_Disconnect,
     S_C_Disconnect,
+    //聊天消息
     C_S_ChatMessage,
     S_C_ChatMessage,
+    //背包数据
     C_S_GetBagData,
-    S_C_GetBagData
+    S_C_GetBagData,
+    //客户端使用物品和服务端给更新物品
+    C_S_UseItem,
+    S_C_UpdateItem
 }
 /// <summary>
 /// 可以预知的完成的返回信息，做成Code的方式，做个可知的码。比如服务端返回码等
@@ -166,5 +174,47 @@ public struct S_C_GetBagData : INetworkSerializable
         {
             bagData.NetworkSerialize(serializer);
         }
+    }
+}
+
+public struct C_S_UseItem : INetworkSerializable
+{
+    //使用物品，先确定物品索引
+    public int itemIndex; //背包中的位置
+
+    public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+    {
+        serializer.SerializeValue(ref itemIndex);
+    }
+}
+public struct S_C_UpdateItem : INetworkSerializable
+{
+    public int bagDataVersion;
+    public int itemIndex;
+    public ItemType itemType;
+    //TODO 武器使用后，相当于玩家要切换武器
+    public ItemDataBase newItemData;
+    public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+    {
+        serializer.SerializeValue(ref bagDataVersion);
+        serializer.SerializeValue(ref itemIndex);
+        serializer.SerializeValue(ref itemType);
+        if(serializer.IsReader)//反序列化，将数据转为对象，则要求数据不能为null
+        {
+            switch (itemType)
+            {
+                case ItemType.Weapon:
+                    newItemData = new WeaponData();
+                    break;
+                case ItemType.Consumable:
+                    newItemData = new ConsumableData();
+                    break;
+                case ItemType.Material:
+                    newItemData = new MaterialData();
+                    break;
+            }
+        }
+        if (newItemData != null) newItemData.NetworkSerialize(serializer);
+
     }
 }
