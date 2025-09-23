@@ -1,21 +1,24 @@
 using JKFrame;
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 /// <summary>
 /// 其他格子都以这个为基础，首要做为抽象的基类
 /// </summary>
-public abstract class UI_SlotBase : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler
+public abstract class UI_SlotBase : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler,IPointerClickHandler
 {
     [SerializeField] protected Image frameImage;
     [SerializeField] protected Sprite normalFrame;
     [SerializeField] protected Sprite selectedFrame;
+    protected int index; //格子的index
+    protected Action<int> onUseAction;
 
     //默认data，config为null，可以表示不传入值是没有问题的
-    public virtual void Init(ItemDataBase data = null, ItemConfigBase config = null)
+    public virtual void Init(ItemDataBase data, ItemConfigBase config,int index, Action<int> onUseAction)
     {
+        this.index = index;
+        this.onUseAction = onUseAction;
         OnPointerExit(null);
 
     }
@@ -33,6 +36,19 @@ public abstract class UI_SlotBase : MonoBehaviour,IPointerEnterHandler,IPointerE
     {
         this.GameObjectPushPool();
     }
+    /// <summary>
+    /// 鼠标点击
+    /// </summary>
+    /// <param name="eventData">PointerEventData是Unity底层的事件数据</param>
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        //鼠标右键意味着使用物品
+        if(onUseAction != null && eventData.button == PointerEventData.InputButton.Right)
+        {
+            transform.GetSiblingIndex();
+            onUseAction?.Invoke(index);
+        }
+    }
 }
 public abstract class UI_SlotBase<D,C> : UI_SlotBase where D : ItemDataBase where C : ItemConfigBase
 {
@@ -44,9 +60,9 @@ public abstract class UI_SlotBase<D,C> : UI_SlotBase where D : ItemDataBase wher
     /// </summary>
     /// <param name="data"></param>
     /// <param name="config"></param>
-    public override void Init(ItemDataBase data, ItemConfigBase config)
+    public override void Init(ItemDataBase data, ItemConfigBase config, int index, Action<int> onUseAction)
     {
-        base.Init(data,config);
+        base.Init(data,config,index,onUseAction);
         this.itemData = (D)data;
         this.itemConfig = (C)config;
         iconImage.sprite = config.icon;

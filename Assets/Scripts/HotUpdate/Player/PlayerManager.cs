@@ -2,6 +2,7 @@
 //从而要求他们不能去依赖客户端或者服务端的程序集的内容，要打断他们的依赖关系，可以通过事件，去传，从而跨程序集通信
 using Cinemachine;
 using JKFrame;
+using System;
 using Unity.Netcode;
 using UnityEngine;
 /// <summary>
@@ -120,6 +121,11 @@ public class PlayerManager : SingletonMono<PlayerManager>
         cinemachine.Follow = localPlayer.cameraFollowTarget;
         localPlayer.canControl = playerControlEnable;
 #endif
+    }
+
+    public void UseItem(int slotIndex)
+    {
+        //TODO 构建消息
     }
 }
 
