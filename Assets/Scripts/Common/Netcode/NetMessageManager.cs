@@ -33,6 +33,7 @@ public class NetMessageManager : SingletonMono<NetMessageManager>
     {
         try
         {
+            //TODO 每次加入新消息类型
             reader.ReadValueSafe(out MessageType messageType);
             Debug.Log("收到网络信息:" + messageType);
             switch (messageType)
@@ -80,6 +81,14 @@ public class NetMessageManager : SingletonMono<NetMessageManager>
                 case MessageType.S_C_GetBagData:
                     reader.ReadValueSafe(out S_C_GetBagData S_C_GetBagData);
                     TriggerMessageCallback(MessageType.S_C_GetBagData, clientId, S_C_GetBagData);
+                    break;
+                case MessageType.C_S_UseItem:
+                    reader.ReadValueSafe(out C_S_UseItem C_S_UseItem);
+                    TriggerMessageCallback(MessageType.C_S_UseItem, clientId, C_S_UseItem);
+                    break;
+                case MessageType.S_C_UpdateItem:
+                    reader.ReadValueSafe(out S_C_UpdateItem S_C_UpdateItem);
+                    TriggerMessageCallback(MessageType.S_C_UpdateItem, clientId, S_C_UpdateItem);
                     break;
             }
         }

@@ -6,9 +6,9 @@ public class ConsumableData : StackableItemDataBase
     //    return new ConsumableData { id = id, count = count };
     //}
 
-    //public override ItemType GetItemType()
-    //{
-    //    return ItemType.Consumable;
-    //}
+    public override ItemType GetItemType()
+    {
+        return ItemType.Consumable;
+    }
 
 }

@@ -76,9 +76,40 @@ public class BagData: INetworkSerializable
     }
 
     #region Server 服务端背包数据->数据获取
-#if UNITY_SERVER || UNITY_EDITOR
+    //暂时不使用 UNITY_SERVER ，这里调用出错误。暂时移除 TryUseItem 方法的条件编译限制
+    //错误内容，Assets\Scripts\Server\Client\ClientsManager.cs(308,45): error CS1061: 'BagData' does not contain a definition for 'TryUseItem' and no accessible extension method 'TryUseItem' accepting a first argument of type 'BagData' could be found (are you missing a using directive or an assembly reference?)
+    //#if UNITY_SERVER || UNITY_EDITOR
+    public ItemDataBase TryUseItem(int index)
+    {
+        if (index <= 0 || index >= itemList.Count - 1) return null;
+
+        ItemDataBase itemData = itemList[index];
+        // 只有武器与消耗品才可以使用
+        if (itemData is WeaponData)
+        {
+            return itemData;
+        }
+        else if (itemData is ConsumableData)
+        {
+            dataVersion += 1;
+            //TODO 暂时虚拟一个消耗品减少的效果：临时逻辑
+            ConsumableData consumableData = (ConsumableData)itemData;
+            consumableData.count -= 1;
+            if (consumableData.count <= 0) //物品全部使用完毕
+            {
+                itemList[index] = null;
+                itemData = null;
+            }
+            return itemData;
+        }
+        return null;
+    }
+
     public bool TryAddWeapon(string id,out int index)
     {
+        index = -1;
+        if (index <= 0 || index >= itemList.Count - 1) return false;
+
         if (TryGetFirstEmptyIndex(out index)) //拿出第一个itemList的空数据
         {
             WeaponData weaponData = new WeaponData();
@@ -89,6 +120,8 @@ public class BagData: INetworkSerializable
     }
     public bool TryAddStackableItem<T>(string id, int count,out int index) where T: StackableItemDataBase, new()
     {
+        index = -1;
+        if (index <= 0 || index >= itemList.Count - 1) return false;
         //index在初始已定义int，后面无需定义
         ItemDataBase itemData = TryGetItem(id, out index);
         if (itemData != null) //已存在
@@ -112,11 +145,12 @@ public class BagData: INetworkSerializable
     }
     public void RemoveItem(int index)
     {
+        if (index <= 0 || index >= itemList.Count - 1) return;
         itemList[index] = null;
     }
     public ItemDataBase TryGetItem(string id, out int index)
     {
-        for(int i = 0; i< itemList.Count; i++)
+        for (int i = 0; i< itemList.Count; i++)
         {
             ItemDataBase itemData = itemList[i];
             if(itemData!=null && itemData.id == id)
@@ -133,6 +167,8 @@ public class BagData: INetworkSerializable
     /// </summary>
     public bool TryGetFirstEmptyIndex(out int index)
     {
+        index = -1;
+        if (index <= 0 || index >= itemList.Count - 1) return false;
         for (int i = 0; i < itemList.Count; i++)
         {
             if (itemList[i] == null)
@@ -146,6 +182,6 @@ public class BagData: INetworkSerializable
     }
 
 
-#endif
+//#endif
     #endregion
 }

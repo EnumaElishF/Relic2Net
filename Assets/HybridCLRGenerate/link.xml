@@ -112,6 +112,7 @@
     <type fullname="UnityEngine.Object" preserve="all" />
     <type fullname="UnityEngine.Plane" preserve="all" />
     <type fullname="UnityEngine.Quaternion" preserve="all" />
+    <type fullname="UnityEngine.RectTransform" preserve="all" />
     <type fullname="UnityEngine.RuntimeInitializeOnLoadMethodAttribute" preserve="all" />
     <type fullname="UnityEngine.SceneManagement.LoadSceneMode" preserve="all" />
     <type fullname="UnityEngine.SerializeField" preserve="all" />
@@ -135,9 +136,11 @@
   </assembly>
   <assembly fullname="UnityEngine.UI">
     <type fullname="UnityEngine.EventSystems.IEventSystemHandler" preserve="all" />
+    <type fullname="UnityEngine.EventSystems.IPointerClickHandler" preserve="all" />
     <type fullname="UnityEngine.EventSystems.IPointerEnterHandler" preserve="all" />
     <type fullname="UnityEngine.EventSystems.IPointerExitHandler" preserve="all" />
     <type fullname="UnityEngine.EventSystems.PointerEventData" preserve="all" />
+    <type fullname="UnityEngine.EventSystems.PointerEventData/InputButton" preserve="all" />
     <type fullname="UnityEngine.UI.Button" preserve="all" />
     <type fullname="UnityEngine.UI.Button/ButtonClickedEvent" preserve="all" />
     <type fullname="UnityEngine.UI.Graphic" preserve="all" />
@@ -156,6 +159,7 @@
     <type fullname="System.Action" preserve="all" />
     <type fullname="System.Action`1" preserve="all" />
     <type fullname="System.Action`2" preserve="all" />
+    <type fullname="System.Activator" preserve="all" />
     <type fullname="System.Array" preserve="all" />
     <type fullname="System.Attribute" preserve="all" />
     <type fullname="System.Byte" preserve="all" />
@@ -194,6 +198,7 @@
     <type fullname="System.Runtime.CompilerServices.RuntimeHelpers" preserve="all" />
     <type fullname="System.Runtime.InteropServices.UnmanagedType" preserve="all" />
     <type fullname="System.RuntimeFieldHandle" preserve="all" />
+    <type fullname="System.Single" preserve="all" />
     <type fullname="System.String" preserve="all" />
     <type fullname="System.Type" preserve="all" />
     <type fullname="System.ValueType" preserve="all" />

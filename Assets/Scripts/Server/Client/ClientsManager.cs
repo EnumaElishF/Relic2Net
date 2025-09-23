@@ -5,11 +5,15 @@ using UnityEngine;
 
 public class ClientsManager : SingletonMono<ClientsManager> //SingletonMono加入对Singleton的通用基类改造，
 {
+    #region 主要数据
     private Dictionary<ClientState, HashSet<Client>> clientStateDic;
     // Key : ClientID
     public Dictionary<ulong, Client> clientIDDic;
     //Key:账号 Value:ClientID
     private Dictionary<string, ulong> accountDic;
+    #endregion
+
+    #region 自身逻辑_主要逻辑
     /// <summary>
     /// 初始化   需要由服务器开启，作为客户端们的管理者（考虑一个位置，谁去做他的初始化是最好的情况？
     /// </summary>
@@ -34,29 +38,27 @@ public class ClientsManager : SingletonMono<ClientsManager> //SingletonMono加�
         NetMessageManager.Instance.RegisterMessageCallback(MessageType.C_S_Disconnect, OnClientDisconnect);
         NetMessageManager.Instance.RegisterMessageCallback(MessageType.C_S_ChatMessage, OnClientChatMessage);
         NetMessageManager.Instance.RegisterMessageCallback(MessageType.C_S_GetBagData, OnClientGetBagData);
-        
+        NetMessageManager.Instance.RegisterMessageCallback(MessageType.C_S_UseItem, OnClientUseItem);
+
     }
-
-
-
 
 
 
     /// <summary>
     /// 标准的状态切换的函数，方便管理后续状态切换
     /// </summary>
-    private void SetClientState(ulong clientID,ClientState newState)
+    private void SetClientState(ulong clientID, ClientState newState)
     {
-        if (clientIDDic.TryGetValue(clientID,out Client client))
+        if (clientIDDic.TryGetValue(clientID, out Client client))
         {
             clientStateDic[client.clientState].Remove(client);
             clientStateDic[newState].Add(client);
             client.clientState = newState;
         }
     }
+    #endregion
 
-
-
+    #region 连接与退出
     /// <summary>
     /// 连接成功
     /// </summary>
@@ -75,10 +77,10 @@ public class ClientsManager : SingletonMono<ClientsManager> //SingletonMono加�
     /// </summary>
     private void OnClientNetCodeDisconnect(ulong clientID)
     {
-        if(clientIDDic.Remove(clientID, out Client client))
+        if (clientIDDic.Remove(clientID, out Client client))
         {
             clientStateDic[client.clientState].Remove(client);
-            if(client.playerData != null) accountDic.Remove(client.playerData.name);
+            if (client.playerData != null) accountDic.Remove(client.playerData.name);
             // 如果不使用下面这条，那么采用的是NetCode自己的管理，也就是客户端掉线会自动清除所属的网络对象
             if (client.playerController != null) NetManager.Instance.DestroyObject(client.playerController.NetworkObject);
             client.playerData = null;
@@ -86,7 +88,6 @@ public class ClientsManager : SingletonMono<ClientsManager> //SingletonMono加�
             client.OnDestroy();
         }
     }
-
     /// <summary>
     /// 客户端退出到开始菜单场景
     /// </summary>
@@ -101,7 +102,7 @@ public class ClientsManager : SingletonMono<ClientsManager> //SingletonMono加�
             NetManager.Instance.DestroyObject(client.playerController.NetworkObject);
             client.playerController = null;
         }
-        if(client.playerData != null)
+        if (client.playerData != null)
         {
             //退出账号
             accountDic.Remove(client.playerData.name);
@@ -112,6 +113,10 @@ public class ClientsManager : SingletonMono<ClientsManager> //SingletonMono加�
         //回复消息
         NetMessageManager.Instance.SendMessageToClient<S_C_Disconnect>(MessageType.S_C_Disconnect, default, clientID);
     }
+
+    #endregion
+
+    #region 注册与登录
     /// <summary>
     /// 申请注册
     /// </summary>
@@ -185,24 +190,24 @@ public class ClientsManager : SingletonMono<ClientsManager> //SingletonMono加�
         {
             //检查是否有这个玩家，并且账号信息正确
             PlayerData playerData = DataBaseManager.Instance.GetPlayerData(accountInfo.playerName);
-            if(playerData==null || playerData.password != accountInfo.password)
+            if (playerData == null || playerData.password != accountInfo.password)
             {
                 result.errorCode = ErrorCode.NameOrPassword;
             }
             else
             {
                 //检查 挤号
-                if(accountDic.TryGetValue(accountInfo.playerName,out ulong oldClientID))
+                if (accountDic.TryGetValue(accountInfo.playerName, out ulong oldClientID))
                 {
                     //通知旧客户端
                     NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_Disconnect, new S_C_Disconnect
                     {
                         errorCode = ErrorCode.AccountRepeatLogin
-                    },oldClientID);
+                    }, oldClientID);
                     //设置旧客户端为已连接但是未登录状态
                     SetClientState(oldClientID, ClientState.Connected);
                     //可能存在的角色需要销毁,因为登录的人还不一定产生了角色
-                    if(clientIDDic.TryGetValue(oldClientID,out Client oldClient))
+                    if (clientIDDic.TryGetValue(oldClientID, out Client oldClient))
                     {
                         if (oldClient.playerController != null)
                         {
@@ -225,6 +230,7 @@ public class ClientsManager : SingletonMono<ClientsManager> //SingletonMono加�
         //回复客户端
         NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_Login, result, clientID);
     }
+
     /// <summary>
     /// 玩家进入游戏
     /// </summary>
@@ -238,13 +244,17 @@ public class ClientsManager : SingletonMono<ClientsManager> //SingletonMono加�
         PlayerData playerData = client.playerData;
         CharacterData characterData = playerData.characterData;
         //生成游戏对象
-        NetworkObject playerObject = NetManager.Instance.SpawnObject(clientID, ServerResSystem.serverConfig.playerPrefab, characterData.position,Quaternion.Euler(0,characterData.rotation_Y,0));
+        NetworkObject playerObject = NetManager.Instance.SpawnObject(clientID, ServerResSystem.serverConfig.playerPrefab, characterData.position, Quaternion.Euler(0, characterData.rotation_Y, 0));
         client.playerController = playerObject.GetComponent<PlayerController>();
         //TODO 玩家可能使用不同的武器之类的实例化
 
     }
+    #endregion
+
+
+    #region 聊天
     /// <summary>
-    /// 服务器对客户端的聊天消息发送: 广播给全部的游戏中玩家
+    /// 当客户端发来聊天消息。服务器对客户端的聊天消息发送: 广播给全部的游戏中玩家
     /// </summary>
     private void OnClientChatMessage(ulong clientID, INetworkSerializable serializable)
     {
@@ -252,10 +262,10 @@ public class ClientsManager : SingletonMono<ClientsManager> //SingletonMono加�
         if (string.IsNullOrWhiteSpace(chatMessage)) return; //消息有效性验证
         if (!clientIDDic.TryGetValue(clientID, out Client sourceClient) && sourceClient.playerData == null) return;//检查源头客户端的有效性
         //发送给所有游戏状态下的客户端
-        if(clientStateDic.TryGetValue(ClientState.Gaming,out HashSet<Client> clients))
+        if (clientStateDic.TryGetValue(ClientState.Gaming, out HashSet<Client> clients))
         {
             S_C_ChatMessage message = new S_C_ChatMessage { playerName = sourceClient.playerData.name, message = chatMessage };
-            foreach(Client client in clients)
+            foreach (Client client in clients)
             {
                 //这样就把消息转发出去了
                 NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_ChatMessage, message, client.clientID);
@@ -263,19 +273,52 @@ public class ClientsManager : SingletonMono<ClientsManager> //SingletonMono加�
         }
 
     }
+    #endregion
+
+    #region 物品
+    /// <summary>
+    /// 当客户端请求背包数据
+    /// </summary>
     private void OnClientGetBagData(ulong clientID, INetworkSerializable serializable)
     {
         C_S_GetBagData message = (C_S_GetBagData)serializable;
-        S_C_GetBagData result = new S_C_GetBagData { haveBagData = false };
-        if(clientIDDic.TryGetValue(clientID,out Client client))
+        if(clientIDDic.TryGetValue(clientID,out Client client) && client.playerData != null)
         {
-            if (client.playerData != null && client.playerData.bagData.dataVersion != message.dataVersion)
-            {
-                //客户端这边新版背包数据不为空，且客户端的背包版本发生变化，才会执行
-                result.haveBagData = true;
-                result.bagData = client.playerData.bagData;
-            }
+            S_C_GetBagData result = new S_C_GetBagData 
+            { 
+                haveBagData = client.playerData.bagData.dataVersion != message.dataVersion 
+            };
+            //客户端这边新版背包数据不为空，且客户端的背包版本发生变化，才会执行
+            if (result.haveBagData) result.bagData = client.playerData.bagData;
+            NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_GetBagData, result, clientID);
         }
-        NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_GetBagData, result, clientID);
     }
+    /// <summary>
+    /// 当客户端请求使用物品
+    /// </summary>
+    private void OnClientUseItem(ulong clientID, INetworkSerializable serializable)
+    {
+        C_S_UseItem message = (C_S_UseItem)serializable;
+        if (clientIDDic.TryGetValue(clientID, out Client client) && client.playerData != null)
+        {
+            //TODO 具体的物品使用
+            BagData bagData = client.playerData.bagData;
+            //背包数据的TryUseItem原本是放服务器这边的，但是出现Common程序集获取内容的错误，应该是Unity打包识别不足够好，
+            //最后我们还是把数据获取内容，转移到BagData
+            ItemDataBase itemData = bagData.TryUseItem(message.itemIndex);
+            ItemType itemType = ItemType.Empty;
+            if (itemData != null) itemType = itemData.GetItemType();
+            S_C_UpdateItem result = new S_C_UpdateItem
+            {
+                itemIndex = message.itemIndex,
+                bagDataVersion = bagData.dataVersion,
+                newItemData = itemData,
+                itemType = itemType
+            };
+            NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_UpdateItem, result, clientID);
+        }
+
+    }
+    #endregion
+
 }

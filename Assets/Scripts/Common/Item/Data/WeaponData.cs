@@ -5,8 +5,8 @@ public class WeaponData : ItemDataBase
     //{
     //    return new WeaponData { id = id };
     //}
-    //public override ItemType GetItemType()
-    //{
-    //    return ItemType.Weapon;
-    //}
+    public override ItemType GetItemType()
+    {
+        return ItemType.Weapon;
+    }
 }
