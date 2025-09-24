@@ -31,4 +31,9 @@ public static class ServerResSystem
         instance.GetComponent<Terrain>().enabled = false;
         return instance;
     }
+    public static T GetItemConfig<T>(string itemName) where T: ItemConfigBase
+    {
+        ItemConfigBase itemConfig = serverConfig.itemConfigDic[itemName];
+        return (T)itemConfig;
+    }
 }

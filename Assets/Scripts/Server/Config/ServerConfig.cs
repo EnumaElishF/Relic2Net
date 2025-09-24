@@ -23,6 +23,8 @@ public class ServerConfig : ConfigBase
     public Vector3 playerDefaultPosition;
     [Header("地形")]
     public Dictionary<string,GameObject> terrainDic;
+    [Header("物品配置")]
+    public Dictionary<string, ItemConfigBase> itemConfigDic;
 #if UNITY_EDITOR
     [FolderPath] public string terrainFolderPath; //文件夹路径
     /// <summary>
@@ -40,6 +42,34 @@ public class ServerConfig : ConfigBase
             {
                 GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(files[i]);
                 terrainDic.Add(prefab.name, prefab);
+            }
+        }
+    }
+
+    //目前三种物品，后续如果有可以继续加
+    [FolderPath] public string weaponConfigFolderPath;
+    [FolderPath] public string consumablegConfigFolderPath;
+    [FolderPath] public string materialConfigFolderPath;
+    /// <summary>
+    /// 服务端物品配置
+    /// </summary>
+    public void SetItemConfigDic()
+    {
+        if (itemConfigDic == null) itemConfigDic = new Dictionary<string, ItemConfigBase>();
+        itemConfigDic.Clear();
+        FindItems(weaponConfigFolderPath);
+        FindItems(consumablegConfigFolderPath);
+        FindItems(materialConfigFolderPath);
+    }
+    private void FindItems(string path)
+    {
+        string[] files = Directory.GetFiles(path);//包含*.meta 文件
+        for (int i = 0; i < files.Length; i++)
+        {
+            if (!files[i].EndsWith(".meta")) //不计入 *.meta文件
+            {
+                ItemConfigBase itemConfig = AssetDatabase.LoadAssetAtPath<ItemConfigBase>(files[i]);
+                itemConfigDic.Add(itemConfig.name, itemConfig);
             }
         }
     }
