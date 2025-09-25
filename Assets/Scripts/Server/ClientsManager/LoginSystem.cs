@@ -55,6 +55,7 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
         playerData.characterData = new CharacterData
         {
             position = ServerResSystem.serverConfig.playerDefaultPosition,
+            usedWeaponName = "Weapon_0"
         };
         playerData.name = accountInfo.playerName;
         playerData.password = accountInfo.password;
@@ -148,8 +149,10 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
         //生成游戏对象
         NetworkObject playerObject = NetManager.Instance.SpawnObject(clientID, ServerResSystem.serverConfig.playerPrefab, characterData.position, Quaternion.Euler(0, characterData.rotation_Y, 0));
         client.playerController = playerObject.GetComponent<PlayerController>();
-        //TODO 玩家可能使用不同的武器之类的实例化
 
+        //玩家可能使用不同的武器之类的实例化
+        client.playerController.usedWeaponName.Value = playerData.characterData.usedWeaponName;
+        Debug.Log($"服务端设置初始武器：{playerData.characterData.usedWeaponName}");
     }
 
     /// <summary>

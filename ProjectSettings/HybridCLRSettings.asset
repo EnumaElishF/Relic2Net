@@ -33,6 +33,7 @@ MonoBehaviour:
   - Unity.Netcode.Runtime
   - System
   - System.Core
+  - Unity.Collections
   outputLinkFile: HybridCLRGenerate/link.xml
   outputAOTGenericReferenceFile: HybridCLRGenerate/AOTGenericReferences.cs
   maxGenericReferenceIteration: 10

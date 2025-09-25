@@ -27,7 +27,7 @@ public class BagData: INetworkSerializable
                 //serializer.SerializeValue(ref itemType);
                 //读取器
                 FastBufferReader reader = serializer.GetFastBufferReader();
-                reader.ReadValue(out ItemType itemType);
+                reader.ReadValueSafe(out ItemType itemType);
                 //读出一个物品的物品类型
                 switch (itemType)
                 {

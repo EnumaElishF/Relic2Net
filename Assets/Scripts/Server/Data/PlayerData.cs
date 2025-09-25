@@ -19,8 +19,10 @@ public class PlayerData
 
 
 }
+//这里都是会存到MongoDB数据库的内容数据
 public class CharacterData
 {
     public Vector3 position;
     public float rotation_Y;
+    public string usedWeaponName;
 }

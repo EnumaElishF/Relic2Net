@@ -65,6 +65,7 @@ MonoBehaviour:
   - {fileID: 4900000, guid: 677c583eaab1e324f84fb08db7f6b7cf, type: 3}
   - {fileID: 4900000, guid: 22a112d2213e5974da4eed2610541d2e, type: 3}
   - {fileID: 4900000, guid: f295e07bcf260144a892b848ef8226de, type: 3}
+  - {fileID: 4900000, guid: 01a576b789843e34ba0e60f60776b8af, type: 3}
   hotUpdateDllNames:
   - Common.dll
   - HotUpdate.dll

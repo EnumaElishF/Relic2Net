@@ -13,6 +13,8 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
     /// </summary>
     public void InitItemSystem()
     {
+        PlayerController.SetGetWeaponFunc(GetWeapon);
+
         //NetMessageManager注册网络事件
         NetMessageManager.Instance.RegisterMessageCallback(MessageType.C_S_GetBagData, OnClientGetBagData);
         NetMessageManager.Instance.RegisterMessageCallback(MessageType.C_S_UseItem, OnClientUseItem);
@@ -64,4 +66,17 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
     }
     #endregion
 
+    private GameObject GetWeapon(string weaponName)
+    {
+        GameObject weaponObj = PoolSystem.GetGameObject(weaponName);
+        Debug.Log("weaponName是:" + weaponName);
+        if (weaponObj == null)
+        {
+            WeaponConfig weaponConfig = ServerResSystem.GetItemConfig<WeaponConfig>(weaponName);
+            if(weaponConfig == null) Debug.Log("weaponConfig获取失败,weaponName是:" + weaponName);
+            weaponObj = Instantiate(weaponConfig.prefab);
+            weaponConfig.name = weaponName;
+        }
+        return weaponObj;
+    }
 }

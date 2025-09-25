@@ -1,4 +1,6 @@
 using JKFrame;
+using System;
+using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -7,13 +9,28 @@ using UnityEngine;
 /// </summary>
 public partial class PlayerController : NetworkBehaviour
 {
+    #region 静态成员
+    private static Func<string, GameObject> getWeaponFunc;
+    public static void SetGetWeaponFunc(Func<string,GameObject> func)
+    {
+        getWeaponFunc = func;
+        Debug.Log($"委托绑定：{func.Method.DeclaringType.Name}.{func.Method.Name}"); // 输出绑定的方法所在类
+    }
+    [SerializeField] private Player_View view;
+    public Player_View View { get => view; }
+
+    #endregion
     private NetVariable<PlayerState> currentState = new NetVariable<PlayerState>(PlayerState.None);
+    //新程序集，要加入对Common的新程序集的引用 Unity.Collections;
+    public NetVariable<FixedString32Bytes> usedWeaponName = new NetVariable<FixedString32Bytes>();
+
     //多个玩家，所以Player没有单例
     //public NetworkVariable<float> moveSpeed;   //网络变量：值类型，或者是结构体
 
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
+        usedWeaponName.OnValueChanged = OnUsedWeaponNameChanged;
 
         if (IsClient)
         {
@@ -28,6 +45,18 @@ public partial class PlayerController : NetworkBehaviour
 #endif
         }
 
+    }
+
+    private void OnUsedWeaponNameChanged(FixedString32Bytes previousValue, FixedString32Bytes newValue)
+    {
+        Debug.Log($"武器名称变化：{previousValue} → {newValue}");
+        if (getWeaponFunc == null)
+        {
+            Debug.LogError("getWeaponFunc为null，未绑定方法");
+            return;
+        }
+        GameObject weaponGameObject = getWeaponFunc.Invoke(newValue.ToString());
+        view.SetWeapon(weaponGameObject);
     }
 
     /// <summary>
@@ -154,9 +183,6 @@ public partial class PlayerController : NetworkBehaviour,IStateMachineOwner
 
     [SerializeField] private CharacterController characterController;
     public  CharacterController CharacterController { get => characterController; }
-
-    [SerializeField] private Player_View view;
-    public Player_View View { get => view; }
 
     [SerializeField] private Animator animator;
     public Animator Animator { get => animator; }

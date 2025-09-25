@@ -162,6 +162,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Func<object,UnityEngine.ResourceManagement.ResourceProviders.SceneInstance>
 	// System.Func<object,object>
 	// System.Func<object>
+	// System.IEquatable<Unity.Collections.FixedString32Bytes>
 	// System.Predicate<UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle>
 	// System.Predicate<UnityEngine.Vector2Int>
 	// System.Predicate<object>
@@ -178,23 +179,33 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// Unity.Netcode.BufferSerializer<Unity.Netcode.BufferSerializerReader>
 	// Unity.Netcode.BufferSerializer<Unity.Netcode.BufferSerializerWriter>
 	// Unity.Netcode.BufferSerializer<object>
+	// Unity.Netcode.FallbackSerializer<Unity.Collections.FixedString32Bytes>
 	// Unity.Netcode.FallbackSerializer<int>
 	// Unity.Netcode.FallbackSerializer<object>
+	// Unity.Netcode.FixedStringSerializer<Unity.Collections.FixedString32Bytes>
+	// Unity.Netcode.INetworkVariableSerializer<Unity.Collections.FixedString32Bytes>
 	// Unity.Netcode.INetworkVariableSerializer<int>
 	// Unity.Netcode.INetworkVariableSerializer<object>
+	// Unity.Netcode.NetworkVariable.OnValueChangedDelegate<Unity.Collections.FixedString32Bytes>
 	// Unity.Netcode.NetworkVariable.OnValueChangedDelegate<int>
 	// Unity.Netcode.NetworkVariable.OnValueChangedDelegate<object>
+	// Unity.Netcode.NetworkVariable<Unity.Collections.FixedString32Bytes>
 	// Unity.Netcode.NetworkVariable<int>
 	// Unity.Netcode.NetworkVariable<object>
+	// Unity.Netcode.NetworkVariableSerialization.EqualsDelegate<Unity.Collections.FixedString32Bytes>
 	// Unity.Netcode.NetworkVariableSerialization.EqualsDelegate<int>
 	// Unity.Netcode.NetworkVariableSerialization.EqualsDelegate<object>
+	// Unity.Netcode.NetworkVariableSerialization<Unity.Collections.FixedString32Bytes>
 	// Unity.Netcode.NetworkVariableSerialization<int>
 	// Unity.Netcode.NetworkVariableSerialization<object>
 	// Unity.Netcode.UnmanagedTypeSerializer<int>
+	// Unity.Netcode.UserNetworkVariableSerialization.DuplicateValueDelegate<Unity.Collections.FixedString32Bytes>
 	// Unity.Netcode.UserNetworkVariableSerialization.DuplicateValueDelegate<int>
 	// Unity.Netcode.UserNetworkVariableSerialization.DuplicateValueDelegate<object>
+	// Unity.Netcode.UserNetworkVariableSerialization.ReadValueDelegate<Unity.Collections.FixedString32Bytes>
 	// Unity.Netcode.UserNetworkVariableSerialization.ReadValueDelegate<int>
 	// Unity.Netcode.UserNetworkVariableSerialization.ReadValueDelegate<object>
+	// Unity.Netcode.UserNetworkVariableSerialization.WriteValueDelegate<Unity.Collections.FixedString32Bytes>
 	// Unity.Netcode.UserNetworkVariableSerialization.WriteValueDelegate<int>
 	// Unity.Netcode.UserNetworkVariableSerialization.WriteValueDelegate<object>
 	// Unity.Netcode.UserNetworkVariableSerialization<object>
@@ -297,10 +308,9 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.Void Unity.Netcode.FastBufferReader.ReadNetworkSerializable<S_C_Login>(S_C_Login&)
 		// System.Void Unity.Netcode.FastBufferReader.ReadNetworkSerializable<S_C_Register>(S_C_Register&)
 		// System.Void Unity.Netcode.FastBufferReader.ReadNetworkSerializable<S_C_UpdateItem>(S_C_UpdateItem&)
-		// System.Void Unity.Netcode.FastBufferReader.ReadUnmanaged<int>(int&)
 		// System.Void Unity.Netcode.FastBufferReader.ReadUnmanagedSafe<byte>(byte&)
+		// System.Void Unity.Netcode.FastBufferReader.ReadUnmanagedSafe<int>(int&)
 		// System.Void Unity.Netcode.FastBufferReader.ReadUnmanagedSafe<object>(object&)
-		// System.Void Unity.Netcode.FastBufferReader.ReadValue<int>(int&,Unity.Netcode.FastBufferWriter.ForEnums)
 		// System.Void Unity.Netcode.FastBufferReader.ReadValueSafe<C_S_ChatMessage>(C_S_ChatMessage&,Unity.Netcode.FastBufferWriter.ForNetworkSerializable)
 		// System.Void Unity.Netcode.FastBufferReader.ReadValueSafe<C_S_Disconnect>(C_S_Disconnect&,Unity.Netcode.FastBufferWriter.ForNetworkSerializable)
 		// System.Void Unity.Netcode.FastBufferReader.ReadValueSafe<C_S_EnterGame>(C_S_EnterGame&,Unity.Netcode.FastBufferWriter.ForNetworkSerializable)
@@ -315,6 +325,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.Void Unity.Netcode.FastBufferReader.ReadValueSafe<S_C_Register>(S_C_Register&,Unity.Netcode.FastBufferWriter.ForNetworkSerializable)
 		// System.Void Unity.Netcode.FastBufferReader.ReadValueSafe<S_C_UpdateItem>(S_C_UpdateItem&,Unity.Netcode.FastBufferWriter.ForNetworkSerializable)
 		// System.Void Unity.Netcode.FastBufferReader.ReadValueSafe<byte>(byte&,Unity.Netcode.FastBufferWriter.ForEnums)
+		// System.Void Unity.Netcode.FastBufferReader.ReadValueSafe<int>(int&,Unity.Netcode.FastBufferWriter.ForEnums)
 		// System.Void Unity.Netcode.FastBufferReader.ReadValueSafe<object>(object&,Unity.Netcode.FastBufferWriter.ForEnums)
 		// System.Void Unity.Netcode.FastBufferWriter.WriteNetworkSerializable<C_S_ChatMessage>(C_S_ChatMessage&)
 		// System.Void Unity.Netcode.FastBufferWriter.WriteNetworkSerializable<C_S_Disconnect>(C_S_Disconnect&)
@@ -344,8 +355,11 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.Void Unity.Netcode.IReaderWriter.SerializeValue<byte>(byte&,Unity.Netcode.FastBufferWriter.ForPrimitives)
 		// System.Void Unity.Netcode.IReaderWriter.SerializeValue<int>(int&,Unity.Netcode.FastBufferWriter.ForEnums)
 		// System.Void Unity.Netcode.IReaderWriter.SerializeValue<int>(int&,Unity.Netcode.FastBufferWriter.ForPrimitives)
+		// bool Unity.Netcode.NetworkVariableSerialization<Unity.Collections.FixedString32Bytes>.EqualityEquals<Unity.Collections.FixedString32Bytes>(Unity.Collections.FixedString32Bytes&,Unity.Collections.FixedString32Bytes&)
 		// bool Unity.Netcode.NetworkVariableSerialization<int>.ValueEquals<int>(int&,int&)
+		// System.Void Unity.Netcode.NetworkVariableSerializationTypes.InitializeEqualityChecker_UnmanagedIEquatable<Unity.Collections.FixedString32Bytes>()
 		// System.Void Unity.Netcode.NetworkVariableSerializationTypes.InitializeEqualityChecker_UnmanagedValueEquals<int>()
+		// System.Void Unity.Netcode.NetworkVariableSerializationTypes.InitializeSerializer_FixedString<Unity.Collections.FixedString32Bytes>()
 		// System.Void Unity.Netcode.NetworkVariableSerializationTypes.InitializeSerializer_UnmanagedByMemcpy<int>()
 		// UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<object> UnityEngine.AddressableAssets.Addressables.LoadAssetAsync<object>(object)
 		// UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<object> UnityEngine.AddressableAssets.AddressablesImpl.LoadAssetAsync<object>(object)

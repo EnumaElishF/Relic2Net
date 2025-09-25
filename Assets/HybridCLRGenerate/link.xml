@@ -36,6 +36,9 @@
   <assembly fullname="Unity.Addressables">
     <type fullname="UnityEngine.AddressableAssets.Addressables" preserve="all" />
   </assembly>
+  <assembly fullname="Unity.Collections">
+    <type fullname="Unity.Collections.FixedString32Bytes" preserve="all" />
+  </assembly>
   <assembly fullname="Unity.Netcode.Runtime">
     <type fullname="Unity.Netcode.BufferSerializer`1" preserve="all" />
     <type fullname="Unity.Netcode.CustomMessagingManager" preserve="all" />
@@ -67,6 +70,7 @@
     <type fullname="Unity.Netcode.NetworkVariableSerialization`1/EqualsDelegate" preserve="all" />
     <type fullname="Unity.Netcode.NetworkVariableWritePermission" preserve="all" />
     <type fullname="Unity.Netcode.NetworkVariable`1" preserve="all" />
+    <type fullname="Unity.Netcode.NetworkVariable`1/OnValueChangedDelegate" preserve="all" />
     <type fullname="Unity.Netcode.RpcDelivery" preserve="all" />
     <type fullname="Unity.Netcode.ServerRpcAttribute" preserve="all" />
     <type fullname="Unity.Netcode.ServerRpcParams" preserve="all" />

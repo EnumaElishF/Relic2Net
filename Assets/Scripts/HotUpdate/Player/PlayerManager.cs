@@ -19,6 +19,9 @@ public class PlayerManager : SingletonMono<PlayerManager>
     /// </summary>
     public void Init()
     {
+        Debug.Log("客户端的玩家初始化");
+        PlayerController.SetGetWeaponFunc(GetWeapon);
+
         //事件的监听开始
         EventSystem.AddTypeEventListener<InitLocalPlayerEvent>(OnInitLocalPlayerEvent);
         EventSystem.AddTypeEventListener<MouseActiveStateChangedEvent>(OnMouseActiveStateChangedEvent);
@@ -27,7 +30,6 @@ public class PlayerManager : SingletonMono<PlayerManager>
 
         ClientGlobal.Instance.ActiveMouse = false;
     }
-
 
 
     private void OnDestroy()
@@ -142,6 +144,22 @@ public class PlayerManager : SingletonMono<PlayerManager>
         {
             bagWindow.UpdateItem(message.itemIndex, itemData);
         }
+    }
+    private GameObject GetWeapon(string weaponName)
+    {
+        Debug.Log("客户端玩家的武器获取");
+        GameObject weaponObj = PoolSystem.GetGameObject(weaponName);
+        Debug.Log("weaponName是:" + weaponName);
+        if (weaponObj == null)
+        {
+            WeaponConfig weaponConfig = ResSystem.LoadAsset<WeaponConfig>(weaponName);
+            if (weaponConfig == null) Debug.Log("weaponConfig获取失败,weaponName是:" + weaponName);
+            weaponObj = Instantiate(weaponConfig.prefab);
+            weaponConfig.name = weaponName;
+        }
+        Debug.Log("weaponConfig.name是:" + weaponObj.name);
+
+        return weaponObj;
     }
 }
 

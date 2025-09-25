@@ -165,7 +165,7 @@ public struct S_C_GetBagData : INetworkSerializable
     {
         serializer.SerializeValue(ref haveBagData);
         if (!haveBagData) return;
-        if(serializer.IsReader || haveBagData) //反序列化,这时如果haveBagData = true，意味着要保存背包数据
+        if(serializer.IsReader) //反序列化,这时如果haveBagData = true，意味着要保存背包数据
         {
             if (bagData == null) bagData = new BagData();
             bagData.NetworkSerialize(serializer);
