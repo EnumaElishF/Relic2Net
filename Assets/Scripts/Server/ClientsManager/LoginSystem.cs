@@ -71,6 +71,7 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
         playerData.bagData.itemList[7] = (new MaterialData() { id = "Material_0", count = 5 });
         playerData.bagData.itemList[8] = (new MaterialData() { id = "Material_1", count = 7 });
         playerData.bagData.itemList[9] = (new MaterialData() { id = "Material_2", count = 8 });
+        playerData.bagData.shortcutBarIndex[0] = 0;
 
         DataBaseManager.Instance.CreatePlayerData(playerData);
         return playerData;

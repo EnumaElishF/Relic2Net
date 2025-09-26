@@ -13,6 +13,7 @@ public class PlayerManager : SingletonMono<PlayerManager>
     public static PlayerController localPlayer { get; private set; }
     //玩家是否可以控制角色，以后可能受到多个方面的影响，目前只和鼠标显示关联
     public bool playerControlEnable { get; private set; }
+    private bool requestOpenBagWindow = false;
     private BagData bagData;
     /// <summary>
     /// PlayerManaget在Awake里触发xxx改为手动Init，然后要求PlayerController才在后续方法里面触发
@@ -29,6 +30,7 @@ public class PlayerManager : SingletonMono<PlayerManager>
         NetMessageManager.Instance.RegisterMessageCallback(MessageType.S_C_UpdateItem, OnS_C_UpdateItem);
 
         ClientGlobal.Instance.ActiveMouse = false;
+        RequestBagData();
     }
 
 
@@ -79,17 +81,24 @@ public class PlayerManager : SingletonMono<PlayerManager>
         {
             if (!ClientUtility.GetWindowActiveState(out UI_BagWindow bagWindow))
             {
-                //请求网络
-                int dataVersion = bagData == null ? -1 : bagData.dataVersion;
-                NetMessageManager.Instance.SendMessageToServer(MessageType.C_S_GetBagData, new C_S_GetBagData { dataVersion = dataVersion });
-                //等网络消息回发
+                OpenBagWindow();
             }
-            else
-            {
-                UISystem.Close<UI_BagWindow>();
-            }
+            else UISystem.Close<UI_BagWindow>();
 
         }
+    }
+    private void OpenBagWindow()
+    {
+        requestOpenBagWindow = true;
+        RequestBagData();
+    }
+
+    private void RequestBagData()
+    {
+        // 请求网络
+        int dataVersion = bagData == null ? -1 : bagData.dataVersion;
+        NetMessageManager.Instance.SendMessageToServer(MessageType.C_S_GetBagData, new C_S_GetBagData { dataVersion = dataVersion });
+        // 等网络消息回发
     }
     /// <summary>
     /// 服务器把背包的消息发回来
@@ -101,7 +110,15 @@ public class PlayerManager : SingletonMono<PlayerManager>
         {
             this.bagData = message.bagData;
         }
-        UISystem.Show<UI_BagWindow>().Show(bagData);
+        if (requestOpenBagWindow)
+        {
+            UISystem.Show<UI_BagWindow>().Show(bagData);
+        }
+        if (UISystem.GetWindow<UI_ShortcutBarWindow>() == null)
+        {
+            //UI_ShortcutBarWindow作为常驻窗口，道具快捷栏是一直存在的，只要是没有，那就打开他
+            UISystem.Show<UI_ShortcutBarWindow>().Show(bagData);
+        }
     }
 
     public bool IsLoadingCompleted()

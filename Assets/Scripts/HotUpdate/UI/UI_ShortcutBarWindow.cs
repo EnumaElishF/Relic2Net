@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UI_ShortcutBarWindow : MonoBehaviour
+public class UI_ShortcutBarWindow : UI_WindowBase
 {
     [SerializeField] private Transform itemRoot;
     private UI_SlotBase[] slots = new UI_SlotBase[GlobalUtility.itemShortcutBarCount]; //物品快捷栏格子数量
@@ -14,20 +14,52 @@ public class UI_ShortcutBarWindow : MonoBehaviour
 
     public void Show(BagData bagData)
     {
-        
+        for (int i = 0; i < GlobalUtility.itemShortcutBarCount; i++)
+        {
+            int bagIndex = bagData.shortcutBarIndex[i];
+            UI_SlotBase slot;
+            int keyCode = i + 1;
+            if (bagIndex == -1) //空格子
+            {
+                slot = CreateEmptySlot(bagIndex, keyCode);
+            }
+            else
+            {
+                slot = CreateItemSlot(bagIndex, keyCode, bagData.itemList[bagIndex]);
+            }
+            slots[i] = slot;
+        }
     }
-    private UI_SlotBase CreateItemSlot(int index, int keyCode, ItemDataBase itemData)
+    /// <summary>
+    /// 格子关闭的，做个回收，回收到对象池里
+    /// </summary>
+    public override void OnClose()
+    {
+        for (int i = 0; i < slots.Length; i++)
+        {
+            slots[i].Destroy();
+            slots[i] = null;
+        }
+    }
+    /// <summary>
+    /// 道具栏带有内容的格子的创建
+    /// </summary>
+    /// <param name="bagIndex">背包索引</param>
+    /// <param name="keyCode">当前的按键</param>
+    /// <param name="itemData"></param>
+    /// <returns></returns>
+    private UI_SlotBase CreateItemSlot(int bagIndex, int keyCode, ItemDataBase itemData)
     {
         ItemConfigBase config = ResSystem.LoadAsset<ItemConfigBase>(itemData.id);
         UI_SlotBase slot = ResSystem.InstantiateGameObject<UI_SlotBase>(config.slotPrafabPath, itemRoot);
-        slot.Init(itemData, config, index, OnUseItem);
+        slot.Init(itemData, config, bagIndex, OnUseItem);
         slot.SetShortKeyCode(keyCode);
         return slot;
     }
-    private UI_SlotBase CreateEmptySlot(int index, int keyCode)
+    private UI_SlotBase CreateEmptySlot(int bagIndex, int keyCode)
     {
         UI_SlotBase slot = ResSystem.InstantiateGameObject<UI_SlotBase>(emptySlotPath, itemRoot);
-        slot.Init(null, null, index, null);
+        slot.Init(null, null, bagIndex, null);
         slot.SetShortKeyCode(keyCode);
         return slot;
     }

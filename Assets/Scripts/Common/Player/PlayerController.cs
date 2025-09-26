@@ -53,6 +53,7 @@ public partial class PlayerController : NetworkBehaviour
     }
     private void UpdateWeaponObject(string weaponID)
     {
+        if (string.IsNullOrWhiteSpace(weaponID)) return; //weapon上关于playerData的数据还没执行获得到呢的话，就不先执行下面的内容
         GameObject weaponGameObject = getWeaponFunc.Invoke(weaponID);
         view.SetWeapon(weaponGameObject);
     }

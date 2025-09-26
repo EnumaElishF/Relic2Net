@@ -10,16 +10,22 @@ public class BagData: INetworkSerializable
     public int dataVersion; // 背包数据的版本
     public List<ItemDataBase> itemList = new List<ItemDataBase>(itemCount);
     public int usedWeaponIndex; //正在使用的武器格子索引
+    public int[] shortcutBarIndex = new int[GlobalUtility.itemShortcutBarCount];
     public BagData()
     {
         for(int i = 0; i < itemCount; i++)
         {
             itemList.Add(null);
         }
+        for(int i = 0; i < GlobalUtility.itemShortcutBarCount; i++)
+        {
+            shortcutBarIndex[i] = -1; //-1代表默认是空格子
+        }
     }
     public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
     {
         serializer.SerializeValue(ref usedWeaponIndex);//背包中标记当前武器格子
+        serializer.SerializeValue(ref shortcutBarIndex);
         for (int i = 0; i < itemCount; i++)
         {
             if (serializer.IsReader) //反序列化, 数据转为对象
