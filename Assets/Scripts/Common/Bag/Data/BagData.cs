@@ -9,7 +9,7 @@ public class BagData: INetworkSerializable
     [BsonIgnore] //避免保存到数据库标志
     public int dataVersion; // 背包数据的版本
     public List<ItemDataBase> itemList = new List<ItemDataBase>(itemCount);
-
+    public int usedWeaponIndex; //正在使用的武器格子索引
     public BagData()
     {
         for(int i = 0; i < itemCount; i++)
@@ -19,7 +19,8 @@ public class BagData: INetworkSerializable
     }
     public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
     {
-        for(int i = 0; i < itemCount; i++)
+        serializer.SerializeValue(ref usedWeaponIndex);//背包中标记当前武器格子
+        for (int i = 0; i < itemCount; i++)
         {
             if (serializer.IsReader) //反序列化, 数据转为对象
             {
@@ -81,12 +82,14 @@ public class BagData: INetworkSerializable
     //#if UNITY_SERVER || UNITY_EDITOR
     public ItemDataBase TryUseItem(int index)
     {
-        if (index <= 0 || index >= itemList.Count - 1) return null;
+        if (index < 0 || index >= itemList.Count - 1) return null;
 
         ItemDataBase itemData = itemList[index];
         // 只有武器与消耗品才可以使用
         if (itemData is WeaponData)
         {
+            dataVersion += 1;
+            usedWeaponIndex = index;
             return itemData;
         }
         else if (itemData is ConsumableData)

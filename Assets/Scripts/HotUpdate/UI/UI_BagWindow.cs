@@ -9,6 +9,8 @@ public class UI_BagWindow : UI_CustomWindowBase
     [SerializeField] private Transform itemRoot;
     private string emptySlotPath = "UI_EmptySlot";
     private List<UI_SlotBase> slotList = new List<UI_SlotBase>();
+    private BagData bagData;
+    private int usedWeaponIndex;
     public override void Init()
     {
         closeButton.onClick.AddListener(CloseButtonClick);
@@ -22,6 +24,7 @@ public class UI_BagWindow : UI_CustomWindowBase
             slotList[i].Destroy();
         }
         slotList.Clear();
+        bagData = null; //关了的时候做空，防无效的引用
     }
     private void CloseButtonClick()
     {
@@ -29,6 +32,7 @@ public class UI_BagWindow : UI_CustomWindowBase
     }
     public void Show(BagData bagData)
     {
+        this.bagData = bagData;
         for(int i = 0; i < bagData.itemList.Count; i++)
         {
             ItemDataBase itemData = bagData.itemList[i];
@@ -37,6 +41,9 @@ public class UI_BagWindow : UI_CustomWindowBase
             else //空格子
                 slotList.Add(CreateEmptySlot(i));
         }
+        usedWeaponIndex = bagData.usedWeaponIndex;
+        UI_WeaponSlot weaponSlot = (UI_WeaponSlot)slotList[usedWeaponIndex];
+        weaponSlot.SetUseState(true);
     }
     private UI_SlotBase CreateItemSlot(int index, ItemDataBase itemData)
     {
@@ -65,5 +72,13 @@ public class UI_BagWindow : UI_CustomWindowBase
         //设置他是父亲的子物体的第几个
         newSlot.transform.SetSiblingIndex(index);
         slotList[index] = newSlot;
+        if(index == bagData.usedWeaponIndex && usedWeaponIndex!= index) //武器格子发生了变化
+        {
+            UI_WeaponSlot oldWeaponSlot = slotList[usedWeaponIndex] as UI_WeaponSlot;
+            if (oldWeaponSlot != null) oldWeaponSlot.SetUseState(false);
+            UI_WeaponSlot newWeaponSlot = (UI_WeaponSlot)slotList[index];
+            newWeaponSlot.SetUseState(true);
+            usedWeaponIndex = index;
+        }
     }
 }

@@ -139,6 +139,10 @@ public class PlayerManager : SingletonMono<PlayerManager>
         ItemDataBase itemData = message.newItemData;
         bagData.itemList[message.itemIndex] = itemData;
         bagData.dataVersion = message.bagDataVersion;
+        if(message.usedWeapon)//更新武器
+        {
+            bagData.usedWeaponIndex = message.itemIndex;
+        }
         //如果背包是打开状态则同步给背包
         if(ClientUtility.GetWindowActiveState(out UI_BagWindow bagWindow))
         {
@@ -147,17 +151,13 @@ public class PlayerManager : SingletonMono<PlayerManager>
     }
     private GameObject GetWeapon(string weaponName)
     {
-        Debug.Log("客户端玩家的武器获取");
         GameObject weaponObj = PoolSystem.GetGameObject(weaponName);
-        Debug.Log("weaponName是:" + weaponName);
         if (weaponObj == null)
         {
             WeaponConfig weaponConfig = ResSystem.LoadAsset<WeaponConfig>(weaponName);
-            if (weaponConfig == null) Debug.Log("weaponConfig获取失败,weaponName是:" + weaponName);
             weaponObj = Instantiate(weaponConfig.prefab);
             weaponConfig.name = weaponName;
         }
-        Debug.Log("weaponConfig.name是:" + weaponObj.name);
 
         return weaponObj;
     }

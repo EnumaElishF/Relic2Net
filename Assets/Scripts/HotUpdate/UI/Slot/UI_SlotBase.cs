@@ -40,7 +40,8 @@ public abstract class UI_SlotBase : MonoBehaviour,IPointerEnterHandler,IPointerE
     /// 鼠标点击
     /// </summary>
     /// <param name="eventData">PointerEventData是Unity底层的事件数据</param>
-    public void OnPointerClick(PointerEventData eventData)
+    /// virtual实现多态性让子类可重写
+    public virtual void OnPointerClick(PointerEventData eventData)
     {
         //鼠标右键意味着使用物品
         if(onUseAction != null && eventData.button == PointerEventData.InputButton.Right)

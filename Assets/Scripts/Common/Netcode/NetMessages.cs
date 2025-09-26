@@ -192,13 +192,14 @@ public struct S_C_UpdateItem : INetworkSerializable
     public int bagDataVersion;
     public int itemIndex;
     public ItemType itemType;
-    //TODO 武器使用后，相当于玩家要切换武器
+    public bool usedWeapon;//是不是使用武器，要使用true
     public ItemDataBase newItemData;
     public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
     {
         serializer.SerializeValue(ref bagDataVersion);
         serializer.SerializeValue(ref itemIndex);
         serializer.SerializeValue(ref itemType);
+        serializer.SerializeValue(ref usedWeapon);
         if(serializer.IsReader)//反序列化，将数据转为对象，则要求数据不能为null
         {
             switch (itemType)

@@ -51,8 +51,9 @@ public class ServerConfig : ConfigBase
     [FolderPath] public string consumablegConfigFolderPath;
     [FolderPath] public string materialConfigFolderPath;
     /// <summary>
-    /// 服务端物品配置
+    /// 服务端物品配置: 记得把物品几个文件夹的内容拖拽，然后手动set到ServerConfig里
     /// </summary>
+    [Button]
     public void SetItemConfigDic()
     {
         if (itemConfigDic == null) itemConfigDic = new Dictionary<string, ItemConfigBase>();

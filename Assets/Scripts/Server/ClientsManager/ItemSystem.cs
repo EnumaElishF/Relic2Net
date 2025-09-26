@@ -58,8 +58,15 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
                 itemIndex = message.itemIndex,
                 bagDataVersion = bagData.dataVersion,
                 newItemData = itemData,
-                itemType = itemType
+                itemType = itemType,
+                usedWeapon = itemType == ItemType.Weapon
             };
+            if(result.usedWeapon) //更新角色的实际武器
+            {
+#if UNITY_SERVER || UNITY_EDITOR
+                client.playerController.UpdateWeaponNetVar(itemData.id);
+#endif
+            }
             NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_UpdateItem, result, clientID);
         }
 

@@ -28,6 +28,12 @@ public class HotUpdateSystem : MonoBehaviour
         //赋值一下全局参数的值，作为给当前方法传参
         this.onPercentageForEachFile = onPercentageForEachFile;
         this.onEnd = onEnd;
+
+        //避免掉在Editor下走热更逻辑，如果需要再改
+#if UNITY_EDITOR
+        onEnd?.Invoke(true);
+        return;
+#endif
         //开始更新
         StartCoroutine(DoUpdateAddressables());
     }
