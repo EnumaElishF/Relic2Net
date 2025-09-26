@@ -1,8 +1,9 @@
 using JKFrame;
 using UnityEngine;
 
-public class ClientUtility : MonoBehaviour
+public class ClientUtility
 {
+    public const string emptySlotPath = "UI_EmptySlot";
     /// <summary>
     /// 窗口UI界面判断是否激活打开状态
     /// </summary>

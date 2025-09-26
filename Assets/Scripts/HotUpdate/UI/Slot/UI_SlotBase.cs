@@ -11,6 +11,7 @@ public abstract class UI_SlotBase : MonoBehaviour,IPointerEnterHandler,IPointerE
     [SerializeField] protected Image frameImage;
     [SerializeField] protected Sprite normalFrame;
     [SerializeField] protected Sprite selectedFrame;
+    [SerializeField] protected Text keyCodeText; //快捷窗口中时显示快捷键的
     protected int index; //格子的index
     protected Action<int> onUseAction;
 
@@ -19,8 +20,12 @@ public abstract class UI_SlotBase : MonoBehaviour,IPointerEnterHandler,IPointerE
     {
         this.index = index;
         this.onUseAction = onUseAction;
+        if (keyCodeText != null) keyCodeText.gameObject.SetActive(true);
         OnPointerExit(null);
-
+    }
+    public virtual void SetShortKeyCode(int num) //键盘数字
+    {
+        keyCodeText.text = num.ToString();
     }
     public virtual void OnPointerEnter(PointerEventData eventData)
     {

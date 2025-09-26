@@ -7,7 +7,7 @@ public class UI_BagWindow : UI_CustomWindowBase
 {
     [SerializeField] private Button closeButton;
     [SerializeField] private Transform itemRoot;
-    private string emptySlotPath = "UI_EmptySlot";
+    private string emptySlotPath => ClientUtility.emptySlotPath;
     private List<UI_SlotBase> slotList = new List<UI_SlotBase>();
     private BagData bagData;
     private int usedWeaponIndex;
