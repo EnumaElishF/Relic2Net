@@ -14,11 +14,16 @@ public class UI_ShortcutBarWindow : UI_WindowBase
 
     public void Show(BagData bagData)
     {
+        usedWeaponIndex = -1;
         for (int i = 0; i < GlobalUtility.itemShortcutBarCount; i++)
         {
             int bagIndex = bagData.shortcutBarIndex[i];
             UI_SlotBase slot;
             int keyCode = i + 1;
+            if(bagIndex == bagData.usedWeaponIndex)
+            {
+                usedWeaponIndex = i;
+            }
             if (bagIndex == -1) //空格子
             {
                 slot = CreateEmptySlot(bagIndex, keyCode);
@@ -29,6 +34,7 @@ public class UI_ShortcutBarWindow : UI_WindowBase
             }
             slots[i] = slot;
         }
+        UpdateWeaponUsedState(usedWeaponIndex,true);
     }
     /// <summary>
     /// 格子关闭的，做个回收，回收到对象池里
@@ -67,5 +73,40 @@ public class UI_ShortcutBarWindow : UI_WindowBase
     private void OnUseItem(int bagIndex)
     {
         PlayerManager.Instance.UseItem(bagIndex);
+    }
+    public void UpdateItemByBagIndex(int bagIndex,ItemDataBase newData)
+    {
+        int newWeaponIndex = -1;
+        for (int i = 0; i < slots.Length; i++)
+        {
+            UI_SlotBase slot = slots[i];
+            if (slot == null) continue;
+            if(slot.bagIndex == bagIndex)
+            {
+                if (slot.bagIndex == PlayerManager.Instance.UsedWeaponIndex) newWeaponIndex = i; //武器发生改变
+                slot.Destroy();
+                int keyCode = i + 1;
+                if (newData != null) slot = CreateItemSlot(bagIndex, keyCode, newData);
+                else slot = CreateEmptySlot(bagIndex, keyCode);
+                slot.transform.SetSiblingIndex(i);
+                slots[i] = slot;
+                break;
+            }
+        }
+        if(usedWeaponIndex!= newWeaponIndex)
+        {
+            UpdateWeaponUsedState(usedWeaponIndex, false);
+            UpdateWeaponUsedState(newWeaponIndex, true);
+            usedWeaponIndex = newWeaponIndex;
+        }
+    }
+    /// <summary>
+    /// 更新武器有效性
+    /// </summary>
+    private void UpdateWeaponUsedState(int index,bool state)
+    {
+        if (index < 0) return;
+        UI_WeaponSlot slot = slots[index] as UI_WeaponSlot;
+        if (slot != null) slot.SetUseState(state);
     }
 }

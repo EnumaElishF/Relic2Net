@@ -12,15 +12,15 @@ public abstract class UI_SlotBase : MonoBehaviour,IPointerEnterHandler,IPointerE
     [SerializeField] protected Sprite normalFrame;
     [SerializeField] protected Sprite selectedFrame;
     [SerializeField] protected Text keyCodeText; //快捷窗口中时显示快捷键的
-    protected int index; //格子的index
+    public int bagIndex { get; private set; } //格子的index
     protected Action<int> onUseAction;
 
     //默认data，config为null，可以表示不传入值是没有问题的
     public virtual void Init(ItemDataBase data, ItemConfigBase config,int index, Action<int> onUseAction)
     {
-        this.index = index;
+        this.bagIndex = index;
         this.onUseAction = onUseAction;
-        if (keyCodeText != null) keyCodeText.gameObject.SetActive(true);
+        if (keyCodeText != null) keyCodeText.gameObject.SetActive(false);//keyCode默认不显示
         OnPointerExit(null);
     }
     public virtual void SetShortKeyCode(int num) //键盘数字
@@ -52,7 +52,7 @@ public abstract class UI_SlotBase : MonoBehaviour,IPointerEnterHandler,IPointerE
         if(onUseAction != null && eventData.button == PointerEventData.InputButton.Right)
         {
             transform.GetSiblingIndex();
-            onUseAction?.Invoke(index);
+            onUseAction?.Invoke(bagIndex);
         }
     }
 }

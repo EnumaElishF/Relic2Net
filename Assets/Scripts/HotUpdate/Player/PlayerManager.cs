@@ -13,6 +13,8 @@ public class PlayerManager : SingletonMono<PlayerManager>
     public static PlayerController localPlayer { get; private set; }
     //玩家是否可以控制角色，以后可能受到多个方面的影响，目前只和鼠标显示关联
     public bool playerControlEnable { get; private set; }
+    public int UsedWeaponIndex => bagData.usedWeaponIndex;
+
     private bool requestOpenBagWindow = false;
     private BagData bagData;
     /// <summary>
@@ -113,6 +115,7 @@ public class PlayerManager : SingletonMono<PlayerManager>
         if (requestOpenBagWindow)
         {
             UISystem.Show<UI_BagWindow>().Show(bagData);
+            requestOpenBagWindow = false;
         }
         if (UISystem.GetWindow<UI_ShortcutBarWindow>() == null)
         {
@@ -164,6 +167,11 @@ public class PlayerManager : SingletonMono<PlayerManager>
         if(ClientUtility.GetWindowActiveState(out UI_BagWindow bagWindow))
         {
             bagWindow.UpdateItem(message.itemIndex, itemData);
+        }
+        //道具快捷栏
+        if (ClientUtility.GetWindowActiveState(out UI_ShortcutBarWindow shortcutBarWindow))
+        {
+            shortcutBarWindow.UpdateItemByBagIndex(message.itemIndex, itemData);
         }
     }
     private GameObject GetWeapon(string weaponName)
