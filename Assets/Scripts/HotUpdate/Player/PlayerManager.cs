@@ -10,7 +10,8 @@ using UnityEngine;
 public class PlayerManager : SingletonMono<PlayerManager>
 {
     [SerializeField] private CinemachineFreeLook cinemachine;
-    public static PlayerController localPlayer { get; private set; }
+    //取消使用静态变量static,因为跨场景的时候曾经的PlayerController并没有被销毁，而是放对象池中，静态变量指向的变量是全局唯一，且是强绑定
+    public PlayerController localPlayer { get; private set; } 
     //玩家是否可以控制角色，以后可能受到多个方面的影响，目前只和鼠标显示关联
     public bool playerControlEnable { get; private set; }
     public int UsedWeaponIndex => bagData.usedWeaponIndex;
@@ -114,8 +115,8 @@ public class PlayerManager : SingletonMono<PlayerManager>
         }
         if (requestOpenBagWindow)
         {
-            UISystem.Show<UI_BagWindow>().Show(bagData);
             requestOpenBagWindow = false;
+            UISystem.Show<UI_BagWindow>().Show(bagData);
         }
         if (UISystem.GetWindow<UI_ShortcutBarWindow>() == null)
         {

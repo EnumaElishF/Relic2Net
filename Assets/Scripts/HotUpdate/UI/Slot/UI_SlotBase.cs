@@ -14,14 +14,21 @@ public abstract class UI_SlotBase : MonoBehaviour,IPointerEnterHandler,IPointerE
     [SerializeField] protected Text keyCodeText; //快捷窗口中时显示快捷键的
     public int bagIndex { get; private set; } //格子的index
     protected Action<int> onUseAction;
-
+    protected Action<UI_SlotBase, UI_SlotBase> onDragToNewSlotAction; //从A拖拽到B
+    protected static UI_SlotBase enteredSlot; //目前鼠标进入的格子
     //默认data，config为null，可以表示不传入值是没有问题的
-    public virtual void Init(ItemDataBase data, ItemConfigBase config,int index, Action<int> onUseAction)
+    public virtual void Init(ItemDataBase data, ItemConfigBase config,int index, Action<int> onUseAction,Action<UI_SlotBase,UI_SlotBase> onDragToNewSlotAction)
     {
         this.bagIndex = index;
         this.onUseAction = onUseAction;
+        this.onDragToNewSlotAction = onDragToNewSlotAction;
         if (keyCodeText != null) keyCodeText.gameObject.SetActive(false);//keyCode默认不显示
         OnPointerExit(null);
+        OnInit();
+    }
+    public virtual void OnInit()
+    {
+
     }
     public virtual void SetShortKeyCode(int num) //键盘数字
     {
@@ -31,15 +38,18 @@ public abstract class UI_SlotBase : MonoBehaviour,IPointerEnterHandler,IPointerE
     {
         //鼠标选中后，修改图标边框
         frameImage.sprite = selectedFrame;
+        enteredSlot = this;
     }
 
     public virtual void OnPointerExit(PointerEventData eventData)
     {
         frameImage.sprite = normalFrame;
+        enteredSlot = null;
     }
     public virtual void Destroy()
     {
         this.GameObjectPushPool();
+        if (enteredSlot == this) enteredSlot = null;
     }
     /// <summary>
     /// 鼠标点击
@@ -56,7 +66,7 @@ public abstract class UI_SlotBase : MonoBehaviour,IPointerEnterHandler,IPointerE
         }
     }
 }
-public abstract class UI_SlotBase<D,C> : UI_SlotBase where D : ItemDataBase where C : ItemConfigBase
+public abstract class UI_SlotBase<D,C> : UI_SlotBase, IBeginDragHandler, IDragHandler, IEndDragHandler where D : ItemDataBase where C : ItemConfigBase
 {
     [SerializeField] protected Image iconImage;
     protected D itemData;
@@ -64,14 +74,16 @@ public abstract class UI_SlotBase<D,C> : UI_SlotBase where D : ItemDataBase wher
     /// <summary>
     /// 虽然说初始化的部分有泛型，但是不一定拿到的数据类型是准的，我们还是给明确一个类型基类，然后在内部转泛型
     /// </summary>
-    /// <param name="data"></param>
-    /// <param name="config"></param>
-    public override void Init(ItemDataBase data, ItemConfigBase config, int index, Action<int> onUseAction)
+    public override void Init(ItemDataBase data, ItemConfigBase config, int index, Action<int> onUseAction, Action<UI_SlotBase, UI_SlotBase> onDragToNewSlotAcion)
     {
-        base.Init(data,config,index,onUseAction);
         this.itemData = (D)data;
         this.itemConfig = (C)config;
-        iconImage.sprite = config.icon;
+        base.Init(data, config, index, onUseAction, onDragToNewSlotAcion);
+    }
+
+    public override void OnInit()
+    {
+        iconImage.sprite = itemConfig.icon;
     }
     public override void Destroy()
     {
@@ -95,13 +107,35 @@ public abstract class UI_SlotBase<D,C> : UI_SlotBase where D : ItemDataBase wher
     /// </summary>
     public override void OnPointerExit(PointerEventData eventData)
     {
-        if (itemConfig != null)
+        if (itemConfig != null && enteredSlot == this)
         {
             UISystem.Close<UI_ItemInfoPopupWindow>();
         }
         base.OnPointerExit(eventData);
     }
 
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        iconImage.transform.SetParent(UISystem.DragLayer);
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        iconImage.transform.position = eventData.position;
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        iconImage.transform.SetParent(transform);
+        iconImage.transform.SetAsFirstSibling();//设置到最顶级
+        iconImage.transform.localPosition = Vector3.zero;
+        // 对方格子是有意义的并且不是自己
+        if (enteredSlot != null && enteredSlot != this)
+        {
+            onDragToNewSlotAction?.Invoke(this, enteredSlot);
+        }
+
+    }
 }
 
 

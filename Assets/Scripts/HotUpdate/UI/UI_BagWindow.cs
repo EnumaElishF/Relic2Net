@@ -1,4 +1,5 @@
 using JKFrame;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -49,13 +50,13 @@ public class UI_BagWindow : UI_CustomWindowBase
     {
         ItemConfigBase config = ResSystem.LoadAsset<ItemConfigBase>(itemData.id);
         UI_SlotBase slot = ResSystem.InstantiateGameObject<UI_SlotBase>(config.slotPrafabPath, itemRoot);
-        slot.Init(itemData, config, index, OnUseItem);
+        slot.Init(itemData, config, index, OnUseItem,OnInteriorDragItem);
         return slot;
     }
     private UI_SlotBase CreateEmptySlot(int index)
     {
         UI_SlotBase slot = ResSystem.InstantiateGameObject<UI_SlotBase>(emptySlotPath, itemRoot);
-        slot.Init(null, null, index, null);
+        slot.Init(null, null, index, null,null);
         return slot;
     }
 
@@ -80,5 +81,10 @@ public class UI_BagWindow : UI_CustomWindowBase
             newWeaponSlot.SetUseState(true);
             usedWeaponIndex = index;
         }
+    }
+
+    private void OnInteriorDragItem(UI_SlotBase slotA, UI_SlotBase slotB)
+    {
+        
     }
 }
