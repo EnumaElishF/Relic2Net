@@ -8,6 +8,8 @@ using UnityEngine.UI;
 /// </summary>
 public abstract class UI_SlotBase : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler,IPointerClickHandler
 {
+    protected static UI_SlotBase enteredSlot; //目前鼠标进入的格子
+
     [SerializeField] protected Image frameImage;
     [SerializeField] protected Sprite normalFrame;
     [SerializeField] protected Sprite selectedFrame;
@@ -15,10 +17,11 @@ public abstract class UI_SlotBase : MonoBehaviour,IPointerEnterHandler,IPointerE
     public int bagIndex { get; private set; } //格子的index
     protected Action<int> onUseAction;
     protected Action<UI_SlotBase, UI_SlotBase> onDragToNewSlotAction; //从A拖拽到B
-    protected static UI_SlotBase enteredSlot; //目前鼠标进入的格子
+    public IItemWindow ownerWindow { get; private set; }
     //默认data，config为null，可以表示不传入值是没有问题的
-    public virtual void Init(ItemDataBase data, ItemConfigBase config,int index, Action<int> onUseAction,Action<UI_SlotBase,UI_SlotBase> onDragToNewSlotAction)
+    public virtual void Init(IItemWindow ownerWindow,ItemDataBase data, ItemConfigBase config,int index, Action<int> onUseAction,Action<UI_SlotBase,UI_SlotBase> onDragToNewSlotAction)
     {
+        this.ownerWindow = ownerWindow;
         this.bagIndex = index;
         this.onUseAction = onUseAction;
         this.onDragToNewSlotAction = onDragToNewSlotAction;
@@ -74,11 +77,11 @@ public abstract class UI_SlotBase<D,C> : UI_SlotBase, IBeginDragHandler, IDragHa
     /// <summary>
     /// 虽然说初始化的部分有泛型，但是不一定拿到的数据类型是准的，我们还是给明确一个类型基类，然后在内部转泛型
     /// </summary>
-    public override void Init(ItemDataBase data, ItemConfigBase config, int index, Action<int> onUseAction, Action<UI_SlotBase, UI_SlotBase> onDragToNewSlotAcion)
+    public override void Init(IItemWindow ownerWindow, ItemDataBase data, ItemConfigBase config, int index, Action<int> onUseAction, Action<UI_SlotBase, UI_SlotBase> onDragToNewSlotAcion)
     {
         this.itemData = (D)data;
         this.itemConfig = (C)config;
-        base.Init(data, config, index, onUseAction, onDragToNewSlotAcion);
+        base.Init(ownerWindow,data, config, index, onUseAction, onDragToNewSlotAcion);
     }
 
     public override void OnInit()

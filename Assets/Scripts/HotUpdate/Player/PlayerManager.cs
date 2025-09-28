@@ -30,7 +30,7 @@ public class PlayerManager : SingletonMono<PlayerManager>
         EventSystem.AddTypeEventListener<InitLocalPlayerEvent>(OnInitLocalPlayerEvent);
         EventSystem.AddTypeEventListener<MouseActiveStateChangedEvent>(OnMouseActiveStateChangedEvent);
         NetMessageManager.Instance.RegisterMessageCallback(MessageType.S_C_GetBagData, OnS_C_GetBagData);
-        NetMessageManager.Instance.RegisterMessageCallback(MessageType.S_C_UpdateItem, OnS_C_UpdateItem);
+        NetMessageManager.Instance.RegisterMessageCallback(MessageType.S_C_BagUpdateItem, OnS_C_UpdateItem);
 
         ClientGlobal.Instance.ActiveMouse = false;
         RequestBagData();
@@ -46,7 +46,7 @@ public class PlayerManager : SingletonMono<PlayerManager>
         EventSystem.RemoveTypeEventListener<InitLocalPlayerEvent>(OnInitLocalPlayerEvent);
         EventSystem.RemoveTypeEventListener<MouseActiveStateChangedEvent>(OnMouseActiveStateChangedEvent);//每次在ClientGlobal的ActiveMouse触发
         NetMessageManager.Instance.UnRegisterMessageCallback(MessageType.S_C_GetBagData, OnS_C_GetBagData);
-        NetMessageManager.Instance.UnRegisterMessageCallback(MessageType.S_C_UpdateItem, OnS_C_UpdateItem);
+        NetMessageManager.Instance.UnRegisterMessageCallback(MessageType.S_C_BagUpdateItem, OnS_C_UpdateItem);
 
     }
 
@@ -149,12 +149,12 @@ public class PlayerManager : SingletonMono<PlayerManager>
     public void UseItem(int slotIndex)
     {
         // 构建使用物品的消息
-        C_S_UseItem message = new C_S_UseItem { itemIndex = slotIndex };
-        NetMessageManager.Instance.SendMessageToServer(MessageType.C_S_UseItem, message);
+        C_S_BagUseItem message = new C_S_BagUseItem { itemIndex = slotIndex };
+        NetMessageManager.Instance.SendMessageToServer(MessageType.C_S_BagUseItem, message);
     }
     private void OnS_C_UpdateItem(ulong serverID, INetworkSerializable serializable)
     {
-        S_C_UpdateItem message = (S_C_UpdateItem)serializable;
+        S_C_BagUpdateItem message = (S_C_BagUpdateItem)serializable;
         // 版本一致则不需要考虑，背包没有数据也不用考虑
         if (bagData == null || bagData.dataVersion == message.bagDataVersion) return;
         ItemDataBase itemData = message.newItemData;

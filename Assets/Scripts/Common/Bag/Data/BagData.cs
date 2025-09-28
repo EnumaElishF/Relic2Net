@@ -1,4 +1,5 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
+using System;
 using System.Collections.Generic;
 using Unity.Netcode;
 
@@ -94,13 +95,13 @@ public class BagData: INetworkSerializable
         // 只有武器与消耗品才可以使用
         if (itemData is WeaponData)
         {
-            dataVersion += 1;
+            AddDataVersion();
             usedWeaponIndex = index;
             return itemData;
         }
         else if (itemData is ConsumableData)
         {
-            dataVersion += 1;
+            AddDataVersion();
             //TODO 暂时虚拟一个消耗品减少的效果：临时逻辑
             ConsumableData consumableData = (ConsumableData)itemData;
             consumableData.count -= 1;
@@ -190,7 +191,23 @@ public class BagData: INetworkSerializable
         return false;
     }
 
+    public void SwapItem(int itemIndexA, int itemIndexB)
+    {
+        if (usedWeaponIndex == itemIndexA) usedWeaponIndex = itemIndexB;
+        else if (usedWeaponIndex == itemIndexB) usedWeaponIndex = itemIndexA;
+        ItemDataBase temp = itemList[itemIndexA];
+        itemList[itemIndexA] = itemList[itemIndexB];
+        itemList[itemIndexB] = temp;
+        AddDataVersion();
+    }
+    /// <summary>
+    /// 版本+1
+    /// </summary>
+    public void AddDataVersion()
+    {
+        dataVersion += 1;
+    }
 
-//#endif
+    //#endif
     #endregion
 }

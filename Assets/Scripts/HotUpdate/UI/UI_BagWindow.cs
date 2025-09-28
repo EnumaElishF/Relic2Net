@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UI_BagWindow : UI_CustomWindowBase
+public class UI_BagWindow : UI_CustomWindowBase,IItemWindow
 {
     [SerializeField] private Button closeButton;
     [SerializeField] private Transform itemRoot;
@@ -50,13 +50,13 @@ public class UI_BagWindow : UI_CustomWindowBase
     {
         ItemConfigBase config = ResSystem.LoadAsset<ItemConfigBase>(itemData.id);
         UI_SlotBase slot = ResSystem.InstantiateGameObject<UI_SlotBase>(config.slotPrafabPath, itemRoot);
-        slot.Init(itemData, config, index, OnUseItem,OnInteriorDragItem);
+        slot.Init(this,itemData, config, index, OnUseItem,OnInteriorDragItem);
         return slot;
     }
     private UI_SlotBase CreateEmptySlot(int index)
     {
         UI_SlotBase slot = ResSystem.InstantiateGameObject<UI_SlotBase>(emptySlotPath, itemRoot);
-        slot.Init(null, null, index, null,null);
+        slot.Init(this,null, null, index, null,null);
         return slot;
     }
 
@@ -82,9 +82,22 @@ public class UI_BagWindow : UI_CustomWindowBase
             usedWeaponIndex = index;
         }
     }
-
+    //A一定是来自自身的，B不一定
     private void OnInteriorDragItem(UI_SlotBase slotA, UI_SlotBase slotB)
     {
-        
+        // 内部交换
+        if(slotB.ownerWindow == this)
+        {
+            NetMessageManager.Instance.SendMessageToServer(MessageType.C_S_BagSwapItem, new C_S_BagSwapItem
+            {
+                itemIndexA = slotA.bagIndex,
+                itemIndexB = slotB.bagIndex,
+            });
+        }
+        //设置这个格子到快捷栏
+        else if(slotA.ownerWindow is UI_ShortcutBarWindow)
+        {
+            //TODO
+        }
     }
 }

@@ -21,8 +21,9 @@ public enum MessageType : byte
     C_S_GetBagData,
     S_C_GetBagData,
     //客户端使用物品和服务端给更新物品
-    C_S_UseItem,
-    S_C_UpdateItem
+    C_S_BagUseItem,
+    S_C_BagUpdateItem,
+    C_S_BagSwapItem
 }
 /// <summary>
 /// 可以预知的完成的返回信息，做成Code的方式，做个可知的码。比如服务端返回码等
@@ -177,7 +178,7 @@ public struct S_C_GetBagData : INetworkSerializable
     }
 }
 
-public struct C_S_UseItem : INetworkSerializable
+public struct C_S_BagUseItem : INetworkSerializable
 {
     //使用物品，先确定物品索引
     public int itemIndex; //背包中的位置
@@ -187,7 +188,7 @@ public struct C_S_UseItem : INetworkSerializable
         serializer.SerializeValue(ref itemIndex);
     }
 }
-public struct S_C_UpdateItem : INetworkSerializable
+public struct S_C_BagUpdateItem : INetworkSerializable
 {
     public int bagDataVersion;
     public int itemIndex;
@@ -217,5 +218,16 @@ public struct S_C_UpdateItem : INetworkSerializable
         }
         if (newItemData != null) newItemData.NetworkSerialize(serializer);
 
+    }
+}
+
+public struct C_S_BagSwapItem : INetworkSerializable
+{
+    public int itemIndexA;
+    public int itemIndexB;
+    public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+    {
+        serializer.SerializeValue(ref itemIndexA);
+        serializer.SerializeValue(ref itemIndexB);
     }
 }

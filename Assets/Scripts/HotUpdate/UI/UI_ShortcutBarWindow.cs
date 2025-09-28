@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UI_ShortcutBarWindow : UI_WindowBase
+public class UI_ShortcutBarWindow : UI_WindowBase,IItemWindow
 {
     [SerializeField] private Transform itemRoot;
     private UI_SlotBase[] slots = new UI_SlotBase[GlobalUtility.itemShortcutBarCount]; //物品快捷栏格子数量
@@ -59,14 +59,14 @@ public class UI_ShortcutBarWindow : UI_WindowBase
     {
         ItemConfigBase config = ResSystem.LoadAsset<ItemConfigBase>(itemData.id);
         UI_SlotBase slot = ResSystem.InstantiateGameObject<UI_SlotBase>(config.slotPrafabPath, itemRoot);
-        slot.Init(itemData, config, bagIndex, OnUseItem, OnInteriorDragItem);
+        slot.Init(this, itemData, config, bagIndex, OnUseItem, OnInteriorDragItem);
         slot.SetShortKeyCode(keyCode);
         return slot;
     }
     private UI_SlotBase CreateEmptySlot(int bagIndex, int keyCode)
     {
         UI_SlotBase slot = ResSystem.InstantiateGameObject<UI_SlotBase>(emptySlotPath, itemRoot);
-        slot.Init(null, null, bagIndex, null, null);
+        slot.Init(this, null, null, bagIndex, null, null);
         slot.SetShortKeyCode(keyCode);
         return slot;
     }

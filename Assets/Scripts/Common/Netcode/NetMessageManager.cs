@@ -82,13 +82,17 @@ public class NetMessageManager : SingletonMono<NetMessageManager>
                     reader.ReadValueSafe(out S_C_GetBagData S_C_GetBagData);
                     TriggerMessageCallback(MessageType.S_C_GetBagData, clientId, S_C_GetBagData);
                     break;
-                case MessageType.C_S_UseItem:
-                    reader.ReadValueSafe(out C_S_UseItem C_S_UseItem);
-                    TriggerMessageCallback(MessageType.C_S_UseItem, clientId, C_S_UseItem);
+                case MessageType.C_S_BagUseItem:
+                    reader.ReadValueSafe(out C_S_BagUseItem C_S_BagUseItem);
+                    TriggerMessageCallback(MessageType.C_S_BagUseItem, clientId, C_S_BagUseItem);
                     break;
-                case MessageType.S_C_UpdateItem:
-                    reader.ReadValueSafe(out S_C_UpdateItem S_C_UpdateItem);
-                    TriggerMessageCallback(MessageType.S_C_UpdateItem, clientId, S_C_UpdateItem);
+                case MessageType.S_C_BagUpdateItem:
+                    reader.ReadValueSafe(out S_C_BagUpdateItem S_C_BagUpdateItem);
+                    TriggerMessageCallback(MessageType.S_C_BagUpdateItem, clientId, S_C_BagUpdateItem);
+                    break;
+                case MessageType.C_S_BagSwapItem:
+                    reader.ReadValueSafe(out C_S_BagSwapItem C_S_BagSwapItem);
+                    TriggerMessageCallback(MessageType.C_S_BagSwapItem, clientId, C_S_BagSwapItem);
                     break;
             }
         }

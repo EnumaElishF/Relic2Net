@@ -1,4 +1,5 @@
 ﻿using JKFrame;
+using System;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
@@ -16,8 +17,10 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
         PlayerController.SetGetWeaponFunc(GetWeapon);
 
         //NetMessageManager注册网络事件
+        NetMessageManager.Instance.RegisterMessageCallback(MessageType.C_S_ChatMessage, OnClientChatMessage);
         NetMessageManager.Instance.RegisterMessageCallback(MessageType.C_S_GetBagData, OnClientGetBagData);
-        NetMessageManager.Instance.RegisterMessageCallback(MessageType.C_S_UseItem, OnClientUseItem);
+        NetMessageManager.Instance.RegisterMessageCallback(MessageType.C_S_BagUseItem, OnClientBagUseItem);
+        NetMessageManager.Instance.RegisterMessageCallback(MessageType.C_S_BagSwapItem, OnClientBagSwapItem);
     }
 
     #region 物品
@@ -26,9 +29,10 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
     /// </summary>
     private void OnClientGetBagData(ulong clientID, INetworkSerializable serializable)
     {
-        C_S_GetBagData message = (C_S_GetBagData)serializable;
         if (clientIDDic.TryGetValue(clientID, out Client client) && client.playerData != null)
         {
+            C_S_GetBagData message = (C_S_GetBagData)serializable;
+
             S_C_GetBagData result = new S_C_GetBagData
             {
                 haveBagData = client.playerData.bagData.dataVersion != message.dataVersion
@@ -41,11 +45,12 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
     /// <summary>
     /// 当客户端请求使用物品
     /// </summary>
-    private void OnClientUseItem(ulong clientID, INetworkSerializable serializable)
+    private void OnClientBagUseItem(ulong clientID, INetworkSerializable serializable)
     {
-        C_S_UseItem message = (C_S_UseItem)serializable;
         if (clientIDDic.TryGetValue(clientID, out Client client) && client.playerData != null)
         {
+            C_S_BagUseItem message = (C_S_BagUseItem)serializable;
+
             //TODO 具体的物品使用
             BagData bagData = client.playerData.bagData;
             //背包数据的TryUseItem原本是放服务器这边的，但是出现Common程序集获取内容的错误，应该是Unity打包识别不足够好，
@@ -53,7 +58,7 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
             ItemDataBase itemData = bagData.TryUseItem(message.itemIndex);
             ItemType itemType = ItemType.Empty;
             if (itemData != null) itemType = itemData.GetItemType();
-            S_C_UpdateItem result = new S_C_UpdateItem
+            S_C_BagUpdateItem result = new S_C_BagUpdateItem
             {
                 itemIndex = message.itemIndex,
                 bagDataVersion = bagData.dataVersion,
@@ -67,7 +72,7 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
                 client.playerController.UpdateWeaponNetVar(itemData.id);
 #endif
             }
-            NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_UpdateItem, result, clientID);
+            NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_BagUpdateItem, result, clientID);
         }
 
     }
@@ -86,4 +91,45 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
         }
         return weaponObj;
     }
+    /// <summary>
+    /// 当客户端互换背包中的物品
+    /// </summary>
+    private void OnClientBagSwapItem(ulong clientID, INetworkSerializable serializable)
+    {
+        if (clientIDDic.TryGetValue(clientID, out Client client) && client.playerData != null)
+        {
+            C_S_BagSwapItem message = (C_S_BagSwapItem)serializable;
+            BagData bagData = client.playerData.bagData;
+            //交换数据
+            bagData.SwapItem(message.itemIndexA, message.itemIndexB);
+
+            ItemDataBase itemAData = bagData.itemList[message.itemIndexA];
+            ItemDataBase itemBData = bagData.itemList[message.itemIndexB];
+            ItemType itemAType = itemAData == null ? ItemType.Empty : itemAData.GetItemType();
+            ItemType itemBType = itemBData == null ? ItemType.Empty : itemBData.GetItemType();
+
+            S_C_BagUpdateItem resultA = new S_C_BagUpdateItem
+            {
+                itemIndex = message.itemIndexA,
+                bagDataVersion = bagData.dataVersion,
+                newItemData = itemAData,
+                itemType = itemAType,
+                usedWeapon = bagData.usedWeaponIndex == message.itemIndexA,
+            };
+            bagData.AddDataVersion(); // 避免第二条消息因为版本号是一样的被客户端过滤,版本需要+1位
+            S_C_BagUpdateItem resultB = new S_C_BagUpdateItem
+            {
+                itemIndex = message.itemIndexB,
+                bagDataVersion = bagData.dataVersion,
+                newItemData = itemBData,
+                itemType = itemBType,
+                usedWeapon = bagData.usedWeaponIndex == message.itemIndexB,
+            };
+            NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_BagUpdateItem, resultA, clientID);
+            NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_BagUpdateItem, resultB, clientID);
+
+            //TODO也许会涉及到快捷键的修改，也就是A或者B 的快捷键跟着修改
+        }
+    }
+
 }
