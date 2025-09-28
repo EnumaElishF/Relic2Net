@@ -100,7 +100,7 @@ public class UI_BagWindow : UI_CustomWindowBase,IItemWindow
             int shortcurBagIndex = UISystem.GetWindow<UI_ShortcutBarWindow>().GetItemIndex(slotB);
             if(shortcurBagIndex != -1)
             {
-                NetMessageManager.Instance.SendMessageToServer(MessageType.C_S_SetShortcutBarItem, new C_S_SetShortcutBarItem
+                NetMessageManager.Instance.SendMessageToServer(MessageType.C_S_ShortcutBarSetItem, new C_S_ShortcutBarSetItem
                 {
                     shortcutBarIndex = shortcurBagIndex,
                     bagIndex = slotA.bagIndex

@@ -194,8 +194,6 @@ public class PlayerManager : SingletonMono<PlayerManager>
     private void OnS_C_ShortcutBarUpdateItem(ulong serverID, INetworkSerializable serializable)
     {
         S_C_ShortcutBarUpdateItem message = (S_C_ShortcutBarUpdateItem)serializable;
-        if (bagData.dataVersion == message.bagDataVersion) return;
-        bagData.dataVersion = message.bagDataVersion;
         // 通知快捷栏
         if (ClientUtility.GetWindowActiveState(out UI_ShortcutBarWindow shortcutBarWindow))
         {

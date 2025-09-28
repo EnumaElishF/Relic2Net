@@ -28,7 +28,9 @@ public enum MessageType : byte
     //道具栏快捷键变更
     S_C_ShortcutBarUpdateItem,
     //设置快捷栏Item
-    C_S_SetShortcutBarItem
+    C_S_ShortcutBarSetItem,
+    //快捷栏内格子交换
+    C_S_ShortcutBarSwapItem,
 }
 /// <summary>
 /// 可以预知的完成的返回信息，做成Code的方式，做个可知的码。比如服务端返回码等
@@ -250,7 +252,7 @@ public struct S_C_ShortcutBarUpdateItem : INetworkSerializable
     }
 }
 
-public struct C_S_SetShortcutBarItem : INetworkSerializable
+public struct C_S_ShortcutBarSetItem : INetworkSerializable
 {
     //客户端发服务端，不需要背包版本号
     public int shortcutBarIndex;
@@ -259,5 +261,15 @@ public struct C_S_SetShortcutBarItem : INetworkSerializable
     {
         serializer.SerializeValue(ref shortcutBarIndex);
         serializer.SerializeValue(ref bagIndex);
+    }
+}
+public struct C_S_ShortcutBarSwapItem : INetworkSerializable
+{
+    public int shortcutBarIndexA;
+    public int shortcutBarIndexB;
+    public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+    {
+        serializer.SerializeValue(ref shortcutBarIndexA);
+        serializer.SerializeValue(ref shortcutBarIndexB);
     }
 }

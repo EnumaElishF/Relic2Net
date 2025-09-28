@@ -232,6 +232,13 @@ public class BagData: INetworkSerializable
         UpdateShortcutBarItem(shortcutIndex, -1);
     }
 
+    public void SwapShortcutBarItem(int shortcutBarIndexA, int shortcutBarIndexB)
+    {
+        int temp = shortcutBarIndexs[shortcutBarIndexA];
+        shortcutBarIndexs[shortcutBarIndexA] = shortcutBarIndexs[shortcutBarIndexB];
+        shortcutBarIndexs[shortcutBarIndexB] = temp;
+    }
+
     //#endif
     #endregion
 }

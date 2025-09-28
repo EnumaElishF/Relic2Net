@@ -126,10 +126,7 @@ public class UI_ShortcutBarWindow : UI_WindowBase,IItemWindow
             UpdateWeaponUsedState(usedWeaponIndex, true);
         }
     }
-    private void OnInteriorDragItem(UI_SlotBase base1, UI_SlotBase base2)
-    {
 
-    }
 
     public int GetItemIndex(UI_SlotBase slotB)
     {
@@ -142,5 +139,20 @@ public class UI_ShortcutBarWindow : UI_WindowBase,IItemWindow
             }
         }
         return -1;
+    }
+    private void OnInteriorDragItem(UI_SlotBase slotA, UI_SlotBase slotB)
+    {
+        //快捷栏类格子互换
+        if(slotB.ownerWindow == this)
+        {
+            int indexA = GetItemIndex(slotA);
+            int indexB = GetItemIndex(slotB);
+            NetMessageManager.Instance.SendMessageToServer(MessageType.C_S_ShortcutBarSwapItem, new C_S_ShortcutBarSwapItem
+            {
+                shortcutBarIndexA = indexA,
+                shortcutBarIndexB = indexB
+            });
+
+        }
     }
 }
