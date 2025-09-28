@@ -1,4 +1,5 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
+using Sirenix.Utilities;
 using System;
 using System.Collections.Generic;
 using Unity.Netcode;
@@ -11,7 +12,7 @@ public class BagData: INetworkSerializable
     public int dataVersion; // 背包数据的版本
     public List<ItemDataBase> itemList = new List<ItemDataBase>(itemCount);
     public int usedWeaponIndex; //正在使用的武器格子索引
-    public int[] shortcutBarIndex = new int[GlobalUtility.itemShortcutBarCount];
+    public int[] shortcutBarIndexs = new int[GlobalUtility.itemShortcutBarCount];
     public BagData()
     {
         for(int i = 0; i < itemCount; i++)
@@ -20,13 +21,13 @@ public class BagData: INetworkSerializable
         }
         for(int i = 0; i < GlobalUtility.itemShortcutBarCount; i++)
         {
-            shortcutBarIndex[i] = -1; //-1代表默认是空格子
+            shortcutBarIndexs[i] = -1; //-1代表默认是空格子
         }
     }
     public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
     {
         serializer.SerializeValue(ref usedWeaponIndex);//背包中标记当前武器格子
-        serializer.SerializeValue(ref shortcutBarIndex);
+        serializer.SerializeValue(ref shortcutBarIndexs);
         for (int i = 0; i < itemCount; i++)
         {
             if (serializer.IsReader) //反序列化, 数据转为对象
@@ -206,6 +207,25 @@ public class BagData: INetworkSerializable
     public void AddDataVersion()
     {
         dataVersion += 1;
+    }
+
+    public bool TryGetShortcutBarIndex(int bagIndex,out int shortCutBarIndex)
+    {
+        for(int i = 0; i < shortcutBarIndexs.Length; i++)
+        {
+            if (shortcutBarIndexs[i] == bagIndex)
+            {
+                shortCutBarIndex = i;
+                return true;
+            }
+        }
+        shortCutBarIndex = -1;
+        return false;
+    }
+
+    public void UpdateShortcutBarIndex(int shortcutIndex, int bagIndex)
+    {
+        shortcutBarIndexs[shortcutIndex] = bagIndex;
     }
 
     //#endif

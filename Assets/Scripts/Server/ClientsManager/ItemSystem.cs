@@ -128,7 +128,40 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
             NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_BagUpdateItem, resultA, clientID);
             NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_BagUpdateItem, resultB, clientID);
 
-            //TODO也许会涉及到快捷键的修改，也就是A或者B 的快捷键跟着修改
+            //涉及到快捷键的修改，也就是A或者B 的快捷键跟着修改
+            if(bagData.TryGetShortcutBarIndex(message.itemIndexA,out int shortcutAIndex))
+            {
+                //涉及到服务器上数据变更，背包的改动每次加个版本号变化，这样做背包的内容
+                bagData.AddDataVersion();
+                //A使用的快捷键被替换成B
+                S_C_ShortcutBarUpdateItem shortcutBarUpdateItem = new S_C_ShortcutBarUpdateItem
+                {
+                    shortcutBarIndex = shortcutAIndex,
+                    bagIndex = message.itemIndexB,
+                    bagDataVersion = bagData.dataVersion
+                };
+                NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_ShortcutBarUpdateItem, shortcutBarUpdateItem, clientID);
+            }
+            if(bagData.TryGetShortcutBarIndex(message.itemIndexB,out int shortcutBIndex))
+            {
+                bagData.AddDataVersion();
+                bagData.UpdateShortcutBarIndex(shortcutBIndex, message.itemIndexA);
+                S_C_ShortcutBarUpdateItem shortcutBarUpdateItem = new S_C_ShortcutBarUpdateItem
+                {
+                    shortcutBarIndex = shortcutBIndex,
+                    bagIndex = message.itemIndexA,
+                    bagDataVersion = bagData.dataVersion
+                };
+                NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_ShortcutBarUpdateItem, shortcutBarUpdateItem, clientID);
+            }
+            if (shortcutAIndex != -1)
+            {
+                bagData.UpdateShortcutBarIndex(shortcutAIndex, message.itemIndexB);
+            }
+            if (shortcutBIndex != -1)
+            {
+                bagData.UpdateShortcutBarIndex(shortcutBIndex, message.itemIndexA);
+            }
         }
     }
 

@@ -23,7 +23,10 @@ public enum MessageType : byte
     //客户端使用物品和服务端给更新物品
     C_S_BagUseItem,
     S_C_BagUpdateItem,
-    C_S_BagSwapItem
+    //背包格子位置交换
+    C_S_BagSwapItem,
+    //道具栏快捷键变更
+    S_C_ShortcutBarUpdateItem
 }
 /// <summary>
 /// 可以预知的完成的返回信息，做成Code的方式，做个可知的码。比如服务端返回码等
@@ -229,5 +232,18 @@ public struct C_S_BagSwapItem : INetworkSerializable
     {
         serializer.SerializeValue(ref itemIndexA);
         serializer.SerializeValue(ref itemIndexB);
+    }
+}
+
+public struct S_C_ShortcutBarUpdateItem : INetworkSerializable
+{
+    public int shortcutBarIndex;
+    public int bagIndex;
+    public int bagDataVersion;
+    public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+    {
+        serializer.SerializeValue(ref shortcutBarIndex);
+        serializer.SerializeValue(ref bagIndex);
+        serializer.SerializeValue(ref bagDataVersion);
     }
 }

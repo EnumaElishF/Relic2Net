@@ -2,6 +2,7 @@
 //从而要求他们不能去依赖客户端或者服务端的程序集的内容，要打断他们的依赖关系，可以通过事件，去传，从而跨程序集通信
 using Cinemachine;
 using JKFrame;
+using System;
 using Unity.Netcode;
 using UnityEngine;
 /// <summary>
@@ -31,6 +32,7 @@ public class PlayerManager : SingletonMono<PlayerManager>
         EventSystem.AddTypeEventListener<MouseActiveStateChangedEvent>(OnMouseActiveStateChangedEvent);
         NetMessageManager.Instance.RegisterMessageCallback(MessageType.S_C_GetBagData, OnS_C_GetBagData);
         NetMessageManager.Instance.RegisterMessageCallback(MessageType.S_C_BagUpdateItem, OnS_C_UpdateItem);
+        NetMessageManager.Instance.RegisterMessageCallback(MessageType.S_C_ShortcutBarUpdateItem, OnS_C_ShortcutBarUpdateItem);
 
         ClientGlobal.Instance.ActiveMouse = false;
         RequestBagData();
@@ -47,6 +49,7 @@ public class PlayerManager : SingletonMono<PlayerManager>
         EventSystem.RemoveTypeEventListener<MouseActiveStateChangedEvent>(OnMouseActiveStateChangedEvent);//每次在ClientGlobal的ActiveMouse触发
         NetMessageManager.Instance.UnRegisterMessageCallback(MessageType.S_C_GetBagData, OnS_C_GetBagData);
         NetMessageManager.Instance.UnRegisterMessageCallback(MessageType.S_C_BagUpdateItem, OnS_C_UpdateItem);
+        NetMessageManager.Instance.UnRegisterMessageCallback(MessageType.S_C_ShortcutBarUpdateItem, OnS_C_ShortcutBarUpdateItem);
 
     }
 
@@ -186,6 +189,18 @@ public class PlayerManager : SingletonMono<PlayerManager>
         }
 
         return weaponObj;
+    }
+
+    private void OnS_C_ShortcutBarUpdateItem(ulong serverID, INetworkSerializable serializable)
+    {
+        S_C_ShortcutBarUpdateItem message = (S_C_ShortcutBarUpdateItem)serializable;
+        if (bagData.dataVersion == message.bagDataVersion) return;
+        bagData.dataVersion = message.bagDataVersion;
+        // 通知快捷栏
+        if (ClientUtility.GetWindowActiveState(out UI_ShortcutBarWindow shortcutBarWindow))
+        {
+            shortcutBarWindow.SetItem(message.shortcutBarIndex, message.bagIndex, bagData);
+        }
     }
 }
 

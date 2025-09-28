@@ -94,6 +94,10 @@ public class NetMessageManager : SingletonMono<NetMessageManager>
                     reader.ReadValueSafe(out C_S_BagSwapItem C_S_BagSwapItem);
                     TriggerMessageCallback(MessageType.C_S_BagSwapItem, clientId, C_S_BagSwapItem);
                     break;
+                case MessageType.S_C_ShortcutBarUpdateItem:
+                    reader.ReadValueSafe(out S_C_ShortcutBarUpdateItem S_C_ShortcutBarUpdateItem);
+                    TriggerMessageCallback(MessageType.S_C_ShortcutBarUpdateItem, clientId, S_C_ShortcutBarUpdateItem);
+                    break;
             }
         }
         catch(Exception e)

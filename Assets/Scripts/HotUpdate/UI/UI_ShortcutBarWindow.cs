@@ -18,7 +18,7 @@ public class UI_ShortcutBarWindow : UI_WindowBase,IItemWindow
         usedWeaponIndex = -1;
         for (int i = 0; i < GlobalUtility.itemShortcutBarCount; i++)
         {
-            int bagIndex = bagData.shortcutBarIndex[i];
+            int bagIndex = bagData.shortcutBarIndexs[i];
             UI_SlotBase slot;
             int keyCode = i + 1;
             if(bagIndex == bagData.usedWeaponIndex)
@@ -111,8 +111,23 @@ public class UI_ShortcutBarWindow : UI_WindowBase,IItemWindow
         if (slot != null) slot.SetUseState(state);
     }
 
+    public void SetItem(int shortcutBarIndex, int bagIndex, BagData bagData)
+    {
+        if (slots[shortcutBarIndex] != null) slots[shortcutBarIndex].Destroy();
+        UI_SlotBase slot;
+        int keyCode = shortcutBarIndex + 1;
+        if (bagIndex == -1 || bagData.itemList[bagIndex] == null) slot = CreateEmptySlot(bagIndex, keyCode);
+        else slot = CreateItemSlot(bagIndex, keyCode, bagData.itemList[bagIndex]);
+        slots[shortcutBarIndex] = slot;
+        slot.transform.SetSiblingIndex(shortcutBarIndex);
+        if (bagIndex == bagData.usedWeaponIndex)
+        {
+            usedWeaponIndex = shortcutBarIndex;
+            UpdateWeaponUsedState(usedWeaponIndex, true);
+        }
+    }
     private void OnInteriorDragItem(UI_SlotBase base1, UI_SlotBase base2)
     {
-        
+
     }
 }
