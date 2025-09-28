@@ -77,29 +77,29 @@ public class UI_ShortcutBarWindow : UI_WindowBase,IItemWindow
     }
     public void UpdateItemByBagIndex(int bagIndex,ItemDataBase newData)
     {
-        int newWeaponIndex = -1;
         for (int i = 0; i < slots.Length; i++)
         {
             UI_SlotBase slot = slots[i];
             if (slot == null) continue;
             if(slot.bagIndex == bagIndex)
             {
-                if (slot.bagIndex == PlayerManager.Instance.UsedWeaponIndex) newWeaponIndex = i; //武器发生改变
                 slot.Destroy();
                 int keyCode = i + 1;
                 if (newData != null) slot = CreateItemSlot(bagIndex, keyCode, newData);
                 else slot = CreateEmptySlot(bagIndex, keyCode);
                 slot.transform.SetSiblingIndex(i);
                 slots[i] = slot;
+                //当前武器索引==目前玩家已经使用的武器的索引 && 当前武器索引!= 本地武器索引
+                if (bagIndex == PlayerManager.Instance.UsedWeaponIndex && bagIndex!=usedWeaponIndex)
+                {
+                    UpdateWeaponUsedState(usedWeaponIndex, false);
+                    UpdateWeaponUsedState(bagIndex, true);
+                    usedWeaponIndex = bagIndex;
+                }
                 break;
             }
         }
-        if(usedWeaponIndex!= newWeaponIndex)
-        {
-            UpdateWeaponUsedState(usedWeaponIndex, false);
-            UpdateWeaponUsedState(newWeaponIndex, true);
-            usedWeaponIndex = newWeaponIndex;
-        }
+ 
     }
     /// <summary>
     /// 更新武器有效性
@@ -129,5 +129,18 @@ public class UI_ShortcutBarWindow : UI_WindowBase,IItemWindow
     private void OnInteriorDragItem(UI_SlotBase base1, UI_SlotBase base2)
     {
 
+    }
+
+    public int GetItemIndex(UI_SlotBase slotB)
+    {
+        //考虑到格子做的是固定数量背包，所以使用暴力搜索没有什么性能问题
+        for(int i = 0; i < slots.Length; i++)
+        {
+            if (slots[i] == slotB)
+            {
+                return i;
+            }
+        }
+        return -1;
     }
 }

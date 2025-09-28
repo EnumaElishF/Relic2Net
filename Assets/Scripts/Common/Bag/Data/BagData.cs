@@ -223,9 +223,13 @@ public class BagData: INetworkSerializable
         return false;
     }
 
-    public void UpdateShortcutBarIndex(int shortcutIndex, int bagIndex)
+    public void UpdateShortcutBarItem(int shortcutIndex, int bagIndex)
     {
         shortcutBarIndexs[shortcutIndex] = bagIndex;
+    }
+    public void RemoveShortcutBarItem(int shortcutIndex)
+    {
+        UpdateShortcutBarItem(shortcutIndex, -1);
     }
 
     //#endif

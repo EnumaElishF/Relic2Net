@@ -95,9 +95,17 @@ public class UI_BagWindow : UI_CustomWindowBase,IItemWindow
             });
         }
         //设置这个格子到快捷栏
-        else if(slotA.ownerWindow is UI_ShortcutBarWindow)
+        else if(slotB.ownerWindow is UI_ShortcutBarWindow)
         {
-            //TODO
+            int shortcurBagIndex = UISystem.GetWindow<UI_ShortcutBarWindow>().GetItemIndex(slotB);
+            if(shortcurBagIndex != -1)
+            {
+                NetMessageManager.Instance.SendMessageToServer(MessageType.C_S_SetShortcutBarItem, new C_S_SetShortcutBarItem
+                {
+                    shortcutBarIndex = shortcurBagIndex,
+                    bagIndex = slotA.bagIndex
+                });
+            }
         }
     }
 }

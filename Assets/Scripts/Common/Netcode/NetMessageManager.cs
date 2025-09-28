@@ -33,7 +33,7 @@ public class NetMessageManager : SingletonMono<NetMessageManager>
     {
         try
         {
-            //TODO 每次加入新消息类型
+            //TODO 每次加入新消息类型-> 其实这里可以做成自动化的，例如：通过特性的方式，运行的时候就注册进来，这里是只有一次的反射？要是反射多了，那么考虑自动化
             reader.ReadValueSafe(out MessageType messageType);
             Debug.Log("收到网络信息:" + messageType);
             switch (messageType)
@@ -97,6 +97,10 @@ public class NetMessageManager : SingletonMono<NetMessageManager>
                 case MessageType.S_C_ShortcutBarUpdateItem:
                     reader.ReadValueSafe(out S_C_ShortcutBarUpdateItem S_C_ShortcutBarUpdateItem);
                     TriggerMessageCallback(MessageType.S_C_ShortcutBarUpdateItem, clientId, S_C_ShortcutBarUpdateItem);
+                    break;
+                case MessageType.C_S_SetShortcutBarItem:
+                    reader.ReadValueSafe(out C_S_SetShortcutBarItem C_S_SetShortcutBarItem);
+                    TriggerMessageCallback(MessageType.C_S_SetShortcutBarItem, clientId, C_S_SetShortcutBarItem);
                     break;
             }
         }
