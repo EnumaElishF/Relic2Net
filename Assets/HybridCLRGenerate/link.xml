@@ -110,6 +110,8 @@
     <type fullname="UnityEngine.Events.UnityEvent`1" preserve="all" />
     <type fullname="UnityEngine.GameObject" preserve="all" />
     <type fullname="UnityEngine.GeometryUtility" preserve="all" />
+    <type fullname="UnityEngine.Gizmos" preserve="all" />
+    <type fullname="UnityEngine.HeaderAttribute" preserve="all" />
     <type fullname="UnityEngine.KeyCode" preserve="all" />
     <type fullname="UnityEngine.Mathf" preserve="all" />
     <type fullname="UnityEngine.MonoBehaviour" preserve="all" />
@@ -123,6 +125,7 @@
     <type fullname="UnityEngine.Sprite" preserve="all" />
     <type fullname="UnityEngine.SystemLanguage" preserve="all" />
     <type fullname="UnityEngine.Time" preserve="all" />
+    <type fullname="UnityEngine.TooltipAttribute" preserve="all" />
     <type fullname="UnityEngine.Transform" preserve="all" />
     <type fullname="UnityEngine.Vector2" preserve="all" />
     <type fullname="UnityEngine.Vector2Int" preserve="all" />
@@ -135,10 +138,18 @@
   <assembly fullname="UnityEngine.InputLegacyModule">
     <type fullname="UnityEngine.Input" preserve="all" />
   </assembly>
+  <assembly fullname="UnityEngine.PhysicsModule">
+    <type fullname="UnityEngine.BoxCollider" preserve="all" />
+    <type fullname="UnityEngine.Collider" preserve="all" />
+    <type fullname="UnityEngine.SphereCollider" preserve="all" />
+  </assembly>
   <assembly fullname="UnityEngine.TerrainModule">
     <type fullname="UnityEngine.Terrain" preserve="all" />
   </assembly>
   <assembly fullname="UnityEngine.UI">
+    <type fullname="UnityEngine.EventSystems.IBeginDragHandler" preserve="all" />
+    <type fullname="UnityEngine.EventSystems.IDragHandler" preserve="all" />
+    <type fullname="UnityEngine.EventSystems.IEndDragHandler" preserve="all" />
     <type fullname="UnityEngine.EventSystems.IEventSystemHandler" preserve="all" />
     <type fullname="UnityEngine.EventSystems.IPointerClickHandler" preserve="all" />
     <type fullname="UnityEngine.EventSystems.IPointerEnterHandler" preserve="all" />
@@ -194,6 +205,8 @@
     <type fullname="System.Int32" preserve="all" />
     <type fullname="System.NotSupportedException" preserve="all" />
     <type fullname="System.Object" preserve="all" />
+    <type fullname="System.Reflection.MemberInfo" preserve="all" />
+    <type fullname="System.Reflection.MethodInfo" preserve="all" />
     <type fullname="System.Runtime.CompilerServices.CompilationRelaxationsAttribute" preserve="all" />
     <type fullname="System.Runtime.CompilerServices.CompilerGeneratedAttribute" preserve="all" />
     <type fullname="System.Runtime.CompilerServices.IsReadOnlyAttribute" preserve="all" />
