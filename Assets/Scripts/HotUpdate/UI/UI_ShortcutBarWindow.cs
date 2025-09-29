@@ -60,14 +60,14 @@ public class UI_ShortcutBarWindow : UI_WindowBase,IItemWindow
         ItemConfigBase config = ResSystem.LoadAsset<ItemConfigBase>(itemData.id);
         UI_SlotBase slot = ResSystem.InstantiateGameObject<UI_SlotBase>(config.slotPrafabPath, itemRoot);
         slot.Init(this, itemData, config, bagIndex, OnUseItem, OnInteriorDragItem);
-        slot.SetShortKeyCode(keyCode);
+        slot.SetShortcutKeyCode(keyCode);
         return slot;
     }
     private UI_SlotBase CreateEmptySlot(int bagIndex, int keyCode)
     {
         UI_SlotBase slot = ResSystem.InstantiateGameObject<UI_SlotBase>(emptySlotPath, itemRoot);
         slot.Init(this, null, null, bagIndex, null, null);
-        slot.SetShortKeyCode(keyCode);
+        slot.SetShortcutKeyCode(keyCode);
         return slot;
     }
 
@@ -142,7 +142,7 @@ public class UI_ShortcutBarWindow : UI_WindowBase,IItemWindow
     }
     private void OnInteriorDragItem(UI_SlotBase slotA, UI_SlotBase slotB)
     {
-        //快捷栏类格子互换
+        //快捷栏内格子互换
         if(slotB.ownerWindow == this)
         {
             int indexA = GetItemIndex(slotA);
@@ -152,7 +152,15 @@ public class UI_ShortcutBarWindow : UI_WindowBase,IItemWindow
                 shortcutBarIndexA = indexA,
                 shortcutBarIndexB = indexB
             });
-
+        }
+        // 快捷栏中的格子移到背包中意味着取消这个快捷栏
+        else if(slotB.ownerWindow is UI_BagWindow){
+            int indexA = GetItemIndex(slotA);
+            NetMessageManager.Instance.SendMessageToServer(MessageType.C_S_ShortcutBarSetItem, new C_S_ShortcutBarSetItem
+            {
+                shortcutBarIndex = indexA,
+                bagIndex = -1
+            });
         }
     }
 }

@@ -33,7 +33,7 @@ public abstract class UI_SlotBase : MonoBehaviour,IPointerEnterHandler,IPointerE
     {
 
     }
-    public virtual void SetShortKeyCode(int num) //键盘数字
+    public virtual void SetShortcutKeyCode(int num) //键盘数字
     {
         keyCodeText.text = num.ToString();
     }

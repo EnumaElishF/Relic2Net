@@ -16,13 +16,13 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
     {
         PlayerController.SetGetWeaponFunc(GetWeapon);
 
-        //NetMessageManager注册网络事件
-        NetMessageManager.Instance.RegisterMessageCallback(MessageType.C_S_ChatMessage, OnClientChatMessage);
+        //NetMessageManager注册网络事件： 服务端控制背包数据变化的关键
         NetMessageManager.Instance.RegisterMessageCallback(MessageType.C_S_GetBagData, OnClientGetBagData);
         NetMessageManager.Instance.RegisterMessageCallback(MessageType.C_S_BagUseItem, OnClientBagUseItem);
         NetMessageManager.Instance.RegisterMessageCallback(MessageType.C_S_BagSwapItem, OnClientBagSwapItem);
-        NetMessageManager.Instance.RegisterMessageCallback(MessageType.S_C_ShortcutBarUpdateItem, OnClientShortcutBarSetItem);
+        NetMessageManager.Instance.RegisterMessageCallback(MessageType.C_S_ShortcutBarSetItem, OnClientShortcutBarSetItem);
         NetMessageManager.Instance.RegisterMessageCallback(MessageType.C_S_ShortcutBarSwapItem, OnClientShortcutBarSwapItem);
+
     }
 
 
@@ -177,6 +177,7 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
         {
             C_S_ShortcutBarSetItem message = (C_S_ShortcutBarSetItem)serializable;
             BagData bagData = client.playerData.bagData;
+
             // 找到当前快捷栏中可能存在的重复项，将其移除
             if(bagData.TryGetShortcutBarIndex(message.bagIndex,out int shortcutBarIndex))
             {
@@ -206,6 +207,9 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
 
         }
     }
+    /// <summary>
+    /// 当客户端交换快捷键
+    /// </summary>
     private void OnClientShortcutBarSwapItem(ulong clientID, INetworkSerializable serializable)
     {
         if (clientIDDic.TryGetValue(clientID, out Client client) && client.playerData != null)
@@ -213,8 +217,8 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
             C_S_ShortcutBarSwapItem message = (C_S_ShortcutBarSwapItem)serializable;
             BagData bagData = client.playerData.bagData;
             bagData.SwapShortcutBarItem(message.shortcutBarIndexA, message.shortcutBarIndexB);
-            bagData.AddDataVersion();
             //消息1
+            bagData.AddDataVersion();
             S_C_ShortcutBarUpdateItem result1 = new S_C_ShortcutBarUpdateItem
             {
                 shortcutBarIndex = message.shortcutBarIndexA,
@@ -222,7 +226,9 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
                 bagDataVersion = bagData.dataVersion
             };
             NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_ShortcutBarUpdateItem, result1, clientID);
+
             //消息2
+            bagData.AddDataVersion();
             S_C_ShortcutBarUpdateItem result2 = new S_C_ShortcutBarUpdateItem
             {
                 shortcutBarIndex = message.shortcutBarIndexB,

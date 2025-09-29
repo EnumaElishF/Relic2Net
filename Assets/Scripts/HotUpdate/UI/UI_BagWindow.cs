@@ -73,10 +73,14 @@ public class UI_BagWindow : UI_CustomWindowBase,IItemWindow
         //设置他是父亲的子物体的第几个
         newSlot.transform.SetSiblingIndex(index);
         slotList[index] = newSlot;
-        if(index == bagData.usedWeaponIndex && usedWeaponIndex!= index) //武器格子发生了变化
+        if (index == bagData.usedWeaponIndex) // 武器格子发生了变化
         {
-            UI_WeaponSlot oldWeaponSlot = slotList[usedWeaponIndex] as UI_WeaponSlot;
-            if (oldWeaponSlot != null) oldWeaponSlot.SetUseState(false);
+            if (usedWeaponIndex != index)
+            {
+                UI_WeaponSlot oldWeaponSlot = slotList[usedWeaponIndex] as UI_WeaponSlot;
+                if (oldWeaponSlot != null) oldWeaponSlot.SetUseState(false);
+            }
+
             UI_WeaponSlot newWeaponSlot = (UI_WeaponSlot)slotList[index];
             newWeaponSlot.SetUseState(true);
             usedWeaponIndex = index;
@@ -94,7 +98,7 @@ public class UI_BagWindow : UI_CustomWindowBase,IItemWindow
                 itemIndexB = slotB.bagIndex,
             });
         }
-        //设置这个格子到快捷栏
+        //设置这个格子到快捷栏  背包->快捷栏
         else if(slotB.ownerWindow is UI_ShortcutBarWindow)
         {
             int shortcurBagIndex = UISystem.GetWindow<UI_ShortcutBarWindow>().GetItemIndex(slotB);
