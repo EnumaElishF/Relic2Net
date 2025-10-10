@@ -60,6 +60,8 @@ public class ClientGlobal : SingletonMono<ClientGlobal>
     /// </summary>
     public void InitWindowData()
     {
+        //TODO 每次新加的窗口，都需要在这里定义UI_WindowData
+
         //做一个对框架上修改的窗口，不依赖于静态的配置
         UISystem.AddUIWindowData<UI_MainMenuWindow>(new UIWindowData(false, nameof(UI_MainMenuWindow), 0));
         //弹窗的层级给高一些，给个4吧。
@@ -72,11 +74,13 @@ public class ClientGlobal : SingletonMono<ClientGlobal>
         //把框架的2层，设置为2层 之间的ui互相不会遮挡， 比如商店背包互相拖拽，还有聊天
         UISystem.AddUIWindowData<UI_ChatWindow>(new UIWindowData(false, nameof(UI_ChatWindow), 2));
         //背包内容多，还需要高频开关使用，所以开缓存true。
-        //TODO 开了缓存的，在关掉的时候我们做逻辑，给他放入对象池！！
+        //开了缓存的，在关掉的时候我们做逻辑，给他放入对象池！！
         UISystem.AddUIWindowData<UI_BagWindow>(new UIWindowData(true, nameof(UI_BagWindow), 2));
         UISystem.AddUIWindowData<UI_ItemInfoPopupWindow>(new UIWindowData(true, nameof(UI_ItemInfoPopupWindow), 2));
         //道具栏：常驻窗口，不需要去缓存
         UISystem.AddUIWindowData<UI_ShortcutBarWindow>(new UIWindowData(false, nameof(UI_ShortcutBarWindow), 2));
+        UISystem.AddUIWindowData<UI_ShopWindow>(new UIWindowData(true, nameof(UI_ShopWindow), 2));
+
     }
     private void OnGameSceneLaunchEvent(GameSceneLaunchEvent @event)
     {

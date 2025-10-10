@@ -58,7 +58,7 @@ public class UI_ShortcutBarWindow : UI_WindowBase,IItemWindow
     private UI_SlotBase CreateItemSlot(int bagIndex, int keyCode, ItemDataBase itemData)
     {
         ItemConfigBase config = ResSystem.LoadAsset<ItemConfigBase>(itemData.id);
-        UI_SlotBase slot = ResSystem.InstantiateGameObject<UI_SlotBase>(config.slotPrafabPath, itemRoot);
+        UI_SlotBase slot = ResSystem.InstantiateGameObject<UI_SlotBase>(config.slotPrefabPath, itemRoot);
         slot.Init(this, itemData, config, bagIndex, OnUseItem, OnInteriorDragItem);
         slot.SetShortcutKeyCode(keyCode);
         return slot;
@@ -81,7 +81,7 @@ public class UI_ShortcutBarWindow : UI_WindowBase,IItemWindow
         {
             UI_SlotBase slot = slots[i];
             if (slot == null) continue;
-            if(slot.bagIndex == bagIndex)
+            if(slot.dataIndex == bagIndex)
             {
                 slot.Destroy();
                 int keyCode = i + 1;

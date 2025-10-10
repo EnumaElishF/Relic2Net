@@ -8,8 +8,11 @@ using System.Collections.Generic;
 public abstract class ItemConfigBase : ConfigBase
 {
     public int price; //商品的价格放在公共情况里使用，服务端与客户端都需要
+    protected ItemDataBase defaultData;
+    public abstract ItemDataBase GetDefaultItemData();
+
 #if !UNITY_SERVER || UNITY_EDITOR
-    public string slotPrafabPath;
+    public string slotPrefabPath;
     public Sprite icon;
     public Dictionary<LanguageType, string> nameDic;
     public Dictionary<LanguageType, string> descriptionDic;

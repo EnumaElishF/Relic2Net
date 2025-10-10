@@ -26,7 +26,7 @@ public static class ItemConfigImport
                     string chineseDescription = worksheet.Cells[x, 4].Text.Trim();
                     string englishDescription = worksheet.Cells[x, 5].Text.Trim();
                     int price = int.Parse(worksheet.Cells[x, 6].Text.Trim());
-                    if(i==1)//武器
+                    if(i==1)//武器 sheet
                     {
                         float attackValue = float.Parse(worksheet.Cells[x, 7].Text.Trim());
                         string configPath = $"Assets/Config/Item/Weapon/{key}.asset";
@@ -49,11 +49,15 @@ public static class ItemConfigImport
                         string configPath = $"Assets/Config/Item/Consumable/{key}.asset";
                         string iconPath = $"Assets/Res/Icon/Consumable/{key}.png";
                         string slotPrefabPath = "UI_ConsumableSlot";
+                        int defalutCountOnShop = int.Parse(worksheet.Cells[x, 8].Text.Trim());
+
                         ConsumableConfig itemConfig = AssetDatabase.LoadAssetAtPath<ConsumableConfig>(configPath);
                         bool isCreate = itemConfig == null;
                         if (isCreate) itemConfig = ConsumableConfig.CreateInstance<ConsumableConfig>();
                         SetConfigCommon(itemConfig, chineseName, englishName, chineseDescription, englishDescription, iconPath, slotPrefabPath, price);
                         itemConfig.HPRegeneration = HPRegeneration;
+                        itemConfig.defaultCountInShop = defalutCountOnShop;
+
                         EditorUtility.SetDirty(itemConfig); //Dirty重保存一下
                         if (isCreate) AssetDatabase.CreateAsset(itemConfig, configPath);
                         else AssetDatabase.SaveAssetIfDirty(itemConfig);
@@ -62,11 +66,15 @@ public static class ItemConfigImport
                         string configPath = $"Assets/Config/Item/Material/{key}.asset";
                         string iconPath = $"Assets/Res/Icon/Material/{key}.png";
                         string slotPrefabPath = "UI_MaterialSlot";
+                        int defaultCountOnShop = int.Parse(worksheet.Cells[x, 7].Text.Trim());
+
 
                         MaterialConfig itemConfig = AssetDatabase.LoadAssetAtPath<MaterialConfig>(configPath);
                         bool isCreate = itemConfig == null;
                         if (isCreate) itemConfig = MaterialConfig.CreateInstance<MaterialConfig>();
                         SetConfigCommon(itemConfig, chineseName, englishName, chineseDescription, englishDescription, iconPath, slotPrefabPath, price);
+                        itemConfig.defaultCountInShop = defaultCountOnShop;
+
                         EditorUtility.SetDirty(itemConfig);
                         if (isCreate) AssetDatabase.CreateAsset(itemConfig, configPath);
                         else AssetDatabase.SaveAssetIfDirty(itemConfig);
@@ -104,9 +112,9 @@ public static class ItemConfigImport
         };
         itemConfig.icon = AssetDatabase.LoadAssetAtPath<Sprite>(iconPath);
         //有可能已经设置过专属预制体，则忽视。举例就是武器类型的话，如果在本地化配置上，写SlotPrefabPath是手动放入过的，那么再次本地化就不会被覆盖了
-        if (string.IsNullOrEmpty(itemConfig.slotPrafabPath)) 
+        if (string.IsNullOrEmpty(itemConfig.slotPrefabPath)) 
         {
-            itemConfig.slotPrafabPath = slotPrefabPath;
+            itemConfig.slotPrefabPath = slotPrefabPath;
         }
         itemConfig.price = price;
     }

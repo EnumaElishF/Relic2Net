@@ -34,7 +34,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 12
-      Data: 26
+      Data: 27
     - Name: 
       Entry: 7
       Data: 
@@ -1616,6 +1616,67 @@ MonoBehaviour:
     - Name: content
       Entry: 1
       Data: HPRegeneration
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: "\u5546\u5E97"
+    - Name: $v
+      Entry: 7
+      Data: 81|System.Collections.Generic.Dictionary`2[[LanguageType, JKFrame],[LocalizationDataBase,
+        JKFrame]], mscorlib
+    - Name: comparer
+      Entry: 9
+      Data: 3
+    - Name: 
+      Entry: 12
+      Data: 2
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 0
+    - Name: $v
+      Entry: 7
+      Data: 82|LocalizationStringData, JKFrame
+    - Name: content
+      Entry: 1
+      Data: "\u5546\u5E97"
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 2
+    - Name: $v
+      Entry: 7
+      Data: 83|LocalizationStringData, JKFrame
+    - Name: content
+      Entry: 1
+      Data: Shop
     - Name: 
       Entry: 8
       Data: 

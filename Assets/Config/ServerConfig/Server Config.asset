@@ -21008,6 +21008,7 @@ MonoBehaviour:
   ServerOnGameScenePrefab: {fileID: 6183135768358698062, guid: f44599ab588d6ff4885da0f741572b10, type: 3}
   playerPrefab: {fileID: 2039334567599830296, guid: d1adee6bbc176af418dfe396816ca8e4, type: 3}
   playerDefaultPosition: {x: 138, y: 54, z: 109}
+  playerDefaultCoinCount: 1000
   terrainFolderPath: Assets/EnvRes/Terrains
   weaponConfigFolderPath: Assets/Config/Item/Weapon
   consumablegConfigFolderPath: Assets/Config/Item/Consumable

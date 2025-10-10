@@ -14,15 +14,15 @@ public abstract class UI_SlotBase : MonoBehaviour,IPointerEnterHandler,IPointerE
     [SerializeField] protected Sprite normalFrame;
     [SerializeField] protected Sprite selectedFrame;
     [SerializeField] protected Text keyCodeText; //快捷窗口中时显示快捷键的
-    public int bagIndex { get; private set; } //格子的index
+    public int dataIndex { get; private set; } //格子的index
     protected Action<int> onUseAction;
     protected Action<UI_SlotBase, UI_SlotBase> onDragToNewSlotAction; //从A拖拽到B
     public IItemWindow ownerWindow { get; private set; }
     //默认data，config为null，可以表示不传入值是没有问题的
-    public virtual void Init(IItemWindow ownerWindow,ItemDataBase data, ItemConfigBase config,int index, Action<int> onUseAction,Action<UI_SlotBase,UI_SlotBase> onDragToNewSlotAction)
+    public virtual void Init(IItemWindow ownerWindow,ItemDataBase data, ItemConfigBase config,int dataIndex, Action<int> onUseAction,Action<UI_SlotBase,UI_SlotBase> onDragToNewSlotAction)
     {
         this.ownerWindow = ownerWindow;
-        this.bagIndex = index;
+        this.dataIndex = dataIndex;
         this.onUseAction = onUseAction;
         this.onDragToNewSlotAction = onDragToNewSlotAction;
         if (keyCodeText != null) keyCodeText.gameObject.SetActive(false);//keyCode默认不显示
@@ -65,7 +65,7 @@ public abstract class UI_SlotBase : MonoBehaviour,IPointerEnterHandler,IPointerE
         if(onUseAction != null && eventData.button == PointerEventData.InputButton.Right)
         {
             transform.GetSiblingIndex();
-            onUseAction?.Invoke(bagIndex);
+            onUseAction?.Invoke(dataIndex);
         }
     }
 }

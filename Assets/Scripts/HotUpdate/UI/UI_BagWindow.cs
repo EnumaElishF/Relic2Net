@@ -50,7 +50,7 @@ public class UI_BagWindow : UI_CustomWindowBase,IItemWindow
     private UI_SlotBase CreateItemSlot(int index, ItemDataBase itemData)
     {
         ItemConfigBase config = ResSystem.LoadAsset<ItemConfigBase>(itemData.id);
-        UI_SlotBase slot = ResSystem.InstantiateGameObject<UI_SlotBase>(config.slotPrafabPath, itemRoot);
+        UI_SlotBase slot = ResSystem.InstantiateGameObject<UI_SlotBase>(config.slotPrefabPath, itemRoot);
         slot.Init(this,itemData, config, index, OnUseItem,OnInteriorDragItem);
         return slot;
     }
@@ -95,8 +95,8 @@ public class UI_BagWindow : UI_CustomWindowBase,IItemWindow
         {
             NetMessageManager.Instance.SendMessageToServer(MessageType.C_S_BagSwapItem, new C_S_BagSwapItem
             {
-                itemIndexA = slotA.bagIndex,
-                itemIndexB = slotB.bagIndex,
+                itemIndexA = slotA.dataIndex,
+                itemIndexB = slotB.dataIndex,
             });
         }
         //设置这个格子到快捷栏  背包->快捷栏
@@ -108,7 +108,7 @@ public class UI_BagWindow : UI_CustomWindowBase,IItemWindow
                 NetMessageManager.Instance.SendMessageToServer(MessageType.C_S_ShortcutBarSetItem, new C_S_ShortcutBarSetItem
                 {
                     shortcutBarIndex = shortcurBagIndex,
-                    bagIndex = slotA.bagIndex
+                    bagIndex = slotA.dataIndex
                 });
             }
         }

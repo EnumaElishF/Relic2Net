@@ -6,11 +6,11 @@ public class WeaponConfig : ItemConfigBase
     public GameObject prefab;
     public float attackValue;
 
-    //public override ItemDataBase GetDefaultItemData()
-    //{
-    //    if (defaultData == null) defaultData = new WeaponData { id = name };
-    //    return defaultData;
-    //}
+    public override ItemDataBase GetDefaultItemData()
+    {
+        if (defaultData == null) defaultData = new WeaponData { id = name };
+        return defaultData;
+    }
 
     public override string GetType(LanguageType languageType)
     {

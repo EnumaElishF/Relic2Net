@@ -32,11 +32,10 @@ public class MerchantController : MonoBehaviour
                 //提示感叹号一直朝向玩家
                 prompt.transform.LookAt(Camera.main.transform);
             }
-            Debug.Log($"MerchantController:{ other.gameObject.name }");
             if (Input.GetKeyDown(KeyCode.E))
             {
                 //交互
-                Debug.Log($"MerchantController: 交互");
+                PlayerManager.Instance.OpenShop(merchantConfigName);
 
             }
         }

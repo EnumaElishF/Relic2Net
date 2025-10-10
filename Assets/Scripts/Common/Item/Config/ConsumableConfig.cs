@@ -6,11 +6,11 @@ public class ConsumableConfig : ItemConfigBase
     public float HPRegeneration; // HP回复量
     public int defaultCountInShop;
 
-    //public override ItemDataBase GetDefaultItemData()
-    //{
-    //    if (defaultData == null) defaultData = new ConsumableData { id = name, count = defaultCountInShop };
-    //    return defaultData;
-    //}
+    public override ItemDataBase GetDefaultItemData()
+    {
+        if (defaultData == null) defaultData = new ConsumableData { id = name, count = defaultCountInShop };
+        return defaultData;
+    }
     public override string GetType(LanguageType languageType)
     {
         return LocalizationSystem.GetContent<LocalizationStringData>("消耗品", languageType).content;
