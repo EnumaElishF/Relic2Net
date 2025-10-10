@@ -111,6 +111,7 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
+  price: 200
   slotPrafabPath: UI_WeaponSlot
   icon: {fileID: 21300000, guid: f2ec446fe4acaa1478a160ce1b973a51, type: 3}
   prefab: {fileID: 8303556329516393519, guid: fb4a8ca28a7fc01499acf1926ede454d, type: 3}

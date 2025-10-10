@@ -7,6 +7,7 @@ using System.Collections.Generic;
 /// </summary>
 public abstract class ItemConfigBase : ConfigBase
 {
+    public int price; //商品的价格放在公共情况里使用，服务端与客户端都需要
 #if !UNITY_SERVER || UNITY_EDITOR
     public string slotPrafabPath;
     public Sprite icon;

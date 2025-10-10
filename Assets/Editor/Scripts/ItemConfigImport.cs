@@ -25,10 +25,10 @@ public static class ItemConfigImport
                     string englishName = worksheet.Cells[x, 3].Text.Trim();
                     string chineseDescription = worksheet.Cells[x, 4].Text.Trim();
                     string englishDescription = worksheet.Cells[x, 5].Text.Trim();
-
+                    int price = int.Parse(worksheet.Cells[x, 6].Text.Trim());
                     if(i==1)//武器
                     {
-                        float attackValue = float.Parse(worksheet.Cells[x, 6].Text.Trim());
+                        float attackValue = float.Parse(worksheet.Cells[x, 7].Text.Trim());
                         string configPath = $"Assets/Config/Item/Weapon/{key}.asset";
                         string iconPath = $"Assets/Res/Icon/Weapon/{key}.png";
                         string prefab = $"Assets/Prefab/Weapon/{key}.prefab";
@@ -36,7 +36,7 @@ public static class ItemConfigImport
                         WeaponConfig itemConfig = AssetDatabase.LoadAssetAtPath<WeaponConfig>(configPath);
                         bool isCreate = itemConfig == null;
                         if (isCreate) itemConfig = WeaponConfig.CreateInstance<WeaponConfig>();
-                        SetConfigCommon(itemConfig, chineseName, englishName, chineseDescription, englishDescription, iconPath, slotPrefabPath);
+                        SetConfigCommon(itemConfig, chineseName, englishName, chineseDescription, englishDescription, iconPath, slotPrefabPath, price);
                         itemConfig.attackValue = attackValue;
                         itemConfig.prefab = AssetDatabase.LoadAssetAtPath<GameObject>(prefab);
                         EditorUtility.SetDirty(itemConfig); //Dirty重保存一下
@@ -45,14 +45,14 @@ public static class ItemConfigImport
 
                     }else if(i == 2) //消耗品
                     {
-                        float HPRegeneration = float.Parse(worksheet.Cells[x, 6].Text.Trim()); //HP恢复量
+                        float HPRegeneration = float.Parse(worksheet.Cells[x, 7].Text.Trim()); //HP恢复量
                         string configPath = $"Assets/Config/Item/Consumable/{key}.asset";
                         string iconPath = $"Assets/Res/Icon/Consumable/{key}.png";
                         string slotPrefabPath = "UI_ConsumableSlot";
                         ConsumableConfig itemConfig = AssetDatabase.LoadAssetAtPath<ConsumableConfig>(configPath);
                         bool isCreate = itemConfig == null;
                         if (isCreate) itemConfig = ConsumableConfig.CreateInstance<ConsumableConfig>();
-                        SetConfigCommon(itemConfig, chineseName, englishName, chineseDescription, englishDescription, iconPath, slotPrefabPath);
+                        SetConfigCommon(itemConfig, chineseName, englishName, chineseDescription, englishDescription, iconPath, slotPrefabPath, price);
                         itemConfig.HPRegeneration = HPRegeneration;
                         EditorUtility.SetDirty(itemConfig); //Dirty重保存一下
                         if (isCreate) AssetDatabase.CreateAsset(itemConfig, configPath);
@@ -66,7 +66,7 @@ public static class ItemConfigImport
                         MaterialConfig itemConfig = AssetDatabase.LoadAssetAtPath<MaterialConfig>(configPath);
                         bool isCreate = itemConfig == null;
                         if (isCreate) itemConfig = MaterialConfig.CreateInstance<MaterialConfig>();
-                        SetConfigCommon(itemConfig, chineseName, englishName, chineseDescription, englishDescription, iconPath, slotPrefabPath);
+                        SetConfigCommon(itemConfig, chineseName, englishName, chineseDescription, englishDescription, iconPath, slotPrefabPath, price);
                         EditorUtility.SetDirty(itemConfig);
                         if (isCreate) AssetDatabase.CreateAsset(itemConfig, configPath);
                         else AssetDatabase.SaveAssetIfDirty(itemConfig);
@@ -89,7 +89,7 @@ public static class ItemConfigImport
     /// <param name="englishDescription"></param>
     /// <param name="iconPath"></param>
     /// <param name="slotPrefabPath">slotPrefabPath就是Addressables的Key</param>
-    private static void SetConfigCommon(ItemConfigBase itemConfig, string chineseName, string englishName, string chineseDescription, string englishDescription, string iconPath,string slotPrefabPath)
+    private static void SetConfigCommon(ItemConfigBase itemConfig, string chineseName, string englishName, string chineseDescription, string englishDescription, string iconPath,string slotPrefabPath,int price)
     {
         //编译器下倒是可以忽略性能问题，在这里直接new也挺方便的
         itemConfig.nameDic = new Dictionary<LanguageType, string>()
@@ -108,6 +108,7 @@ public static class ItemConfigImport
         {
             itemConfig.slotPrafabPath = slotPrefabPath;
         }
+        itemConfig.price = price;
     }
  }
 

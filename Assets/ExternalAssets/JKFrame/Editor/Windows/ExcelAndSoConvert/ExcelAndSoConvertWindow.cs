@@ -10,7 +10,7 @@ namespace JKFrame.Editor
         public int num;
         public ExcelAndSoConvertSetting setting;     // 通过面板拖拽赋值
         public VisualTreeAsset editorUIAsset;   // 通过面板拖拽赋值
-        [MenuItem("JKFrame/Excel和SO互转")]
+        [MenuItem("WorkFrame/Excel和SO互转")]
         public static void ShowExample()
         {
             ExcelAndSoConvertWindow wnd = GetWindow<ExcelAndSoConvertWindow>();

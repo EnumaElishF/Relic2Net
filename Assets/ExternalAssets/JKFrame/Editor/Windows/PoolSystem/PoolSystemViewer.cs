@@ -22,7 +22,7 @@ namespace JKFrame.Editor
 
         private ListView objectLayerListView;
         private ListView gameObjectLayerListView;
-        [MenuItem("JKFrame/PoolSystemViewer")]
+        [MenuItem("WorkFrame/PoolSystemViewer")]
         public static void ShowExample()
         {
             PoolSystemViewer wnd = GetWindow<PoolSystemViewer>();

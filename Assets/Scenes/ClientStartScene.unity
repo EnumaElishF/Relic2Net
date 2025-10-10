@@ -428,7 +428,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3120937713004212231, guid: 405dd55ce89c9bd4f89efcd8102d26e0, type: 3}
       propertyPath: m_Name
-      value: JKFrame Variant
+      value: WorkFrame Variant
       objectReference: {fileID: 0}
     - target: {fileID: 3120937713004212231, guid: 405dd55ce89c9bd4f89efcd8102d26e0, type: 3}
       propertyPath: m_IsActive
