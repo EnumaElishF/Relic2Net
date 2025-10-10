@@ -59,7 +59,6 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
         };
         playerData.name = accountInfo.playerName;
         playerData.password = accountInfo.password;
-        playerData.bagData = new BagData();
 
         playerData.bagData.itemList[0] = (new WeaponData() { id = "Weapon_0" });
         playerData.bagData.itemList[1] = (new WeaponData() { id = "Weapon_1" });
@@ -72,7 +71,7 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
         playerData.bagData.itemList[8] = (new MaterialData() { id = "Material_1", count = 7 });
         playerData.bagData.itemList[9] = (new MaterialData() { id = "Material_2", count = 8 });
         playerData.bagData.shortcutBarIndexs[0] = 0;
-
+        playerData.bagData.coinCount = ServerResSystem.serverConfig.playerDefaultCoinCount;
         DataBaseManager.Instance.CreatePlayerData(playerData);
         return playerData;
     }

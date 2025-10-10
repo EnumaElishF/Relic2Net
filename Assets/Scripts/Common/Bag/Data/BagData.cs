@@ -11,6 +11,7 @@ public class BagData: INetworkSerializable
     public List<ItemDataBase> itemList = new List<ItemDataBase>(itemCount);
     public int usedWeaponIndex; //正在使用的武器格子索引
     public int[] shortcutBarIndexs = new int[GlobalUtility.itemShortcutBarCount];
+    public int coinCount;//金币数量
     public BagData()
     {
         for(int i = 0; i < itemCount; i++)
@@ -25,6 +26,7 @@ public class BagData: INetworkSerializable
     public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
     {
         serializer.SerializeValue(ref usedWeaponIndex);//背包中标记当前武器格子
+        serializer.SerializeValue(ref coinCount);
         serializer.SerializeValue(ref shortcutBarIndexs);
         for (int i = 0; i < itemCount; i++)
         {

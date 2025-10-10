@@ -21,6 +21,8 @@ public class ServerConfig : ConfigBase
     public GameObject playerPrefab;
     ///玩家默认坐标
     public Vector3 playerDefaultPosition;
+    //玩家默认金币数量
+    public int playerDefaultCoinCount;
     [Header("地形")]
     public Dictionary<string,GameObject> terrainDic;
     [Header("物品配置")]

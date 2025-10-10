@@ -7,6 +7,7 @@ public class UI_BagWindow : UI_CustomWindowBase,IItemWindow
 {
     [SerializeField] private Button closeButton;
     [SerializeField] private Transform itemRoot;
+    [SerializeField] private Text coinText;
     private string emptySlotPath => ClientUtility.emptySlotPath;
     private List<UI_SlotBase> slotList = new List<UI_SlotBase>();
     private BagData bagData;
@@ -33,6 +34,7 @@ public class UI_BagWindow : UI_CustomWindowBase,IItemWindow
     public void Show(BagData bagData)
     {
         this.bagData = bagData;
+        coinText.text = bagData.coinCount.ToString();
         for(int i = 0; i < bagData.itemList.Count; i++)
         {
             ItemDataBase itemData = bagData.itemList[i];
