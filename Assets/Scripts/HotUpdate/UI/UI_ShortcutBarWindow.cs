@@ -77,10 +77,15 @@ public class UI_ShortcutBarWindow : UI_WindowBase,IItemWindow
     }
     public void UpdateItemByBagIndex(int bagIndex,ItemDataBase newData)
     {
+        int newUseWeaponIndex = -1;
         for (int i = 0; i < slots.Length; i++)
         {
             UI_SlotBase slot = slots[i];
             if (slot == null) continue;
+            if(slot.dataIndex == PlayerManager.Instance.UsedWeaponIndex)
+            {
+                newUseWeaponIndex = i;
+            }
             if(slot.dataIndex == bagIndex)
             {
                 slot.Destroy();
@@ -89,17 +94,21 @@ public class UI_ShortcutBarWindow : UI_WindowBase,IItemWindow
                 else slot = CreateEmptySlot(bagIndex, keyCode);
                 slot.transform.SetSiblingIndex(i);
                 slots[i] = slot;
-                //当前武器索引==目前玩家已经使用的武器的索引 && 当前武器索引!= 本地武器索引
-                if (bagIndex == PlayerManager.Instance.UsedWeaponIndex && bagIndex!=usedWeaponIndex)
-                {
-                    UpdateWeaponUsedState(usedWeaponIndex, false);
-                    UpdateWeaponUsedState(bagIndex, true);
-                    usedWeaponIndex = bagIndex;
-                }
                 break;
             }
         }
- 
+        //关闭可能存在的旧武器; -1代表着不在快捷栏的武器
+        if (usedWeaponIndex != -1 && slots[usedWeaponIndex].dataIndex != PlayerManager.Instance.UsedWeaponIndex)
+        {
+            UpdateWeaponUsedState(usedWeaponIndex, false);
+        }
+        //开启可能存在的新武器
+        if(newUseWeaponIndex != -1 && newUseWeaponIndex != usedWeaponIndex)
+        {
+            UpdateWeaponUsedState(newUseWeaponIndex, true);
+        }
+        usedWeaponIndex = newUseWeaponIndex;
+
     }
     /// <summary>
     /// 更新武器有效性

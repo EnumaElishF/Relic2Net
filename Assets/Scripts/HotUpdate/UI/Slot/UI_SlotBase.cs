@@ -90,9 +90,13 @@ public abstract class UI_SlotBase<D,C> : UI_SlotBase, IBeginDragHandler, IDragHa
     }
     public override void Destroy()
     {
-        base.Destroy();
+        if (itemConfig != null && enteredSlot == this)
+        {
+            UISystem.Close<UI_ItemInfoPopupWindow>();
+        }
         itemData = null;
         itemConfig = null;
+        base.Destroy();
     }
     /// <summary>
     /// 鼠标进入
