@@ -6,6 +6,7 @@ using UnityEngine.AddressableAssets;
 public class ClientGlobal : SingletonMono<ClientGlobal>
 {
     public GameSetting gameSetting { get; private set; }
+
     public GameBasicSetting basicSetting { get; private set; }
     public static Vector2 canvasSize = new Vector2(1920, 1080); 
 

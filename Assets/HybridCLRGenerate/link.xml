@@ -46,6 +46,7 @@
     <type fullname="Unity.Netcode.FastBufferReader" preserve="all" />
     <type fullname="Unity.Netcode.FastBufferWriter" preserve="all" />
     <type fullname="Unity.Netcode.FastBufferWriter/ForEnums" preserve="all" />
+    <type fullname="Unity.Netcode.FastBufferWriter/ForFixedStrings" preserve="all" />
     <type fullname="Unity.Netcode.FastBufferWriter/ForNetworkSerializable" preserve="all" />
     <type fullname="Unity.Netcode.FastBufferWriter/ForPrimitives" preserve="all" />
     <type fullname="Unity.Netcode.INetworkPrefabInstanceHandler" preserve="all" />

@@ -59,6 +59,10 @@ public class UI_ShopWindow : UI_CustomWindowBase, IItemWindow
     // A一定来自自身的，B不一定
     private void OnInteriorDragItem(UI_SlotBase slotA, UI_SlotBase slotB)
     {
-
+        //购买物品
+        if(slotB.ownerWindow is UI_BagWindow)
+        {
+            PlayerManager.Instance.ShopBuyItem(merchantConfig.items[slotA.dataIndex],slotB.dataIndex);
+        }
     }
 }

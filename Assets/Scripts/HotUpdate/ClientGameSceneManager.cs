@@ -23,6 +23,7 @@ public class ClientGameSceneManager : MonoBehaviour
         float progress = 0;
         loadingWindow.UpdateProgress(progress, 100);
         yield return CoroutineTool.WaitForFrame(); //等待一帧
+
         while (!ClientMapManager.Instance.IsLoadingCompleted())
         {
             yield return CoroutineTool.WaitForFrame();

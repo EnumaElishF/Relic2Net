@@ -1,7 +1,4 @@
 using JKFrame;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class UI_ShortcutBarWindow : UI_WindowBase,IItemWindow

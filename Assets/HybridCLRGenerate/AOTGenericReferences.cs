@@ -9,6 +9,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		"System.Core.dll",
 		"System.dll",
 		"Unity.Addressables.dll",
+		"Unity.Collections.dll",
 		"Unity.Netcode.Runtime.dll",
 		"Unity.ResourceManager.dll",
 		"UnityEngine.CoreModule.dll",
@@ -177,6 +178,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Threading.Tasks.Task<object>
 	// System.Threading.Tasks.TaskCompletionSource<UnityEngine.ResourceManagement.ResourceProviders.SceneInstance>
 	// System.Threading.Tasks.TaskCompletionSource<object>
+	// Unity.Collections.IIndexable<byte>
 	// Unity.Netcode.BufferSerializer<Unity.Netcode.BufferSerializerReader>
 	// Unity.Netcode.BufferSerializer<Unity.Netcode.BufferSerializerWriter>
 	// Unity.Netcode.BufferSerializer<object>
@@ -201,14 +203,19 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// Unity.Netcode.NetworkVariableSerialization<object>
 	// Unity.Netcode.UnmanagedTypeSerializer<int>
 	// Unity.Netcode.UserNetworkVariableSerialization.DuplicateValueDelegate<Unity.Collections.FixedString32Bytes>
+	// Unity.Netcode.UserNetworkVariableSerialization.DuplicateValueDelegate<float>
 	// Unity.Netcode.UserNetworkVariableSerialization.DuplicateValueDelegate<int>
 	// Unity.Netcode.UserNetworkVariableSerialization.DuplicateValueDelegate<object>
 	// Unity.Netcode.UserNetworkVariableSerialization.ReadValueDelegate<Unity.Collections.FixedString32Bytes>
+	// Unity.Netcode.UserNetworkVariableSerialization.ReadValueDelegate<float>
 	// Unity.Netcode.UserNetworkVariableSerialization.ReadValueDelegate<int>
 	// Unity.Netcode.UserNetworkVariableSerialization.ReadValueDelegate<object>
 	// Unity.Netcode.UserNetworkVariableSerialization.WriteValueDelegate<Unity.Collections.FixedString32Bytes>
+	// Unity.Netcode.UserNetworkVariableSerialization.WriteValueDelegate<float>
 	// Unity.Netcode.UserNetworkVariableSerialization.WriteValueDelegate<int>
 	// Unity.Netcode.UserNetworkVariableSerialization.WriteValueDelegate<object>
+	// Unity.Netcode.UserNetworkVariableSerialization<Unity.Collections.FixedString32Bytes>
+	// Unity.Netcode.UserNetworkVariableSerialization<float>
 	// Unity.Netcode.UserNetworkVariableSerialization<object>
 	// UnityEngine.AddressableAssets.AddressablesImpl.<>c__DisplayClass79_0<object>
 	// UnityEngine.Events.InvokableCall<float>
@@ -293,6 +300,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// S_C_Login System.Activator.CreateInstance<S_C_Login>()
 		// S_C_Register System.Activator.CreateInstance<S_C_Register>()
 		// S_C_ShortcutBarUpdateItem System.Activator.CreateInstance<S_C_ShortcutBarUpdateItem>()
+		// Unity.Collections.FixedString32Bytes System.Activator.CreateInstance<Unity.Collections.FixedString32Bytes>()
 		// object System.Activator.CreateInstance<object>()
 		// object[] System.Array.Empty<object>()
 		// System.Void* Unity.Collections.LowLevel.Unsafe.UnsafeUtility.AddressOf<int>(int&)
@@ -319,6 +327,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.Void Unity.Netcode.FastBufferReader.ReadNetworkSerializable<S_C_Register>(S_C_Register&)
 		// System.Void Unity.Netcode.FastBufferReader.ReadNetworkSerializable<S_C_ShortcutBarUpdateItem>(S_C_ShortcutBarUpdateItem&)
 		// System.Void Unity.Netcode.FastBufferReader.ReadUnmanagedSafe<byte>(byte&)
+		// System.Void Unity.Netcode.FastBufferReader.ReadUnmanagedSafe<float>(float&)
 		// System.Void Unity.Netcode.FastBufferReader.ReadUnmanagedSafe<int>(int&)
 		// System.Void Unity.Netcode.FastBufferReader.ReadUnmanagedSafe<object>(object&)
 		// System.Void Unity.Netcode.FastBufferReader.ReadValueSafe<C_S_BagSwapItem>(C_S_BagSwapItem&,Unity.Netcode.FastBufferWriter.ForNetworkSerializable)
@@ -338,7 +347,9 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.Void Unity.Netcode.FastBufferReader.ReadValueSafe<S_C_Login>(S_C_Login&,Unity.Netcode.FastBufferWriter.ForNetworkSerializable)
 		// System.Void Unity.Netcode.FastBufferReader.ReadValueSafe<S_C_Register>(S_C_Register&,Unity.Netcode.FastBufferWriter.ForNetworkSerializable)
 		// System.Void Unity.Netcode.FastBufferReader.ReadValueSafe<S_C_ShortcutBarUpdateItem>(S_C_ShortcutBarUpdateItem&,Unity.Netcode.FastBufferWriter.ForNetworkSerializable)
+		// System.Void Unity.Netcode.FastBufferReader.ReadValueSafe<Unity.Collections.FixedString32Bytes>(Unity.Collections.FixedString32Bytes&,Unity.Netcode.FastBufferWriter.ForFixedStrings)
 		// System.Void Unity.Netcode.FastBufferReader.ReadValueSafe<byte>(byte&,Unity.Netcode.FastBufferWriter.ForEnums)
+		// System.Void Unity.Netcode.FastBufferReader.ReadValueSafe<float>(float&,Unity.Netcode.FastBufferWriter.ForPrimitives)
 		// System.Void Unity.Netcode.FastBufferReader.ReadValueSafe<int>(int&,Unity.Netcode.FastBufferWriter.ForEnums)
 		// System.Void Unity.Netcode.FastBufferReader.ReadValueSafe<object>(object&,Unity.Netcode.FastBufferWriter.ForEnums)
 		// System.Void Unity.Netcode.FastBufferWriter.WriteNetworkSerializable<C_S_BagSwapItem>(C_S_BagSwapItem&)
@@ -352,9 +363,12 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.Void Unity.Netcode.FastBufferWriter.WriteNetworkSerializable<C_S_ShortcutBarSetItem>(C_S_ShortcutBarSetItem&)
 		// System.Void Unity.Netcode.FastBufferWriter.WriteNetworkSerializable<C_S_ShortcutBarSwapItem>(C_S_ShortcutBarSwapItem&)
 		// System.Void Unity.Netcode.FastBufferWriter.WriteNetworkSerializable<object>(object&)
+		// System.Void Unity.Netcode.FastBufferWriter.WriteUnmanaged<int>(int&)
 		// System.Void Unity.Netcode.FastBufferWriter.WriteUnmanagedSafe<byte>(byte&)
+		// System.Void Unity.Netcode.FastBufferWriter.WriteUnmanagedSafe<float>(float&)
 		// System.Void Unity.Netcode.FastBufferWriter.WriteUnmanagedSafe<int>(int&)
 		// System.Void Unity.Netcode.FastBufferWriter.WriteUnmanagedSafe<object>(object&)
+		// System.Void Unity.Netcode.FastBufferWriter.WriteValue<Unity.Collections.FixedString32Bytes>(Unity.Collections.FixedString32Bytes&,Unity.Netcode.FastBufferWriter.ForFixedStrings)
 		// System.Void Unity.Netcode.FastBufferWriter.WriteValueSafe<C_S_BagSwapItem>(C_S_BagSwapItem&,Unity.Netcode.FastBufferWriter.ForNetworkSerializable)
 		// System.Void Unity.Netcode.FastBufferWriter.WriteValueSafe<C_S_BagUseItem>(C_S_BagUseItem&,Unity.Netcode.FastBufferWriter.ForNetworkSerializable)
 		// System.Void Unity.Netcode.FastBufferWriter.WriteValueSafe<C_S_ChatMessage>(C_S_ChatMessage&,Unity.Netcode.FastBufferWriter.ForNetworkSerializable)
@@ -365,7 +379,9 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.Void Unity.Netcode.FastBufferWriter.WriteValueSafe<C_S_Register>(C_S_Register&,Unity.Netcode.FastBufferWriter.ForNetworkSerializable)
 		// System.Void Unity.Netcode.FastBufferWriter.WriteValueSafe<C_S_ShortcutBarSetItem>(C_S_ShortcutBarSetItem&,Unity.Netcode.FastBufferWriter.ForNetworkSerializable)
 		// System.Void Unity.Netcode.FastBufferWriter.WriteValueSafe<C_S_ShortcutBarSwapItem>(C_S_ShortcutBarSwapItem&,Unity.Netcode.FastBufferWriter.ForNetworkSerializable)
+		// System.Void Unity.Netcode.FastBufferWriter.WriteValueSafe<Unity.Collections.FixedString32Bytes>(Unity.Collections.FixedString32Bytes&,Unity.Netcode.FastBufferWriter.ForFixedStrings)
 		// System.Void Unity.Netcode.FastBufferWriter.WriteValueSafe<byte>(byte&,Unity.Netcode.FastBufferWriter.ForEnums)
+		// System.Void Unity.Netcode.FastBufferWriter.WriteValueSafe<float>(float&,Unity.Netcode.FastBufferWriter.ForPrimitives)
 		// System.Void Unity.Netcode.FastBufferWriter.WriteValueSafe<int>(int&,Unity.Netcode.FastBufferWriter.ForEnums)
 		// System.Void Unity.Netcode.FastBufferWriter.WriteValueSafe<object>(object&,Unity.Netcode.FastBufferWriter.ForEnums)
 		// System.Void Unity.Netcode.FastBufferWriter.WriteValueSafe<object>(object&,Unity.Netcode.FastBufferWriter.ForNetworkSerializable)

@@ -31,6 +31,8 @@ public enum MessageType : byte
     C_S_ShortcutBarSetItem,
     //快捷栏内格子交换
     C_S_ShortcutBarSwapItem,
+    //通过商店购买物品
+    C_S_ShopBuyItem
 }
 /// <summary>
 /// 可以预知的完成的返回信息，做成Code的方式，做个可知的码。比如服务端返回码等
@@ -43,6 +45,8 @@ public enum ErrorCode : byte
     NameDuplication,     //名称重复
     NameOrPassword,      //名称或密码错误
     AccountRepeatLogin,  // 账号重复登录
+    CoinsInsufficient,   // 金币不足
+    LackOfBagSpace,      // 缺少背包空间
 
 }
 
@@ -273,3 +277,14 @@ public struct C_S_ShortcutBarSwapItem : INetworkSerializable
         serializer.SerializeValue(ref shortcutBarIndexB);
     }
 }
+public struct C_S_ShopBuyItem : INetworkSerializable
+{
+    public string itemID;
+    public int bagIndex;
+    public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+    {
+        serializer.SerializeValue(ref itemID);
+        serializer.SerializeValue(ref bagIndex);
+    }
+}
+

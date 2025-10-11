@@ -21007,7 +21007,7 @@ MonoBehaviour:
   NetworkManagerPrefab: {fileID: 6896608431864125974, guid: a640b579c4cbcb0418ae9ac63a4beadf, type: 3}
   ServerOnGameScenePrefab: {fileID: 6183135768358698062, guid: f44599ab588d6ff4885da0f741572b10, type: 3}
   playerPrefab: {fileID: 2039334567599830296, guid: d1adee6bbc176af418dfe396816ca8e4, type: 3}
-  playerDefaultPosition: {x: 138, y: 54, z: 109}
+  playerDefaultPosition: {x: 222, y: 54, z: 130}
   playerDefaultCoinCount: 1000
   terrainFolderPath: Assets/EnvRes/Terrains
   weaponConfigFolderPath: Assets/Config/Item/Weapon

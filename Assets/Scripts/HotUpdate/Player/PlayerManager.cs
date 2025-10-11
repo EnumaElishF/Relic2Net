@@ -212,5 +212,43 @@ public class PlayerManager : SingletonMono<PlayerManager>
             }
         }
     }
+
+    internal void ShopBuyItem(ItemConfigBase targetItemConfig, int bagIndex)
+    {
+        //金币是否足够
+        if(targetItemConfig.price > bagData.coinCount)
+        {
+            //弹窗金币不足+本地化
+            UISystem.Show<UI_MessagePopupWindow>().ShowMessageByLocalizationKey(ErrorCode.CoinsInsufficient.ToString(), Color.yellow);
+            return;
+        }
+        // 背包空间检测
+        ItemDataBase existedItemData = bagData.TryGetItem(targetItemConfig.name, out int existedBagIndex);
+        ItemDataBase targetSlotItemData = bagData.itemList[bagIndex];
+        bool check; 
+        //堆叠物品可以是空位，或是同一个物品
+        if(targetItemConfig.GetDefaultItemData() is StackableItemDataBase)
+        {
+            check = targetSlotItemData == null || existedItemData != null;
+            if(existedItemData != null)
+            {
+                bagIndex = existedBagIndex;
+            }
+        }
+        //武器必须在空位
+        else
+        {
+            check = targetSlotItemData == null;
+        }
+        if (!check)
+        {
+            UISystem.Show<UI_MessagePopupWindow>().ShowMessageByLocalizationKey(ErrorCode.LackOfBagSpace.ToString(), Color.yellow);
+            return;
+        }
+        //发送网络信息
+        NetMessageManager.Instance.SendMessageToServer(MessageType.C_S_ShopBuyItem,
+            new C_S_ShopBuyItem { itemID = targetItemConfig.name, bagIndex = bagIndex});
+
+    }
 }
 
