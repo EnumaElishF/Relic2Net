@@ -313,7 +313,10 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
             C_S_BagSellItem message = (C_S_BagSellItem)serializable;
             BagData bagData = client.playerData.bagData;
             //条件：index范围有效，物品不是空格子，不是当前使用的武器
-            if (!bagData.CheckBagIndexRange(message.bagIndex) || bagData.itemList[message.bagIndex] == null || message.bagIndex == bagData.usedWeaponIndex) return;
+            if (!bagData.CheckBagIndexRange(message.bagIndex) || message.bagIndex == bagData.usedWeaponIndex) return;
+            ItemDataBase itemData = bagData.itemList[message.bagIndex];
+            if (itemData == null) return;
+
             ItemConfigBase itemConfig = ServerResSystem.GetItemConfig<ItemConfigBase>(bagData.itemList[message.bagIndex].id);
             //销毁物品
             bagData.RemoveItem(message.bagIndex);
@@ -327,13 +330,13 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
                     itemType = ItemType.Empty,
                     usedWeapon = false
                 }, clientID);
+            int itemCount = 1;
+            if (itemData is StackableItemDataBase)
+            {
+                itemCount = ((StackableItemDataBase)itemData).count;
+            }
             //增加金币: 售出价格为原价格的一半
-            //if (itemData is StackableItemDataBase)
-            //{
-            //    itemCount = ((StackableItemDataBase)itemData).count;
-            //}
-            //bagData.coinCount += (itemConfig.price / 2) * itemCount;
-            bagData.coinCount += (itemConfig.price / 2);
+            bagData.coinCount += (itemConfig.price / 2) * itemCount;
             bagData.AddDataVersion();
             NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_UpdateCoinCount,
                 new S_C_UpdateCoinCount
