@@ -83,6 +83,20 @@ public class BagData: INetworkSerializable
         }
 
     }
+    /// <summary>
+    /// 检查背包索引的有效性
+    /// </summary>
+    public bool CheckBagIndexRange(int index)
+    {
+        return index >= 0 && index < itemCount;
+    }
+    /// <summary>
+    /// 检查快捷栏索引的有效性
+    /// </summary>
+    public bool CheckShortcutBarIndexRange(int index)
+    {
+        return index >= 0 && index < shortcutBarIndexs.Length;
+    }
 
     #region Server 服务端背包数据->数据获取
     //暂时不使用 UNITY_SERVER ，这里调用出错误。暂时移除 TryUseItem 方法的条件编译限制
@@ -90,8 +104,6 @@ public class BagData: INetworkSerializable
     //#if UNITY_SERVER || UNITY_EDITOR
     public ItemDataBase TryUseItem(int index)
     {
-        if (index < 0 || index >= itemList.Count - 1) return null;
-
         ItemDataBase itemData = itemList[index];
         // 只有武器与消耗品才可以使用
         if (itemData is WeaponData)
@@ -119,7 +131,6 @@ public class BagData: INetworkSerializable
     public bool TryAddWeapon(string id,out int index)
     {
         index = -1;
-        if (index <= 0 || index >= itemList.Count - 1) return false;
 
         if (TryGetFirstEmptyIndex(out index)) //拿出第一个itemList的空数据
         {
@@ -132,7 +143,6 @@ public class BagData: INetworkSerializable
     public bool TryAddStackableItem<T>(string id, int count,out int index) where T: StackableItemDataBase, new()
     {
         index = -1;
-        if (index <= 0 || index >= itemList.Count - 1) return false;
         //index在初始已定义int，后面无需定义
         ItemDataBase itemData = TryGetItem(id, out index);
         if (itemData != null) //已存在
@@ -156,7 +166,6 @@ public class BagData: INetworkSerializable
     }
     public void RemoveItem(int index)
     {
-        if (index <= 0 || index >= itemList.Count - 1) return;
         itemList[index] = null;
     }
     public ItemDataBase TryGetItem(string id, out int index)
@@ -179,7 +188,6 @@ public class BagData: INetworkSerializable
     public bool TryGetFirstEmptyIndex(out int index)
     {
         index = -1;
-        if (index <= 0 || index >= itemList.Count - 1) return false;
         for (int i = 0; i < itemList.Count; i++)
         {
             if (itemList[i] == null)

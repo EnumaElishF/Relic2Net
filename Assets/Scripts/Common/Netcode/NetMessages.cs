@@ -31,9 +31,10 @@ public enum MessageType : byte
     C_S_ShortcutBarSetItem,
     //快捷栏内格子交换
     C_S_ShortcutBarSwapItem,
-    //通过商店购买物品
+    //通过商店购买与出售物品
     C_S_ShopBuyItem,
-    S_C_UpdateCoinCount
+    S_C_UpdateCoinCount,
+    C_S_BagSellItem
 
 }
 /// <summary>
@@ -49,6 +50,7 @@ public enum ErrorCode : byte
     AccountRepeatLogin,  // 账号重复登录
     CoinsInsufficient,   // 金币不足
     LackOfBagSpace,      // 缺少背包空间
+    UsedWeaponCannotSell,// 使用状态下的武器无法出售
 
 }
 
@@ -194,11 +196,11 @@ public struct S_C_GetBagData : INetworkSerializable
 public struct C_S_BagUseItem : INetworkSerializable
 {
     //使用物品，先确定物品索引
-    public int itemIndex; //背包中的位置
+    public int bagIndex; //背包中的位置
 
     public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
     {
-        serializer.SerializeValue(ref itemIndex);
+        serializer.SerializeValue(ref bagIndex);
     }
 }
 public struct S_C_BagUpdateItem : INetworkSerializable
@@ -236,12 +238,12 @@ public struct S_C_BagUpdateItem : INetworkSerializable
 
 public struct C_S_BagSwapItem : INetworkSerializable
 {
-    public int itemIndexA;
-    public int itemIndexB;
+    public int bagIndexA;
+    public int bagIndexB;
     public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
     {
-        serializer.SerializeValue(ref itemIndexA);
-        serializer.SerializeValue(ref itemIndexB);
+        serializer.SerializeValue(ref bagIndexA);
+        serializer.SerializeValue(ref bagIndexB);
     }
 }
 
@@ -298,6 +300,14 @@ public struct S_C_UpdateCoinCount : INetworkSerializable
     {
         serializer.SerializeValue(ref bagDataVersion);
         serializer.SerializeValue(ref coinCount);
+    }
+}
+public struct C_S_BagSellItem : INetworkSerializable
+{
+    public int bagIndex;
+    public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+    {
+        serializer.SerializeValue(ref bagIndex);
     }
 }
 

@@ -114,6 +114,10 @@ public class NetMessageManager : SingletonMono<NetMessageManager>
                     reader.ReadValueSafe(out S_C_UpdateCoinCount S_C_UpdateCoinCount);
                     TriggerMessageCallback(MessageType.S_C_UpdateCoinCount, clientId, S_C_UpdateCoinCount);
                     break;
+                case MessageType.C_S_BagSellItem:
+                    reader.ReadValueSafe(out C_S_BagSellItem C_S_BagSellItem);
+                    TriggerMessageCallback(MessageType.C_S_BagSellItem, clientId, C_S_BagSellItem);
+                    break;
             }
         }
         catch(Exception e)
@@ -127,7 +131,7 @@ public class NetMessageManager : SingletonMono<NetMessageManager>
     /// </summary>
     private FastBufferWriter WriteData<T>(MessageType messageType, T data) where T : INetworkSerializable
     {
-        // 默认1024字节，当不足时候会在10240范围内自动扩容
+        // 默认1024字节，当不足时候会在10240范围内自动扩容。扩容的最大值设置：10240
         FastBufferWriter writer = new FastBufferWriter(1024, Allocator.Temp, 10240);
         using (writer)
         {

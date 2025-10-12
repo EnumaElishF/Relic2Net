@@ -101,8 +101,8 @@ public class UI_BagWindow : UI_CustomWindowBase,IItemWindow
         {
             NetMessageManager.Instance.SendMessageToServer(MessageType.C_S_BagSwapItem, new C_S_BagSwapItem
             {
-                itemIndexA = slotA.dataIndex,
-                itemIndexB = slotB.dataIndex,
+                bagIndexA = slotA.dataIndex,
+                bagIndexB = slotB.dataIndex,
             });
         }
         //设置这个格子到快捷栏  背包->快捷栏
@@ -117,6 +117,19 @@ public class UI_BagWindow : UI_CustomWindowBase,IItemWindow
                     bagIndex = slotA.dataIndex
                 });
             }
+        }
+        // 出售这个物品
+        else if(slotB.ownerWindow is UI_ShopWindow)
+        {
+            if(slotA.dataIndex == PlayerManager.Instance.bagData.usedWeaponIndex)
+            {
+                UISystem.Show<UI_MessagePopupWindow>().ShowMessageByLocalizationKey(ErrorCode.UsedWeaponCannotSell.ToString(), Color.yellow);
+                return;
+            }
+            NetMessageManager.Instance.SendMessageToServer(MessageType.C_S_BagSellItem, new C_S_BagSellItem
+            {
+                bagIndex = slotA.dataIndex
+            });
         }
     }
 }

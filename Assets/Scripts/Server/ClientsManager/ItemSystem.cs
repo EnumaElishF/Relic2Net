@@ -22,7 +22,9 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
         NetMessageManager.Instance.RegisterMessageCallback(MessageType.C_S_ShortcutBarSetItem, OnClientShortcutBarSetItem);
         NetMessageManager.Instance.RegisterMessageCallback(MessageType.C_S_ShortcutBarSwapItem, OnClientShortcutBarSwapItem);
         NetMessageManager.Instance.RegisterMessageCallback(MessageType.C_S_ShopBuyItem, OnClientShopBuyItem);
+        NetMessageManager.Instance.RegisterMessageCallback(MessageType.C_S_BagSellItem, OnClientBagSellItem);
     }
+
 
 
 
@@ -53,17 +55,17 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
         if (clientIDDic.TryGetValue(clientID, out Client client) && client.playerData != null)
         {
             C_S_BagUseItem message = (C_S_BagUseItem)serializable;
-
-            //TODO 具体的物品使用
+            //具体的物品使用
             BagData bagData = client.playerData.bagData;
             //背包数据的TryUseItem原本是放服务器这边的，但是出现Common程序集获取内容的错误，应该是Unity打包识别不足够好，
             //最后我们还是把数据获取内容，转移到BagData
-            ItemDataBase itemData = bagData.TryUseItem(message.itemIndex);
+            if (!bagData.CheckBagIndexRange(message.bagIndex)) return;
+            ItemDataBase itemData = bagData.TryUseItem(message.bagIndex);
             ItemType itemType = ItemType.Empty;
             if (itemData != null) itemType = itemData.GetItemType();
             S_C_BagUpdateItem result = new S_C_BagUpdateItem
             {
-                itemIndex = message.itemIndex,
+                itemIndex = message.bagIndex,
                 bagDataVersion = bagData.dataVersion,
                 newItemData = itemData,
                 itemType = itemType,
@@ -103,36 +105,37 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
         {
             C_S_BagSwapItem message = (C_S_BagSwapItem)serializable;
             BagData bagData = client.playerData.bagData;
+            if (!bagData.CheckBagIndexRange(message.bagIndexA) || !bagData.CheckBagIndexRange(message.bagIndexB)) return;
             //交换数据
-            bagData.SwapItem(message.itemIndexA, message.itemIndexB);
+            bagData.SwapItem(message.bagIndexA, message.bagIndexB);
 
-            ItemDataBase itemAData = bagData.itemList[message.itemIndexA];
-            ItemDataBase itemBData = bagData.itemList[message.itemIndexB];
+            ItemDataBase itemAData = bagData.itemList[message.bagIndexA];
+            ItemDataBase itemBData = bagData.itemList[message.bagIndexB];
             ItemType itemAType = itemAData == null ? ItemType.Empty : itemAData.GetItemType();
             ItemType itemBType = itemBData == null ? ItemType.Empty : itemBData.GetItemType();
 
             S_C_BagUpdateItem resultA = new S_C_BagUpdateItem
             {
-                itemIndex = message.itemIndexA,
+                itemIndex = message.bagIndexA,
                 bagDataVersion = bagData.dataVersion,
                 newItemData = itemAData,
                 itemType = itemAType,
-                usedWeapon = bagData.usedWeaponIndex == message.itemIndexA,
+                usedWeapon = bagData.usedWeaponIndex == message.bagIndexA,
             };
             bagData.AddDataVersion(); // 避免第二条消息因为版本号是一样的被客户端过滤,版本需要+1位
             S_C_BagUpdateItem resultB = new S_C_BagUpdateItem
             {
-                itemIndex = message.itemIndexB,
+                itemIndex = message.bagIndexB,
                 bagDataVersion = bagData.dataVersion,
                 newItemData = itemBData,
                 itemType = itemBType,
-                usedWeapon = bagData.usedWeaponIndex == message.itemIndexB,
+                usedWeapon = bagData.usedWeaponIndex == message.bagIndexB,
             };
             NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_BagUpdateItem, resultA, clientID);
             NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_BagUpdateItem, resultB, clientID);
 
             //涉及到快捷键的修改，也就是A或者B 的快捷键跟着修改
-            if(bagData.TryGetShortcutBarIndex(message.itemIndexA,out int shortcutAIndex))
+            if(bagData.TryGetShortcutBarIndex(message.bagIndexA,out int shortcutAIndex))
             {
                 //涉及到服务器上数据变更，背包的改动每次加个版本号变化，这样做背包的内容
                 bagData.AddDataVersion();
@@ -140,30 +143,30 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
                 S_C_ShortcutBarUpdateItem shortcutBarUpdateItem = new S_C_ShortcutBarUpdateItem
                 {
                     shortcutBarIndex = shortcutAIndex,
-                    bagIndex = message.itemIndexB,
+                    bagIndex = message.bagIndexB,
                     bagDataVersion = bagData.dataVersion
                 };
                 NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_ShortcutBarUpdateItem, shortcutBarUpdateItem, clientID);
             }
-            if(bagData.TryGetShortcutBarIndex(message.itemIndexB,out int shortcutBIndex))
+            if(bagData.TryGetShortcutBarIndex(message.bagIndexB,out int shortcutBIndex))
             {
                 bagData.AddDataVersion();
-                bagData.UpdateShortcutBarItem(shortcutBIndex, message.itemIndexA);
+                bagData.UpdateShortcutBarItem(shortcutBIndex, message.bagIndexA);
                 S_C_ShortcutBarUpdateItem shortcutBarUpdateItem = new S_C_ShortcutBarUpdateItem
                 {
                     shortcutBarIndex = shortcutBIndex,
-                    bagIndex = message.itemIndexA,
+                    bagIndex = message.bagIndexA,
                     bagDataVersion = bagData.dataVersion
                 };
                 NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_ShortcutBarUpdateItem, shortcutBarUpdateItem, clientID);
             }
             if (shortcutAIndex != -1)
             {
-                bagData.UpdateShortcutBarItem(shortcutAIndex, message.itemIndexB);
+                bagData.UpdateShortcutBarItem(shortcutAIndex, message.bagIndexB);
             }
             if (shortcutBIndex != -1)
             {
-                bagData.UpdateShortcutBarItem(shortcutBIndex, message.itemIndexA);
+                bagData.UpdateShortcutBarItem(shortcutBIndex, message.bagIndexA);
             }
         }
     }
@@ -178,8 +181,11 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
             C_S_ShortcutBarSetItem message = (C_S_ShortcutBarSetItem)serializable;
             BagData bagData = client.playerData.bagData;
 
+            message.bagIndex = bagData.CheckBagIndexRange(message.bagIndex) ? message.bagIndex : -1;
+            if (!bagData.CheckShortcutBarIndexRange(message.shortcutBarIndex)) return;
+
             // 找到当前快捷栏中可能存在的重复项，将其移除
-            if(bagData.TryGetShortcutBarIndex(message.bagIndex,out int shortcutBarIndex))
+            if (bagData.TryGetShortcutBarIndex(message.bagIndex,out int shortcutBarIndex))
             {
                 bagData.RemoveShortcutBarItem(shortcutBarIndex);
                 bagData.AddDataVersion();
@@ -216,6 +222,7 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
         {
             C_S_ShortcutBarSwapItem message = (C_S_ShortcutBarSwapItem)serializable;
             BagData bagData = client.playerData.bagData;
+            if (!bagData.CheckShortcutBarIndexRange(message.shortcutBarIndexA) || !bagData.CheckShortcutBarIndexRange(message.shortcutBarIndexB)) return;
             bagData.SwapShortcutBarItem(message.shortcutBarIndexA, message.shortcutBarIndexB);
             //消息1
             bagData.AddDataVersion();
@@ -244,11 +251,10 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
         {
             C_S_ShopBuyItem message = (C_S_ShopBuyItem)serializable;
             BagData bagData = client.playerData.bagData;
-            //if (!bagData.CheckBagIndexRange(message.bagIndex)) return;
-
+            if (!bagData.CheckBagIndexRange(message.bagIndex)) return;
             // 物品不存在的判断
             ItemConfigBase itemConfig = ServerResSystem.GetItemConfig<ItemConfigBase>(message.itemID);
-            if (itemConfig == null || message.bagIndex<0 || message.bagIndex >= bagData.itemList.Count) return;
+            if (itemConfig == null) return;
 
             //空间检测
             //如果是武器，目标位置应该是Null，如果是可堆叠物品，目标位置应该是同id或null
@@ -297,5 +303,44 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
 
         }
     }
-
+    /// <summary>
+    /// 当客户端从背包出售物品
+    /// </summary>
+    public void OnClientBagSellItem(ulong clientID, INetworkSerializable serializable)
+    {
+        if (clientIDDic.TryGetValue(clientID, out Client client) && client.playerData != null)
+        {
+            C_S_BagSellItem message = (C_S_BagSellItem)serializable;
+            BagData bagData = client.playerData.bagData;
+            //条件：index范围有效，物品不是空格子，不是当前使用的武器
+            if (!bagData.CheckBagIndexRange(message.bagIndex) || bagData.itemList[message.bagIndex] == null || message.bagIndex == bagData.usedWeaponIndex) return;
+            ItemConfigBase itemConfig = ServerResSystem.GetItemConfig<ItemConfigBase>(bagData.itemList[message.bagIndex].id);
+            //销毁物品
+            bagData.RemoveItem(message.bagIndex);
+            bagData.AddDataVersion();
+            NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_BagUpdateItem,
+                new S_C_BagUpdateItem
+                {
+                    itemIndex = message.bagIndex,
+                    bagDataVersion = bagData.dataVersion,
+                    newItemData = null,
+                    itemType = ItemType.Empty,
+                    usedWeapon = false
+                }, clientID);
+            //增加金币: 售出价格为原价格的一半
+            //if (itemData is StackableItemDataBase)
+            //{
+            //    itemCount = ((StackableItemDataBase)itemData).count;
+            //}
+            //bagData.coinCount += (itemConfig.price / 2) * itemCount;
+            bagData.coinCount += (itemConfig.price / 2);
+            bagData.AddDataVersion();
+            NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_UpdateCoinCount,
+                new S_C_UpdateCoinCount
+                {
+                    bagDataVersion = bagData.dataVersion,
+                    coinCount = bagData.coinCount,
+                }, clientID);
+        }
+    }
 }

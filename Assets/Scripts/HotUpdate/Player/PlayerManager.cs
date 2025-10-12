@@ -2,7 +2,6 @@
 //从而要求他们不能去依赖客户端或者服务端的程序集的内容，要打断他们的依赖关系，可以通过事件，去传，从而跨程序集通信
 using Cinemachine;
 using JKFrame;
-using System;
 using Unity.Netcode;
 using UnityEngine;
 /// <summary>
@@ -18,7 +17,7 @@ public class PlayerManager : SingletonMono<PlayerManager>
     public int UsedWeaponIndex => bagData.usedWeaponIndex;
 
     private bool requestOpenBagWindow = false;
-    private BagData bagData;
+    public BagData bagData { get; private set; }
     /// <summary>
     /// PlayerManaget在Awake里触发xxx改为手动Init，然后要求PlayerController才在后续方法里面触发
     /// </summary>
@@ -154,7 +153,7 @@ public class PlayerManager : SingletonMono<PlayerManager>
     public void UseItem(int slotIndex)
     {
         // 构建使用物品的消息
-        C_S_BagUseItem message = new C_S_BagUseItem { itemIndex = slotIndex };
+        C_S_BagUseItem message = new C_S_BagUseItem { bagIndex = slotIndex };
         NetMessageManager.Instance.SendMessageToServer(MessageType.C_S_BagUseItem, message);
     }
     private void OnS_C_UpdateItem(ulong serverID, INetworkSerializable serializable)
@@ -196,6 +195,8 @@ public class PlayerManager : SingletonMono<PlayerManager>
     private void OnS_C_ShortcutBarUpdateItem(ulong serverID, INetworkSerializable serializable)
     {
         S_C_ShortcutBarUpdateItem message = (S_C_ShortcutBarUpdateItem)serializable;
+        if (bagData.dataVersion == message.bagDataVersion) return; //没变化就不要去处理下面的内容
+        bagData.dataVersion = message.bagDataVersion;
         // 通知快捷栏
         if (ClientUtility.GetWindowActiveState(out UI_ShortcutBarWindow shortcutBarWindow))
         {
