@@ -34,7 +34,7 @@ public class UI_BagWindow : UI_CustomWindowBase,IItemWindow
     public void Show(BagData bagData)
     {
         this.bagData = bagData;
-        coinText.text = bagData.coinCount.ToString();
+        UpdateCoin(bagData.coinCount);
         for(int i = 0; i < bagData.itemList.Count; i++)
         {
             ItemDataBase itemData = bagData.itemList[i];
@@ -65,6 +65,12 @@ public class UI_BagWindow : UI_CustomWindowBase,IItemWindow
     {
         PlayerManager.Instance.UseItem(slotIndex);
     }
+
+    public void UpdateCoin(int value)
+    {
+        coinText.text = value.ToString();
+    }
+
     public void UpdateItem(int index,ItemDataBase itemData)
     {
         slotList[index].Destroy(); // 回收掉格子

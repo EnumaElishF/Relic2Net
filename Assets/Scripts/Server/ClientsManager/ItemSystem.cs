@@ -1,4 +1,5 @@
 ﻿using JKFrame;
+using System;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -14,14 +15,15 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
     {
         PlayerController.SetGetWeaponFunc(GetWeapon);
 
-        //NetMessageManager注册网络事件： 服务端控制背包数据变化的关键
+        //TODO C到S端的，NetMessageManager注册网络事件： 服务端控制背包数据变化的关键
         NetMessageManager.Instance.RegisterMessageCallback(MessageType.C_S_GetBagData, OnClientGetBagData);
         NetMessageManager.Instance.RegisterMessageCallback(MessageType.C_S_BagUseItem, OnClientBagUseItem);
         NetMessageManager.Instance.RegisterMessageCallback(MessageType.C_S_BagSwapItem, OnClientBagSwapItem);
         NetMessageManager.Instance.RegisterMessageCallback(MessageType.C_S_ShortcutBarSetItem, OnClientShortcutBarSetItem);
         NetMessageManager.Instance.RegisterMessageCallback(MessageType.C_S_ShortcutBarSwapItem, OnClientShortcutBarSwapItem);
-
+        NetMessageManager.Instance.RegisterMessageCallback(MessageType.C_S_ShopBuyItem, OnClientShopBuyItem);
     }
+
 
 
     #region 物品
@@ -234,8 +236,66 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
                 bagDataVersion = bagData.dataVersion
             };
             NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_ShortcutBarUpdateItem, result2, clientID);
+        }
+    }
+    private void OnClientShopBuyItem(ulong clientID, INetworkSerializable serializable)
+    {
+        if (clientIDDic.TryGetValue(clientID, out Client client) && client.playerData != null)
+        {
+            C_S_ShopBuyItem message = (C_S_ShopBuyItem)serializable;
+            BagData bagData = client.playerData.bagData;
+            //if (!bagData.CheckBagIndexRange(message.bagIndex)) return;
+
+            // 物品不存在的判断
+            ItemConfigBase itemConfig = ServerResSystem.GetItemConfig<ItemConfigBase>(message.itemID);
+            if (itemConfig == null || message.bagIndex<0 || message.bagIndex >= bagData.itemList.Count) return;
+
+            //空间检测
+            //如果是武器，目标位置应该是Null，如果是可堆叠物品，目标位置应该是同id或null
+            bool check;
+            //下面这个数据并不会每次都会生成，所以并不会有那种gcc的问题
+            bool isStackableItemData = itemConfig.GetDefaultItemData() is StackableItemDataBase;
+            if (isStackableItemData) check = bagData.itemList[message.bagIndex] == null || bagData.itemList[message.bagIndex].id == message.itemID;
+            else check = bagData.itemList[message.bagIndex] == null;
+
+            if (!check) return;
+            // 金币检查
+            check = bagData.coinCount >= itemConfig.price;
+            if (!check) return;
+            //如果是可堆叠物品，如果是空位，则新增一个物品，否则增加数量即可
+            if (isStackableItemData)
+            {
+                if (bagData.itemList[message.bagIndex] == null)
+                    bagData.itemList[message.bagIndex] = itemConfig.GetDefaultItemData().Copy();
+                else
+                    ((StackableItemDataBase)bagData.itemList[message.bagIndex]).count += ((StackableItemDataBase)itemConfig.GetDefaultItemData()).count;
+            }
+            else
+            {
+                bagData.itemList[message.bagIndex] = itemConfig.GetDefaultItemData().Copy();
+            }
+            bagData.AddDataVersion();
+            //回复客户端增加物品
+            NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_BagUpdateItem,
+                new S_C_BagUpdateItem
+                {
+                    itemIndex = message.bagIndex,
+                    bagDataVersion = bagData.dataVersion,
+                    newItemData = bagData.itemList[message.bagIndex],
+                    itemType = bagData.itemList[message.bagIndex].GetItemType(),
+                    usedWeapon = false
+                }, clientID);
+            //回复客户端金币更新
+            bagData.coinCount -= itemConfig.price;
+            bagData.AddDataVersion();
+            NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_UpdateCoinCount,
+                new S_C_UpdateCoinCount
+                {
+                    bagDataVersion = bagData.dataVersion,
+                    coinCount = bagData.coinCount,
+                }, clientID);
 
         }
-
     }
+
 }

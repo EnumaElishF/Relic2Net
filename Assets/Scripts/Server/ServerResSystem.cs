@@ -33,7 +33,13 @@ public static class ServerResSystem
     }
     public static T GetItemConfig<T>(string itemName) where T: ItemConfigBase
     {
-        ItemConfigBase itemConfig = serverConfig.itemConfigDic[itemName];
-        return (T)itemConfig;
+        //改成基于字典的TryGet的内容
+        if(serverConfig.itemConfigDic.TryGetValue(itemName,out ItemConfigBase itemConfig))
+        {
+            //找到
+            return (T)itemConfig;
+        }
+        //没有找到
+        return default;
     }
 }

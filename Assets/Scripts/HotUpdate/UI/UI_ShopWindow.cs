@@ -34,7 +34,7 @@ public class UI_ShopWindow : UI_CustomWindowBase, IItemWindow
         List<ItemConfigBase> items = merchantConfig.items;
         for (int i = 0; i < BagData.itemCount; i++)
         {
-            if (i >= items.Count) slotList.Add(CreateEmptySlot(i)); //大于的情况是空的格子
+            if (i >= items.Count) slotList.Add(CreateEmptySlot(i)); //大于的情况是去创建空的格子
             else
             {
                 ItemDataBase itemData = items[i].GetDefaultItemData();

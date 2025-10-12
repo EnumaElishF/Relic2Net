@@ -32,7 +32,9 @@ public enum MessageType : byte
     //快捷栏内格子交换
     C_S_ShortcutBarSwapItem,
     //通过商店购买物品
-    C_S_ShopBuyItem
+    C_S_ShopBuyItem,
+    S_C_UpdateCoinCount
+
 }
 /// <summary>
 /// 可以预知的完成的返回信息，做成Code的方式，做个可知的码。比如服务端返回码等
@@ -285,6 +287,17 @@ public struct C_S_ShopBuyItem : INetworkSerializable
     {
         serializer.SerializeValue(ref itemID);
         serializer.SerializeValue(ref bagIndex);
+    }
+}
+
+public struct S_C_UpdateCoinCount : INetworkSerializable
+{
+    public int bagDataVersion;
+    public int coinCount;
+    public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+    {
+        serializer.SerializeValue(ref bagDataVersion);
+        serializer.SerializeValue(ref coinCount);
     }
 }
 

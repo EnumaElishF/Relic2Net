@@ -11,4 +11,5 @@ public abstract class ItemDataBase: INetworkSerializable
         //序列化 、反序列化 id
         serializer.SerializeValue(ref id);
     }
+    public abstract ItemDataBase Copy();
 }

@@ -30,9 +30,11 @@ public class PlayerManager : SingletonMono<PlayerManager>
         //事件的监听开始
         EventSystem.AddTypeEventListener<InitLocalPlayerEvent>(OnInitLocalPlayerEvent);
         EventSystem.AddTypeEventListener<MouseActiveStateChangedEvent>(OnMouseActiveStateChangedEvent);
+        //TODO 每次新加，玩家相关回复给客户端的消息
         NetMessageManager.Instance.RegisterMessageCallback(MessageType.S_C_GetBagData, OnS_C_GetBagData);
         NetMessageManager.Instance.RegisterMessageCallback(MessageType.S_C_BagUpdateItem, OnS_C_UpdateItem);
         NetMessageManager.Instance.RegisterMessageCallback(MessageType.S_C_ShortcutBarUpdateItem, OnS_C_ShortcutBarUpdateItem);
+        NetMessageManager.Instance.RegisterMessageCallback(MessageType.S_C_UpdateCoinCount, OnS_C_UpdateCoinCount);
 
         ClientGlobal.Instance.ActiveMouse = false;
         RequestBagData();
@@ -248,7 +250,18 @@ public class PlayerManager : SingletonMono<PlayerManager>
         //发送网络信息
         NetMessageManager.Instance.SendMessageToServer(MessageType.C_S_ShopBuyItem,
             new C_S_ShopBuyItem { itemID = targetItemConfig.name, bagIndex = bagIndex});
+    }
 
+    private void OnS_C_UpdateCoinCount(ulong serverID, INetworkSerializable serializable)
+    {
+        S_C_UpdateCoinCount message = (S_C_UpdateCoinCount)serializable;
+        if (bagData.dataVersion == message.bagDataVersion) return;
+        bagData.dataVersion = message.bagDataVersion;
+        bagData.coinCount = message.coinCount;
+        if(ClientUtility.GetWindowActiveState(out UI_BagWindow bagWindow))
+        {
+            bagWindow.UpdateCoin(bagData.coinCount);
+        }
     }
 }
 

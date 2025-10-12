@@ -68,7 +68,6 @@ public static class ItemConfigImport
                         string slotPrefabPath = "UI_MaterialSlot";
                         int defaultCountOnShop = int.Parse(worksheet.Cells[x, 7].Text.Trim());
 
-
                         MaterialConfig itemConfig = AssetDatabase.LoadAssetAtPath<MaterialConfig>(configPath);
                         bool isCreate = itemConfig == null;
                         if (isCreate) itemConfig = MaterialConfig.CreateInstance<MaterialConfig>();

@@ -110,6 +110,10 @@ public class NetMessageManager : SingletonMono<NetMessageManager>
                     reader.ReadValueSafe(out C_S_ShopBuyItem C_S_ShopBuyItem);
                     TriggerMessageCallback(MessageType.C_S_ShopBuyItem, clientId, C_S_ShopBuyItem);
                     break;
+                case MessageType.S_C_UpdateCoinCount:
+                    reader.ReadValueSafe(out S_C_UpdateCoinCount S_C_UpdateCoinCount);
+                    TriggerMessageCallback(MessageType.S_C_UpdateCoinCount, clientId, S_C_UpdateCoinCount);
+                    break;
             }
         }
         catch(Exception e)
