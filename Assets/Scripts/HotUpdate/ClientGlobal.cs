@@ -78,7 +78,9 @@ public class ClientGlobal : SingletonMono<ClientGlobal>
         UISystem.AddUIWindowData<UI_ItemInfoPopupWindow>(new UIWindowData(true, nameof(UI_ItemInfoPopupWindow), 2));
         //道具栏：常驻窗口，不需要去缓存
         UISystem.AddUIWindowData<UI_ShortcutBarWindow>(new UIWindowData(false, nameof(UI_ShortcutBarWindow), 2));
+        //商店和合成制作：做个缓存吧，其实不做也可以，因为他们没有那么频繁用
         UISystem.AddUIWindowData<UI_ShopWindow>(new UIWindowData(true, nameof(UI_ShopWindow), 2));
+        UISystem.AddUIWindowData<UI_CraftWindow>(new UIWindowData(true, nameof(UI_CraftWindow), 2));
 
     }
     private void OnGameSceneLaunchEvent(GameSceneLaunchEvent @event)
