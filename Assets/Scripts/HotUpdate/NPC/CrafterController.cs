@@ -7,7 +7,7 @@ public class CrafterController : NPCControllerBase
 
     protected override void OnPlayerInteraction()
     {
-        base.OnPlayerInteraction();
+         PlayerManager.Instance.OpenCraft(configName);
     }
     //protected override void MainInteraction()
     //{

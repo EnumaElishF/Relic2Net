@@ -127,16 +127,19 @@ public abstract class UI_SlotBase<D,C> : UI_SlotBase, IBeginDragHandler, IDragHa
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        if (onDragToNewSlotAction == null) return; //因为如果都还没有拖拽行为，也就不需要考虑icon的位置变动
         iconImage.transform.SetParent(UISystem.DragLayer);
     }
 
     public void OnDrag(PointerEventData eventData)
     {
+        if (onDragToNewSlotAction == null) return;
         iconImage.transform.position = eventData.position;
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        if (onDragToNewSlotAction == null) return;
         iconImage.transform.SetParent(transform);
         iconImage.transform.SetAsFirstSibling();//设置到最顶级
         iconImage.transform.localPosition = Vector3.zero;

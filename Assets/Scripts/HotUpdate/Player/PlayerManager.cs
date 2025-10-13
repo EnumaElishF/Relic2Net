@@ -2,6 +2,7 @@
 //从而要求他们不能去依赖客户端或者服务端的程序集的内容，要打断他们的依赖关系，可以通过事件，去传，从而跨程序集通信
 using Cinemachine;
 using JKFrame;
+using System;
 using Unity.Netcode;
 using UnityEngine;
 /// <summary>
@@ -206,7 +207,7 @@ public class PlayerManager : SingletonMono<PlayerManager>
 
     public void OpenShop(string merchantConfigName)
     {
-        if (!ClientUtility.GetWindowActiveState(out UI_ShopWindow shopWindow))
+        if (!ClientUtility.GetWindowActiveState<UI_ShopWindow>(out _))
         {
             UISystem.Show<UI_ShopWindow>().Show(ResSystem.LoadAsset<MerchantConfig>(merchantConfigName));
             if(!requestOpenBagWindow && !ClientUtility.GetWindowActiveState(out UI_BagWindow bagWindow))
@@ -262,6 +263,19 @@ public class PlayerManager : SingletonMono<PlayerManager>
         if(ClientUtility.GetWindowActiveState(out UI_BagWindow bagWindow))
         {
             bagWindow.UpdateCoin(bagData.coinCount);
+        }
+    }
+
+    public void OpenCraft(string configName)
+    {
+        //放弃out参数，避免后续用了不该用的变量！做好优化
+        if (!ClientUtility.GetWindowActiveState<UI_CraftWindow>(out _))
+        {
+            UISystem.Show<UI_CraftWindow>().Show(ResSystem.LoadAsset<CrafterConfig>(configName));
+            if (!requestOpenBagWindow && !ClientUtility.GetWindowActiveState(out UI_BagWindow bagWindow))
+            {
+                OpenBagWindow();
+            }
         }
     }
 }
