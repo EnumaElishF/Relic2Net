@@ -1,4 +1,5 @@
 using JKFrame;
+using System;
 using UnityEngine;
 
 public class UI_ShortcutBarWindow : UI_WindowBase,IItemWindow
@@ -33,6 +34,24 @@ public class UI_ShortcutBarWindow : UI_WindowBase,IItemWindow
             slots[i] = slot;
         }
         UpdateWeaponUsedState(usedWeaponIndex,true);
+        for(int i = 0;i< slots.Length; i++)
+        {
+            shortcutKeycode[i] = Enum.Parse<KeyCode>($"Alpha{i + 1}"); //快捷键填充键盘数字完毕
+        }
+    }
+    private void Update()
+    {
+        if(PlayerManager.Instance.localPlayer != null && PlayerManager.Instance.playerControlEnable && Input.anyKeyDown)
+        {
+            for(int i = 0; i < shortcutKeycode.Length; i++)
+            {
+                if (Input.GetKeyDown(shortcutKeycode[i]))
+                {
+                    //玩家快捷键使用物品
+                    slots[i].Use();
+                }
+            }
+        }
     }
     /// <summary>
     /// 格子关闭的，做个回收，回收到对象池里

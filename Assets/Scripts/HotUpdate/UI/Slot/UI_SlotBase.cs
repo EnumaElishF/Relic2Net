@@ -35,6 +35,7 @@ public abstract class UI_SlotBase : MonoBehaviour,IPointerEnterHandler,IPointerE
     }
     public virtual void SetShortcutKeyCode(int num) //键盘数字
     {
+        keyCodeText.gameObject.SetActive(true);
         keyCodeText.text = num.ToString();
     }
     public virtual void OnPointerEnter(PointerEventData eventData)
@@ -62,11 +63,14 @@ public abstract class UI_SlotBase : MonoBehaviour,IPointerEnterHandler,IPointerE
     public virtual void OnPointerClick(PointerEventData eventData)
     {
         //鼠标右键意味着使用物品
-        if(onUseAction != null && eventData.button == PointerEventData.InputButton.Right)
+        if(eventData.button == PointerEventData.InputButton.Right)
         {
-            transform.GetSiblingIndex();
-            onUseAction?.Invoke(dataIndex);
+            Use();
         }
+    }
+    public void Use()
+    {
+        onUseAction?.Invoke(dataIndex);
     }
 }
 public abstract class UI_SlotBase<D,C> : UI_SlotBase, IBeginDragHandler, IDragHandler, IEndDragHandler where D : ItemDataBase where C : ItemConfigBase
