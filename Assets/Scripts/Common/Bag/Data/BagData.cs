@@ -129,10 +129,7 @@ public class BagData: INetworkSerializable
         return null;
     }
 
-    public void RemoveItem(int index)
-    {
-        itemList[index] = null;
-    }
+
     public ItemDataBase TryGetItem(string id, out int index)
     {
         for (int i = 0; i< itemList.Count; i++)
@@ -277,6 +274,67 @@ public class BagData: INetworkSerializable
         {
             //非可堆叠数据-武器等
             itemList[itemIndex] = targetItemConfig.GetDefaultItemData();
+            return true;
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// 检查合成
+    /// </summary>
+    public bool CheckCraft(ItemConfigBase targetItem, out bool containUsedWeapon)
+    {
+        containUsedWeapon = false;
+        foreach(KeyValuePair<string,int> item in targetItem.craftConfig.itemDic)
+        {
+            ItemDataBase itemData = TryGetItem(item.Key, out int itemIndex);
+            if (itemData == null) return false;
+            if (itemIndex == usedWeaponIndex) containUsedWeapon = true;
+            if(itemData is StackableItemDataBase) //如果itemData是可堆叠物品
+            {
+                int curr = ((StackableItemDataBase)itemData).count;
+                if (curr < item.Value) return false;
+            }
+        }
+        return true;
+    }
+    /// <summary>
+    /// 移除一个格子的物品，无数量
+    /// </summary>
+    /// <param name="index"></param>
+    public void RemoveItem(int index)
+    {
+        itemList[index] = null;
+    }
+    /// <summary>
+    /// 移除一个格子的物品，按照数量
+    /// </summary>
+    public void RemoveItem(int itemIndex,int count)
+    {
+        ItemDataBase itemData = itemList[itemIndex];
+        if (itemData == null) return;
+        StackableItemDataBase stackableItemData = itemData as StackableItemDataBase;
+        if(stackableItemData != null)
+        {
+            stackableItemData.count -= count;
+            if(stackableItemData.count == 0) RemoveItem(itemIndex);
+        }
+        else RemoveItem(itemIndex); //武器的情况不考虑数量的问题，直接移除就行
+    }
+    /// <summary>
+    /// 检查能否添加物品
+    /// </summary>
+    public bool CheckAddItem(ItemConfigBase targetItemConfig)
+    {
+        bool isStackableItemData = targetItemConfig.GetDefaultItemData() is StackableItemDataBase;
+        if (isStackableItemData)
+        {
+            //对于可堆叠物品(消耗品和材料)来说，优先去判断堆放，然后再考虑占用新空位
+            StackableItemDataBase existedItemData = TryGetItem(targetItemConfig.name, out int itemIndex) as StackableItemDataBase;
+            return existedItemData != null || TryGetFirstEmptyIndex(out itemIndex);
+        }
+        else if (TryGetFirstEmptyIndex(out int itemIndex))
+        {
             return true;
         }
         return false;
