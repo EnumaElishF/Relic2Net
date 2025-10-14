@@ -247,6 +247,32 @@ public class BagData: INetworkSerializable
         shortcutBarIndexs[shortcutBarIndexB] = temp;
     }
 
+    public bool TryAddItem(ItemConfigBase targetItemConfig,int stackableCount,int targetIndex)
+    {
+        bool isStackableItemData = targetItemConfig.GetDefaultItemData() is StackableItemDataBase;
+        if (isStackableItemData)
+        {
+            if (itemList[targetIndex] == null) //空位
+            {
+                StackableItemDataBase newData = (StackableItemDataBase)targetItemConfig.GetDefaultItemData().Copy();
+                newData.count = 1;
+                itemList[targetIndex] = newData;
+                return true;
+            }
+            else if (itemList[targetIndex].id == targetItemConfig.name)
+            {
+                ((StackableItemDataBase)itemList[targetIndex]).count += 1;
+            }
+        }
+        else
+        {
+            if (itemList[targetIndex] == null)
+            {
+                itemList[targetIndex] = targetItemConfig.GetDefaultItemData().Copy();
+            }
+        }
+        return false;
+    }
     //#endif
     #endregion
 }
