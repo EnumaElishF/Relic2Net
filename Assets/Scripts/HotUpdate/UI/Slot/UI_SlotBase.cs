@@ -89,7 +89,7 @@ public abstract class UI_SlotBase<D,C> : UI_SlotBase, IBeginDragHandler, IDragHa
     {
         this.itemData = (D)data;
         this.itemConfig = (C)config;
-        base.Init(ownerWindow,data, config, dataIndex, onUseAction, onDragToNewSlotAction);
+        base.Init(ownerWindow,data, config, dataIndex, onUseAction, onDragToNewSlotAction, onClickAction);
     }
 
     public override void OnInit()

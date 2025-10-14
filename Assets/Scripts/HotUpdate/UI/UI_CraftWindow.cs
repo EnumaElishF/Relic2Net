@@ -19,6 +19,7 @@ public class UI_CraftWindow : UI_CustomWindowBase, IItemWindow
     private UI_SlotBase[] craftItems = new UI_SlotBase[craftItemCount];
     private CrafterConfig crafterConfig;
     private UI_SlotBase targetItemSlog;
+    private ItemConfigBase targetItemConfig;
     public override void Init()
     {
         closeButton.onClick.AddListener(CloseButtonClick);
@@ -54,34 +55,54 @@ public class UI_CraftWindow : UI_CustomWindowBase, IItemWindow
             else
             {
                 ItemDataBase itemData = items[i].GetDefaultItemData();
-                slotList.Add(CreateItemSlot(i, itemData, itemRoot, onItemClick));
+                slotList.Add(CreateItemSlot(i, itemData, itemRoot, OnItemClick));
             }
         }
         CreateDefaultCraftArea();
     }
-
-    private void onItemClick(PointerEventData.InputButton button, int dataIndex)
-    {
-        if (button != PointerEventData.InputButton.Left) return;
-    }
-
     /// <summary>
-    /// 创建合成区域
+    /// 创建默认合成区域
     /// </summary>
     private void CreateDefaultCraftArea()
     {
         //销毁已有的
         DestroyCraftArea();
         targetItemSlog = CreateEmptySlot(0, targetItemRoot);
-        for(int i = 0; i < craftItems.Length; i++)
+        for (int i = 0; i < craftItems.Length; i++)
         {
-            if (craftItems[i] != null)
-            {
-                GameObject.Destroy(craftItems[i].gameObject);
-            }
             craftItems[i] = CreateEmptySlot(i, craftItemRoot);
         }
     }
+    private void OnItemClick(PointerEventData.InputButton button, int dataIndex)
+    {
+        if (button != PointerEventData.InputButton.Left) return;
+        ItemConfigBase itemConfig = crafterConfig.items[dataIndex];
+        //创建合成区域
+        CreateCraftArea(targetItemConfig);
+    }
+
+    private void CreateCraftArea(ItemConfigBase targetItem)
+    {
+        DestroyCraftArea();
+        targetItemSlog = CreateItemSlot(0, targetItem.GetDefaultItemData(), targetItemRoot, null);
+        //TODO 设置合成区域的格子状态与数量
+        Dictionary<string, int> craftItemDic = targetItem.craftConfig.itemDic;
+        int i = 0;
+        foreach(KeyValuePair<string,int> item in craftItemDic)
+        {
+            ItemConfigBase itemConfig = ResSystem.LoadAsset<ItemConfigBase>(item.Key);
+            UI_SlotBase slot = CreateItemSlot(i, itemConfig.GetDefaultItemData(), craftItemRoot, null);
+            //TODO 检验背包数量，当前是否满足这个条件
+            craftItems[i] = slot;
+            i += 1;
+        }
+        //合成材料所需数量
+        for (; i < craftItemCount; i++)
+        {
+            craftItems[i] = CreateEmptySlot(i, craftItemRoot);
+        }
+    }
+
     private void DestroyTargetItemSlot()
     {
         targetItemSlog?.Destroy();
