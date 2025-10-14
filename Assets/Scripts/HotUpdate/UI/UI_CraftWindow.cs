@@ -32,7 +32,17 @@ public class UI_CraftWindow : UI_CustomWindowBase, IItemWindow
     public override void OnClose()
     {
         base.OnClose();
+        DestroySlots();
+        DestroyCraftArea();
 
+    }
+    private void DestroySlots()
+    {
+        for (int i = 0; i < slotList.Count; i++)
+        {
+            slotList[i].Destroy();
+        }
+        slotList.Clear();
     }
     public void Show(CrafterConfig crafterConfig)
     {
@@ -44,15 +54,24 @@ public class UI_CraftWindow : UI_CustomWindowBase, IItemWindow
             else
             {
                 ItemDataBase itemData = items[i].GetDefaultItemData();
-                slotList.Add(CreateItemSlot(i, itemData, itemRoot));
+                slotList.Add(CreateItemSlot(i, itemData, itemRoot, onItemClick));
             }
         }
-        CreateDefaultCraft();
+        CreateDefaultCraftArea();
     }
-    private void CreateDefaultCraft()
+
+    private void onItemClick(PointerEventData.InputButton button, int dataIndex)
+    {
+        if (button != PointerEventData.InputButton.Left) return;
+    }
+
+    /// <summary>
+    /// 创建合成区域
+    /// </summary>
+    private void CreateDefaultCraftArea()
     {
         //销毁已有的
-        if (targetItemSlog != null) GameObject.Destroy(targetItemSlog.gameObject);
+        DestroyCraftArea();
         targetItemSlog = CreateEmptySlot(0, targetItemRoot);
         for(int i = 0; i < craftItems.Length; i++)
         {
@@ -63,12 +82,26 @@ public class UI_CraftWindow : UI_CustomWindowBase, IItemWindow
             craftItems[i] = CreateEmptySlot(i, craftItemRoot);
         }
     }
+    private void DestroyTargetItemSlot()
+    {
+        targetItemSlog?.Destroy();
+        targetItemSlog = null;
+    }
+    private void DestroyCraftArea()
+    {
+        DestroyTargetItemSlot();
+        for (int i = 0; i < craftItems.Length; i++)
+        {
+            craftItems[i]?.Destroy();
+            craftItems[i] = null;
+        }
+    }
 
-    private UI_SlotBase CreateItemSlot(int index, ItemDataBase itemData, Transform root)
+    private UI_SlotBase CreateItemSlot(int index, ItemDataBase itemData, Transform root, Action<PointerEventData.InputButton, int> onClickAction)
     {
         ItemConfigBase config = ResSystem.LoadAsset<ItemConfigBase>(itemData.id);
         UI_SlotBase slot = ResSystem.InstantiateGameObject<UI_SlotBase>(config.slotPrefabPath, root);
-        slot.Init(this, itemData, config, index, null, null);
+        slot.Init(this, itemData, config, index, null, null, onClickAction);
         return slot;
     }
 

@@ -16,14 +16,17 @@ public abstract class UI_SlotBase : MonoBehaviour,IPointerEnterHandler,IPointerE
     [SerializeField] protected Text keyCodeText; //快捷窗口中时显示快捷键的
     public int dataIndex { get; private set; } //格子的index
     protected Action<int> onUseAction;
+    protected Action<PointerEventData.InputButton, int> onClickAction;//格子点击事件
     protected Action<UI_SlotBase, UI_SlotBase> onDragToNewSlotAction; //从A拖拽到B
     public IItemWindow ownerWindow { get; private set; }
     //默认data，config为null，可以表示不传入值是没有问题的
-    public virtual void Init(IItemWindow ownerWindow,ItemDataBase data, ItemConfigBase config,int dataIndex, Action<int> onUseAction,Action<UI_SlotBase,UI_SlotBase> onDragToNewSlotAction)
+    public virtual void Init(IItemWindow ownerWindow,ItemDataBase data, ItemConfigBase config,int dataIndex,
+        Action<int> onUseAction = null,Action<UI_SlotBase,UI_SlotBase> onDragToNewSlotAction = null, Action<PointerEventData.InputButton, int> onClickAction = null)
     {
         this.ownerWindow = ownerWindow;
         this.dataIndex = dataIndex;
         this.onUseAction = onUseAction;
+        this.onClickAction = onClickAction;
         this.onDragToNewSlotAction = onDragToNewSlotAction;
         if (keyCodeText != null) keyCodeText.gameObject.SetActive(false);//keyCode默认不显示
         OnPointerExit(null);
@@ -62,6 +65,7 @@ public abstract class UI_SlotBase : MonoBehaviour,IPointerEnterHandler,IPointerE
     /// virtual实现多态性让子类可重写
     public virtual void OnPointerClick(PointerEventData eventData)
     {
+        onClickAction?.Invoke(eventData.button, dataIndex);
         //鼠标右键意味着使用物品
         if(eventData.button == PointerEventData.InputButton.Right)
         {
@@ -81,11 +85,11 @@ public abstract class UI_SlotBase<D,C> : UI_SlotBase, IBeginDragHandler, IDragHa
     /// <summary>
     /// 虽然说初始化的部分有泛型，但是不一定拿到的数据类型是准的，我们还是给明确一个类型基类，然后在内部转泛型
     /// </summary>
-    public override void Init(IItemWindow ownerWindow, ItemDataBase data, ItemConfigBase config, int index, Action<int> onUseAction, Action<UI_SlotBase, UI_SlotBase> onDragToNewSlotAcion)
+    public override void Init(IItemWindow ownerWindow, ItemDataBase data, ItemConfigBase config, int dataIndex, Action<int> onUseAction = null, Action<UI_SlotBase, UI_SlotBase> onDragToNewSlotAction = null, Action<PointerEventData.InputButton, int> onClickAction = null)
     {
         this.itemData = (D)data;
         this.itemConfig = (C)config;
-        base.Init(ownerWindow,data, config, index, onUseAction, onDragToNewSlotAcion);
+        base.Init(ownerWindow,data, config, dataIndex, onUseAction, onDragToNewSlotAction);
     }
 
     public override void OnInit()

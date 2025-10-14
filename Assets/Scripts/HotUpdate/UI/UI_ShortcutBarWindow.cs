@@ -82,7 +82,7 @@ public class UI_ShortcutBarWindow : UI_WindowBase,IItemWindow
     private UI_SlotBase CreateEmptySlot(int bagIndex, int keyCode)
     {
         UI_SlotBase slot = ResSystem.InstantiateGameObject<UI_SlotBase>(emptySlotPath, itemRoot);
-        slot.Init(this, null, null, bagIndex, null, null);
+        slot.Init(this, null, null, bagIndex);
         slot.SetShortcutKeyCode(keyCode);
         return slot;
     }

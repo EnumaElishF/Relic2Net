@@ -57,7 +57,7 @@ public class UI_BagWindow : UI_CustomWindowBase,IItemWindow
     private UI_SlotBase CreateEmptySlot(int index)
     {
         UI_SlotBase slot = ResSystem.InstantiateGameObject<UI_SlotBase>(emptySlotPath, itemRoot);
-        slot.Init(this,null, null, index, null,null);
+        slot.Init(this,null, null, index);
         return slot;
     }
 
