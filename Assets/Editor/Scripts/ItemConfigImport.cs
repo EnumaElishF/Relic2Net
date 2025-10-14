@@ -26,9 +26,20 @@ public static class ItemConfigImport
                     string chineseDescription = worksheet.Cells[x, 4].Text.Trim();
                     string englishDescription = worksheet.Cells[x, 5].Text.Trim();
                     int price = int.Parse(worksheet.Cells[x, 6].Text.Trim());
-                    if(i==1)//武器 sheet
+                    //合成这一列
+                    string craftString = worksheet.Cells[x, 7].Text.Trim();
+                    //合成分隔字符串数组，按逗号区分，(材料,数量，材料，数量...)
+                    string[] craftSplitStrings = craftString.Split(',');
+                    ItemCraftConfig itemCraftConfig = new ItemCraftConfig();
+                    for(int s = 0; s < craftSplitStrings.Length-1; s+=2)
                     {
-                        float attackValue = float.Parse(worksheet.Cells[x, 7].Text.Trim());
+                        string name = craftSplitStrings[s];
+                        int count = int.Parse(craftSplitStrings[s + 1]);
+                        itemCraftConfig.itemDic.Add(name, count);
+                    }
+                    if (i==1)//武器 sheet
+                    {
+                        float attackValue = float.Parse(worksheet.Cells[x, 8].Text.Trim());
                         string configPath = $"Assets/Config/Item/Weapon/{key}.asset";
                         string iconPath = $"Assets/Res/Icon/Weapon/{key}.png";
                         string prefab = $"Assets/Prefab/Weapon/{key}.prefab";
@@ -36,7 +47,7 @@ public static class ItemConfigImport
                         WeaponConfig itemConfig = AssetDatabase.LoadAssetAtPath<WeaponConfig>(configPath);
                         bool isCreate = itemConfig == null;
                         if (isCreate) itemConfig = WeaponConfig.CreateInstance<WeaponConfig>();
-                        SetConfigCommon(itemConfig, chineseName, englishName, chineseDescription, englishDescription, iconPath, slotPrefabPath, price);
+                        SetConfigCommon(itemConfig, chineseName, englishName, chineseDescription, englishDescription, iconPath, slotPrefabPath, price, itemCraftConfig);
                         itemConfig.attackValue = attackValue;
                         itemConfig.prefab = AssetDatabase.LoadAssetAtPath<GameObject>(prefab);
                         EditorUtility.SetDirty(itemConfig); //Dirty重保存一下
@@ -45,16 +56,16 @@ public static class ItemConfigImport
 
                     }else if(i == 2) //消耗品
                     {
-                        float HPRegeneration = float.Parse(worksheet.Cells[x, 7].Text.Trim()); //HP恢复量
+                        float HPRegeneration = float.Parse(worksheet.Cells[x, 8].Text.Trim()); //HP恢复量
                         string configPath = $"Assets/Config/Item/Consumable/{key}.asset";
                         string iconPath = $"Assets/Res/Icon/Consumable/{key}.png";
                         string slotPrefabPath = "UI_ConsumableSlot";
-                        int defalutCountOnShop = int.Parse(worksheet.Cells[x, 8].Text.Trim());
+                        int defalutCountOnShop = int.Parse(worksheet.Cells[x, 9].Text.Trim());
 
                         ConsumableConfig itemConfig = AssetDatabase.LoadAssetAtPath<ConsumableConfig>(configPath);
                         bool isCreate = itemConfig == null;
                         if (isCreate) itemConfig = ConsumableConfig.CreateInstance<ConsumableConfig>();
-                        SetConfigCommon(itemConfig, chineseName, englishName, chineseDescription, englishDescription, iconPath, slotPrefabPath, price);
+                        SetConfigCommon(itemConfig, chineseName, englishName, chineseDescription, englishDescription, iconPath, slotPrefabPath, price, itemCraftConfig);
                         itemConfig.HPRegeneration = HPRegeneration;
                         itemConfig.defaultCountInShop = defalutCountOnShop;
 
@@ -66,12 +77,12 @@ public static class ItemConfigImport
                         string configPath = $"Assets/Config/Item/Material/{key}.asset";
                         string iconPath = $"Assets/Res/Icon/Material/{key}.png";
                         string slotPrefabPath = "UI_MaterialSlot";
-                        int defaultCountOnShop = int.Parse(worksheet.Cells[x, 7].Text.Trim());
+                        int defaultCountOnShop = int.Parse(worksheet.Cells[x, 8].Text.Trim());
 
                         MaterialConfig itemConfig = AssetDatabase.LoadAssetAtPath<MaterialConfig>(configPath);
                         bool isCreate = itemConfig == null;
                         if (isCreate) itemConfig = MaterialConfig.CreateInstance<MaterialConfig>();
-                        SetConfigCommon(itemConfig, chineseName, englishName, chineseDescription, englishDescription, iconPath, slotPrefabPath, price);
+                        SetConfigCommon(itemConfig, chineseName, englishName, chineseDescription, englishDescription, iconPath, slotPrefabPath, price,itemCraftConfig);
                         itemConfig.defaultCountInShop = defaultCountOnShop;
 
                         EditorUtility.SetDirty(itemConfig);
@@ -96,8 +107,9 @@ public static class ItemConfigImport
     /// <param name="englishDescription"></param>
     /// <param name="iconPath"></param>
     /// <param name="slotPrefabPath">slotPrefabPath就是Addressables的Key</param>
-    private static void SetConfigCommon(ItemConfigBase itemConfig, string chineseName, string englishName, string chineseDescription, string englishDescription, string iconPath,string slotPrefabPath,int price)
+    private static void SetConfigCommon(ItemConfigBase itemConfig, string chineseName, string englishName, string chineseDescription, string englishDescription, string iconPath,string slotPrefabPath,int price, ItemCraftConfig itemCraftConfig)
     {
+        itemConfig.craftConfig = itemCraftConfig;
         //编译器下倒是可以忽略性能问题，在这里直接new也挺方便的
         itemConfig.nameDic = new Dictionary<LanguageType, string>()
         {

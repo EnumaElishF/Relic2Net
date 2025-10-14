@@ -8,6 +8,7 @@ using System.Collections.Generic;
 public abstract class ItemConfigBase : ConfigBase
 {
     public int price; //商品的价格放在公共情况里使用，服务端与客户端都需要
+    public ItemCraftConfig craftConfig;
     protected ItemDataBase defaultData;
     public abstract ItemDataBase GetDefaultItemData();
 
@@ -26,4 +27,11 @@ public abstract class ItemConfigBase : ConfigBase
     }
     public abstract string GetType(LanguageType languageType);
 #endif
+}
+/// <summary>
+/// 合成配置
+/// </summary>
+public class ItemCraftConfig
+{
+    public Dictionary<string, int> itemDic = new Dictionary<string, int>();
 }
