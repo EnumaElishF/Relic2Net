@@ -1,6 +1,7 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 using System.Collections.Generic;
 using Unity.Netcode;
+using UnityEngine;
 
 public class BagData: INetworkSerializable
 {
@@ -128,42 +129,6 @@ public class BagData: INetworkSerializable
         return null;
     }
 
-    public bool TryAddWeapon(string id,out int index)
-    {
-        index = -1;
-
-        if (TryGetFirstEmptyIndex(out index)) //拿出第一个itemList的空数据
-        {
-            WeaponData weaponData = new WeaponData();
-            weaponData.id = id;
-            return true;
-        }
-        return false;
-    }
-    public bool TryAddStackableItem<T>(string id, int count,out int index) where T: StackableItemDataBase, new()
-    {
-        index = -1;
-        //index在初始已定义int，后面无需定义
-        ItemDataBase itemData = TryGetItem(id, out index);
-        if (itemData != null) //已存在
-        {
-            if(itemData is T)
-            {
-                ((T)itemData).count += count;
-                return true;
-            }
-            
-        }
-        else if(TryGetFirstEmptyIndex(out index))
-        {
-            T data = new T();
-            //泛型可用参数取自： 由于T继承自StackableItemDataBase，而StackableItemDataBase又继承自ItemDataBase
-            data.id = id;
-            data.count = count;
-            return true;
-        }
-        return false;
-    }
     public void RemoveItem(int index)
     {
         itemList[index] = null;
@@ -246,7 +211,13 @@ public class BagData: INetworkSerializable
         shortcutBarIndexs[shortcutBarIndexA] = shortcutBarIndexs[shortcutBarIndexB];
         shortcutBarIndexs[shortcutBarIndexB] = temp;
     }
-
+    /// <summary>
+    /// 尝试添加物品，指定位置
+    /// </summary>
+    /// <param name="targetItemConfig">目标物品</param>
+    /// <param name="stackableCount">堆叠数量</param>
+    /// <param name="targetIndex">目标Index，如果没有就不给放置</param>
+    /// <returns></returns>
     public bool TryAddItem(ItemConfigBase targetItemConfig,int stackableCount,int targetIndex)
     {
         bool isStackableItemData = targetItemConfig.GetDefaultItemData() is StackableItemDataBase;
@@ -270,6 +241,43 @@ public class BagData: INetworkSerializable
             {
                 itemList[targetIndex] = targetItemConfig.GetDefaultItemData().Copy();
             }
+        }
+        return false;
+    }
+    /// <summary>
+    /// 尝试添加物品，不指定位置_ 任务或合成产出的道具自动堆叠排放
+    /// </summary>
+    /// <param name="targetItemConfig">目标物品</param>
+    /// <param name="stackableCount">堆叠数量</param>
+    /// <param name="itemIndex">输出-最终添加的index</param>
+    /// <returns></returns>
+    public bool TryAddItem(ItemConfigBase targetItemConfig, int stackableCount,out int itemIndex)
+    {
+        itemIndex = -1;
+        bool isStackableItemData = targetItemConfig.GetDefaultItemData() is StackableItemDataBase;
+        if (isStackableItemData)
+        {
+            //对于可堆叠物品(消耗品和材料)来说，优先去判断堆放，然后再考虑占用新空位
+            StackableItemDataBase existedItemData = TryGetItem(targetItemConfig.name, out itemIndex) as StackableItemDataBase;
+            if(existedItemData != null) //堆叠
+            {
+                existedItemData.count += 1;
+                return true;
+            }
+            else if(TryGetFirstEmptyIndex(out itemIndex))//需要空位
+            {
+                //放新的数据到空位格子
+                StackableItemDataBase newData = (StackableItemDataBase)targetItemConfig.GetDefaultItemData().Copy();
+                newData.count = 1;
+                itemList[itemIndex] = newData;
+                return true;
+            }
+        }
+        else if(TryGetFirstEmptyIndex(out itemIndex))
+        {
+            //非可堆叠数据-武器等
+            itemList[itemIndex] = targetItemConfig.GetDefaultItemData();
+            return true;
         }
         return false;
     }

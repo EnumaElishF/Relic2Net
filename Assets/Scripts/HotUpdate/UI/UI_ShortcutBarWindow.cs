@@ -119,7 +119,7 @@ public class UI_ShortcutBarWindow : UI_WindowBase,IItemWindow
             UpdateWeaponUsedState(usedWeaponIndex, false);
         }
         //开启可能存在的新武器
-        if(newUseWeaponIndex != -1 && newUseWeaponIndex != usedWeaponIndex)
+        if(newUseWeaponIndex != -1)
         {
             UpdateWeaponUsedState(newUseWeaponIndex, true);
         }
