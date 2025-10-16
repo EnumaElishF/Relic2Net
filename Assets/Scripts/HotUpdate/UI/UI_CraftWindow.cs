@@ -23,8 +23,9 @@ public class UI_CraftWindow : UI_CustomWindowBase, IItemWindow
     public override void Init()
     {
         closeButton.onClick.AddListener(CloseButtonClick);
-        //craftSubmitButton.onClick.AddListener(SubmitButtonClick);
+        craftSubmitButton.onClick.AddListener(SubmitButtonClick);
     }
+
 
     private void CloseButtonClick()
     {
@@ -85,13 +86,27 @@ public class UI_CraftWindow : UI_CustomWindowBase, IItemWindow
     {
         DestroyCraftArea();
         targetItemSlog = CreateItemSlot(0, targetItem.GetDefaultItemData(), targetItemRoot, null);
-        //TODO 设置合成区域的格子状态与数量
+        //设置合成区域的格子状态与数量
         Dictionary<string, int> craftItemDic = targetItem.craftConfig.itemDic;
         int i = 0;
+        //检查背包，当时是否满足条件
+        BagData bagData = PlayerManager.Instance.bagData;
         foreach(KeyValuePair<string,int> item in craftItemDic)
         {
             ItemConfigBase itemConfig = ResSystem.LoadAsset<ItemConfigBase>(item.Key);
             UI_SlotBase slot = CreateItemSlot(i, itemConfig.GetDefaultItemData(), craftItemRoot, null);
+            ItemDataBase itemData = bagData.TryGetItem(item.Key, out _);
+            //可堆叠物品考虑数量，武器考虑有没有
+            if (itemConfig.GetDefaultItemData() is StackableItemDataBase)
+            {
+                int curr = 0;
+                if (itemData != null) curr = ((StackableItemDataBase)itemData).count;
+                Color color = curr >= item.Value ? Color.white : Color.red;
+                slot.SetFrameColor(color);
+                slot.SetCount($"{curr}/{item.Value}", color);
+            }
+            else slot.SetFrameColor(itemData != null ? Color.white : Color.red);
+  
             //TODO 检验背包数量，当前是否满足这个条件
             craftItems[i] = slot;
             i += 1;
@@ -101,8 +116,17 @@ public class UI_CraftWindow : UI_CustomWindowBase, IItemWindow
         {
             craftItems[i] = CreateEmptySlot(i, craftItemRoot);
         }
+        //可以提交 = 有足够的材料 && 有足够的空间
+        bool canSubmit = bagData.CheckCraft(targetItem, out bool cotainUseWeapon) && bagData.CheckAddItem(targetItem);
+        // 如果当前合成的材料中包含了当前使用的武器，那么必须要合成的是武器类型，因为将在合成后瞬间替换成当前武器
+        if (cotainUseWeapon && canSubmit) canSubmit = targetItemConfig is WeaponConfig;
+        craftSubmitButton.interactable = canSubmit;
     }
 
+    private void SubmitButtonClick()
+    {
+        
+    }
     private void DestroyTargetItemSlot()
     {
         targetItemSlog?.Destroy();

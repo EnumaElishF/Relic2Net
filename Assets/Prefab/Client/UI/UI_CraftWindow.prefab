@@ -334,7 +334,7 @@ MonoBehaviour:
   itemRoot: {fileID: 3732497203794707637}
   targetItemRoot: {fileID: 566674232175473808}
   craftItemRoot: {fileID: 6111576852081380754}
-  craftSubmitButton: {fileID: 0}
+  craftSubmitButton: {fileID: 400908938218211540}
 --- !u!1 &3732497202662272581
 GameObject:
   m_ObjectHideFlags: 0

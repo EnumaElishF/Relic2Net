@@ -28,6 +28,7 @@ public abstract class UI_SlotBase : MonoBehaviour,IPointerEnterHandler,IPointerE
         this.onUseAction = onUseAction;
         this.onClickAction = onClickAction;
         this.onDragToNewSlotAction = onDragToNewSlotAction;
+        SetFrameColor(Color.white);
         if (keyCodeText != null) keyCodeText.gameObject.SetActive(false);//keyCode默认不显示
         OnPointerExit(null);
         OnInit();
@@ -71,6 +72,17 @@ public abstract class UI_SlotBase : MonoBehaviour,IPointerEnterHandler,IPointerE
         {
             Use();
         }
+    }
+    /// <summary>
+    /// 定义边框颜色
+    /// </summary>
+    public void SetFrameColor(Color color)
+    {
+        frameImage.color = color;
+    }
+    public virtual void SetCount(string countString,Color color)
+    {
+
     }
     public void Use()
     {

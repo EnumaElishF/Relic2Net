@@ -12,7 +12,11 @@ public class UI_ConsumableSlot : UI_SlotBase<ConsumableData, ConsumableConfig>
 
     public void SetCount()
     {
-        countText.text = itemData.count.ToString();
+        SetCount(itemData.count.ToString(), Color.white);
     }
-
+    public override void SetCount(string countString, Color color)
+    {
+        countText.text = countString;
+        countText.color = color;
+    }
 }
