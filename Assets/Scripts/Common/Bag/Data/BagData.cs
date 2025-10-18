@@ -230,6 +230,7 @@ public class BagData: INetworkSerializable
             else if (itemList[targetIndex].id == targetItemConfig.name)
             {
                 ((StackableItemDataBase)itemList[targetIndex]).count += 1;
+                return true;
             }
         }
         else
@@ -280,7 +281,7 @@ public class BagData: INetworkSerializable
     }
 
     /// <summary>
-    /// 检查合成
+    /// 检查合成是否可行
     /// </summary>
     public bool CheckCraft(ItemConfigBase targetItem, out bool containUsedWeapon)
     {

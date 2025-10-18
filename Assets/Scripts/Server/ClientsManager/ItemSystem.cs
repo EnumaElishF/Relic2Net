@@ -23,6 +23,7 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
         NetMessageManager.Instance.RegisterMessageCallback(MessageType.C_S_ShortcutBarSwapItem, OnClientShortcutBarSwapItem);
         NetMessageManager.Instance.RegisterMessageCallback(MessageType.C_S_ShopBuyItem, OnClientShopBuyItem);
         NetMessageManager.Instance.RegisterMessageCallback(MessageType.C_S_BagSellItem, OnClientBagSellItem);
+        NetMessageManager.Instance.RegisterMessageCallback(MessageType.C_S_CraftItem, OnClientCraftItem);
     }
 
 
@@ -57,12 +58,12 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
             C_S_BagUseItem message = (C_S_BagUseItem)serializable;
             //具体的物品使用
             BagData bagData = client.playerData.bagData;
+
             //背包数据的TryUseItem原本是放服务器这边的，但是出现Common程序集获取内容的错误，应该是Unity打包识别不足够好，
             //最后我们还是把数据获取内容，转移到BagData
             if (!bagData.CheckBagIndexRange(message.bagIndex)) return;
             ItemDataBase itemData = bagData.TryUseItem(message.bagIndex);
-            ItemType itemType = ItemType.Empty;
-            if (itemData != null) itemType = itemData.GetItemType();
+            ItemType itemType = GlobalUtility.GetItemType(itemData);
             S_C_BagUpdateItem result = new S_C_BagUpdateItem
             {
                 itemIndex = message.bagIndex,
@@ -245,6 +246,9 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
             NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_ShortcutBarUpdateItem, result2, clientID);
         }
     }
+    /// <summary>
+    /// 当客户端从商店购买物品
+    /// </summary>
     private void OnClientShopBuyItem(ulong clientID, INetworkSerializable serializable)
     {
         if (clientIDDic.TryGetValue(clientID, out Client client) && client.playerData != null)
@@ -267,7 +271,7 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
                         itemIndex = message.bagIndex,
                         bagDataVersion = bagData.dataVersion,
                         newItemData = bagData.itemList[message.bagIndex],
-                        itemType = bagData.itemList[message.bagIndex].GetItemType(),
+                        itemType = GlobalUtility.GetItemType(bagData.itemList[message.bagIndex]),
                         usedWeapon = false
                     }, clientID);
                 //回复客户端金币更新
@@ -326,4 +330,66 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
                 }, clientID);
         }
     }
+    /// <summary>
+    /// 当客户端合成物品
+    /// </summary>
+    private void OnClientCraftItem(ulong clientID, INetworkSerializable serializable)
+    {
+        if (clientIDDic.TryGetValue(clientID, out Client client) && client.playerData != null)
+        {
+            C_S_CraftItem message = (C_S_CraftItem)serializable;
+            //要合成的目标物品
+            ItemConfigBase targetItemConfig = ServerResSystem.GetItemConfig<ItemConfigBase>(message.targetItemName);
+            if (targetItemConfig == null) return;
+            BagData bagData = client.playerData.bagData;
+            if(bagData.CheckCraft(targetItemConfig,out bool containUsedWeapon))
+            {
+                int updateItemIndex = -1; // 最终更新物品的位置
+                if (containUsedWeapon) //合成中需要的材料涉及到当前使用武器的，必须目标物品也是武器，进行替换
+                {
+                    if(targetItemConfig is WeaponConfig)
+                    {
+                        updateItemIndex = bagData.usedWeaponIndex;
+                        //覆盖掉之前的武器
+                        bagData.itemList[updateItemIndex] = targetItemConfig.GetDefaultItemData().Copy();
+                        client.playerController.UpdateWeaponNetVar(targetItemConfig.name);
+                    }
+                }else if (bagData.TryAddItem(targetItemConfig,1,out updateItemIndex)) //尝试添加
+                {
+                    // 移除全部用来合成的物品
+                    foreach(System.Collections.Generic.KeyValuePair<string, int> item in targetItemConfig.craftConfig.itemDic)
+                    {
+                        ItemDataBase itemData = bagData.TryGetItem(item.Key, out int itemIndex);
+                        //如果涉及到当前武器的，之前已经处理过了
+                        if (containUsedWeapon && itemIndex == bagData.usedWeaponIndex) continue;
+                        bagData.RemoveItem(itemIndex, item.Value);
+                        bagData.AddDataVersion();
+                        NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_BagUpdateItem, new S_C_BagUpdateItem
+                        {
+                            itemIndex = itemIndex,
+                            bagDataVersion = bagData.dataVersion,
+                            newItemData = bagData.itemList[itemIndex],
+                            itemType = GlobalUtility.GetItemType(bagData.itemList[itemIndex]),
+                            usedWeapon = false
+                        }, clientID);
+                    }
+                }
+                if(updateItemIndex != -1)
+                {
+                    bagData.AddDataVersion();
+                    NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_BagUpdateItem, new S_C_BagUpdateItem
+                    {
+                        itemIndex = updateItemIndex,
+                        bagDataVersion = bagData.dataVersion,
+                        newItemData = bagData.itemList[updateItemIndex],
+                        itemType = GlobalUtility.GetItemType(bagData.itemList[updateItemIndex]),
+                        usedWeapon = containUsedWeapon
+                    }, clientID);
+                }
+            }
+        }
+
+    }
+
+
 }

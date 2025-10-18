@@ -259,7 +259,7 @@ public partial class PlayerController : NetworkBehaviour,IStateMachineOwner
         }
     }
     /// <summary>
-    /// 更新网络变量
+    /// 更新武器网络变量
     /// </summary>
     /// <param name="weaponID"></param>
     public void UpdateWeaponNetVar(string weaponID)

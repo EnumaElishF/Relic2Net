@@ -86,6 +86,7 @@ public class UI_CraftWindow : UI_CustomWindowBase, IItemWindow
     {
         DestroyCraftArea();
         targetItemSlog = CreateItemSlot(0, targetItem.GetDefaultItemData(), targetItemRoot, null);
+        targetItemSlog.SetCount("1", Color.white);
         //设置合成区域的格子状态与数量
         Dictionary<string, int> craftItemDic = targetItem.craftConfig.itemDic;
         int i = 0;
@@ -125,7 +126,10 @@ public class UI_CraftWindow : UI_CustomWindowBase, IItemWindow
 
     private void SubmitButtonClick()
     {
-        
+        NetMessageManager.Instance.SendMessageToServer(MessageType.C_S_CraftItem, new C_S_CraftItem
+        {
+            targetItemName = targetItemConfig.name
+        });
     }
     private void DestroyTargetItemSlot()
     {

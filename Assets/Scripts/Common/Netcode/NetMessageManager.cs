@@ -118,6 +118,10 @@ public class NetMessageManager : SingletonMono<NetMessageManager>
                     reader.ReadValueSafe(out C_S_BagSellItem C_S_BagSellItem);
                     TriggerMessageCallback(MessageType.C_S_BagSellItem, clientId, C_S_BagSellItem);
                     break;
+                case MessageType.C_S_CraftItem:
+                    reader.ReadValueSafe(out C_S_CraftItem C_S_CraftItem);
+                    TriggerMessageCallback(MessageType.C_S_CraftItem, clientId, C_S_CraftItem);
+                    break;
             }
         }
         catch(Exception e)

@@ -34,7 +34,8 @@ public enum MessageType : byte
     //通过商店购买与出售物品
     C_S_ShopBuyItem,
     S_C_UpdateCoinCount,
-    C_S_BagSellItem
+    C_S_BagSellItem,
+    C_S_CraftItem
 
 }
 /// <summary>
@@ -308,6 +309,14 @@ public struct C_S_BagSellItem : INetworkSerializable
     public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
     {
         serializer.SerializeValue(ref bagIndex);
+    }
+}
+public struct C_S_CraftItem : INetworkSerializable
+{
+    public string targetItemName;
+    public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+    {
+        serializer.SerializeValue(ref targetItemName);
     }
 }
 
