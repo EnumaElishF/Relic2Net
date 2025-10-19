@@ -160,4 +160,12 @@ public class UI_CraftWindow : UI_CustomWindowBase, IItemWindow
         slot.Init(this, null, null, index, null, null);
         return slot;
     }
+
+    public void UpdateCraftArea()
+    {
+        if (targetItemConfig != null)
+        {
+            CreateCraftArea(targetItemConfig);
+        }
+    }
 }

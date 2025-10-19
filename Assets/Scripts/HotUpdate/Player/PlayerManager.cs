@@ -179,6 +179,10 @@ public class PlayerManager : SingletonMono<PlayerManager>
         {
             shortcutBarWindow.UpdateItemByBagIndex(message.itemIndex, itemData);
         }
+        if (ClientUtility.GetWindowActiveState(out UI_CraftWindow craftWindow))
+        {
+            craftWindow.UpdateCraftArea();
+        }
     }
     private GameObject GetWeapon(string weaponName)
     {

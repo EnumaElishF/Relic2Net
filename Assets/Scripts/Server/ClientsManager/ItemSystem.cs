@@ -350,11 +350,10 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
                     if(targetItemConfig is WeaponConfig)
                     {
                         updateItemIndex = bagData.usedWeaponIndex;
-                        //覆盖掉之前的武器
-                        bagData.itemList[updateItemIndex] = targetItemConfig.GetDefaultItemData().Copy();
-                        client.playerController.UpdateWeaponNetVar(targetItemConfig.name);
                     }
-                }else if (bagData.TryAddItem(targetItemConfig,1,out updateItemIndex)) //尝试添加
+                }
+                else bagData.TryAddItem(targetItemConfig, 1, out updateItemIndex);
+                if(updateItemIndex != -1)
                 {
                     // 移除全部用来合成的物品
                     foreach(System.Collections.Generic.KeyValuePair<string, int> item in targetItemConfig.craftConfig.itemDic)
@@ -373,9 +372,12 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
                             usedWeapon = false
                         }, clientID);
                     }
-                }
-                if(updateItemIndex != -1)
-                {
+                    if (containUsedWeapon)
+                    {
+                        //覆盖掉之前的武器
+                        bagData.itemList[updateItemIndex] = targetItemConfig.GetDefaultItemData().Copy();
+                        client.playerController.UpdateWeaponNetVar(targetItemConfig.name);
+                    }
                     bagData.AddDataVersion();
                     NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_BagUpdateItem, new S_C_BagUpdateItem
                     {
@@ -386,6 +388,7 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
                         usedWeapon = containUsedWeapon
                     }, clientID);
                 }
+
             }
         }
 
