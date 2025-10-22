@@ -12,7 +12,8 @@ public abstract class ItemConfigBase : ConfigBase
     protected ItemDataBase defaultData;
     public abstract ItemDataBase GetDefaultItemData();
 
-#if !UNITY_SERVER || UNITY_EDITOR
+    //对ItemConfig“可Unity序列化的变量”的宏会导致内存布局变化导致在序列化失败的情况，移除他
+    //考虑能不能被客户端调用的安全问题，如果是安全的话，就不用定在服务端，我们把他解放 去掉#if !UNITY_SERVER || UNITY_EDITOR
     public string slotPrefabPath;
     public Sprite icon;
     public Dictionary<LanguageType, string> nameDic;
@@ -26,7 +27,6 @@ public abstract class ItemConfigBase : ConfigBase
         return descriptionDic[languageType];
     }
     public abstract string GetType(LanguageType languageType);
-#endif
 }
 /// <summary>
 /// 合成配置

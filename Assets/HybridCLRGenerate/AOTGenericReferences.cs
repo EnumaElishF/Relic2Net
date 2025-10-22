@@ -43,6 +43,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Action<UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle>
 	// System.Action<UnityEngine.Vector2Int>
 	// System.Action<float>
+	// System.Action<int,int>
 	// System.Action<int>
 	// System.Action<object,object>
 	// System.Action<object>
@@ -56,31 +57,37 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Collections.Generic.Dictionary.Enumerator<UnityEngine.Vector2Int,object>
 	// System.Collections.Generic.Dictionary.Enumerator<byte,object>
 	// System.Collections.Generic.Dictionary.Enumerator<int,object>
+	// System.Collections.Generic.Dictionary.Enumerator<object,int>
 	// System.Collections.Generic.Dictionary.Enumerator<object,object>
 	// System.Collections.Generic.Dictionary.Enumerator<ulong,object>
 	// System.Collections.Generic.Dictionary.KeyCollection.Enumerator<UnityEngine.Vector2Int,object>
 	// System.Collections.Generic.Dictionary.KeyCollection.Enumerator<byte,object>
 	// System.Collections.Generic.Dictionary.KeyCollection.Enumerator<int,object>
+	// System.Collections.Generic.Dictionary.KeyCollection.Enumerator<object,int>
 	// System.Collections.Generic.Dictionary.KeyCollection.Enumerator<object,object>
 	// System.Collections.Generic.Dictionary.KeyCollection.Enumerator<ulong,object>
 	// System.Collections.Generic.Dictionary.KeyCollection<UnityEngine.Vector2Int,object>
 	// System.Collections.Generic.Dictionary.KeyCollection<byte,object>
 	// System.Collections.Generic.Dictionary.KeyCollection<int,object>
+	// System.Collections.Generic.Dictionary.KeyCollection<object,int>
 	// System.Collections.Generic.Dictionary.KeyCollection<object,object>
 	// System.Collections.Generic.Dictionary.KeyCollection<ulong,object>
 	// System.Collections.Generic.Dictionary.ValueCollection.Enumerator<UnityEngine.Vector2Int,object>
 	// System.Collections.Generic.Dictionary.ValueCollection.Enumerator<byte,object>
 	// System.Collections.Generic.Dictionary.ValueCollection.Enumerator<int,object>
+	// System.Collections.Generic.Dictionary.ValueCollection.Enumerator<object,int>
 	// System.Collections.Generic.Dictionary.ValueCollection.Enumerator<object,object>
 	// System.Collections.Generic.Dictionary.ValueCollection.Enumerator<ulong,object>
 	// System.Collections.Generic.Dictionary.ValueCollection<UnityEngine.Vector2Int,object>
 	// System.Collections.Generic.Dictionary.ValueCollection<byte,object>
 	// System.Collections.Generic.Dictionary.ValueCollection<int,object>
+	// System.Collections.Generic.Dictionary.ValueCollection<object,int>
 	// System.Collections.Generic.Dictionary.ValueCollection<object,object>
 	// System.Collections.Generic.Dictionary.ValueCollection<ulong,object>
 	// System.Collections.Generic.Dictionary<UnityEngine.Vector2Int,object>
 	// System.Collections.Generic.Dictionary<byte,object>
 	// System.Collections.Generic.Dictionary<int,object>
+	// System.Collections.Generic.Dictionary<object,int>
 	// System.Collections.Generic.Dictionary<object,object>
 	// System.Collections.Generic.Dictionary<ulong,object>
 	// System.Collections.Generic.EqualityComparer<UnityEngine.Vector2Int>
@@ -93,6 +100,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<UnityEngine.Vector2Int,object>>
 	// System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<byte,object>>
 	// System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<int,object>>
+	// System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<object,int>>
 	// System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<object,object>>
 	// System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<ulong,object>>
 	// System.Collections.Generic.ICollection<UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle>
@@ -104,6 +112,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<UnityEngine.Vector2Int,object>>
 	// System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<byte,object>>
 	// System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<int,object>>
+	// System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<object,int>>
 	// System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<object,object>>
 	// System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<ulong,object>>
 	// System.Collections.Generic.IEnumerable<UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle>
@@ -112,6 +121,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Collections.Generic.IEnumerator<System.Collections.Generic.KeyValuePair<UnityEngine.Vector2Int,object>>
 	// System.Collections.Generic.IEnumerator<System.Collections.Generic.KeyValuePair<byte,object>>
 	// System.Collections.Generic.IEnumerator<System.Collections.Generic.KeyValuePair<int,object>>
+	// System.Collections.Generic.IEnumerator<System.Collections.Generic.KeyValuePair<object,int>>
 	// System.Collections.Generic.IEnumerator<System.Collections.Generic.KeyValuePair<object,object>>
 	// System.Collections.Generic.IEnumerator<System.Collections.Generic.KeyValuePair<ulong,object>>
 	// System.Collections.Generic.IEnumerator<UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle>
@@ -129,6 +139,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Collections.Generic.KeyValuePair<UnityEngine.Vector2Int,object>
 	// System.Collections.Generic.KeyValuePair<byte,object>
 	// System.Collections.Generic.KeyValuePair<int,object>
+	// System.Collections.Generic.KeyValuePair<object,int>
 	// System.Collections.Generic.KeyValuePair<object,object>
 	// System.Collections.Generic.KeyValuePair<ulong,object>
 	// System.Collections.Generic.LinkedList.Enumerator<object>
@@ -283,14 +294,17 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// object LocalizationConfigBase<int>.GetContent<object>(string,int)
 		// object LocalizationSystem.GetContent<object>(string,LanguageType)
 		// object LocalizationSystem.GetContentByKey<object>(string,LanguageType)
+		// C_S_BagSellItem System.Activator.CreateInstance<C_S_BagSellItem>()
 		// C_S_BagSwapItem System.Activator.CreateInstance<C_S_BagSwapItem>()
 		// C_S_BagUseItem System.Activator.CreateInstance<C_S_BagUseItem>()
 		// C_S_ChatMessage System.Activator.CreateInstance<C_S_ChatMessage>()
+		// C_S_CraftItem System.Activator.CreateInstance<C_S_CraftItem>()
 		// C_S_Disconnect System.Activator.CreateInstance<C_S_Disconnect>()
 		// C_S_EnterGame System.Activator.CreateInstance<C_S_EnterGame>()
 		// C_S_GetBagData System.Activator.CreateInstance<C_S_GetBagData>()
 		// C_S_Login System.Activator.CreateInstance<C_S_Login>()
 		// C_S_Register System.Activator.CreateInstance<C_S_Register>()
+		// C_S_ShopBuyItem System.Activator.CreateInstance<C_S_ShopBuyItem>()
 		// C_S_ShortcutBarSetItem System.Activator.CreateInstance<C_S_ShortcutBarSetItem>()
 		// C_S_ShortcutBarSwapItem System.Activator.CreateInstance<C_S_ShortcutBarSwapItem>()
 		// S_C_BagUpdateItem System.Activator.CreateInstance<S_C_BagUpdateItem>()
@@ -300,23 +314,29 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// S_C_Login System.Activator.CreateInstance<S_C_Login>()
 		// S_C_Register System.Activator.CreateInstance<S_C_Register>()
 		// S_C_ShortcutBarUpdateItem System.Activator.CreateInstance<S_C_ShortcutBarUpdateItem>()
+		// S_C_UpdateCoinCount System.Activator.CreateInstance<S_C_UpdateCoinCount>()
 		// Unity.Collections.FixedString32Bytes System.Activator.CreateInstance<Unity.Collections.FixedString32Bytes>()
 		// object System.Activator.CreateInstance<object>()
 		// object[] System.Array.Empty<object>()
+		// int System.Enum.Parse<int>(string)
+		// int System.Enum.Parse<int>(string,bool)
 		// System.Void* Unity.Collections.LowLevel.Unsafe.UnsafeUtility.AddressOf<int>(int&)
 		// System.Void Unity.Netcode.BufferSerializer<object>.SerializeValue<byte>(byte&,Unity.Netcode.FastBufferWriter.ForEnums)
 		// System.Void Unity.Netcode.BufferSerializer<object>.SerializeValue<byte>(byte&,Unity.Netcode.FastBufferWriter.ForPrimitives)
 		// System.Void Unity.Netcode.BufferSerializer<object>.SerializeValue<int>(int&,Unity.Netcode.FastBufferWriter.ForEnums)
 		// System.Void Unity.Netcode.BufferSerializer<object>.SerializeValue<int>(int&,Unity.Netcode.FastBufferWriter.ForPrimitives)
 		// System.Void Unity.Netcode.BufferSerializer<object>.SerializeValue<int>(int[]&,Unity.Netcode.FastBufferWriter.ForPrimitives)
+		// System.Void Unity.Netcode.FastBufferReader.ReadNetworkSerializable<C_S_BagSellItem>(C_S_BagSellItem&)
 		// System.Void Unity.Netcode.FastBufferReader.ReadNetworkSerializable<C_S_BagSwapItem>(C_S_BagSwapItem&)
 		// System.Void Unity.Netcode.FastBufferReader.ReadNetworkSerializable<C_S_BagUseItem>(C_S_BagUseItem&)
 		// System.Void Unity.Netcode.FastBufferReader.ReadNetworkSerializable<C_S_ChatMessage>(C_S_ChatMessage&)
+		// System.Void Unity.Netcode.FastBufferReader.ReadNetworkSerializable<C_S_CraftItem>(C_S_CraftItem&)
 		// System.Void Unity.Netcode.FastBufferReader.ReadNetworkSerializable<C_S_Disconnect>(C_S_Disconnect&)
 		// System.Void Unity.Netcode.FastBufferReader.ReadNetworkSerializable<C_S_EnterGame>(C_S_EnterGame&)
 		// System.Void Unity.Netcode.FastBufferReader.ReadNetworkSerializable<C_S_GetBagData>(C_S_GetBagData&)
 		// System.Void Unity.Netcode.FastBufferReader.ReadNetworkSerializable<C_S_Login>(C_S_Login&)
 		// System.Void Unity.Netcode.FastBufferReader.ReadNetworkSerializable<C_S_Register>(C_S_Register&)
+		// System.Void Unity.Netcode.FastBufferReader.ReadNetworkSerializable<C_S_ShopBuyItem>(C_S_ShopBuyItem&)
 		// System.Void Unity.Netcode.FastBufferReader.ReadNetworkSerializable<C_S_ShortcutBarSetItem>(C_S_ShortcutBarSetItem&)
 		// System.Void Unity.Netcode.FastBufferReader.ReadNetworkSerializable<C_S_ShortcutBarSwapItem>(C_S_ShortcutBarSwapItem&)
 		// System.Void Unity.Netcode.FastBufferReader.ReadNetworkSerializable<S_C_BagUpdateItem>(S_C_BagUpdateItem&)
@@ -326,18 +346,22 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.Void Unity.Netcode.FastBufferReader.ReadNetworkSerializable<S_C_Login>(S_C_Login&)
 		// System.Void Unity.Netcode.FastBufferReader.ReadNetworkSerializable<S_C_Register>(S_C_Register&)
 		// System.Void Unity.Netcode.FastBufferReader.ReadNetworkSerializable<S_C_ShortcutBarUpdateItem>(S_C_ShortcutBarUpdateItem&)
+		// System.Void Unity.Netcode.FastBufferReader.ReadNetworkSerializable<S_C_UpdateCoinCount>(S_C_UpdateCoinCount&)
 		// System.Void Unity.Netcode.FastBufferReader.ReadUnmanagedSafe<byte>(byte&)
 		// System.Void Unity.Netcode.FastBufferReader.ReadUnmanagedSafe<float>(float&)
 		// System.Void Unity.Netcode.FastBufferReader.ReadUnmanagedSafe<int>(int&)
 		// System.Void Unity.Netcode.FastBufferReader.ReadUnmanagedSafe<object>(object&)
+		// System.Void Unity.Netcode.FastBufferReader.ReadValueSafe<C_S_BagSellItem>(C_S_BagSellItem&,Unity.Netcode.FastBufferWriter.ForNetworkSerializable)
 		// System.Void Unity.Netcode.FastBufferReader.ReadValueSafe<C_S_BagSwapItem>(C_S_BagSwapItem&,Unity.Netcode.FastBufferWriter.ForNetworkSerializable)
 		// System.Void Unity.Netcode.FastBufferReader.ReadValueSafe<C_S_BagUseItem>(C_S_BagUseItem&,Unity.Netcode.FastBufferWriter.ForNetworkSerializable)
 		// System.Void Unity.Netcode.FastBufferReader.ReadValueSafe<C_S_ChatMessage>(C_S_ChatMessage&,Unity.Netcode.FastBufferWriter.ForNetworkSerializable)
+		// System.Void Unity.Netcode.FastBufferReader.ReadValueSafe<C_S_CraftItem>(C_S_CraftItem&,Unity.Netcode.FastBufferWriter.ForNetworkSerializable)
 		// System.Void Unity.Netcode.FastBufferReader.ReadValueSafe<C_S_Disconnect>(C_S_Disconnect&,Unity.Netcode.FastBufferWriter.ForNetworkSerializable)
 		// System.Void Unity.Netcode.FastBufferReader.ReadValueSafe<C_S_EnterGame>(C_S_EnterGame&,Unity.Netcode.FastBufferWriter.ForNetworkSerializable)
 		// System.Void Unity.Netcode.FastBufferReader.ReadValueSafe<C_S_GetBagData>(C_S_GetBagData&,Unity.Netcode.FastBufferWriter.ForNetworkSerializable)
 		// System.Void Unity.Netcode.FastBufferReader.ReadValueSafe<C_S_Login>(C_S_Login&,Unity.Netcode.FastBufferWriter.ForNetworkSerializable)
 		// System.Void Unity.Netcode.FastBufferReader.ReadValueSafe<C_S_Register>(C_S_Register&,Unity.Netcode.FastBufferWriter.ForNetworkSerializable)
+		// System.Void Unity.Netcode.FastBufferReader.ReadValueSafe<C_S_ShopBuyItem>(C_S_ShopBuyItem&,Unity.Netcode.FastBufferWriter.ForNetworkSerializable)
 		// System.Void Unity.Netcode.FastBufferReader.ReadValueSafe<C_S_ShortcutBarSetItem>(C_S_ShortcutBarSetItem&,Unity.Netcode.FastBufferWriter.ForNetworkSerializable)
 		// System.Void Unity.Netcode.FastBufferReader.ReadValueSafe<C_S_ShortcutBarSwapItem>(C_S_ShortcutBarSwapItem&,Unity.Netcode.FastBufferWriter.ForNetworkSerializable)
 		// System.Void Unity.Netcode.FastBufferReader.ReadValueSafe<S_C_BagUpdateItem>(S_C_BagUpdateItem&,Unity.Netcode.FastBufferWriter.ForNetworkSerializable)
@@ -347,19 +371,23 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.Void Unity.Netcode.FastBufferReader.ReadValueSafe<S_C_Login>(S_C_Login&,Unity.Netcode.FastBufferWriter.ForNetworkSerializable)
 		// System.Void Unity.Netcode.FastBufferReader.ReadValueSafe<S_C_Register>(S_C_Register&,Unity.Netcode.FastBufferWriter.ForNetworkSerializable)
 		// System.Void Unity.Netcode.FastBufferReader.ReadValueSafe<S_C_ShortcutBarUpdateItem>(S_C_ShortcutBarUpdateItem&,Unity.Netcode.FastBufferWriter.ForNetworkSerializable)
+		// System.Void Unity.Netcode.FastBufferReader.ReadValueSafe<S_C_UpdateCoinCount>(S_C_UpdateCoinCount&,Unity.Netcode.FastBufferWriter.ForNetworkSerializable)
 		// System.Void Unity.Netcode.FastBufferReader.ReadValueSafe<Unity.Collections.FixedString32Bytes>(Unity.Collections.FixedString32Bytes&,Unity.Netcode.FastBufferWriter.ForFixedStrings)
 		// System.Void Unity.Netcode.FastBufferReader.ReadValueSafe<byte>(byte&,Unity.Netcode.FastBufferWriter.ForEnums)
 		// System.Void Unity.Netcode.FastBufferReader.ReadValueSafe<float>(float&,Unity.Netcode.FastBufferWriter.ForPrimitives)
 		// System.Void Unity.Netcode.FastBufferReader.ReadValueSafe<int>(int&,Unity.Netcode.FastBufferWriter.ForEnums)
 		// System.Void Unity.Netcode.FastBufferReader.ReadValueSafe<object>(object&,Unity.Netcode.FastBufferWriter.ForEnums)
+		// System.Void Unity.Netcode.FastBufferWriter.WriteNetworkSerializable<C_S_BagSellItem>(C_S_BagSellItem&)
 		// System.Void Unity.Netcode.FastBufferWriter.WriteNetworkSerializable<C_S_BagSwapItem>(C_S_BagSwapItem&)
 		// System.Void Unity.Netcode.FastBufferWriter.WriteNetworkSerializable<C_S_BagUseItem>(C_S_BagUseItem&)
 		// System.Void Unity.Netcode.FastBufferWriter.WriteNetworkSerializable<C_S_ChatMessage>(C_S_ChatMessage&)
+		// System.Void Unity.Netcode.FastBufferWriter.WriteNetworkSerializable<C_S_CraftItem>(C_S_CraftItem&)
 		// System.Void Unity.Netcode.FastBufferWriter.WriteNetworkSerializable<C_S_Disconnect>(C_S_Disconnect&)
 		// System.Void Unity.Netcode.FastBufferWriter.WriteNetworkSerializable<C_S_EnterGame>(C_S_EnterGame&)
 		// System.Void Unity.Netcode.FastBufferWriter.WriteNetworkSerializable<C_S_GetBagData>(C_S_GetBagData&)
 		// System.Void Unity.Netcode.FastBufferWriter.WriteNetworkSerializable<C_S_Login>(C_S_Login&)
 		// System.Void Unity.Netcode.FastBufferWriter.WriteNetworkSerializable<C_S_Register>(C_S_Register&)
+		// System.Void Unity.Netcode.FastBufferWriter.WriteNetworkSerializable<C_S_ShopBuyItem>(C_S_ShopBuyItem&)
 		// System.Void Unity.Netcode.FastBufferWriter.WriteNetworkSerializable<C_S_ShortcutBarSetItem>(C_S_ShortcutBarSetItem&)
 		// System.Void Unity.Netcode.FastBufferWriter.WriteNetworkSerializable<C_S_ShortcutBarSwapItem>(C_S_ShortcutBarSwapItem&)
 		// System.Void Unity.Netcode.FastBufferWriter.WriteNetworkSerializable<object>(object&)
@@ -369,14 +397,17 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 		// System.Void Unity.Netcode.FastBufferWriter.WriteUnmanagedSafe<int>(int&)
 		// System.Void Unity.Netcode.FastBufferWriter.WriteUnmanagedSafe<object>(object&)
 		// System.Void Unity.Netcode.FastBufferWriter.WriteValue<Unity.Collections.FixedString32Bytes>(Unity.Collections.FixedString32Bytes&,Unity.Netcode.FastBufferWriter.ForFixedStrings)
+		// System.Void Unity.Netcode.FastBufferWriter.WriteValueSafe<C_S_BagSellItem>(C_S_BagSellItem&,Unity.Netcode.FastBufferWriter.ForNetworkSerializable)
 		// System.Void Unity.Netcode.FastBufferWriter.WriteValueSafe<C_S_BagSwapItem>(C_S_BagSwapItem&,Unity.Netcode.FastBufferWriter.ForNetworkSerializable)
 		// System.Void Unity.Netcode.FastBufferWriter.WriteValueSafe<C_S_BagUseItem>(C_S_BagUseItem&,Unity.Netcode.FastBufferWriter.ForNetworkSerializable)
 		// System.Void Unity.Netcode.FastBufferWriter.WriteValueSafe<C_S_ChatMessage>(C_S_ChatMessage&,Unity.Netcode.FastBufferWriter.ForNetworkSerializable)
+		// System.Void Unity.Netcode.FastBufferWriter.WriteValueSafe<C_S_CraftItem>(C_S_CraftItem&,Unity.Netcode.FastBufferWriter.ForNetworkSerializable)
 		// System.Void Unity.Netcode.FastBufferWriter.WriteValueSafe<C_S_Disconnect>(C_S_Disconnect&,Unity.Netcode.FastBufferWriter.ForNetworkSerializable)
 		// System.Void Unity.Netcode.FastBufferWriter.WriteValueSafe<C_S_EnterGame>(C_S_EnterGame&,Unity.Netcode.FastBufferWriter.ForNetworkSerializable)
 		// System.Void Unity.Netcode.FastBufferWriter.WriteValueSafe<C_S_GetBagData>(C_S_GetBagData&,Unity.Netcode.FastBufferWriter.ForNetworkSerializable)
 		// System.Void Unity.Netcode.FastBufferWriter.WriteValueSafe<C_S_Login>(C_S_Login&,Unity.Netcode.FastBufferWriter.ForNetworkSerializable)
 		// System.Void Unity.Netcode.FastBufferWriter.WriteValueSafe<C_S_Register>(C_S_Register&,Unity.Netcode.FastBufferWriter.ForNetworkSerializable)
+		// System.Void Unity.Netcode.FastBufferWriter.WriteValueSafe<C_S_ShopBuyItem>(C_S_ShopBuyItem&,Unity.Netcode.FastBufferWriter.ForNetworkSerializable)
 		// System.Void Unity.Netcode.FastBufferWriter.WriteValueSafe<C_S_ShortcutBarSetItem>(C_S_ShortcutBarSetItem&,Unity.Netcode.FastBufferWriter.ForNetworkSerializable)
 		// System.Void Unity.Netcode.FastBufferWriter.WriteValueSafe<C_S_ShortcutBarSwapItem>(C_S_ShortcutBarSwapItem&,Unity.Netcode.FastBufferWriter.ForNetworkSerializable)
 		// System.Void Unity.Netcode.FastBufferWriter.WriteValueSafe<Unity.Collections.FixedString32Bytes>(Unity.Collections.FixedString32Bytes&,Unity.Netcode.FastBufferWriter.ForFixedStrings)

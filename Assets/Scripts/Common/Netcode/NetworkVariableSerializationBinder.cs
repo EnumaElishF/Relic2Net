@@ -36,6 +36,9 @@ public static class NetworkVariableSerializationBinder
             duplicateValue = value;
         };
     }
+    /// <summary>
+    /// FixedString32Bytes因为热更新也需要绑定序列化相关函数,否则报错问题
+    /// </summary>
     public static void BindFixedString32BytesSerialization()
     {
         UserNetworkVariableSerialization<FixedString32Bytes>.WriteValue = (FastBufferWriter writer, in FixedString32Bytes value) =>

@@ -77,7 +77,7 @@ public class UI_CraftWindow : UI_CustomWindowBase, IItemWindow
     private void OnItemClick(PointerEventData.InputButton button, int dataIndex)
     {
         if (button != PointerEventData.InputButton.Left) return;
-        ItemConfigBase itemConfig = crafterConfig.items[dataIndex];
+        targetItemConfig = crafterConfig.items[dataIndex];
         //创建合成区域
         CreateCraftArea(targetItemConfig);
     }

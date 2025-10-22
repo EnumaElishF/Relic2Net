@@ -69,5 +69,4 @@ MonoBehaviour:
   hotUpdateDllNames:
   - Common.dll
   - HotUpdate.dll
-  - Test.dll
   versionInfoAddressableKey: VersionInfo

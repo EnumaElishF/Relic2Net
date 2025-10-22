@@ -1194,7 +1194,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2036951900947302608, guid: 6d6a17a863d398a41855e1af239c0a38, type: 3}
       propertyPath: m_Name
-      value: TestManager
+      value: ClientTestManager
       objectReference: {fileID: 0}
     - target: {fileID: 5176887546165433126, guid: 6d6a17a863d398a41855e1af239c0a38, type: 3}
       propertyPath: m_LocalPosition.x

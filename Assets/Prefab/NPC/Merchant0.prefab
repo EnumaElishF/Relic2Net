@@ -94,31 +94,31 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 97fb789608f220a4fbd2be4370812e27, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 143.03
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 97fb789608f220a4fbd2be4370812e27, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 54.05
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 97fb789608f220a4fbd2be4370812e27, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 138.66
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 97fb789608f220a4fbd2be4370812e27, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.97951716
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 97fb789608f220a4fbd2be4370812e27, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 97fb789608f220a4fbd2be4370812e27, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0.20136108
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 97fb789608f220a4fbd2be4370812e27, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 97fb789608f220a4fbd2be4370812e27, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -126,7 +126,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 97fb789608f220a4fbd2be4370812e27, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: -23.233
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 97fb789608f220a4fbd2be4370812e27, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -233,5 +233,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ca25dd980cd11c4da0f9ffebf46ca5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  merchantConfigName: Merchant0
+  configName: Merchant0
   prompt: {fileID: 4030117180979504394}

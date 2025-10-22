@@ -17,9 +17,22 @@ public partial class PlayerController : NetworkBehaviour
         Debug.Log($"委托绑定：{func.Method.DeclaringType.Name}.{func.Method.Name}"); // 输出绑定的方法所在类
     }
     #endregion
+    #region  面板赋值 (理论上，下面这些值，包括移动速度旋转速度等，客户端都不需要知道，只要服务端知道就行) 服务端基于根运动移动
+    [SerializeField] private float moveSpeed = 1;
+    public float MoveSpeed { get => moveSpeed; }
+    [SerializeField] private float rotateSpeed = 1000; //至少一秒要能转1000度
+    public float RotateSpeed { get => rotateSpeed; }
+    [SerializeField] private CharacterController characterController;
+    public CharacterController CharacterController { get => characterController; }
+    [SerializeField] private Animator animator;
+    public Animator Animator { get => animator; }
+    public Transform cameraLookatTarget;
+    public Transform cameraFollowTarget;
+    public bool canControl; //玩家是否可以控制
 
     [SerializeField] private Player_View view;
     public Player_View View { get => view; }
+    #endregion
     private NetVariable<PlayerState> currentState = new NetVariable<PlayerState>(PlayerState.None);
     //新程序集，要加入对Common的新程序集的引用 Unity.Collections;
     public NetVariable<FixedString32Bytes> usedWeaponName = new NetVariable<FixedString32Bytes>();
@@ -101,9 +114,7 @@ public partial class PlayerController : NetworkBehaviour
 #if !UNITY_SERVER || UNITY_EDITOR
 public partial class PlayerController : NetworkBehaviour
 {
-    public Transform cameraLookatTarget;
-    public Transform cameraFollowTarget;
-    public bool canControl; //玩家是否可以控制
+
     private void Start()
     {
         // Start 一定 在OnNetworkSpawn后执行，如果这个阶段IsSpawned = false 说明是个异常对象
@@ -173,19 +184,6 @@ public partial class PlayerController : NetworkBehaviour,IStateMachineOwner
     }
     #endregion
 
-    #region  面板赋值 (理论上，下面这些值，包括移动速度旋转速度等，客户端都不需要知道，只要服务端知道就行) 服务端基于根运动移动
-    [SerializeField] private float moveSpeed = 1;
-    public float MoveSpeed  { get => moveSpeed; }
-
-    [SerializeField] private float rotateSpeed = 1000; //至少一秒要能转1000度
-    public float RotateSpeed { get => rotateSpeed; }
-
-    [SerializeField] private CharacterController characterController;
-    public  CharacterController CharacterController { get => characterController; }
-
-    [SerializeField] private Animator animator;
-    public Animator Animator { get => animator; }
-    #endregion
 
 
     public Vector2Int currentAOICoord { get; private set; }

@@ -238,6 +238,7 @@ public class BagData: INetworkSerializable
             if (itemList[targetIndex] == null)
             {
                 itemList[targetIndex] = targetItemConfig.GetDefaultItemData().Copy();
+                return true;
             }
         }
         return false;

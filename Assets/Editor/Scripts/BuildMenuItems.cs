@@ -62,18 +62,28 @@ public static class BuildMenuItems
             subtarget = (int)StandaloneBuildSubtarget.Server,
             locationPathName = $"{projectRootPath}/{rootFloderPath}/{serverFloderPath}/Server.exe"
         };
-        BuildPipeline.BuildPlayer(buildPlayerOptions);
+        //隐藏：当客户端与服务端的文件太多时，使用宏命令过于麻烦，可以直接在打包时，忽视不需要的文件
+        string hideFolder = "Assets/Scripts/HotUpdate";
+        HideFolder(hideFolder);
+        try
+        {
+            //服务端：实际打包
+            BuildPipeline.BuildPlayer(buildPlayerOptions);
+            Debug.Log("完成构建服务端");
+        }
+        catch (System.Exception)
+        {
+            throw;
+        }
+        finally
+        {
+            RecoverFolder(hideFolder);
+            // 还原HybridCLR
+            SettingsUtil.Enable = true;
+            // 还原Addressables
+            AddressableAssetSettingsDefaultObject.Settings.BuildAddressablesWithPlayerBuild = AddressableAssetSettings.PlayerBuildOption.PreferencesValue;
+        }
 
-        //还原HybridCLR
-        SettingsUtil.Enable = true;
-        //关闭Addressables
-        AddressableAssetSettingsDefaultObject.Settings.BuildAddressablesWithPlayerBuild = AddressableAssetSettings.PlayerBuildOption.PreferencesValue;
-
-
-        HybridCLR.Editor.SettingsUtil.Enable = true;//关闭HybridCLR
-
-
-        Debug.Log("完成构建服务端");
 
     }
     [MenuItem("Project/Build/NewClient")]
@@ -82,36 +92,50 @@ public static class BuildMenuItems
         Debug.Log("开始构建客户端");
         
         BuildFilterAssemblies.serverMode = false;//不做过滤处理（只有服务端需要过滤处理
-
-        //HybridCLR构建准备
-        PrebuildCommand.GenerateAll();//进行华佗的GenerateAll
-        GenerateDllBytesFile();//搬运dll文本文件
-
-        // 清理可能存在的Addressables缓存( 主要是用于Git切换版本的时候，用来避免老的catalog导致问题，所以直接清理掉)
-        string catalogPath = $"{Application.persistentDataPath}/com.unity.addressables";
-        if (Directory.Exists(catalogPath)) Directory.Delete(catalogPath, true); //删掉上次热更的catalog文件夹，以做到，进行重新检查下载 (后续断点续传也是)
-
-    List<string> sceneList = new List<string>(EditorSceneManager.sceneCountInBuildSettings);
-        for (int i = 0; i < EditorSceneManager.sceneCountInBuildSettings; i++)
+        string hideFolder = "Assets/Scripts/Server";
+        HideFolder(hideFolder);
+        try
         {
-            string scenePath = SceneUtility.GetScenePathByBuildIndex(i);
-            if (scenePath != null && !scenePath.Contains("Server")) //排除Server
+            //HybridCLR构建准备
+            PrebuildCommand.GenerateAll();//进行华佗的GenerateAll
+            GenerateDllBytesFile();//搬运dll文本文件
+
+            // 清理可能存在的Addressables缓存( 主要是用于Git切换版本的时候，用来避免老的catalog导致问题，所以直接清理掉)
+            string catalogPath = $"{Application.persistentDataPath}/com.unity.addressables";
+            if (Directory.Exists(catalogPath)) Directory.Delete(catalogPath, true); //删掉上次热更的catalog文件夹，以做到，进行重新检查下载 (后续断点续传也是)
+
+            List<string> sceneList = new List<string>(EditorSceneManager.sceneCountInBuildSettings);
+            for (int i = 0; i < EditorSceneManager.sceneCountInBuildSettings; i++)
             {
-                Debug.Log("添加场景:" + scenePath);
-                sceneList.Add(scenePath);
+                string scenePath = SceneUtility.GetScenePathByBuildIndex(i);
+                if (scenePath != null && !scenePath.Contains("Server")) //排除Server
+                {
+                    Debug.Log("添加场景:" + scenePath);
+                    sceneList.Add(scenePath);
+                }
             }
+            string projectRootPath = new DirectoryInfo(Application.dataPath).Parent.FullName;
+            BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions()
+            {
+                scenes = sceneList.ToArray(),
+                target = BuildTarget.StandaloneWindows64,  //生成目标文件夹名称为StandaloneWindows64
+                subtarget = (int)StandaloneBuildSubtarget.Player,
+                locationPathName = $"{projectRootPath}/{rootFloderPath}/{clientFloderPath}/Client.exe"
+            };
+            BuildPipeline.BuildPlayer(buildPlayerOptions);
+            //Addressables会自动构建
+            Debug.Log("完成构建客户端");
         }
-        string projectRootPath = new DirectoryInfo(Application.dataPath).Parent.FullName;
-        BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions()
+        catch (System.Exception)
         {
-            scenes = sceneList.ToArray(),
-            target = BuildTarget.StandaloneWindows64,  //生成目标文件夹名称为StandaloneWindows64
-            subtarget = (int)StandaloneBuildSubtarget.Player,
-            locationPathName = $"{projectRootPath}/{rootFloderPath}/{clientFloderPath}/Client.exe"
-        };
-        BuildPipeline.BuildPlayer(buildPlayerOptions);
-        //Addressables会自动构建
-        Debug.Log("完成构建客户端");
+
+            throw;
+        }
+        finally
+        {
+            RecoverFolder(hideFolder);
+        }
+
     }
 
     [MenuItem("Project/Build/UpdateClient")]
@@ -121,19 +145,30 @@ public static class BuildMenuItems
         Debug.Log("开始构建客户端更新包");
 
         BuildFilterAssemblies.serverMode = false;//不做过滤处理（只有服务端需要过滤处理
+        string hideFolder = "Assets/Scripts/Server";
+        HideFolder(hideFolder);
+        try
+        {
+            //华佗不需要去更新所有，但是需要更新dll
+            CompileDllCommand.CompileDllActiveBuildTarget();
+            GenerateDllBytesFile();
+            //Addressables更新包
+            string path = ContentUpdateScript.GetContentStateDataPath(false);
+            Debug.Log(path);
+            AddressableAssetSettings addressableAssetSettings = AddressableAssetSettingsDefaultObject.Settings;
+            //构建内容的更新: 模拟点击Update a Previous Build
+            ContentUpdateScript.BuildContentUpdate(addressableAssetSettings, path);
+            Debug.Log("完成构建客户端更新包");
+        }
+        catch (System.Exception)
+        {
 
-        //华佗不需要去更新所有，但是需要更新dll
-        CompileDllCommand.CompileDllActiveBuildTarget();
-        GenerateDllBytesFile();
-        //Addressables更新包
-        string path = ContentUpdateScript.GetContentStateDataPath(false);
-        Debug.Log(path);
-        AddressableAssetSettings addressableAssetSettings = AddressableAssetSettingsDefaultObject.Settings;
-        //构建内容的更新: 模拟点击Update a Previous Build
-        ContentUpdateScript.BuildContentUpdate(addressableAssetSettings, path);
-
-        Debug.Log("完成构建客户端更新包");
-
+            throw;
+        }
+        finally
+        {
+            RecoverFolder(hideFolder);
+        }
 
     }
 
@@ -181,18 +216,29 @@ public static class BuildMenuItems
         Debug.Log("完成生成dll文本文件");
 
     }
-    #region 服务端测试宏
-    public static bool editorServerTest;
-    public const string editorServerTestSymbolString = "UNITY_EDITOR";
-    [MenuItem("Project/TestServer")]
-    public static void TestServer()
+    /// <summary>
+    /// 当客户端与服务端的文件太多时，使用宏命令过于麻烦，可以直接在打包时，忽视不需要的文件
+    /// </summary>
+    private static void HideFolder(string folder)
     {
-        editorServerTest = !editorServerTest;
-        //增加预处理指令   自定义的UNITY_EDITOR，移除预处理指令  UNITY_EDITOR
-        if (editorServerTest) JKFrameSetting.AddScriptCompilationSymbol(editorServerTestSymbolString);
-        else JKFrameSetting.RemoveScriptCompilationSymbol(editorServerTestSymbolString);
-        Menu.SetChecked("Project/TestServer", editorServerTest);
+        if (Directory.Exists(folder))
+        {
+            string newPath = $"{folder}~";
+            Directory.Move(folder, newPath);//处理不使用的文件夹到不被Unity识别的文件夹的机制，文件夹名称~
+            File.Delete($"{folder}.meta"); 
+            Debug.Log($"隐藏了{folder}文件夹");
+            AssetDatabase.Refresh();
+        }
     }
-    #endregion
+    private static void RecoverFolder(string folder)
+    {
+        string newPath = $"{folder}~";
+        if (Directory.Exists(newPath))
+        {
+            Directory.Move(newPath, folder);
+            Debug.Log($"恢复了{folder}文件夹");
+            AssetDatabase.Refresh();
+        }
+    }
 
 }
