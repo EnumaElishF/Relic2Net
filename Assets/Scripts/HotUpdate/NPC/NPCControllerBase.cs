@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using JKFrame;
 using UnityEngine;
 
 public abstract class NPCControllerBase : MonoBehaviour
@@ -8,12 +7,19 @@ public abstract class NPCControllerBase : MonoBehaviour
     //[SerializeField] protected DialogConfig defaultDialogConfig;
     //[SerializeField] protected string taskID;
     [SerializeField] protected GameObject prompt;
-    //[SerializeField] protected Transform floatInfoPoint;
+    [SerializeField] protected Transform floatInfoPoint; //能尽量往上抽一点，就往Base里放，毕竟同样的代码多写也没有意义
     public abstract string nameKey { get; }
 
     private void Start()
     {
         if (prompt != null) prompt.SetActive(false);
+        InitFloatInfo();
+    }
+    public void InitFloatInfo()
+    {
+        NPCFloatInfo floatInfo = ResSystem.InstantiateGameObject<NPCFloatInfo>(floatInfoPoint, "NPCFloatInfo");
+        floatInfo.transform.localPosition = Vector3.zero;
+        floatInfo.Init(nameKey);
     }
     private void OnTriggerEnter(Collider other)
     {

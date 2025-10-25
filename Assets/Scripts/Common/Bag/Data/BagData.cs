@@ -1,7 +1,6 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 using System.Collections.Generic;
 using Unity.Netcode;
-using UnityEngine;
 
 public class BagData: INetworkSerializable
 {
