@@ -29,12 +29,11 @@ public partial class PlayerController : NetworkBehaviour
     public Transform cameraLookatTarget;
     public Transform cameraFollowTarget;
     public Transform floatInfoPoint;
-    public bool canControl; //玩家是否可以控制
 
     [SerializeField] private Player_View view;
     public Player_View View { get => view; }
     #endregion
-    private NetVariable<PlayerState> currentState = new NetVariable<PlayerState>(PlayerState.None);
+    public NetVariable<PlayerState> currentState = new NetVariable<PlayerState>(PlayerState.None);
     //新程序集，要加入对Common的新程序集的引用 Unity.Collections;
     public NetVariable<FixedString32Bytes> usedWeaponName = new NetVariable<FixedString32Bytes>();
     public NetVariable<FixedString32Bytes> playerName = new NetVariable<FixedString32Bytes>();
@@ -97,17 +96,13 @@ public partial class PlayerController : NetworkBehaviour
     //这就是Rpc好用的地方。
     //这里的moveSpeed就算本地客户端作弊，修改了数据，但是服务端在使用的时候用的是服务端的moveSpeed，还达到了防作弊效果。
     //???是true还是false
-    [ServerRpc(RequireOwnership = false)]  //只会被服务端调用的方法
-    private void SendInputMoveDirServerRpc(Vector3 moveDir)
+    [ServerRpc(RequireOwnership = true)]  //只会被服务端调用的方法,RequireOwnership验证是否宿主
+    public void SendInputMoveDirServerRpc(Vector3 moveDir)
     {
-
 #if UNITY_SERVER || UNITY_EDITOR
         Server_ReceiveMoveInput(moveDir);
 #endif
-
     }
-
-
 }
 
 /// <summary>
@@ -131,44 +126,9 @@ public partial class PlayerController : NetworkBehaviour
 
     private void Client_OnNetworkSpawn()
     {
-        EventSystem.TypeEventTrigger(new OnSpawnPlayerEvent { newPlayer = this });
-        //IsOwner 是一个布尔值，用于判断当前本地客户端是否是该 Network Object 的 “所有者”（Owner）。
-        if (IsOwner)
-        {
-            //客户端快速访问到 “自己控制的玩家对象”
-            //PlayerManager.Instance.InitLocalPlayer(this);  替换为下方传事件
-            this.AddUpdate(LocalClientUpdate);//添加一个Update的监听,框架做的
-        }
+        EventSystem.TypeEventTrigger(new SpawnPlayerEvent { newPlayer = this });
     }
-    //最后输入
-    private Vector3 lastInputDir = Vector3.zero;
-    //玩家移动输入判断 （客户端）
-    private void LocalClientUpdate()
-    {
-        if (currentState.Value == PlayerState.None) return;
 
-        //因为玩家发像服务端的移动是如果一个键没有变化就一直向服务端发，
-        //---(我们的移动指令设计是这样的，所以鼠标暂停移动，不能直接在这里return断掉键位消息的发送情况，需要下面逻辑判断为不移动)
-        Vector3 inputDir = Vector3.zero;
-        if (canControl)
-        {
-            //如果true可以控制，就使用玩家键入的按键。如果false不能控制，那么就等于没按
-            float h = Input.GetAxisRaw("Horizontal");
-            float v = Input.GetAxisRaw("Vertical");
-            inputDir = new Vector3(h, 0, v);
-        }
-
-        if(inputDir == Vector3.zero && lastInputDir == Vector3.zero) return;//上一次没按，这一次也没按，就直接不用传消息了
-
-        //输入方向
-        lastInputDir = inputDir;
-        //计算摄像机的旋转，和相对的角色WASD移动的 对应变化
-        float cameraEulerAngleY = Camera.main.transform.eulerAngles.y;
-        //四元数和向量相乘：让这个向量按照四元数所表达的角度进行旋转后得到一个新的向量
-        //移动方向：Quaternion.Euler(0, cameraEulerAngleY, 0) * inputDir
-        SendInputMoveDirServerRpc(Quaternion.Euler(0, cameraEulerAngleY, 0) * inputDir);
-
-    }
 }
 #endif
 
@@ -185,8 +145,6 @@ public partial class PlayerController : NetworkBehaviour,IStateMachineOwner
         public Vector3 moveDir;
     }
     #endregion
-
-
 
     public Vector2Int currentAOICoord { get; private set; }
     public InputData inputData { get; private set; }

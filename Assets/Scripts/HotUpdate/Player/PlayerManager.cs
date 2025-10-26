@@ -11,7 +11,7 @@ public class PlayerManager : SingletonMono<PlayerManager>
 {
     [SerializeField] private CinemachineFreeLook cinemachine;
     //取消使用静态变量static,因为跨场景的时候曾经的PlayerController并没有被销毁，而是放对象池中，静态变量指向的变量是全局唯一，且是强绑定
-    public PlayerController localPlayer { get; private set; } 
+    public PlayerClientController localPlayer { get; private set; } 
     //玩家是否可以控制角色，以后可能受到多个方面的影响，目前只和鼠标显示关联
     public bool playerControlEnable { get; private set; }
     public int UsedWeaponIndex => bagData.usedWeaponIndex;
@@ -27,7 +27,7 @@ public class PlayerManager : SingletonMono<PlayerManager>
         PlayerController.SetGetWeaponFunc(GetWeapon);
 
         //事件的监听开始
-        EventSystem.AddTypeEventListener<OnSpawnPlayerEvent>(OnSpawnPlayerEvent);
+        EventSystem.AddTypeEventListener<SpawnPlayerEvent>(OnSpawnPlayerEvent);
         EventSystem.AddTypeEventListener<MouseActiveStateChangedEvent>(OnMouseActiveStateChangedEvent);
         //TODO 每次新加，玩家相关回复给客户端的消息
         NetMessageManager.Instance.RegisterMessageCallback(MessageType.S_C_GetBagData, OnS_C_GetBagData);
@@ -46,7 +46,7 @@ public class PlayerManager : SingletonMono<PlayerManager>
         //检查所有的的EventSystem的事件绑定，因为PlayerManager脚本并不是全局的，他会因为场景卸载而关闭
         //那么就需要把事件取消掉，所以加了下面这个RemoveTypeEventListener移除事件监听
         //以此类似的还有很多，但是像是ClientGlobal这种一直存在，就不需要加下面的处理
-        EventSystem.RemoveTypeEventListener<OnSpawnPlayerEvent>(OnSpawnPlayerEvent);
+        EventSystem.RemoveTypeEventListener<SpawnPlayerEvent>(OnSpawnPlayerEvent);
         EventSystem.RemoveTypeEventListener<MouseActiveStateChangedEvent>(OnMouseActiveStateChangedEvent);//每次在ClientGlobal的ActiveMouse触发
         NetMessageManager.Instance.UnRegisterMessageCallback(MessageType.S_C_GetBagData, OnS_C_GetBagData);
         NetMessageManager.Instance.UnRegisterMessageCallback(MessageType.S_C_BagUpdateItem, OnS_C_UpdateItem);
@@ -54,17 +54,17 @@ public class PlayerManager : SingletonMono<PlayerManager>
 
     }
 
-    private void OnSpawnPlayerEvent(OnSpawnPlayerEvent arg)
+    private void OnSpawnPlayerEvent(SpawnPlayerEvent arg)
     {
-        if (arg.newPlayer.IsSpawned)
-        {
-            InitLocalPlayer(arg.newPlayer);
-        }
         if(!arg.newPlayer.TryGetComponent(out PlayerClientController clientController))
         {
             clientController = arg.newPlayer.gameObject.AddComponent<PlayerClientController>();
         }
         clientController.Init(arg.newPlayer);
+        if (arg.newPlayer.IsSpawned)
+        {
+            InitLocalPlayer(clientController);
+        }
     }
     private void OnMouseActiveStateChangedEvent(MouseActiveStateChangedEvent arg)
     {
@@ -143,7 +143,7 @@ public class PlayerManager : SingletonMono<PlayerManager>
         return localPlayer != null;
     }
 
-    public void InitLocalPlayer(PlayerController player)
+    public void InitLocalPlayer(PlayerClientController player)
     {
         localPlayer = player;
         cinemachine.transform.position = localPlayer.transform.position;
@@ -152,8 +152,8 @@ public class PlayerManager : SingletonMono<PlayerManager>
 
         //例如：如果是服务端版的热更新的打包，下面这个是纯客户端才存在的东西，如果不加限制为 客户端的#if,那就会报错
 #if !UNITY_SERVER || UNITY_EDITOR
-        cinemachine.LookAt = localPlayer.cameraLookatTarget;
-        cinemachine.Follow = localPlayer.cameraFollowTarget;
+        cinemachine.LookAt = localPlayer.mainController.cameraLookatTarget;
+        cinemachine.Follow = localPlayer.mainController.cameraFollowTarget;
         localPlayer.canControl = playerControlEnable;
 #endif
     }

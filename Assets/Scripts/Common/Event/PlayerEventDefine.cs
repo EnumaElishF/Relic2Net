@@ -1,7 +1,7 @@
 using UnityEngine;
 
 
-public struct OnSpawnPlayerEvent
+public struct SpawnPlayerEvent
 {
     public PlayerController newPlayer;
 }
