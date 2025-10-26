@@ -7,7 +7,7 @@ public class PlayerFloatInfo : MonoBehaviour
     {
         nameText.text = name;
     }
-    private void Update()
+    void LateUpdate()
     {
         //玩家头顶信息PlayerFloatInfo，始终朝向摄像机的方向
         if (Camera.main != null)

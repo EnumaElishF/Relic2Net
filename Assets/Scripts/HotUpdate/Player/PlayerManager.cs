@@ -27,7 +27,7 @@ public class PlayerManager : SingletonMono<PlayerManager>
         PlayerController.SetGetWeaponFunc(GetWeapon);
 
         //事件的监听开始
-        EventSystem.AddTypeEventListener<InitLocalPlayerEvent>(OnInitLocalPlayerEvent);
+        EventSystem.AddTypeEventListener<OnSpawnPlayerEvent>(OnSpawnPlayerEvent);
         EventSystem.AddTypeEventListener<MouseActiveStateChangedEvent>(OnMouseActiveStateChangedEvent);
         //TODO 每次新加，玩家相关回复给客户端的消息
         NetMessageManager.Instance.RegisterMessageCallback(MessageType.S_C_GetBagData, OnS_C_GetBagData);
@@ -46,7 +46,7 @@ public class PlayerManager : SingletonMono<PlayerManager>
         //检查所有的的EventSystem的事件绑定，因为PlayerManager脚本并不是全局的，他会因为场景卸载而关闭
         //那么就需要把事件取消掉，所以加了下面这个RemoveTypeEventListener移除事件监听
         //以此类似的还有很多，但是像是ClientGlobal这种一直存在，就不需要加下面的处理
-        EventSystem.RemoveTypeEventListener<InitLocalPlayerEvent>(OnInitLocalPlayerEvent);
+        EventSystem.RemoveTypeEventListener<OnSpawnPlayerEvent>(OnSpawnPlayerEvent);
         EventSystem.RemoveTypeEventListener<MouseActiveStateChangedEvent>(OnMouseActiveStateChangedEvent);//每次在ClientGlobal的ActiveMouse触发
         NetMessageManager.Instance.UnRegisterMessageCallback(MessageType.S_C_GetBagData, OnS_C_GetBagData);
         NetMessageManager.Instance.UnRegisterMessageCallback(MessageType.S_C_BagUpdateItem, OnS_C_UpdateItem);
@@ -54,9 +54,17 @@ public class PlayerManager : SingletonMono<PlayerManager>
 
     }
 
-    private void OnInitLocalPlayerEvent(InitLocalPlayerEvent arg)
+    private void OnSpawnPlayerEvent(OnSpawnPlayerEvent arg)
     {
-        InitLocalPlayer(arg.localPlayer);
+        if (arg.newPlayer.IsSpawned)
+        {
+            InitLocalPlayer(arg.newPlayer);
+        }
+        if(!arg.newPlayer.TryGetComponent(out PlayerClientController clientController))
+        {
+            clientController = arg.newPlayer.gameObject.AddComponent<PlayerClientController>();
+        }
+        clientController.Init(arg.newPlayer);
     }
     private void OnMouseActiveStateChangedEvent(MouseActiveStateChangedEvent arg)
     {

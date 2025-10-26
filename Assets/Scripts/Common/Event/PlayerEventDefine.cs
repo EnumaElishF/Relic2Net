@@ -1,8 +1,9 @@
 using UnityEngine;
 
-public struct InitLocalPlayerEvent
+
+public struct OnSpawnPlayerEvent
 {
-    public PlayerController localPlayer;
+    public PlayerController newPlayer;
 }
 public struct AOIAddPlayerEvent
 {

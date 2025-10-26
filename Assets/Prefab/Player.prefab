@@ -138,6 +138,7 @@ MonoBehaviour:
   animator: {fileID: 442357951897592354}
   cameraLookatTarget: {fileID: 2646886674619984605}
   cameraFollowTarget: {fileID: 6117674719791029295}
+  floatInfoPoint: {fileID: 8628336642532296424}
   canControl: 0
   view: {fileID: 221965787477646425}
 --- !u!143 &6189258044268938541
@@ -207,7 +208,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8628336642532296424}
   m_Layer: 6
-  m_Name: TopPoint
+  m_Name: FloatPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

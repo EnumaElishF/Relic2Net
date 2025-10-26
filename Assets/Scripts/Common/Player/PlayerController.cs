@@ -28,6 +28,7 @@ public partial class PlayerController : NetworkBehaviour
     public Animator Animator { get => animator; }
     public Transform cameraLookatTarget;
     public Transform cameraFollowTarget;
+    public Transform floatInfoPoint;
     public bool canControl; //玩家是否可以控制
 
     [SerializeField] private Player_View view;
@@ -36,6 +37,7 @@ public partial class PlayerController : NetworkBehaviour
     private NetVariable<PlayerState> currentState = new NetVariable<PlayerState>(PlayerState.None);
     //新程序集，要加入对Common的新程序集的引用 Unity.Collections;
     public NetVariable<FixedString32Bytes> usedWeaponName = new NetVariable<FixedString32Bytes>();
+    public NetVariable<FixedString32Bytes> playerName = new NetVariable<FixedString32Bytes>();
 
     //多个玩家，所以Player没有单例
     //public NetworkVariable<float> moveSpeed;   //网络变量：值类型，或者是结构体
@@ -129,12 +131,12 @@ public partial class PlayerController : NetworkBehaviour
 
     private void Client_OnNetworkSpawn()
     {
+        EventSystem.TypeEventTrigger(new OnSpawnPlayerEvent { newPlayer = this });
         //IsOwner 是一个布尔值，用于判断当前本地客户端是否是该 Network Object 的 “所有者”（Owner）。
         if (IsOwner)
         {
             //客户端快速访问到 “自己控制的玩家对象”
             //PlayerManager.Instance.InitLocalPlayer(this);  替换为下方传事件
-            EventSystem.TypeEventTrigger(new InitLocalPlayerEvent { localPlayer = this });
             this.AddUpdate(LocalClientUpdate);//添加一个Update的监听,框架做的
         }
     }
