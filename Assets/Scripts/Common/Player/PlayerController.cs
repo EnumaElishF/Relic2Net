@@ -5,8 +5,10 @@ using Unity.Netcode;
 using UnityEngine;
 
 /// <summary>
-/// 公共   : 公共的地方大部分都是做分支的，分成客户端，和 服务端
+/// 公共   : 公共的地方大部分都是做分支的，分成客户端，和 服务端  
+/// PlayerController做mainController在Common程序集下，去采用PlayerServerController的部分数值
 /// </summary>
+/// 
 public partial class PlayerController : NetworkBehaviour
 {
     #region 静态成员 static
@@ -18,20 +20,18 @@ public partial class PlayerController : NetworkBehaviour
     }
     #endregion
     #region  面板赋值 (理论上，下面这些值，包括移动速度旋转速度等，客户端都不需要知道，只要服务端知道就行) 服务端基于根运动移动
-    [SerializeField] private float moveSpeed = 1;
-    public float MoveSpeed { get => moveSpeed; }
-    [SerializeField] private float rotateSpeed = 1000; //至少一秒要能转1000度
-    public float RotateSpeed { get => rotateSpeed; }
-    [SerializeField] private CharacterController characterController;
-    public CharacterController CharacterController { get => characterController; }
-    [SerializeField] private Animator animator;
-    public Animator Animator { get => animator; }
+
     public Transform cameraLookatTarget;
     public Transform cameraFollowTarget;
     public Transform floatInfoPoint;
 
     [SerializeField] private Player_View view;
     public Player_View View { get => view; }
+
+    [SerializeField] private float moveSpeed = 1;
+    public float MoveSpeed { get => moveSpeed; }
+    [SerializeField] private float rotateSpeed = 1000; //至少一秒要能转1000度
+    public float RotateSpeed { get => rotateSpeed; }
     #endregion
     public NetVariable<PlayerState> currentState = new NetVariable<PlayerState>(PlayerState.None);
     //新程序集，要加入对Common的新程序集的引用 Unity.Collections;
@@ -139,38 +139,23 @@ public partial class PlayerController : NetworkBehaviour
 #if UNITY_SERVER || UNITY_EDITOR
 public partial class PlayerController : NetworkBehaviour,IStateMachineOwner
 {
-    #region 内部类型
-    public class InputData
+    private IPlayerServerController serverController;
+    public void SetServerController (IPlayerServerController serverController)
     {
-        public Vector3 moveDir;
+        this.serverController = serverController;
     }
-    #endregion
-
-    public Vector2Int currentAOICoord { get; private set; }
-    public InputData inputData { get; private set; }
-    //框架，玩家使用的状态机
-    private StateMachine stateMachine;
-
 
     private void Server_OnNetworkSpawn()
     {
-        stateMachine = new StateMachine();
-        stateMachine.Init(this);
-        inputData = new InputData();
-        //登录游戏后，所在的位置，对应当前的AOI的坐标
-        currentAOICoord = AOIUtility.GetCoordByWorldPostion(transform.position);
-        Debug.Log("Server产生玩家");
-        AOIUtility.AddPlayer(this, currentAOICoord);
-        ChangeState(PlayerState.Idle);
+        serverController.OnNetworkSpawn();
+
     }
     /// <summary>
     /// 服务端 把输入保存起来
     /// </summary>
     private void Server_ReceiveMoveInput(Vector3 moveDir)
     {
-        inputData.moveDir = moveDir.normalized; //序列化，可以避免客户端去作弊
-        //状态类中根据输入情况进行运算
-
+        serverController.ReceiveMoveInput(moveDir);
     }
 
     /// <summary>
@@ -178,44 +163,11 @@ public partial class PlayerController : NetworkBehaviour,IStateMachineOwner
     /// </summary>
     private void Server_OnNetworkDespawn()
     {
-        //玩家销毁时，StateMachine要销毁
-        stateMachine.Destroy();
-        AOIUtility.RemovePlayer(this, currentAOICoord);
+        serverController.OnNetworkDespawn();
+
     }
 
-    public void ChangeState(PlayerState newState)
-    {
-        currentState.Value = newState;
-        switch (newState)
-        {
-            case PlayerState.Idle:
-                stateMachine.ChangeState<PlayerIdleState>();
-                break;
-            case PlayerState.Move:
-                stateMachine.ChangeState<PlayerMoveState>();
-                break;
-
-        }
-    }
-    /// <summary>
-    /// 采用自己管理的方式，状态切换的代码，控制动作状态改变。不使用常规的状态机的SetBool动作切换
-    /// </summary>
-    /// <param name="animationName"></param>
-    public void PlayAnimation(string animationName, float fixedTransitionDuration = 0.25f)
-    {
-        animator.CrossFadeInFixedTime(animationName, fixedTransitionDuration); //默认动作过渡时间0.25秒，基本不用动
-    }
-
-    public void UpdateAOICoord()
-    {
-        //玩家开始移动
-        Vector2Int newCoord = AOIUtility.GetCoordByWorldPostion(transform.position);
-        if (newCoord != currentAOICoord) // 发生了地图块坐标变化
-        {
-            AOIUtility.UpdatePlayerCoord(this, currentAOICoord, newCoord);
-            currentAOICoord = newCoord;
-        }
-    }
+ 
     /// <summary>
     /// 更新武器网络变量
     /// </summary>

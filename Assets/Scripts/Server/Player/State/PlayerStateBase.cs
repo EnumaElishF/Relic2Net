@@ -1,16 +1,15 @@
 
-#if UNITY_SERVER || UNITY_EDITOR
 using JKFrame;
 /// <summary>
 /// 只提供服务端使用
 /// </summary>
 public class PlayerStateBase : StateBase
 {
-    protected PlayerController player;
+    protected PlayerServerController serverController;
+    public PlayerController mainController { get => serverController.mainController; }
     public override void Init(IStateMachineOwner owner)
     {
         base.Init(owner);
-        player = (PlayerController)owner;
+        serverController = (PlayerServerController)owner;
     }
 }
-#endif
