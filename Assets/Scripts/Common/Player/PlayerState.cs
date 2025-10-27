@@ -3,5 +3,5 @@
 /// </summary>
 public enum PlayerState
 {
-    None,Idle,Move
+    None,Idle,Move,Jump,AirDown
 }

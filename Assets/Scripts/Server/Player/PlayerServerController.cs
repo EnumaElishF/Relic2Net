@@ -10,6 +10,7 @@ public class PlayerServerController : MonoBehaviour, IPlayerServerController,ISt
     #region  面板赋值 (理论上，下面这些值，包括移动速度旋转速度等，客户端都不需要知道，只要服务端知道就行) 服务端基于根运动移动
     public float moveSpeed { get; private set; }
     public float rotateSpeed { get; private set; }
+    public float jumpHeightMultiply { get; private set; }
     public CharacterController characterController { get; private set; }
     public Animator animator { get; private set; }
     #endregion
@@ -33,6 +34,7 @@ public class PlayerServerController : MonoBehaviour, IPlayerServerController,ISt
         mainController.SetServerController(this);
         moveSpeed = ServerGlobal.Instance.ServerConfig.playerMoveSpeed;
         rotateSpeed = ServerGlobal.Instance.ServerConfig.playerRotateSpeed;
+        jumpHeightMultiply = ServerGlobal.Instance.ServerConfig.playerJumpHeightMultiply;
     }
     public void OnNetworkSpawn()
     {

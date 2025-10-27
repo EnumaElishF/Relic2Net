@@ -51,5 +51,32 @@ public class Player_View : MonoBehaviour
     {
 
     }
+    private Action jumpStartEndAction;
+    public void SetJumpStartEndAction(Action jumpStartEndAction)
+    {
+        this.jumpStartEndAction = jumpStartEndAction;
+    }
+    public void CleanJumpStartEndAction(Action jumpStartEndAction)
+    {
+        this.jumpStartEndAction = null;
+    }
+    private void JumpStartEnd()
+    {
+        jumpStartEndAction?.Invoke();
+    }
+
+    private Action jumpEndAction;
+    public void SetJumpEndAction(Action jumpEndAction)
+    {
+        this.jumpEndAction = jumpEndAction;
+    }
+    public void CleanJumpEndAction(Action jumpEndAction)
+    {
+        this.jumpEndAction = null;
+    }
+    private void JumpEnd()
+    {
+        jumpEndAction?.Invoke();
+    }
     #endregion
 }

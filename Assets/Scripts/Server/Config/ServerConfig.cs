@@ -25,6 +25,7 @@ public class ServerConfig : ConfigBase
     public int playerDefaultCoinCount;
     public float playerMoveSpeed;
     public float playerRotateSpeed;
+    public float playerJumpHeightMultiply;
     [Header("地形")]
     public Dictionary<string,GameObject> terrainDic;
     [Header("物品配置")]
