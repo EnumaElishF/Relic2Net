@@ -9,6 +9,11 @@ public class PlayerIdleState : PlayerStateBase
     }
     public override void Update()
     {
+        if (serverController.inputData.jump) //跳跃优先级做的比移动高一些
+        {
+            serverController.ChangeState(PlayerState.Jump);
+            return;
+        }
         if (serverController.inputData.moveDir != Vector3.zero)
         {
             serverController.ChangeState(PlayerState.Move);

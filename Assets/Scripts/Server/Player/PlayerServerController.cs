@@ -6,9 +6,11 @@ public class PlayerServerController : MonoBehaviour, IPlayerServerController,ISt
     public class InputData
     {
         public Vector3 moveDir;
+        public bool jump;
     }
     #region  面板赋值 (理论上，下面这些值，包括移动速度旋转速度等，客户端都不需要知道，只要服务端知道就行) 服务端基于根运动移动
-    public float moveSpeed { get; private set; }
+    public float rootMotionMoveSpeedMultiply { get; private set; } //动画根运动的系数(是系数的情况加个Multiply
+    public float airMoveSpeed { get; private set; }
     public float rotateSpeed { get; private set; }
     public float jumpHeightMultiply { get; private set; }
     public CharacterController characterController { get; private set; }
@@ -32,7 +34,8 @@ public class PlayerServerController : MonoBehaviour, IPlayerServerController,ISt
     {
         this.mainController = mainController;
         mainController.SetServerController(this);
-        moveSpeed = ServerGlobal.Instance.ServerConfig.playerMoveSpeed;
+        rootMotionMoveSpeedMultiply = ServerGlobal.Instance.ServerConfig.rootMotionMoveSpeedMultiply;
+        airMoveSpeed = ServerGlobal.Instance.ServerConfig.airMoveSpeed;
         rotateSpeed = ServerGlobal.Instance.ServerConfig.playerRotateSpeed;
         jumpHeightMultiply = ServerGlobal.Instance.ServerConfig.playerJumpHeightMultiply;
     }
@@ -52,13 +55,23 @@ public class PlayerServerController : MonoBehaviour, IPlayerServerController,ISt
         stateMachine.Destroy();
         AOIManager.Instance.RemoveClient(mainController.OwnerClientId, currentAOICoord);
     }
-
+    #region 响应客户端的输入
     public void ReceiveMoveInput(Vector3 moveDir) 
     {
         inputData.moveDir = moveDir.normalized; //序列化，可以避免客户端去作弊
         //状态类中根据输入情况进行运算
     }
-
+    public void ReceiveJumpInput()
+    {
+        switch (mainController.currentState.Value)
+        {
+            case PlayerState.Idle:
+            case PlayerState.Move:
+                inputData.jump = true;
+                break;
+        }
+    }
+    #endregion
     //其他条件
 
     public void ChangeState(PlayerState newState)
@@ -71,6 +84,9 @@ public class PlayerServerController : MonoBehaviour, IPlayerServerController,ISt
                 break;
             case PlayerState.Move:
                 stateMachine.ChangeState<PlayerMoveState>();
+                break;
+            case PlayerState.Jump:
+                stateMachine.ChangeState<PlayerJumpState>();
                 break;
 
         }
@@ -94,4 +110,6 @@ public class PlayerServerController : MonoBehaviour, IPlayerServerController,ISt
             currentAOICoord = newCoord;
         }
     }
+
+
 }

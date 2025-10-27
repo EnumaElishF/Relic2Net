@@ -97,6 +97,13 @@ public partial class PlayerController : NetworkBehaviour
         Server_ReceiveMoveInput(moveDir);
 #endif
     }
+    [ServerRpc(RequireOwnership = true)]
+    public void SendJumpInputServerRpc()
+    {
+#if UNITY_SERVER || UNITY_EDITOR
+        Server_ReceiveJumpInput();
+#endif
+    }
 }
 
 /// <summary>
@@ -148,7 +155,10 @@ public partial class PlayerController : NetworkBehaviour,IStateMachineOwner
     {
         serverController.ReceiveMoveInput(moveDir);
     }
-
+    private void Server_ReceiveJumpInput()
+    {
+        serverController.ReceiveJumpInput();
+    }
     /// <summary>
     /// 服务端玩家下线
     /// </summary>

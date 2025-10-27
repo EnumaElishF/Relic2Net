@@ -37,8 +37,24 @@ public class PlayerClientController : MonoBehaviour
     private void Update()
     {
         if (!mainController.IsSpawned) return; //看看本地的玩家是不是宿主
-
         if (mainController.currentState.Value == PlayerState.None) return;
+        switch (mainController.currentState.Value)
+        {
+            case PlayerState.Idle:
+                break;
+            case PlayerState.Move:
+                UpdateMoveInput();
+                break;
+            case PlayerState.Jump:
+            case PlayerState.AirDown:
+                UpdateMoveInput(); //空中移动要监听移动的输入的
+                break;
+        }
+
+
+    }
+    private void UpdateMoveInput()
+    {
         //因为玩家发像服务端的移动是如果一个键没有变化就一直向服务端发，
         //---(我们的移动指令设计是这样的，所以鼠标暂停移动，不能直接在这里return断掉键位消息的发送情况，需要下面逻辑判断为不移动)
         Vector3 inputDir = Vector3.zero;
@@ -58,6 +74,11 @@ public class PlayerClientController : MonoBehaviour
         //移动方向：Quaternion.Euler(0, cameraEulerAngleY, 0) * inputDir
         mainController.SendInputMoveDirServerRpc(Quaternion.Euler(0, cameraEulerAngleY, 0) * inputDir);
     }
-
-
+    private void UpdateJumpInput()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            mainController.SendJumpInputServerRpc();
+        }
+    }
 }

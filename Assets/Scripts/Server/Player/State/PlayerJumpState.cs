@@ -21,12 +21,26 @@ public class PlayerJumpState : PlayerStateBase
     {
         mainController.view.CleanRootMotionAction();
     }
-
+    /// <summary>
+    /// OnRootMotion只考虑了y轴
+    /// </summary>
     private void OnRootMotion(Vector3 deltaPosition, Quaternion deltaRotation)
     {
+        //应用一个Y轴上升的系数
         //作为上升的情况，只会有正数，且不计算重力，只会变更更高
         deltaPosition.y *= serverController.jumpHeightMultiply;
         //deltaPosition.y -= 9.8f * Time.deltaTime;  //模拟重力:起跳不要模拟重力，不然跳不起来
+
+        Vector3 moveDir = serverController.inputData.moveDir;
+        if (moveDir != Vector3.zero)
+        {
+            //旋转:往哪边按就往哪边转的，设计（也可以修改成别的设计）
+            mainController.view.transform.rotation = Quaternion.RotateTowards(mainController.view.transform.rotation, Quaternion.LookRotation(moveDir), Time.deltaTime * serverController.rotateSpeed);
+            Vector3 forward = Time.deltaTime * serverController.rootMotionMoveSpeedMultiply * mainController.view.transform.forward;
+            //应用玩家的输入情况，x和z轴的
+            deltaPosition.x = forward.x;
+            deltaPosition.z = forward.y;
+        }
         serverController.characterController.Move(deltaPosition);
         //更新AOI :因为起跳没有位移，所以不更新AOI
         //if (deltaPosition != Vector3.zero)

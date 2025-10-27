@@ -11,7 +11,12 @@ public class PlayerMoveState : PlayerStateBase
 
     public override void Update()
     {
-        if(serverController.inputData.moveDir == Vector3.zero)
+        if (serverController.inputData.jump) //跳跃优先级做的比移动高一些
+        {
+            serverController.ChangeState(PlayerState.Jump);
+            return;
+        }
+        if (serverController.inputData.moveDir == Vector3.zero)
         {
             serverController.ChangeState(PlayerState.Idle);
             return;
@@ -28,7 +33,7 @@ public class PlayerMoveState : PlayerStateBase
     /// </summary>
     private void OnRootMotion(Vector3 deltaPosition, Quaternion deltaRotation)
     {
-        serverController.animator.speed = serverController.moveSpeed;
+        serverController.animator.speed = serverController.rootMotionMoveSpeedMultiply;
         deltaPosition.y -= 9.8f * Time.deltaTime;  //模拟重力
         serverController.characterController.Move(deltaPosition);
         //更新AOI :因为有位移，就要更新AOI
