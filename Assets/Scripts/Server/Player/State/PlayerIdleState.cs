@@ -14,10 +14,10 @@ public class PlayerIdleState : PlayerStateBase
             serverController.ChangeState(PlayerState.Move);
             return;
         }
-        if (!serverController.CharacterController.isGrounded)
+        if (!serverController.characterController.isGrounded)
         {
             //防止玩家角色在待机的时候，脚踩空导致飞起来，我们给他一个Idle的时候的重力。
-            serverController.CharacterController.Move(new Vector3(0, -9.8f * Time.deltaTime, 0));
+            serverController.characterController.Move(new Vector3(0, -9.8f * Time.deltaTime, 0));
         }
     }
 }

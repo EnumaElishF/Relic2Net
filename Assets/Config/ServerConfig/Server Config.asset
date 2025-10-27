@@ -21009,6 +21009,8 @@ MonoBehaviour:
   playerPrefab: {fileID: 2039334567599830296, guid: d1adee6bbc176af418dfe396816ca8e4, type: 3}
   playerDefaultPosition: {x: 222, y: 54, z: 130}
   playerDefaultCoinCount: 1000
+  playerMoveSpeed: 1
+  playerRotateSpeed: 1000
   terrainFolderPath: Assets/EnvRes/Terrains
   weaponConfigFolderPath: Assets/Config/Item/Weapon
   consumablegConfigFolderPath: Assets/Config/Item/Consumable

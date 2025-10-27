@@ -3,12 +3,22 @@ using UnityEngine;
 
 public class PlayerClientController : MonoBehaviour
 {
+    public Transform cameraLookatTarget { get; private set; }
+    public Transform cameraFollowTarget { get; private set; }
+    public Transform floatInfoPoint { get; private set; }
     /// <summary>
     /// 本地玩家，主玩家控制器
     /// </summary>
     public PlayerController mainController { get; private set; }
     private PlayerFloatInfo floatInfo;
     public bool canControl; //玩家是否可以控制
+    public void FirstInit() //第一次被添加组件调用
+    {
+        //直接查游戏对象CameraLookat来赋值
+        cameraLookatTarget = transform.Find("CameraLookat");
+        cameraFollowTarget = transform.Find("CameraFollow");
+        floatInfoPoint = transform.Find("FloatPoint");
+    }
     public void Init(PlayerController newPlayer)
     {
         this.mainController = newPlayer;
@@ -18,7 +28,7 @@ public class PlayerClientController : MonoBehaviour
         }
         else
         {
-            if (floatInfo == null) floatInfo = ResSystem.InstantiateGameObject<PlayerFloatInfo>(mainController.floatInfoPoint, "PlayerFloatInfo");
+            if (floatInfo == null) floatInfo = ResSystem.InstantiateGameObject<PlayerFloatInfo>(floatInfoPoint, "PlayerFloatInfo");
             floatInfo.Init(mainController.playerName.Value.ToString());
         }
     }
@@ -48,5 +58,6 @@ public class PlayerClientController : MonoBehaviour
         //移动方向：Quaternion.Euler(0, cameraEulerAngleY, 0) * inputDir
         mainController.SendInputMoveDirServerRpc(Quaternion.Euler(0, cameraEulerAngleY, 0) * inputDir);
     }
+
 
 }

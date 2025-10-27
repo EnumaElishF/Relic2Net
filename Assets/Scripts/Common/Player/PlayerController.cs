@@ -21,17 +21,7 @@ public partial class PlayerController : NetworkBehaviour
     #endregion
     #region  面板赋值 (理论上，下面这些值，包括移动速度旋转速度等，客户端都不需要知道，只要服务端知道就行) 服务端基于根运动移动
 
-    public Transform cameraLookatTarget;
-    public Transform cameraFollowTarget;
-    public Transform floatInfoPoint;
-
-    [SerializeField] private Player_View view;
-    public Player_View View { get => view; }
-
-    [SerializeField] private float moveSpeed = 1;
-    public float MoveSpeed { get => moveSpeed; }
-    [SerializeField] private float rotateSpeed = 1000; //至少一秒要能转1000度
-    public float RotateSpeed { get => rotateSpeed; }
+    public Player_View view { get; private set; }
     #endregion
     public NetVariable<PlayerState> currentState = new NetVariable<PlayerState>(PlayerState.None);
     //新程序集，要加入对Common的新程序集的引用 Unity.Collections;
@@ -45,7 +35,11 @@ public partial class PlayerController : NetworkBehaviour
     {
         base.OnNetworkSpawn();
         usedWeaponName.OnValueChanged = OnUsedWeaponNameChanged;
-
+        if (view == null) // 意味着没有初始化过
+        {
+            //直接查玩家下的游戏对象Player_kazuma的脚本Player_View
+            view = transform.Find("Player_kazuma").GetComponent<Player_View>();
+        }
         if (IsClient)
         {
 #if !UNITY_SERVER || UNITY_EDITOR

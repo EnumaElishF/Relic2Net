@@ -18,40 +18,16 @@ public class AOIManager : SingletonMono<AOIManager>
         // int.MinValue（即 -2147483648） defaultCoord作为一个不可能有的地图块逻辑，用在初始化的时候
         defaultCoord = new Vector2Int(int.MinValue, int.MinValue);
     }
+    public Vector2Int GetCoordByWorldPostion(Vector3 worldPostion)
+    {
+        return new Vector2Int((int)(worldPostion.x / chunkSize), (int)(worldPostion.z / chunkSize));
+    }
 
     public void Init()
     {
         Debug.Log("初始化AOI");
         //初始化，传chunkSize到公共程序
-        AOIUtility.Init(chunkSize);
-
-        //AOIManager，需要对 增加，更新坐标，删除 。。等玩家行为  "监听" 
-        EventSystem.AddTypeEventListener<AOIAddPlayerEvent>(OnAOIAddPlayerEvent);
-        EventSystem.AddTypeEventListener<AOIUpdatePlayerCoordEvent>(OnAOIUpdatePlayerCoordEvent);
-        EventSystem.AddTypeEventListener<AOIRemovePlayerEvent>(OnAOIRemovePlayerEvent);
-
-    }
-    private void OnDestroy()
-    {
-        //卸载此脚本的同时，取消监听
-        EventSystem.RemoveTypeEventListener<AOIAddPlayerEvent>(OnAOIAddPlayerEvent);
-        EventSystem.RemoveTypeEventListener<AOIUpdatePlayerCoordEvent>(OnAOIUpdatePlayerCoordEvent);
-        EventSystem.RemoveTypeEventListener<AOIRemovePlayerEvent>(OnAOIRemovePlayerEvent);
-    }
-
-
-    private void OnAOIAddPlayerEvent(AOIAddPlayerEvent arg)
-    {
-        InitClient(arg.player.OwnerClientId, arg.coord);
-    }
-    private void OnAOIUpdatePlayerCoordEvent(AOIUpdatePlayerCoordEvent arg)
-    {
-        UpdateClientChunkCoord(arg.player.OwnerClientId, arg.oldCoord, arg.newCoord);
-    }
-    private void OnAOIRemovePlayerEvent(AOIRemovePlayerEvent arg)
-    {
-        Debug.Log("移除玩家");
-        RemoveClient(arg.player.OwnerClientId, arg.coord);
+        
     }
 
     #region Client

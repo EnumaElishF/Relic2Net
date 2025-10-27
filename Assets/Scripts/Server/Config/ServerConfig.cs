@@ -23,6 +23,8 @@ public class ServerConfig : ConfigBase
     public Vector3 playerDefaultPosition;
     //玩家默认金币数量
     public int playerDefaultCoinCount;
+    public float playerMoveSpeed;
+    public float playerRotateSpeed;
     [Header("地形")]
     public Dictionary<string,GameObject> terrainDic;
     [Header("物品配置")]
