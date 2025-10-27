@@ -75,7 +75,7 @@ public partial class ClientsManager : SingletonMono<ClientsManager> //SingletonM
             clientStateDic[client.clientState].Remove(client);
             if (client.playerData != null) accountDic.Remove(client.playerData.name);
             // 如果不使用下面这条，那么采用的是NetCode自己的管理，也就是客户端掉线会自动清除所属的网络对象
-            if (client.playerController != null) NetManager.Instance.DestroyObject(client.playerController.NetworkObject);
+            if (client.playerController != null) NetManager.Instance.DestroyObject(client.playerController.mainController.NetworkObject);
             client.playerData = null;
             client.playerController = null;
             client.OnDestroy();

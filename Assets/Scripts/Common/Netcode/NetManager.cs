@@ -43,6 +43,17 @@ public class NetManager : NetworkManager
         StartServer();
     }
     /// <summary>
+    /// 生成一个对象，但是不要网络同步和显示
+    /// </summary>
+    public NetworkObject SpawnObjectNoShow(ulong clientID, GameObject prefab, Vector3 position, Quaternion rotation)
+    {
+        NetworkObject networkObject = prefabHandlerDic[prefab].Instantiate(clientID, position, rotation);
+        networkObject.transform.position = position;
+        //networkObject.SpawnWithOwnership(clientID); //注释掉 生成
+        //networkObject.NetworkShow(clientID);
+        return networkObject;
+    }
+    /// <summary>
     /// 网络对象通过对象池的生成
     /// </summary>
     public NetworkObject SpawnObject(ulong clientID,GameObject prefab,Vector3 position,Quaternion rotation)

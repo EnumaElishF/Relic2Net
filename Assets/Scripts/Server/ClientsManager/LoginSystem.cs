@@ -114,7 +114,7 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
                     {
                         if (oldClient.playerController != null)
                         {
-                            NetManager.Instance.DestroyObject(oldClient.playerController.NetworkObject);
+                            NetManager.Instance.DestroyObject(oldClient.playerController.mainController.NetworkObject);
                             oldClient.playerController = null;
                         }
                         oldClient.playerData = null;
@@ -148,11 +148,20 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
         CharacterData characterData = playerData.characterData;
         //生成游戏对象
         NetworkObject playerObject = NetManager.Instance.SpawnObject(clientID, ServerResSystem.serverConfig.playerPrefab, characterData.position, Quaternion.Euler(0, characterData.rotation_Y, 0));
-        client.playerController = playerObject.GetComponent<PlayerController>();
-        client.playerController.playerName.Value = playerData.name;
+        // 初始化玩家的服务端控制脚本
+        if(!playerObject.TryGetComponent(out PlayerServerController serverController))
+        {
+            serverController = playerObject.gameObject.AddComponent<PlayerServerController>();
+            serverController.FirstInit();
+        }
+        serverController.Init(playerObject.GetComponent<PlayerController>());
+        playerObject.SpawnWithOwnership(clientID); //生成
+        playerObject.NetworkShow(clientID);
+        serverController.mainController.playerName.Value = playerData.name;
         //玩家可能使用不同的武器之类的实例化
-        client.playerController.usedWeaponName.Value = playerData.characterData.usedWeaponName;
-        Debug.Log($"服务端设置初始武器：{playerData.characterData.usedWeaponName}");
+        serverController.mainController.usedWeaponName.Value = playerData.characterData.usedWeaponName;
+        //Debug.Log($"服务端设置初始武器：{playerData.characterData.usedWeaponName}");
+        client.playerController = serverController;
     }
 
     /// <summary>
@@ -166,7 +175,7 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
         //销毁角色
         if (client.playerController != null)
         {
-            NetManager.Instance.DestroyObject(client.playerController.NetworkObject);
+            NetManager.Instance.DestroyObject(client.playerController.mainController.NetworkObject);
             client.playerController = null;
         }
         if (client.playerData != null)

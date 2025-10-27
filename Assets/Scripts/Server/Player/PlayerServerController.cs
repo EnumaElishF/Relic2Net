@@ -27,9 +27,10 @@ public class PlayerServerController : MonoBehaviour, IPlayerServerController,ISt
         stateMachine = new StateMachine();
         inputData = new InputData();
     }
-    public void Init()
+    public void Init(PlayerController mainController)
     {
         this.mainController = mainController;
+        mainController.SetServerController(this);
         moveSpeed = ServerGlobal.Instance.ServerConfig.playerMoveSpeed;
         rotateSpeed = ServerGlobal.Instance.ServerConfig.playerRotateSpeed;
     }
@@ -48,7 +49,6 @@ public class PlayerServerController : MonoBehaviour, IPlayerServerController,ISt
         //玩家销毁时，StateMachine要销毁
         stateMachine.Destroy();
         AOIManager.Instance.RemoveClient(mainController.OwnerClientId, currentAOICoord);
-
     }
 
     public void ReceiveMoveInput(Vector3 moveDir) 

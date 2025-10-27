@@ -105,7 +105,6 @@ public partial class PlayerController : NetworkBehaviour
 #if !UNITY_SERVER || UNITY_EDITOR
 public partial class PlayerController : NetworkBehaviour
 {
-
     private void Start()
     {
         // Start 一定 在OnNetworkSpawn后执行，如果这个阶段IsSpawned = false 说明是个异常对象
@@ -116,8 +115,6 @@ public partial class PlayerController : NetworkBehaviour
             NetManager.Instance.DestroyObject(this.NetworkObject);
         }
     }
-
-
     private void Client_OnNetworkSpawn()
     {
         EventSystem.TypeEventTrigger(new SpawnPlayerEvent { newPlayer = this });
