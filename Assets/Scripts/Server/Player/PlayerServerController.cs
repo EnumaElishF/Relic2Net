@@ -1,4 +1,5 @@
 ﻿using JKFrame;
+using Unity.Netcode.Components;
 using UnityEngine;
 
 public class PlayerServerController : MonoBehaviour, IPlayerServerController,IStateMachineOwner
@@ -17,6 +18,7 @@ public class PlayerServerController : MonoBehaviour, IPlayerServerController,ISt
     public float jumpHeightMultiply { get; private set; }
     public CharacterController characterController { get; private set; }
     public Animator animator { get; private set; }
+    public NetworkAnimator networkAnimator { get; private set; }
     #endregion
 
     public PlayerController mainController { get; private set; }
@@ -28,7 +30,7 @@ public class PlayerServerController : MonoBehaviour, IPlayerServerController,ISt
     {
         characterController = GetComponent<CharacterController>();
         animator = transform.Find("Player_kazuma").GetComponent<Animator>();
-
+        networkAnimator = animator.GetComponent<NetworkAnimator>();
         stateMachine = new StateMachine();
         inputData = new InputData();
     }
@@ -110,13 +112,15 @@ public class PlayerServerController : MonoBehaviour, IPlayerServerController,ISt
                 break;
         }
     }
+    private string currentAnimation = "Idle";
     /// <summary>
     /// 采用自己管理的方式，状态切换的代码，控制动作状态改变。不使用常规的状态机的SetBool动作切换
     /// </summary>
-    /// <param name="animationName"></param>
-    public void PlayAnimation(string animationName, float fixedTransitionDuration = 0.25f)
+    public void PlayAnimation(string animationName)
     {
-        animator.CrossFadeInFixedTime(animationName, fixedTransitionDuration); //默认动作过渡时间0.25秒，基本不用动
+        if (currentAnimation == animationName) return;
+        currentAnimation = animationName;
+        networkAnimator.SetTrigger(animationName);
     }
 
     public void UpdateAOICoord()

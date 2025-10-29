@@ -4,6 +4,10 @@ using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor.Animations;
+#endif
+
 /// <summary>
 /// 公共   : 公共的地方大部分都是做分支的，分成客户端，和 服务端  
 /// PlayerController做mainController在Common程序集下，去采用PlayerServerController的部分数值
@@ -111,6 +115,36 @@ public partial class PlayerController : NetworkBehaviour
         Server_ReceiveAttackInput();
 #endif
     }
+
+    #region Editor
+#if UNITY_EDITOR
+    //添加手动启动器，到PlayerController脚本
+    //完全通过代码取代，不使用Animator的话，容易跳帧。要想有自然的过渡，还是得用Animator的连线的机制功能。
+    [ContextMenu(nameof(SetAnimatorSettings))]
+    public void SetAnimatorSettings()
+    {
+        //是可以强转过来的，因为他可以从继承关系上拿到，AnimatorController点进去看，可以知道是runtimeAnimatorController他的子类
+        AnimatorController animatorController = (AnimatorController)GetComponentInChildren<Animator>().runtimeAnimatorController;
+        animatorController.parameters = null;
+        //遍历Animator动画控制器里的所有的状态：并附上过渡
+        AnimatorStateMachine stateMachine = animatorController.layers[0].stateMachine;
+        stateMachine.anyStateTransitions = null;
+        foreach (ChildAnimatorState state in stateMachine.states)
+        {
+            string triggerName = state.state.name;
+            AnimatorControllerParameter parameter = new AnimatorControllerParameter
+            {
+                name = state.state.name,
+                type = AnimatorControllerParameterType.Trigger
+            };
+            animatorController.AddParameter(parameter);
+            //创建从 Any State 到每一个动画的连线，并附加上动画名称的过渡Trigger
+            AnimatorStateTransition transition = stateMachine.AddAnyStateTransition(state.state);
+            transition.AddCondition(AnimatorConditionMode.If, 0.0f, triggerName);
+        }
+    }
+#endif
+    #endregion
 }
 
 /// <summary>

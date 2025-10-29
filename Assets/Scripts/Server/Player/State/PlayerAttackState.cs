@@ -42,8 +42,8 @@ public class PlayerAttackState : PlayerStateBase
         //不管有几段攻击，只要超出配置表的技能数量，就会重新循环
         if (attackIndex >= mainController.skillConfigList.Count) attackIndex = 0;
         SkillConfig skillConfig = mainController.skillConfigList[attackIndex];
-        //播放动画，技能配置表的名称，攻击加0.1秒的短时间过渡，否则在同步上并不好
-        serverController.PlayAnimation(skillConfig.animationName, 0.1f);
+        //播放动画，技能配置表的名称
+        serverController.PlayAnimation(skillConfig.animationName);
     }
     private void View_startSkillHitAction()
     {
