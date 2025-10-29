@@ -21010,7 +21010,8 @@ MonoBehaviour:
   playerDefaultPosition: {x: 222, y: 54, z: 130}
   playerDefaultCoinCount: 1000
   rootMotionMoveSpeedMultiply: 1
-  airMoveSpeed: 2
+  playerAirMoveSpeed: 3
+  playerGravity: -5.5
   playerRotateSpeed: 1000
   playerJumpHeightMultiply: 3
   terrainFolderPath: Assets/EnvRes/Terrains

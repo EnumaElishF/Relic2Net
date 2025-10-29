@@ -70,7 +70,7 @@ public class Player_View : MonoBehaviour
     {
         this.jumpEndAction = jumpEndAction;
     }
-    public void CleanJumpEndAction(Action jumpEndAction)
+    public void CleanJumpEndAction()
     {
         this.jumpEndAction = null;
     }

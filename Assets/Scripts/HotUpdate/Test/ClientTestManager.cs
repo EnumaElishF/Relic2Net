@@ -33,7 +33,7 @@ public class ClientTestManager : MonoBehaviour
         //#endif
 
         //客户端
-        if (PlayerManager.Instance != null && PlayerManager.Instance.localPlayer != null)
+        if (PlayerManager.Instance != null && PlayerManager.Instance.localPlayer != null && NetManager.Instance.IsConnectedClient)
         {
             // 延迟
             GUILayout.Label("延迟Delay:" + ClientRTTInfo.Instance.rttMs);

@@ -11,6 +11,7 @@ public class PlayerServerController : MonoBehaviour, IPlayerServerController,ISt
     #region  面板赋值 (理论上，下面这些值，包括移动速度旋转速度等，客户端都不需要知道，只要服务端知道就行) 服务端基于根运动移动
     public float rootMotionMoveSpeedMultiply { get; private set; } //动画根运动的系数(是系数的情况加个Multiply
     public float airMoveSpeed { get; private set; }
+    public float gravity { get; private set; }
     public float rotateSpeed { get; private set; }
     public float jumpHeightMultiply { get; private set; }
     public CharacterController characterController { get; private set; }
@@ -35,7 +36,8 @@ public class PlayerServerController : MonoBehaviour, IPlayerServerController,ISt
         this.mainController = mainController;
         mainController.SetServerController(this);
         rootMotionMoveSpeedMultiply = ServerGlobal.Instance.ServerConfig.rootMotionMoveSpeedMultiply;
-        airMoveSpeed = ServerGlobal.Instance.ServerConfig.airMoveSpeed;
+        airMoveSpeed = ServerGlobal.Instance.ServerConfig.playerAirMoveSpeed;
+        gravity = ServerGlobal.Instance.ServerConfig.playerGravity;
         rotateSpeed = ServerGlobal.Instance.ServerConfig.playerRotateSpeed;
         jumpHeightMultiply = ServerGlobal.Instance.ServerConfig.playerJumpHeightMultiply;
     }
@@ -88,7 +90,9 @@ public class PlayerServerController : MonoBehaviour, IPlayerServerController,ISt
             case PlayerState.Jump:
                 stateMachine.ChangeState<PlayerJumpState>();
                 break;
-
+            case PlayerState.AirDown:
+                stateMachine.ChangeState<PlayerAirDownState>();
+                break;
         }
     }
     /// <summary>

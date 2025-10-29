@@ -41,9 +41,9 @@ public class PlayerClientController : MonoBehaviour
         switch (mainController.currentState.Value)
         {
             case PlayerState.Idle:
-                break;
             case PlayerState.Move:
                 UpdateMoveInput();
+                UpdateJumpInput();
                 break;
             case PlayerState.Jump:
             case PlayerState.AirDown:
@@ -72,6 +72,7 @@ public class PlayerClientController : MonoBehaviour
         float cameraEulerAngleY = Camera.main.transform.eulerAngles.y;
         //四元数和向量相乘：让这个向量按照四元数所表达的角度进行旋转后得到一个新的向量
         //移动方向：Quaternion.Euler(0, cameraEulerAngleY, 0) * inputDir
+        Debug.Log("测试inputDir=" + inputDir);
         mainController.SendInputMoveDirServerRpc(Quaternion.Euler(0, cameraEulerAngleY, 0) * inputDir);
     }
     private void UpdateJumpInput()

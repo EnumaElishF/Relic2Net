@@ -24,7 +24,8 @@ public class ServerConfig : ConfigBase
     //玩家默认金币数量
     public int playerDefaultCoinCount;
     public float rootMotionMoveSpeedMultiply;
-    public float airMoveSpeed;
+    public float playerAirMoveSpeed;
+    public float playerGravity;
     public float playerRotateSpeed;
     public float playerJumpHeightMultiply;
     [Header("地形")]

@@ -6,6 +6,7 @@ public class PlayerJumpState : PlayerStateBase
     public override void Enter()
     {
         base.Enter();//可以不保留，因为Enter里没有多少逻辑，如果父方法Enter内含重要逻辑的话，还是base一下比较好
+        serverController.inputData.jump = false;
         serverController.PlayAnimation("JumpStart");
         serverController.mainController.view.SetRootMotionAction(OnRootMotion);
         serverController.mainController.view.SetJumpStartEndAction(OnJumpStartEnd);
