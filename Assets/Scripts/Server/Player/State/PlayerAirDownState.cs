@@ -1,6 +1,4 @@
-﻿
-
-using System;
+﻿using System;
 using UnityEngine;
 
 public class PlayerAirDownState: PlayerStateBase
@@ -19,7 +17,13 @@ public class PlayerAirDownState: PlayerStateBase
             if (serverController.inputData.moveDir != Vector3.zero)
             {
                 serverController.ChangeState(PlayerState.Move);
-                return;
+            }
+            else
+            {
+                if(CheckAnimationState("JumpEnd",out float time) && time >= 0.95f)
+                {
+                    serverController.ChangeState(PlayerState.Idle);
+                }
             }
         } 
         else
@@ -35,17 +39,9 @@ public class PlayerAirDownState: PlayerStateBase
             {
                 serverController.PlayAnimation("JumpEnd");
                 onEndAnimation = true;
-                mainController.view.jumpEndAction += OnJumpEnd;
             }
         }
 
     }
-    public override void Exit()
-    {
-        mainController.view.jumpEndAction -= OnJumpEnd;
-    }
-    private void OnJumpEnd()
-    {
-        serverController.ChangeState(serverController.inputData.moveDir == Vector3.zero ? PlayerState.Idle : PlayerState.Move);
-    }
+
 }

@@ -36,6 +36,7 @@ public class PlayerServerController : MonoBehaviour, IPlayerServerController,ISt
     }
     public void Init(PlayerController mainController)
     {
+        currentAnimation = "Idle";
         this.mainController = mainController;
         mainController.SetServerController(this);
         rootMotionMoveSpeedMultiply = ServerGlobal.Instance.ServerConfig.rootMotionMoveSpeedMultiply;
@@ -76,14 +77,14 @@ public class PlayerServerController : MonoBehaviour, IPlayerServerController,ISt
                 break;
         }
     }
-    public void ReceiveAttackInput()
+    public void ReceiveAttackInput(bool value)
     {
         switch (mainController.currentState.Value)
         {
             case PlayerState.Idle:
             case PlayerState.Move:
             case PlayerState.Attack:
-                inputData.attack = true;
+                inputData.attack = value;
                 break;
         }
     }
@@ -119,6 +120,7 @@ public class PlayerServerController : MonoBehaviour, IPlayerServerController,ISt
     public void PlayAnimation(string animationName)
     {
         if (currentAnimation == animationName) return;
+        networkAnimator.ResetTrigger(currentAnimation);
         currentAnimation = animationName;
         networkAnimator.SetTrigger(animationName);
     }

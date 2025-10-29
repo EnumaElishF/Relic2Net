@@ -4,7 +4,7 @@ using UnityEngine;
 public class PlayerAttackState : PlayerStateBase
 {
     private int attackIndex = -1;
-    private bool canSwitch;
+    private SkillConfig skillConfig;
     /// <summary>
     /// 管理攻击动画事件
     /// </summary>
@@ -13,8 +13,6 @@ public class PlayerAttackState : PlayerStateBase
         Player_View view = mainController.view;
         view.startSkillHitAction += View_startSkillHitAction;
         view.stopSkillHitAction += View_stopSkillHitAction;
-        view.skillCanSwitchAction += View_skillCanSwitchAction;
-        view.skillEndAction += View_skillEndAction;
         view.rootMotionAction += OnRootMotion;
         StartAttack();
     }
@@ -24,24 +22,30 @@ public class PlayerAttackState : PlayerStateBase
         Player_View view = mainController.view;
         view.startSkillHitAction -= View_startSkillHitAction;
         view.stopSkillHitAction -= View_stopSkillHitAction;
-        view.skillCanSwitchAction -= View_skillCanSwitchAction;
-        view.skillEndAction -= View_skillEndAction;
         view.rootMotionAction -= OnRootMotion;
     }
     public override void Update()
     {
-        if (canSwitch && serverController.inputData.attack) StartAttack();
-        else serverController.inputData.attack = false;
+        if(CheckAnimationState(skillConfig.animationName,out float time))
+        {
+            if(time >= skillConfig.switchTime && serverController.inputData.attack)
+            {
+                StartAttack();
+            }
+            else if (time >= skillConfig.endTime)
+            {
+                //结束动画
+                serverController.ChangeState(serverController.inputData.moveDir == Vector3.zero ? PlayerState.Idle : PlayerState.Move);
+            }
+        }
     }
     private void StartAttack()
     {
         //前摇部分不能切换
-        canSwitch = false;
-        serverController.inputData.attack = false;
         attackIndex += 1;
         //不管有几段攻击，只要超出配置表的技能数量，就会重新循环
         if (attackIndex >= mainController.skillConfigList.Count) attackIndex = 0;
-        SkillConfig skillConfig = mainController.skillConfigList[attackIndex];
+        skillConfig = mainController.skillConfigList[attackIndex];
         //播放动画，技能配置表的名称
         serverController.PlayAnimation(skillConfig.animationName);
     }
@@ -53,22 +57,7 @@ public class PlayerAttackState : PlayerStateBase
     {
         
     }
-    private void View_skillCanSwitchAction()
-    {
-        canSwitch = true;
-    }
 
-    private void View_skillEndAction()
-    {
-        if (serverController.inputData.attack)
-        {
-            StartAttack();
-        }
-        else
-        {
-            serverController.ChangeState(serverController.inputData.moveDir == Vector3.zero ? PlayerState.Idle : PlayerState.Move);
-        }
-    }
     private void OnRootMotion(Vector3 deltaPosition, Quaternion deltaRotation)
     {
         serverController.animator.speed = serverController.rootMotionMoveSpeedMultiply;

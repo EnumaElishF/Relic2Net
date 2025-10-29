@@ -9,19 +9,19 @@ public class PlayerJumpState : PlayerStateBase
         serverController.inputData.jump = false;
         serverController.PlayAnimation("JumpStart");
         serverController.mainController.view.rootMotionAction += OnRootMotion;
-        serverController.mainController.view.jumpStartEndAction += OnJumpStartEnd;
     }
-
-    private void OnJumpStartEnd()
+    public override void Update()
     {
-        //玩家跳到最高点后开始下降
-        serverController.ChangeState(PlayerState.AirDown);
+        if(CheckAnimationState("JumpStart",out float time) && time >= 0.95f)
+        {
+            serverController.ChangeState(PlayerState.AirDown);
+
+        }
     }
 
     public override void Exit()
     {
         serverController.mainController.view.rootMotionAction -= OnRootMotion;
-        serverController.mainController.view.jumpStartEndAction -= OnJumpStartEnd;
     }
     /// <summary>
     /// OnRootMotion只考虑了y轴

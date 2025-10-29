@@ -109,10 +109,10 @@ public partial class PlayerController : NetworkBehaviour
 #endif
     }
     [ServerRpc(RequireOwnership = true)]
-    public void SendAttackInputServerRpc()
+    public void SendAttackInputServerRpc(bool value)
     {
 #if UNITY_SERVER || UNITY_EDITOR
-        Server_ReceiveAttackInput();
+        Server_ReceiveAttackInput(value);
 #endif
     }
 
@@ -142,6 +142,8 @@ public partial class PlayerController : NetworkBehaviour
             AnimatorStateTransition transition = stateMachine.AddAnyStateTransition(state.state);
             transition.AddCondition(AnimatorConditionMode.If, 0.0f, triggerName);
         }
+        UnityEditor.EditorUtility.SetDirty(animatorController);
+        UnityEditor.AssetDatabase.SaveAssetIfDirty(animatorController);
     }
 #endif
     #endregion
@@ -200,9 +202,9 @@ public partial class PlayerController : NetworkBehaviour,IStateMachineOwner
     {
         serverController.ReceiveJumpInput();
     }
-    private void Server_ReceiveAttackInput()
+    private void Server_ReceiveAttackInput(bool value)
     {
-        serverController.ReceiveAttackInput();
+        serverController.ReceiveAttackInput(value);
     }
     /// <summary>
     /// 服务端玩家下线
