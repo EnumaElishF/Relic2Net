@@ -103,6 +103,13 @@ public partial class PlayerController : NetworkBehaviour
         Server_ReceiveJumpInput();
 #endif
     }
+    [ServerRpc(RequireOwnership = true)]
+    public void SendAttackInputServerRpc()
+    {
+#if UNITY_SERVER || UNITY_EDITOR
+        Server_ReceiveAttackInput();
+#endif
+    }
 }
 
 /// <summary>
@@ -157,6 +164,10 @@ public partial class PlayerController : NetworkBehaviour,IStateMachineOwner
     private void Server_ReceiveJumpInput()
     {
         serverController.ReceiveJumpInput();
+    }
+    private void Server_ReceiveAttackInput()
+    {
+        serverController.ReceiveAttackInput();
     }
     /// <summary>
     /// 服务端玩家下线

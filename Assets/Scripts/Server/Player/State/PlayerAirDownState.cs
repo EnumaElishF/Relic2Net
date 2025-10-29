@@ -35,14 +35,14 @@ public class PlayerAirDownState: PlayerStateBase
             {
                 serverController.PlayAnimation("JumpEnd");
                 onEndAnimation = true;
-                mainController.view.SetJumpEndAction(OnJumpEnd);
+                mainController.view.jumpEndAction += OnJumpEnd;
             }
         }
 
     }
     public override void Exit()
     {
-        mainController.view.CleanJumpEndAction();
+        mainController.view.jumpEndAction -= OnJumpEnd;
     }
     private void OnJumpEnd()
     {

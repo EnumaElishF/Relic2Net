@@ -5,12 +5,17 @@ public class PlayerMoveState : PlayerStateBase
     public override void Enter()
     {
         serverController.PlayAnimation("Move");
-        serverController.mainController.view.SetRootMotionAction(OnRootMotion);
+        serverController.mainController.view.rootMotionAction += OnRootMotion;
     }
 
 
     public override void Update()
     {
+        if (serverController.inputData.attack)
+        {
+            serverController.ChangeState(PlayerState.Attack);
+            return;
+        }
         if (serverController.inputData.jump) //跳跃优先级做的比移动高一些
         {
             serverController.ChangeState(PlayerState.Jump);
@@ -26,7 +31,7 @@ public class PlayerMoveState : PlayerStateBase
     }
     public override void Exit()
     {
-        mainController.view.CleanRootMotionAction();
+        serverController.mainController.view.rootMotionAction -= OnRootMotion;
     }
     /// <summary>
     /// 必须检查动画Clip 是否启用了Root Motion，需要单独修改移动动画，否则出问题

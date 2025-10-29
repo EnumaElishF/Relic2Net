@@ -7,6 +7,7 @@ public class PlayerServerController : MonoBehaviour, IPlayerServerController,ISt
     {
         public Vector3 moveDir;
         public bool jump;
+        public bool attack;
     }
     #region  面板赋值 (理论上，下面这些值，包括移动速度旋转速度等，客户端都不需要知道，只要服务端知道就行) 服务端基于根运动移动
     public float rootMotionMoveSpeedMultiply { get; private set; } //动画根运动的系数(是系数的情况加个Multiply
@@ -73,6 +74,17 @@ public class PlayerServerController : MonoBehaviour, IPlayerServerController,ISt
                 break;
         }
     }
+    public void ReceiveAttackInput()
+    {
+        switch (mainController.currentState.Value)
+        {
+            case PlayerState.Idle:
+            case PlayerState.Move:
+            case PlayerState.Attack:
+                inputData.attack = true;
+                break;
+        }
+    }
     #endregion
     //其他条件
 
@@ -92,6 +104,9 @@ public class PlayerServerController : MonoBehaviour, IPlayerServerController,ISt
                 break;
             case PlayerState.AirDown:
                 stateMachine.ChangeState<PlayerAirDownState>();
+                break;
+            case PlayerState.Attack:
+                stateMachine.ChangeState<PlayerAttackState>();
                 break;
         }
     }
@@ -114,6 +129,5 @@ public class PlayerServerController : MonoBehaviour, IPlayerServerController,ISt
             currentAOICoord = newCoord;
         }
     }
-
 
 }

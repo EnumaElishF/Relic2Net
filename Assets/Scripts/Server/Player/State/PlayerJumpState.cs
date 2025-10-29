@@ -8,8 +8,8 @@ public class PlayerJumpState : PlayerStateBase
         base.Enter();//可以不保留，因为Enter里没有多少逻辑，如果父方法Enter内含重要逻辑的话，还是base一下比较好
         serverController.inputData.jump = false;
         serverController.PlayAnimation("JumpStart");
-        serverController.mainController.view.SetRootMotionAction(OnRootMotion);
-        serverController.mainController.view.SetJumpStartEndAction(OnJumpStartEnd);
+        serverController.mainController.view.rootMotionAction += OnRootMotion;
+        serverController.mainController.view.jumpStartEndAction += OnJumpStartEnd;
     }
 
     private void OnJumpStartEnd()
@@ -20,7 +20,8 @@ public class PlayerJumpState : PlayerStateBase
 
     public override void Exit()
     {
-        mainController.view.CleanRootMotionAction();
+        serverController.mainController.view.rootMotionAction -= OnRootMotion;
+        serverController.mainController.view.jumpStartEndAction -= OnJumpStartEnd;
     }
     /// <summary>
     /// OnRootMotion只考虑了y轴

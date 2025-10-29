@@ -1,4 +1,3 @@
-#if UNITY_SERVER || UNITY_EDITOR
 using UnityEngine;
 
 public class PlayerIdleState : PlayerStateBase
@@ -9,6 +8,11 @@ public class PlayerIdleState : PlayerStateBase
     }
     public override void Update()
     {
+        if (serverController.inputData.attack)
+        {
+            serverController.ChangeState(PlayerState.Attack);
+            return;
+        }
         if (serverController.inputData.jump) //跳跃优先级做的比移动高一些
         {
             serverController.ChangeState(PlayerState.Jump);
@@ -26,4 +30,3 @@ public class PlayerIdleState : PlayerStateBase
         }
     }
 }
-#endif
