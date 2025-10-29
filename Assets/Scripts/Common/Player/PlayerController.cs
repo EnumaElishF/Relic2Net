@@ -1,5 +1,6 @@
 using JKFrame;
 using System;
+using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
@@ -7,7 +8,6 @@ using UnityEngine;
 /// 公共   : 公共的地方大部分都是做分支的，分成客户端，和 服务端  
 /// PlayerController做mainController在Common程序集下，去采用PlayerServerController的部分数值
 /// </summary>
-/// 
 public partial class PlayerController : NetworkBehaviour
 {
     #region 静态成员 static
@@ -18,6 +18,7 @@ public partial class PlayerController : NetworkBehaviour
         Debug.Log($"委托绑定：{func.Method.DeclaringType.Name}.{func.Method.Name}"); // 输出绑定的方法所在类
     }
     #endregion
+    public List<SkillConfig> skillConfigList = new List<SkillConfig>();
     #region  面板赋值 (理论上，下面这些值，包括移动速度旋转速度等，客户端都不需要知道，只要服务端知道就行) 服务端基于根运动移动
 
     public Player_View view { get; private set; }

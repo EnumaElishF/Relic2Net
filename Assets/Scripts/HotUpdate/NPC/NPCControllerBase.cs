@@ -13,16 +13,25 @@ public abstract class NPCControllerBase : MonoBehaviour
     private void Start()
     {
         if (prompt != null) prompt.SetActive(false);
+#if UNITY_EDITOR
+        if (NetManager.Instance.IsServer) return;
+#endif
         InitFloatInfo();
     }
     public void InitFloatInfo()
     {
+#if UNITY_EDITOR
+        if (NetManager.Instance.IsServer) return;
+#endif
         NPCFloatInfo floatInfo = ResSystem.InstantiateGameObject<NPCFloatInfo>(floatInfoPoint, "NPCFloatInfo");
         floatInfo.transform.localPosition = Vector3.zero;
         floatInfo.Init(nameKey);
     }
     private void OnTriggerEnter(Collider other)
     {
+#if UNITY_EDITOR
+        if (NetManager.Instance.IsServer) return;
+#endif
         if (PlayerManager.Instance != null && other.gameObject == PlayerManager.Instance.localPlayer.gameObject && prompt != null)
         {
             prompt.SetActive(true);
@@ -35,6 +44,9 @@ public abstract class NPCControllerBase : MonoBehaviour
     /// <param name="other"></param>
     private void OnTriggerStay(Collider other)
     {
+#if UNITY_EDITOR
+        if (NetManager.Instance.IsServer) return;
+#endif
         if (PlayerManager.Instance != null && other.gameObject == PlayerManager.Instance.localPlayer.gameObject)
         {
             if (prompt != null && Camera.main != null)
@@ -56,6 +68,9 @@ public abstract class NPCControllerBase : MonoBehaviour
     }
     private void OnTriggerExit(Collider other)
     {
+#if UNITY_EDITOR
+        if (NetManager.Instance.IsServer) return;
+#endif
         if (other.gameObject == PlayerManager.Instance.localPlayer.gameObject && prompt != null)
         {
             prompt.SetActive(false);

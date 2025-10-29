@@ -36,18 +36,21 @@ public class PlayerClientController : MonoBehaviour
     private Vector3 lastInputDir = Vector3.zero;
     private void Update()
     {
-        if (!mainController.IsSpawned) return; //看看本地的玩家是不是宿主
-        if (mainController.currentState.Value == PlayerState.None) return;
+        if (!mainController.IsSpawned || !PlayerManager.Instance.playerControlEnable) return; //看看本地的玩家是不是宿主
         switch (mainController.currentState.Value)
         {
             case PlayerState.Idle:
             case PlayerState.Move:
                 UpdateMoveInput();
                 UpdateJumpInput();
+                UpdateAttackInput();
                 break;
             case PlayerState.Jump:
-            case PlayerState.AirDown:
                 UpdateMoveInput(); //空中移动要监听移动的输入的
+                break;
+            case PlayerState.AirDown: 
+                UpdateMoveInput(); 
+                UpdateAttackInput();
                 break;
         }
 
@@ -80,6 +83,13 @@ public class PlayerClientController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             mainController.SendJumpInputServerRpc();
+        }
+    }
+    private void UpdateAttackInput()
+    {
+        if (Input.GetMouseButton(0))
+        {
+            mainController.SendAttackInputServerRpc();
         }
     }
 }

@@ -65,5 +65,28 @@ public class Player_View : MonoBehaviour
     {
         jumpEndAction?.Invoke();
     }
+    public event Action startSkillHitAction;
+    public event Action stopSkillHitAction;
+    public event Action skillCanSwitchAction;
+    public event Action skillEndAction;
+    /// <summary>
+    /// 攻击动作的Event，函数名称必须设置的与动画里的Event一模一样
+    /// </summary>
+    private void StartSkillHit()
+    {
+        startSkillHitAction?.Invoke();
+    }
+    private void StopSkillHit()
+    {
+        stopSkillHitAction?.Invoke();
+    }
+    private void SkillCanSwitch()
+    {
+        skillCanSwitchAction?.Invoke();
+    }
+    private void SkillEnd()
+    {
+        skillEndAction?.Invoke();
+    }
     #endregion
 }

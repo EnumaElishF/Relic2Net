@@ -132,6 +132,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75834259a05662c46a01b004aceae896, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  skillConfigList:
+  - {fileID: 11400000, guid: ff5d45362f56aff4d8a3bf602d1c3641, type: 2}
+  - {fileID: 11400000, guid: d4be2d4895efa334c89bbe5ddf4b6b87, type: 2}
 --- !u!143 &6189258044268938541
 CharacterController:
   m_ObjectHideFlags: 0
