@@ -59,9 +59,9 @@ public class PlayerManager : SingletonMono<PlayerManager>
         if(!arg.newPlayer.TryGetComponent(out PlayerClientController clientController))
         {
             clientController = arg.newPlayer.gameObject.AddComponent<PlayerClientController>();
-            clientController.FirstInit();
+            clientController.FirstInit(arg.newPlayer);
         }
-        clientController.Init(arg.newPlayer);
+        clientController.Init();
         if (arg.newPlayer.IsSpawned)
         {
             InitLocalPlayer(clientController);

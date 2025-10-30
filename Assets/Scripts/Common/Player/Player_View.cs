@@ -38,14 +38,14 @@ public class Player_View : MonoBehaviour
 #endif
 
     #region 动画事件
+    public event Action footStepAction;
     private void FootStep()
     {
-
+        footStepAction?.Invoke();
     }
     /// <summary>
     /// 把原来使用的Action加了一个event。简化一下使用，这样就不用set很多方法了，比如下面，就去掉了，要不然以后再加一些Action会显得内容乱，这样就+=注册就行了
     /// </summary>
-    public event Action jumpStartEndAction;
     //private Action jumpStartEndAction;
     //public void SetJumpStartEndAction(Action jumpStartEndAction)  //相当于event的 += 创建
     //{
@@ -55,22 +55,19 @@ public class Player_View : MonoBehaviour
     //{
     //    this.jumpStartEndAction = null;
     //}
-    private void JumpStartEnd()
-    {
-        jumpStartEndAction?.Invoke();
-    }
-    public event Action jumpEndAction;
-
-    private void JumpEnd()
-    {
-        jumpEndAction?.Invoke();
-    }
+    public event Action<int> skillStartAction;
     public event Action startSkillHitAction;
     public event Action stopSkillHitAction;
-    public event Action skillCanSwitchAction;
-    public event Action skillEndAction;
     /// <summary>
-    /// 攻击动作的Event，函数名称必须设置的与动画里的Event一模一样
+    /// 技能的开始
+    /// </summary>
+    /// <param name="index">技能索引</param>
+    private void StartSkill(int index)
+    {
+        skillStartAction?.Invoke(index);
+    }
+    /// <summary>
+    /// 技能攻击判定开始：攻击动作的Event，函数名称必须设置的与动画里的Event一模一样
     /// </summary>
     private void StartSkillHit()
     {
@@ -79,14 +76,6 @@ public class Player_View : MonoBehaviour
     private void StopSkillHit()
     {
         stopSkillHitAction?.Invoke();
-    }
-    private void SkillCanSwitch()
-    {
-        skillCanSwitchAction?.Invoke();
-    }
-    private void SkillEnd()
-    {
-        skillEndAction?.Invoke();
     }
     #endregion
 }

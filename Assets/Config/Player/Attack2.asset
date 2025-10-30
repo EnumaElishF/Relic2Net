@@ -15,11 +15,75 @@ MonoBehaviour:
   serializationData:
     SerializedFormat: 2
     SerializedBytes: 
-    ReferencedUnityObjects: []
+    ReferencedUnityObjects:
+    - {fileID: 8300000, guid: 61c3d9a58dbe4ef44a609e1665ecacff, type: 3}
+    - {fileID: 2945851400305922836, guid: 6da0de2216ed7f54693db9eb93849660, type: 3}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
-    SerializationNodes: []
+    SerializationNodes:
+    - Name: releaseEffect
+      Entry: 6
+      Data: 
+    - Name: startHitEffect
+      Entry: 7
+      Data: 0|SkillEffect, Common
+    - Name: audio
+      Entry: 10
+      Data: 0
+    - Name: prefab
+      Entry: 10
+      Data: 1
+    - Name: offset
+      Entry: 7
+      Data: UnityEngine.Vector3, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 4
+      Data: 1.2
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: rotation
+      Entry: 7
+      Data: UnityEngine.Vector3, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
+      Data: 24.56
+    - Name: 
+      Entry: 4
+      Data: 5.734
+    - Name: 
+      Entry: 4
+      Data: -12.768
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: scale
+      Entry: 7
+      Data: UnityEngine.Vector3, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
+      Data: 0.9
+    - Name: 
+      Entry: 4
+      Data: 0.9
+    - Name: 
+      Entry: 4
+      Data: 0.9
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
   animationName: Attack2
   attackValue: 20
+  endTime: 0.9
+  switchTime: 0.65

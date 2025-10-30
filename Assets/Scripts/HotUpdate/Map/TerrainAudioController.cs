@@ -1,5 +1,8 @@
 using JKFrame;
 using UnityEngine;
+/// <summary>
+/// 场景音效
+/// </summary>
 public class TerrainAudioController : MonoBehaviour
 {
     private AudioSource[] audioSources;
