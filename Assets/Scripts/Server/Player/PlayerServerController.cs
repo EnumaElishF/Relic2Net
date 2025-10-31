@@ -1,4 +1,5 @@
 ﻿using JKFrame;
+using System;
 using Unity.Netcode.Components;
 using UnityEngine;
 
@@ -24,27 +25,41 @@ public class PlayerServerController : MonoBehaviour, IPlayerServerController,ISt
     public PlayerController mainController { get; private set; }
     public Vector2Int currentAOICoord { get; private set; }
     public InputData inputData { get; private set; }
+    public WeaponController weapon { get; private set; }
     //框架，玩家使用的状态机
     private StateMachine stateMachine;
-    public void FirstInit()
+    public void FirstInit(PlayerController mainController)
     {
+        this.mainController = mainController;
         characterController = GetComponent<CharacterController>();
         animator = transform.Find("Player_kazuma").GetComponent<Animator>();
         networkAnimator = animator.GetComponent<NetworkAnimator>();
         stateMachine = new StateMachine();
         inputData = new InputData();
-    }
-    public void Init(PlayerController mainController)
-    {
-        currentAnimation = "Idle";
-        this.mainController = mainController;
-        mainController.SetServerController(this);
+
         rootMotionMoveSpeedMultiply = ServerGlobal.Instance.ServerConfig.rootMotionMoveSpeedMultiply;
         airMoveSpeed = ServerGlobal.Instance.ServerConfig.playerAirMoveSpeed;
         gravity = ServerGlobal.Instance.ServerConfig.playerGravity;
         rotateSpeed = ServerGlobal.Instance.ServerConfig.playerRotateSpeed;
         jumpHeightMultiply = ServerGlobal.Instance.ServerConfig.playerJumpHeightMultiply;
+        mainController.SetServerController(this);
+        mainController.onUpdateWeaponObjectAction += MainController_onUpdateWeaponObjectAction;
     }
+    public void Init()
+    {
+        currentAnimation = "Idle";
+    }
+    private void MainController_onUpdateWeaponObjectAction(GameObject obj)
+    {
+        if(!obj.TryGetComponent(out WeaponController temp))
+        {
+            temp = obj.AddComponent<WeaponController>();
+        }
+        weapon = temp;
+        weapon.Init("PlayerWeapon", OnHit);
+    }
+
+    #region 网络
     public void OnNetworkSpawn()
     {
         stateMachine.Init(this);
@@ -61,6 +76,18 @@ public class PlayerServerController : MonoBehaviour, IPlayerServerController,ISt
         stateMachine.Destroy();
         AOIManager.Instance.RemoveClient(mainController.OwnerClientId, currentAOICoord);
     }
+    public void UpdateAOICoord()
+    {
+        //玩家开始移动
+        Vector2Int newCoord = AOIManager.Instance.GetCoordByWorldPostion(transform.position);
+        if (newCoord != currentAOICoord) // 发生了地图块坐标变化
+        {
+            AOIManager.Instance.UpdateClientChunkCoord(mainController.OwnerClientId, currentAOICoord, newCoord);
+            currentAOICoord = newCoord;
+        }
+    }
+    #endregion
+
     #region 响应客户端的输入
     public void ReceiveMoveInput(Vector3 moveDir) 
     {
@@ -125,15 +152,12 @@ public class PlayerServerController : MonoBehaviour, IPlayerServerController,ISt
         networkAnimator.SetTrigger(animationName);
     }
 
-    public void UpdateAOICoord()
-    {
-        //玩家开始移动
-        Vector2Int newCoord = AOIManager.Instance.GetCoordByWorldPostion(transform.position);
-        if (newCoord != currentAOICoord) // 发生了地图块坐标变化
-        {
-            AOIManager.Instance.UpdateClientChunkCoord(mainController.OwnerClientId, currentAOICoord, newCoord);
-            currentAOICoord = newCoord;
-        }
-    }
 
+
+    #region 战斗
+    private void OnHit(IHitTarget target, Vector3 vector)
+    {
+        
+    }
+    #endregion
 }

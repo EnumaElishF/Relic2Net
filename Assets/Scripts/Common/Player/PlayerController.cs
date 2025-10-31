@@ -63,11 +63,17 @@ public partial class PlayerController : NetworkBehaviour
     {
         UpdateWeaponObject(newValue.ToString());
     }
+    public event Action<GameObject> onUpdateWeaponObjectAction;
+    /// <summary>
+    /// 变更武器
+    /// </summary>
     private void UpdateWeaponObject(string weaponID)
     {
         if (string.IsNullOrWhiteSpace(weaponID)) return; //weapon上关于playerData的数据还没执行获得到呢的话，就不先执行下面的内容
         GameObject weaponGameObject = getWeaponFunc.Invoke(weaponID);
         view.SetWeapon(weaponGameObject);
+        //当变更武器的时候就回调一下这个event
+        onUpdateWeaponObjectAction?.Invoke(weaponGameObject);
     }
 
     /// <summary>

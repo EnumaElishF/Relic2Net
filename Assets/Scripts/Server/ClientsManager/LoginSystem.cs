@@ -152,9 +152,9 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
         if(!playerObject.TryGetComponent(out PlayerServerController serverController))
         {
             serverController = playerObject.gameObject.AddComponent<PlayerServerController>();
-            serverController.FirstInit();
+            serverController.FirstInit(playerObject.GetComponent<PlayerController>());
         }
-        serverController.Init(playerObject.GetComponent<PlayerController>());
+        serverController.Init();
         playerObject.SpawnWithOwnership(clientID); //生成
         playerObject.NetworkShow(clientID);
         serverController.mainController.playerName.Value = playerData.name;
