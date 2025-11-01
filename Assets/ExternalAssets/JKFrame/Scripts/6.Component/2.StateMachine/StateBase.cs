@@ -1,4 +1,7 @@
-﻿namespace JKFrame
+﻿using System;
+using UnityEngine;
+
+namespace JKFrame
 {
     /// <summary>
     /// 状态基类
@@ -77,5 +80,6 @@
         {
             return stateMachine.ContainsShareData(key);
         }
+
     }
 }

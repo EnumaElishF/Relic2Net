@@ -1,4 +1,5 @@
 
+using System;
 using UnityEngine;
 
 public class PlayerAttackState : PlayerStateBase
@@ -23,6 +24,7 @@ public class PlayerAttackState : PlayerStateBase
         view.startSkillHitAction -= View_startSkillHitAction;
         view.stopSkillHitAction -= View_stopSkillHitAction;
         view.rootMotionAction -= OnRootMotion;
+        View_stopSkillHitAction();//退出武器攻击状态，再加一次退出，更安全一些，因为有可能状态被别人打断，导致武器一直是攻击状态。
     }
     public override void Update()
     {
@@ -51,11 +53,11 @@ public class PlayerAttackState : PlayerStateBase
     }
     private void View_startSkillHitAction()
     {
-        
+        serverController.weapon.StartHit();
     }
     private void View_stopSkillHitAction()
     {
-        
+        serverController.weapon.StopHit();
     }
 
     private void OnRootMotion(Vector3 deltaPosition, Quaternion deltaRotation)
@@ -68,5 +70,19 @@ public class PlayerAttackState : PlayerStateBase
         {
             serverController.UpdateAOICoord();
         }
+    }
+
+    public void OnHit(IHitTarget target, Vector3 vector)
+    {
+        //服务端只处理伤害，AI的状态逻辑，表现层应该发给客户端去做
+        AttackData attackData = new AttackData
+        {
+            attackValue = skillConfig.attackValueMultiple * serverController.weaponConfig.attackValue,//技能攻击力系数*武器攻击力
+            repelDistance = skillConfig.repelDistance,
+            repelTime = skillConfig.repelTime
+        };
+        //TODO 通知客户端播放效果
+        //通知怪物受伤
+        target.BeHit(attackData);
     }
 }

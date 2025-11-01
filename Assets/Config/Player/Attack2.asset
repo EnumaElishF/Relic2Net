@@ -84,6 +84,9 @@ MonoBehaviour:
       Entry: 8
       Data: 
   animationName: Attack2
-  attackValue: 20
+  attackValueMultiple: 1
   endTime: 0.9
   switchTime: 0.65
+  attackValue: 20
+  repelDistance: 0
+  repelTime: 0

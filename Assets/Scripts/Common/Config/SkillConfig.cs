@@ -4,11 +4,14 @@ using UnityEngine;
 public class SkillConfig : ConfigBase
 {
     public string animationName;
-    public float attackValue;
+    public float attackValueMultiple;//技能攻击力系数
     public float endTime = 0.9f;
     public float switchTime = 0.5f;
+    public float attackValue;
     public SkillEffect releaseEffect;//释放效果
     public SkillEffect startHitEffect;//开始命中效果
+    public float repelDistance; //击退距离
+    public float repelTime; //击退时间
 }
 public class SkillEffect
 {

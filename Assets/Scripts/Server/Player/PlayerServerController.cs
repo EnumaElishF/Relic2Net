@@ -26,6 +26,7 @@ public class PlayerServerController : MonoBehaviour, IPlayerServerController,ISt
     public Vector2Int currentAOICoord { get; private set; }
     public InputData inputData { get; private set; }
     public WeaponController weapon { get; private set; }
+    public WeaponConfig weaponConfig { get; private set; }
     //框架，玩家使用的状态机
     private StateMachine stateMachine;
     public void FirstInit(PlayerController mainController)
@@ -57,6 +58,7 @@ public class PlayerServerController : MonoBehaviour, IPlayerServerController,ISt
         }
         weapon = temp;
         weapon.Init("PlayerWeapon", OnHit);
+        weaponConfig = ServerResSystem.GetItemConfig<WeaponConfig>(mainController.usedWeaponName.Value.ToString());
     }
 
     #region 网络
@@ -157,7 +159,7 @@ public class PlayerServerController : MonoBehaviour, IPlayerServerController,ISt
     #region 战斗
     private void OnHit(IHitTarget target, Vector3 vector)
     {
-        
+        ((PlayerAttackState)stateMachine.currStateObj).OnHit(target, vector);
     }
     #endregion
 }
