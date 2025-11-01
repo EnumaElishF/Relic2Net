@@ -1,7 +1,7 @@
 using JKFrame;
 using UnityEngine;
 
-public class PlayerClientController : MonoBehaviour
+public class PlayerClientController : MonoBehaviour,IPlayerClientController
 {
     public Transform cameraLookatTarget { get; private set; }
     public Transform cameraFollowTarget { get; private set; }
@@ -17,52 +17,13 @@ public class PlayerClientController : MonoBehaviour
     public void FirstInit(PlayerController newPlayer) //第一次被添加组件调用
     {
         this.mainController = newPlayer;
+        newPlayer.SetClientController(this);
         //直接查游戏对象CameraLookat来赋值
         cameraLookatTarget = transform.Find("CameraLookat");
         cameraFollowTarget = transform.Find("CameraFollow");
         floatInfoPoint = transform.Find("FloatPoint");
         clientConfig = ResSystem.LoadAsset<PlayerClientConfig>(nameof(PlayerClientConfig));
-        mainController.view.skillStartAction += View_skillStartAction;
-        mainController.view.startSkillHitAction += View_startSkillHitAction;
         mainController.view.footStepAction += View_footStepAction;
-    }
-    private void View_skillStartAction(int skillIndex)
-    {
-        currentSkillConfig = mainController.skillConfigList[skillIndex];
-        PlaySkillEffect(currentSkillConfig.releaseEffect);
-    }
-    private void View_startSkillHitAction()
-    {
-        PlaySkillEffect(currentSkillConfig.startHitEffect);
-    }
-    private void PlaySkillEffect(SkillEffect skillEffect)
-    {
-        if (skillEffect == null) return;
-        if (skillEffect.audio != null)
-        {
-            AudioSystem.PlayOneShot(skillEffect.audio, transform.position);
-        }
-        if (skillEffect.prefab != null)
-        {
-            GameObject effectObj = ClientUtility.GetOrInstantiate(skillEffect.prefab, null);
-            //效果的坐标，他是要考虑坐标在套入角色内，以及单独拿出外，坐标是会变换的，毕竟父级不一样
-            //效果的坐标，这里函数存的是对于在角色上是0,0,0的坐标，拉出来，无父级的时候是什么坐标。这样一个一直相对变化值
-            //将「角色本地坐标系的偏移量」转换为「世界坐标系的绝对位置」，让效果贴合角色指定位置
-            effectObj.transform.position = mainController.view.transform.TransformPoint(skillEffect.offset);
-            //效果的旋转，道理和上面类似，但是容易一些，我们用四元数相乘的逻辑，做角度叠加。 相对偏移角度skillEffect.rotation
-            //将「角色的基础旋转」与「效果的相对旋转」叠加，让效果朝向符合预期（如技能发射方向、特效朝向）
-            effectObj.transform.rotation = mainController.view.transform.rotation * Quaternion.Euler(skillEffect.rotation);
-            //因为角色模型不会变大变小，所以效果的相对缩放这个方面倒不用考虑其他计算，直接用设定就行
-            effectObj.transform.localScale = skillEffect.scale;
-        }
-    }
-    /// <summary>
-    /// 脚步声
-    /// </summary>
-    private void View_footStepAction()
-    {
-        AudioClip audioClip = clientConfig.footStepAudios[Random.Range(0, clientConfig.footStepAudios.Length)];
-        AudioSystem.PlayOneShot(audioClip, transform.position);
     }
 
     public void Init()
@@ -77,6 +38,20 @@ public class PlayerClientController : MonoBehaviour
             floatInfo.Init(mainController.playerName.Value.ToString());
         }
     }
+
+    #region 网络相关 ：生成和销毁
+    public void OnNetworkSpawn()
+    {
+        
+    }
+
+    public void OnNetworkDespawn()
+    {
+        
+    }
+    #endregion
+
+    #region 检测输入  
     //最后输入
     private Vector3 lastInputDir = Vector3.zero;
     private void Update()
@@ -93,16 +68,14 @@ public class PlayerClientController : MonoBehaviour
             case PlayerState.Jump:
                 UpdateMoveInput(); //空中移动要监听移动的输入的
                 break;
-            case PlayerState.AirDown: 
-                UpdateMoveInput(); 
+            case PlayerState.AirDown:
+                UpdateMoveInput();
                 UpdateAttackInput();
                 break;
             case PlayerState.Attack:
                 UpdateAttackInput(); //空中移动要监听移动的输入的
                 break;
         }
-
-
     }
     private void UpdateMoveInput()
     {
@@ -148,7 +121,8 @@ public class PlayerClientController : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             SetAttackInput(true);
-        }else if (Input.GetMouseButtonUp(0))
+        }
+        else if (Input.GetMouseButtonUp(0))
         {
             SetAttackInput(false);
         }
@@ -158,4 +132,52 @@ public class PlayerClientController : MonoBehaviour
         mainController.SendAttackInputServerRpc(value);
         lastAttackInput = value;
     }
+    #endregion
+
+    #region 战斗
+    public void StartSkill(int skillIndex)
+    {
+        currentSkillConfig = mainController.skillConfigList[skillIndex];
+        PlaySkillEffect(currentSkillConfig.releaseEffect);
+    }
+    public void StartSkillHit()
+    {
+        PlaySkillEffect(currentSkillConfig.startHitEffect);
+    }
+    private void PlaySkillEffect(SkillEffect skillEffect)
+    {
+        if (skillEffect == null) return;
+        if (skillEffect.audio != null)
+        {
+            AudioSystem.PlayOneShot(skillEffect.audio, transform.position);
+        }
+        if (skillEffect.prefab != null)
+        {
+            GameObject effectObj = ClientUtility.GetOrInstantiate(skillEffect.prefab, null);
+            //效果的坐标，他是要考虑坐标在套入角色内，以及单独拿出外，坐标是会变换的，毕竟父级不一样
+            //效果的坐标，这里函数存的是对于在角色上是0,0,0的坐标，拉出来，无父级的时候是什么坐标。这样一个一直相对变化值
+            //将「角色本地坐标系的偏移量」转换为「世界坐标系的绝对位置」，让效果贴合角色指定位置
+            effectObj.transform.position = mainController.view.transform.TransformPoint(skillEffect.offset);
+            //效果的旋转，道理和上面类似，但是容易一些，我们用四元数相乘的逻辑，做角度叠加。 相对偏移角度skillEffect.rotation
+            //将「角色的基础旋转」与「效果的相对旋转」叠加，让效果朝向符合预期（如技能发射方向、特效朝向）
+            effectObj.transform.rotation = mainController.view.transform.rotation * Quaternion.Euler(skillEffect.rotation);
+            //因为角色模型不会变大变小，所以效果的相对缩放这个方面倒不用考虑其他计算，直接用设定就行
+            effectObj.transform.localScale = skillEffect.scale;
+        }
+    }
+    /// <summary>
+    /// 脚步声
+    /// </summary>
+    private void View_footStepAction()
+    {
+        AudioClip audioClip = clientConfig.footStepAudios[Random.Range(0, clientConfig.footStepAudios.Length)];
+        AudioSystem.PlayOneShot(audioClip, transform.position);
+    }
+
+    public void PlaySkillHitEffect(Vector3 point)
+    {
+        //TODO
+    }
+    #endregion
+
 }

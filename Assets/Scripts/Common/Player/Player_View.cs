@@ -55,17 +55,9 @@ public class Player_View : MonoBehaviour
     //{
     //    this.jumpStartEndAction = null;
     //}
-    public event Action<int> skillStartAction;
     public event Action startSkillHitAction;
     public event Action stopSkillHitAction;
-    /// <summary>
-    /// 技能的开始
-    /// </summary>
-    /// <param name="index">技能索引</param>
-    private void StartSkill(int index)
-    {
-        skillStartAction?.Invoke(index);
-    }
+
     /// <summary>
     /// 技能攻击判定开始：攻击动作的Event，函数名称必须设置的与动画里的Event一模一样
     /// </summary>

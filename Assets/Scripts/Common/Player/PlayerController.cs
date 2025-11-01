@@ -47,18 +47,36 @@ public partial class PlayerController : NetworkBehaviour
         if (IsClient)
         {
 #if !UNITY_SERVER || UNITY_EDITOR
-            Client_OnNetworkSpawn();
+            clientController.OnNetworkSpawn();
+            EventSystem.TypeEventTrigger(new SpawnPlayerEvent { newPlayer = this }); //生成
 #endif
         }
         else
         {
 #if UNITY_SERVER || UNITY_EDITOR
-            Server_OnNetworkSpawn();
+            serverController.OnNetworkSpawn();
 #endif
         }
         UpdateWeaponObject(usedWeaponName.Value.ToString());
     }
-
+    /// <summary>
+    /// 玩家下线，Despawn消除玩家
+    /// </summary>
+    public override void OnNetworkDespawn()
+    {
+        if (IsClient)
+        {
+#if !UNITY_SERVER || UNITY_EDITOR
+            clientController.OnNetworkDespawn();
+#endif
+        }
+        else
+        {
+#if UNITY_SERVER || UNITY_EDITOR
+            serverController.OnNetworkDespawn();
+#endif
+        }
+    }
     private void OnUsedWeaponNameChanged(FixedString32Bytes previousValue, FixedString32Bytes newValue)
     {
         UpdateWeaponObject(newValue.ToString());
@@ -76,25 +94,8 @@ public partial class PlayerController : NetworkBehaviour
         onUpdateWeaponObjectAction?.Invoke(weaponGameObject);
     }
 
-    /// <summary>
-    /// 玩家下线，Despawn消除玩家
-    /// </summary>
-    public override void OnNetworkDespawn()
-    {
-        if (IsClient)
-        {
-#if !UNITY_SERVER || UNITY_EDITOR
-            
-#endif
-        }
-        else
-        {
-#if UNITY_SERVER || UNITY_EDITOR
-            Server_OnNetworkDespawn();
-#endif
-        }
-    }
 
+    #region ServerRPC
     //相当于调用 "服务端" 上自身的本体
     //---也就是说，完成上面的数据判断后，把最终的坐标移动交给了服务器。
     //这就是Rpc好用的地方。
@@ -104,26 +105,102 @@ public partial class PlayerController : NetworkBehaviour
     public void SendInputMoveDirServerRpc(Vector3 moveDir)
     {
 #if UNITY_SERVER || UNITY_EDITOR
-        Server_ReceiveMoveInput(moveDir);
+        serverController.ReceiveMoveInput(moveDir);
 #endif
     }
     [ServerRpc(RequireOwnership = true)]
     public void SendJumpInputServerRpc()
     {
 #if UNITY_SERVER || UNITY_EDITOR
-        Server_ReceiveJumpInput();
+        serverController.ReceiveJumpInput();
 #endif
     }
     [ServerRpc(RequireOwnership = true)]
     public void SendAttackInputServerRpc(bool value)
     {
 #if UNITY_SERVER || UNITY_EDITOR
-        Server_ReceiveAttackInput(value);
+        serverController.ReceiveAttackInput(value);
 #endif
     }
 
-    #region Editor
+    #endregion
+    #region ClientRPC
+    //Client的PRC其实就是去完成接口IPlayerClientController里的几个函数
+    [ClientRpc]
+    public void StartSkillClientRpc(int skillIndex)
+    {
+#if !UNITY_SERVER || UNITY_EDITOR
+        clientController.StartSkill(skillIndex);
+#endif
+    }
+    [ClientRpc]
+    public void StartSkillHitClientRpc()
+    {
+#if !UNITY_SERVER || UNITY_EDITOR
+        clientController.StartSkillHit();
+#endif
+    }
+    [ClientRpc]
+    public void PlaySkillHitEffectClientRpc(Vector3 point)//特效命中点
+    {
+#if !UNITY_SERVER || UNITY_EDITOR
+        clientController.PlaySkillHitEffect(point);
+#endif
+    }
+    #endregion
+}
+
+/// <summary>
+/// 客户端
+/// </summary>
+#if !UNITY_SERVER || UNITY_EDITOR
+public partial class PlayerController : NetworkBehaviour
+{
+    private IPlayerClientController clientController;
+    public void SetClientController(IPlayerClientController clientController)
+    {
+        this.clientController = clientController;
+    }
+    private void Start()
+    {
+        // Start 一定 在OnNetworkSpawn后执行，如果这个阶段IsSpawned = false 说明是个异常对象
+        if (!IsSpawned)
+        {
+            //网络对象对象池
+            //玩家如果退出登录,用这个可以销毁，但是我们有AOI相关的东西，不能仅仅把游戏对象销毁就结束。 
+            NetManager.Instance.DestroyObject(this.NetworkObject);
+        }
+    }
+}
+#endif
+
+
+/// <summary>
+/// 服务端
+/// </summary>
+#if UNITY_SERVER || UNITY_EDITOR
+public partial class PlayerController : NetworkBehaviour,IStateMachineOwner
+{
+    private IPlayerServerController serverController;
+    public void SetServerController (IPlayerServerController serverController)
+    {
+        this.serverController = serverController;
+    }
+    /// <summary>
+    /// 更新武器网络变量
+    /// </summary>
+    /// <param name="weaponID"></param>
+    public void UpdateWeaponNetVar(string weaponID)
+    {
+        usedWeaponName.Value = weaponID;
+    }
+}
+#endif
+
+//编辑器部分
 #if UNITY_EDITOR
+public partial class PlayerController : NetworkBehaviour
+{
     //添加手动启动器，到PlayerController脚本
     //完全通过代码取代，不使用Animator的话，容易跳帧。要想有自然的过渡，还是得用Animator的连线的机制功能。
     [ContextMenu(nameof(SetAnimatorSettings))]
@@ -150,85 +227,6 @@ public partial class PlayerController : NetworkBehaviour
         }
         UnityEditor.EditorUtility.SetDirty(animatorController);
         UnityEditor.AssetDatabase.SaveAssetIfDirty(animatorController);
-    }
-#endif
-    #endregion
-}
-
-/// <summary>
-/// 客户端
-/// </summary>
-#if !UNITY_SERVER || UNITY_EDITOR
-public partial class PlayerController : NetworkBehaviour
-{
-    private void Start()
-    {
-        // Start 一定 在OnNetworkSpawn后执行，如果这个阶段IsSpawned = false 说明是个异常对象
-        if (!IsSpawned)
-        {
-            //网络对象对象池
-            //玩家如果退出登录,用这个可以销毁，但是我们有AOI相关的东西，不能仅仅把游戏对象销毁就结束。 
-            NetManager.Instance.DestroyObject(this.NetworkObject);
-        }
-    }
-    private void Client_OnNetworkSpawn()
-    {
-        EventSystem.TypeEventTrigger(new SpawnPlayerEvent { newPlayer = this });
-    }
-
-}
-#endif
-
-
-/// <summary>
-/// 服务端
-/// </summary>
-#if UNITY_SERVER || UNITY_EDITOR
-public partial class PlayerController : NetworkBehaviour,IStateMachineOwner
-{
-    private IPlayerServerController serverController;
-    public void SetServerController (IPlayerServerController serverController)
-    {
-        this.serverController = serverController;
-    }
-
-    private void Server_OnNetworkSpawn()
-    {
-        serverController.OnNetworkSpawn();
-
-    }
-    /// <summary>
-    /// 服务端 把输入保存起来
-    /// </summary>
-    private void Server_ReceiveMoveInput(Vector3 moveDir)
-    {
-        serverController.ReceiveMoveInput(moveDir);
-    }
-    private void Server_ReceiveJumpInput()
-    {
-        serverController.ReceiveJumpInput();
-    }
-    private void Server_ReceiveAttackInput(bool value)
-    {
-        serverController.ReceiveAttackInput(value);
-    }
-    /// <summary>
-    /// 服务端玩家下线
-    /// </summary>
-    private void Server_OnNetworkDespawn()
-    {
-        serverController.OnNetworkDespawn();
-
-    }
-
- 
-    /// <summary>
-    /// 更新武器网络变量
-    /// </summary>
-    /// <param name="weaponID"></param>
-    public void UpdateWeaponNetVar(string weaponID)
-    {
-        usedWeaponName.Value = weaponID;
     }
 }
 #endif

@@ -5,8 +5,9 @@ public class SkillConfig : ConfigBase
 {
     public string animationName;
     public float attackValueMultiple;//技能攻击力系数
-    public float endTime = 0.9f;
-    public float switchTime = 0.5f;
+    public float rotateNormalizedTime = 0.2f; //0.2的进度，序列化的时间,不是读秒的时间
+    public float endNormalizedTime = 0.9f; 
+    public float switchNormalizedTime = 0.5f;
     public float attackValue;
     public SkillEffect releaseEffect;//释放效果
     public SkillEffect startHitEffect;//开始命中效果

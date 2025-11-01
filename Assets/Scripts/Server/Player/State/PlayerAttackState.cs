@@ -28,13 +28,17 @@ public class PlayerAttackState : PlayerStateBase
     }
     public override void Update()
     {
-        if(CheckAnimationState(skillConfig.animationName,out float time))
+        if(CheckAnimationState(skillConfig.animationName,out float normalizedTime))
         {
-            if(time >= skillConfig.switchTime && serverController.inputData.attack)
+            if(serverController.inputData.moveDir != Vector3.zero && normalizedTime < skillConfig.rotateNormalizedTime)
+            {
+                mainController.view.transform.rotation = Quaternion.RotateTowards(mainController.view.transform.rotation, Quaternion.LookRotation(serverController.inputData.moveDir), Time.deltaTime * serverController.rotateSpeed);
+            }
+            if (normalizedTime >= skillConfig.switchNormalizedTime && serverController.inputData.attack)
             {
                 StartAttack();
             }
-            else if (time >= skillConfig.endTime)
+            else if (normalizedTime >= skillConfig.endNormalizedTime)
             {
                 //结束动画
                 serverController.ChangeState(serverController.inputData.moveDir == Vector3.zero ? PlayerState.Idle : PlayerState.Move);
@@ -50,10 +54,12 @@ public class PlayerAttackState : PlayerStateBase
         skillConfig = mainController.skillConfigList[attackIndex];
         //播放动画，技能配置表的名称
         serverController.PlayAnimation(skillConfig.animationName);
+        mainController.StartSkillClientRpc(attackIndex);
     }
     private void View_startSkillHitAction()
     {
         serverController.weapon.StartHit();
+        mainController.StartSkillHitClientRpc();
     }
     private void View_stopSkillHitAction()
     {
@@ -72,7 +78,7 @@ public class PlayerAttackState : PlayerStateBase
         }
     }
 
-    public void OnHit(IHitTarget target, Vector3 vector)
+    public void OnHit(IHitTarget target, Vector3 point)
     {
         //服务端只处理伤害，AI的状态逻辑，表现层应该发给客户端去做
         AttackData attackData = new AttackData
@@ -81,7 +87,8 @@ public class PlayerAttackState : PlayerStateBase
             repelDistance = skillConfig.repelDistance,
             repelTime = skillConfig.repelTime
         };
-        //TODO 通知客户端播放效果
+        //通知客户端播放效果
+        mainController.PlaySkillHitEffectClientRpc(point);
         //通知怪物受伤
         target.BeHit(attackData);
     }
