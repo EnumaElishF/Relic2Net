@@ -16,6 +16,7 @@ public static class GlobalUtility
         if (obj == null)
         {
             obj = GameObject.Instantiate(prefab, parent);
+            //实例化出来的预制体，会有括号克隆的情况，必须重新赋值一下原预制体名称，否则肯定会出问题的
             obj.name = prefab.name;
         }
         return obj;

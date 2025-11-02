@@ -147,7 +147,7 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
         PlayerData playerData = client.playerData;
         CharacterData characterData = playerData.characterData;
         //生成游戏对象
-        NetworkObject playerObject = NetManager.Instance.SpawnObject(clientID, ServerResSystem.serverConfig.playerPrefab, characterData.position, Quaternion.Euler(0, characterData.rotation_Y, 0));
+        NetworkObject playerObject = NetManager.Instance.SpawnObjectNoShow(clientID, ServerResSystem.serverConfig.playerPrefab, characterData.position, Quaternion.Euler(0, characterData.rotation_Y, 0));
         // 初始化玩家的服务端控制脚本
         if(!playerObject.TryGetComponent(out PlayerServerController serverController))
         {
@@ -155,8 +155,11 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
             serverController.FirstInit(playerObject.GetComponent<PlayerController>());
         }
         serverController.Init();
-        playerObject.SpawnWithOwnership(clientID); //生成
+
+        //！生成游戏对象后续操作，网络同步和显示：为什么要这样做呢？是为了处理上面的serverController的FirstInit的PlayerController里有对PlayerServerController的使用情况，保证PlayerServerController先加载完
+        playerObject.SpawnWithOwnership(clientID); //生成, !!!重点关注这里对应的OnNetWorkSpawn
         playerObject.NetworkShow(clientID);
+
         serverController.mainController.playerName.Value = playerData.name;
         //玩家可能使用不同的武器之类的实例化
         serverController.mainController.usedWeaponName.Value = playerData.characterData.usedWeaponName;

@@ -5,7 +5,7 @@ public class SkillConfig : ConfigBase
 {
     public string animationName;
     public float attackValueMultiple;//技能攻击力系数
-    public float rotateNormalizedTime = 0.2f; //0.2的进度，序列化的时间,不是读秒的时间
+    public float rotateNormalizedTime = 0.2f; //移动时间，0.2的进度，序列化的时间,不是读秒的时间
     public float endNormalizedTime = 0.9f; 
     public float switchNormalizedTime = 0.5f;
     public float attackValue;
@@ -13,6 +13,7 @@ public class SkillConfig : ConfigBase
     public SkillEffect startHitEffect;//开始命中效果
     public float repelDistance; //击退距离
     public float repelTime; //击退时间
+    public SkillEffect hitEffect;//实际命中后效果
 }
 public class SkillEffect
 {

@@ -26,12 +26,12 @@ public class WeaponController : MonoBehaviour
     public void StartHit()
     {
         collider.enabled = true;
-        Debug.Log("开启检测");
+        //Debug.Log("开启检测");
     }
     public void StopHit()
     {
         collider.enabled = false;
-        Debug.Log("关闭检测");
+        //Debug.Log("关闭检测");
         hitTargets.Clear();
     }
     //碰撞过程中，每帧调用一次

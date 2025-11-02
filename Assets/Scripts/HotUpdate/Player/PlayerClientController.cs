@@ -73,6 +73,7 @@ public class PlayerClientController : MonoBehaviour,IPlayerClientController
                 UpdateAttackInput();
                 break;
             case PlayerState.Attack:
+                UpdateMoveInput();//更新攻击时转向和移动
                 UpdateAttackInput(); //空中移动要监听移动的输入的
                 break;
         }
@@ -153,7 +154,7 @@ public class PlayerClientController : MonoBehaviour,IPlayerClientController
         }
         if (skillEffect.prefab != null)
         {
-            GameObject effectObj = ClientUtility.GetOrInstantiate(skillEffect.prefab, null);
+            GameObject effectObj = GlobalUtility.GetOrInstantiate(skillEffect.prefab, null);
             //效果的坐标，他是要考虑坐标在套入角色内，以及单独拿出外，坐标是会变换的，毕竟父级不一样
             //效果的坐标，这里函数存的是对于在角色上是0,0,0的坐标，拉出来，无父级的时候是什么坐标。这样一个一直相对变化值
             //将「角色本地坐标系的偏移量」转换为「世界坐标系的绝对位置」，让效果贴合角色指定位置
@@ -176,7 +177,18 @@ public class PlayerClientController : MonoBehaviour,IPlayerClientController
 
     public void PlaySkillHitEffect(Vector3 point)
     {
-        //TODO
+        SkillEffect skillEffect = currentSkillConfig.hitEffect;
+        if (skillEffect == null) return;
+        if (skillEffect.audio != null)
+        {
+            AudioSystem.PlayOneShot(skillEffect.audio, transform.position);
+        }
+        if (skillEffect.prefab != null)
+        {
+            GameObject effectObj = GlobalUtility.GetOrInstantiate(skillEffect.prefab, null);
+            effectObj.transform.position = point;
+            effectObj.transform.localScale = skillEffect.scale;
+        }
     }
     #endregion
 

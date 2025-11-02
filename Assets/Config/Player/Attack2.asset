@@ -18,6 +18,8 @@ MonoBehaviour:
     ReferencedUnityObjects:
     - {fileID: 8300000, guid: 61c3d9a58dbe4ef44a609e1665ecacff, type: 3}
     - {fileID: 2945851400305922836, guid: 6da0de2216ed7f54693db9eb93849660, type: 3}
+    - {fileID: 8300000, guid: 1e71470c7368ce1438caa1b5952aec62, type: 3}
+    - {fileID: 7321269219263944337, guid: 24c432c92a458a74fb42a33536c719f9, type: 3}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
@@ -83,10 +85,68 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
+    - Name: hitEffect
+      Entry: 7
+      Data: 1|SkillEffect, Common
+    - Name: audio
+      Entry: 10
+      Data: 2
+    - Name: prefab
+      Entry: 10
+      Data: 3
+    - Name: offset
+      Entry: 7
+      Data: UnityEngine.Vector3, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: rotation
+      Entry: 7
+      Data: UnityEngine.Vector3, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: scale
+      Entry: 7
+      Data: UnityEngine.Vector3, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
+      Data: 1
+    - Name: 
+      Entry: 4
+      Data: 1
+    - Name: 
+      Entry: 4
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
   animationName: Attack2
   attackValueMultiple: 1
-  endTime: 0.9
-  switchTime: 0.65
+  rotateNormalizedTime: 0.2
+  endNormalizedTime: 0.9
+  switchNormalizedTime: 0.4
   attackValue: 20
   repelDistance: 0
   repelTime: 0

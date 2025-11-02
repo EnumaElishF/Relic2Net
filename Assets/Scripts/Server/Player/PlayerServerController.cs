@@ -43,6 +43,11 @@ public class PlayerServerController : MonoBehaviour, IPlayerServerController,ISt
         gravity = ServerGlobal.Instance.ServerConfig.playerGravity;
         rotateSpeed = ServerGlobal.Instance.ServerConfig.playerRotateSpeed;
         jumpHeightMultiply = ServerGlobal.Instance.ServerConfig.playerJumpHeightMultiply;
+
+        if(mainController == null)
+        {
+            Debug.Log(mainController + "mainController为空");
+        }
         mainController.SetServerController(this);
         mainController.onUpdateWeaponObjectAction += MainController_onUpdateWeaponObjectAction;
     }
@@ -153,8 +158,6 @@ public class PlayerServerController : MonoBehaviour, IPlayerServerController,ISt
         currentAnimation = animationName;
         networkAnimator.SetTrigger(animationName);
     }
-
-
 
     #region 战斗
     private void OnHit(IHitTarget target, Vector3 vector)

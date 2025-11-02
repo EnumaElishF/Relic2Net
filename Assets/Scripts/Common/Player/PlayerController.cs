@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
+
 #if UNITY_EDITOR
 using UnityEditor.Animations;
 #endif
@@ -47,13 +48,17 @@ public partial class PlayerController : NetworkBehaviour
         if (IsClient)
         {
 #if !UNITY_SERVER || UNITY_EDITOR
+            EventSystem.TypeEventTrigger(new SpawnPlayerEvent { newPlayer = this }); //初始化生成PlayerController，要优先于clientController调用之前
             clientController.OnNetworkSpawn();
-            EventSystem.TypeEventTrigger(new SpawnPlayerEvent { newPlayer = this }); //生成
 #endif
         }
         else
         {
 #if UNITY_SERVER || UNITY_EDITOR
+            if (serverController == null)
+            {
+                Debug.Log("serverController空");
+            }
             serverController.OnNetworkSpawn();
 #endif
         }

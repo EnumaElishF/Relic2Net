@@ -112,7 +112,7 @@ PrefabInstance:
     - target: {fileID: -176393540092437691, guid: c4306788b11ebbf428aaadb0867ad530, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 3eca8d03719c9eb41be0ba1b7f43217d, type: 2}
+      objectReference: {fileID: 2100000, guid: 2d61d60a110176f459a35a97d3eef728, type: 2}
     - target: {fileID: 919132149155446097, guid: c4306788b11ebbf428aaadb0867ad530, type: 3}
       propertyPath: m_Name
       value: Weapon_0
@@ -182,7 +182,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 126
-  m_CollisionDetection: 2
+  m_CollisionDetection: 1
 --- !u!65 &3839948660952992672
 BoxCollider:
   m_ObjectHideFlags: 0
