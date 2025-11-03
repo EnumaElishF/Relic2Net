@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class UI_ShopWindow : UI_CustomWindowBase, IItemWindow
 {
+
     [SerializeField] private Button closeButton;
     [SerializeField] private Transform itemRoot;
     private string emptySlotPath => ClientUtility.emptySlotPath;

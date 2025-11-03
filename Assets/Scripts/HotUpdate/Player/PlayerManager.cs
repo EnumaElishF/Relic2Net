@@ -9,7 +9,6 @@ using UnityEngine;
 /// </summary>
 public class PlayerManager : SingletonMono<PlayerManager>
 {
-    [SerializeField] private CinemachineFreeLook cinemachine;
     //取消使用静态变量static,因为跨场景的时候曾经的PlayerController并没有被销毁，而是放对象池中，静态变量指向的变量是全局唯一，且是强绑定
     public PlayerClientController localPlayer { get; private set; } 
     //玩家是否可以控制角色，以后可能受到多个方面的影响，目前只和鼠标显示关联
@@ -72,7 +71,7 @@ public class PlayerManager : SingletonMono<PlayerManager>
         //目前只和鼠标是否显示关联
         playerControlEnable = !arg.activeState;
         //cinemachine转向的相机控制
-        cinemachine.enabled = playerControlEnable;
+        CameraManager.Instance.SetControlState(playerControlEnable);
         if (localPlayer != null)
         {
             localPlayer.canControl = playerControlEnable;
@@ -144,15 +143,13 @@ public class PlayerManager : SingletonMono<PlayerManager>
         return localPlayer != null;
     }
 
+    //注: Unity虽然会把这部分热更在打包前把他们剔除不在包体里，但是Unity剔除前依然会检验这部分能不能用
+    //尤其是公共部分，一种打包成客户端，一种打包成服务端。需要考虑好这个东西在对立，比如服务端的热更新里会不会引用这个内容。反之，客户端也考虑一下。
+    //例如：如果是服务端版的热更新的打包，下面这个是纯客户端才存在的东西，如果不加限制为 客户端的#if,那就会报错
     public void InitLocalPlayer(PlayerClientController player)
     {
         localPlayer = player;
-        cinemachine.transform.position = localPlayer.transform.position;
-        //注: Unity虽然会把这部分热更在打包前把他们剔除不在包体里，但是Unity剔除前依然会检验这部分能不能用
-        //尤其是公共部分，一种打包成客户端，一种打包成服务端。需要考虑好这个东西在对立，比如服务端的热更新里会不会引用这个内容。反之，客户端也考虑一下。
-        //例如：如果是服务端版的热更新的打包，下面这个是纯客户端才存在的东西，如果不加限制为 客户端的#if,那就会报错
-        cinemachine.LookAt = localPlayer.cameraLookatTarget;
-        cinemachine.Follow = localPlayer.cameraFollowTarget;
+        CameraManager.Instance.Init(localPlayer.cameraLookatTarget, localPlayer.cameraFollowTarget);
         localPlayer.canControl = playerControlEnable;
     }
 
