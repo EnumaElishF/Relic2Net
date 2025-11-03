@@ -4,4 +4,5 @@ using UnityEngine;
 public class PlayerClientConfig : ConfigBase
 {
     public AudioClip[] footStepAudios;
+    public float maxHp;
 }

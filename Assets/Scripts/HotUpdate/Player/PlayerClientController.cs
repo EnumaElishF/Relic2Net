@@ -28,21 +28,36 @@ public class PlayerClientController : MonoBehaviour,IPlayerClientController
 
     public void Init()
     {
-        if (mainController.IsSpawned) //本地玩家看不到自己的名字
+        if (mainController.IsOwner) //本地玩家看不到自己的名字
         {
             if (floatInfo != null) floatInfo.gameObject.SetActive(false);
         }
         else
         {
             if (floatInfo == null) floatInfo = ResSystem.InstantiateGameObject<PlayerFloatInfo>(floatInfoPoint, "PlayerFloatInfo");
-            floatInfo.Init(mainController.playerName.Value.ToString());
+            floatInfo.UpdateName(mainController.playerName.Value.ToString());
         }
     }
 
     #region 网络相关 ：生成和销毁
     public void OnNetworkSpawn()
     {
-        
+        mainController.currentHp.OnValueChanged = OnHpChanged;
+    }
+
+    private void OnHpChanged(float previousValue, float newValue)
+    {
+        float fillAmount = newValue / clientConfig.maxHp;
+        if (mainController.IsOwner) //设置IsOwner识别本地玩家，以做区分，本地玩家在左上角展示血条，那么其他玩家是头顶展示的。
+        {
+            //HP值绑定上HP窗口
+            UISystem.GetWindow<UI_PlayerInfoWindow>().UpdateHP(fillAmount);
+        }
+        else
+        {
+            floatInfo.UpdateHp(fillAmount);
+        }
+
     }
 
     public void OnNetworkDespawn()

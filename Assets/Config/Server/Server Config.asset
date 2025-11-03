@@ -21014,6 +21014,7 @@ MonoBehaviour:
   playerGravity: -5.5
   playerRotateSpeed: 1000
   playerJumpHeightMultiply: 3
+  playerMaxHp: 100
   terrainFolderPath: Assets/EnvRes/Terrains
   weaponConfigFolderPath: Assets/Config/Item/Weapon
   consumablegConfigFolderPath: Assets/Config/Item/Consumable

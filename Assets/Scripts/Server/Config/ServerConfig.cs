@@ -28,6 +28,7 @@ public class ServerConfig : ConfigBase
     public float playerGravity;
     public float playerRotateSpeed;
     public float playerJumpHeightMultiply;
+    public float playerMaxHp;
     [Header("地形")]
     public Dictionary<string,GameObject> terrainDic;
     [Header("物品配置")]

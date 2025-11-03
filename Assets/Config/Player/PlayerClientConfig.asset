@@ -32,3 +32,4 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 70e7973a254af8849a10a743a17882bf, type: 3}
   - {fileID: 8300000, guid: b789add20a75d3c4f80bb1083bd00d85, type: 3}
   - {fileID: 8300000, guid: 449630783da9b7747b6a05390c1753a0, type: 3}
+  maxHp: 100

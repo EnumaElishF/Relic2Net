@@ -28,10 +28,15 @@ public partial class PlayerController : NetworkBehaviour
 
     public Player_View view { get; private set; }
     #endregion
+
+    //TODO: 下面按照使用到的，去定义网络变量
     public NetVariable<PlayerState> currentState = new NetVariable<PlayerState>(PlayerState.None);
-    //新程序集，要加入对Common的新程序集的引用 Unity.Collections;
     public NetVariable<FixedString32Bytes> usedWeaponName = new NetVariable<FixedString32Bytes>();
     public NetVariable<FixedString32Bytes> playerName = new NetVariable<FixedString32Bytes>();
+    public NetVariable<float> currentHp = new NetVariable<float>();
+
+    //FixedString32Bytes作为对中文的值类型做存储，UTF-8 属于新的程序集，要加入对Common的新程序集的引用 Unity.Collections;
+    //并且FixedString32Bytes作对比String有很多优势：序列化效率更高，gc开销低，跨平台性好。FixedString32Bytes是值类型，String引用类型。
 
     //多个玩家，所以Player没有单例
     //public NetworkVariable<float> moveSpeed;   //网络变量：值类型，或者是结构体

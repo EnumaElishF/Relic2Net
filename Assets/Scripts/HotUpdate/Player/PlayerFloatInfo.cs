@@ -3,9 +3,15 @@ using UnityEngine;
 public class PlayerFloatInfo : MonoBehaviour
 {
     [SerializeField] private TextMesh nameText;
-    public void Init(string name)
+    [SerializeField] private SpriteRenderer hpBarFillSpriteRenderer;
+    public void UpdateName(string name)
     {
         nameText.text = name;
+    }
+    public void UpdateHp(float fillAmount)
+    {
+        //hp在3D模式下的图已经被设计成了，按照Scale从0到1的缩放就能控制0到100%的血量控制变动关系
+        hpBarFillSpriteRenderer.transform.localScale = new Vector3(fillAmount, 1, 1);
     }
     void LateUpdate()
     {

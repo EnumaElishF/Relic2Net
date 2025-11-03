@@ -52,10 +52,12 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
     private PlayerData CreateDefaultPlayerData(AccountInfo accountInfo)
     {
         PlayerData playerData = ResSystem.GetOrNew<PlayerData>();
+        ServerConfig serverConfig = ServerResSystem.serverConfig;
         playerData.characterData = new CharacterData
         {
-            position = ServerResSystem.serverConfig.playerDefaultPosition,
-            usedWeaponName = "Weapon_0"
+            position = serverConfig.playerDefaultPosition,
+            usedWeaponName = "Weapon_0",
+            hp = serverConfig.playerMaxHp
         };
         playerData.name = accountInfo.playerName;
         playerData.password = accountInfo.password;
@@ -163,6 +165,7 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
         serverController.mainController.playerName.Value = playerData.name;
         //玩家可能使用不同的武器之类的实例化
         serverController.mainController.usedWeaponName.Value = playerData.characterData.usedWeaponName;
+        serverController.mainController.currentHp.Value = playerData.characterData.hp;
         //Debug.Log($"服务端设置初始武器：{playerData.characterData.usedWeaponName}");
         client.playerController = serverController;
     }

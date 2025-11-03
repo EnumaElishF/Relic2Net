@@ -2,6 +2,9 @@
 using MongoDB.Bson.Serialization.Attributes;
 using UnityEngine;
 
+/// <summary>
+/// 存储到MongoDB数据库
+/// </summary>
 public class PlayerData
 {
     [BsonId]
@@ -25,4 +28,5 @@ public class CharacterData
     public Vector3 position;
     public float rotation_Y;
     public string usedWeaponName;
+    public float hp;
 }

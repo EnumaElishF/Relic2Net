@@ -81,6 +81,7 @@ public class ClientGlobal : SingletonMono<ClientGlobal>
         //商店和合成制作：做个缓存吧，其实不做也可以，因为他们没有那么频繁用
         UISystem.AddUIWindowData<UI_ShopWindow>(new UIWindowData(true, nameof(UI_ShopWindow), 2));
         UISystem.AddUIWindowData<UI_CraftWindow>(new UIWindowData(true, nameof(UI_CraftWindow), 2));
+        UISystem.AddUIWindowData<UI_PlayerInfoWindow>(new UIWindowData(true, nameof(UI_PlayerInfoWindow), 1));
 
     }
     private void OnGameSceneLaunchEvent(GameSceneLaunchEvent @event)
