@@ -53,7 +53,7 @@ public class PlayerClientController : MonoBehaviour,IPlayerClientController
         if (mainController.IsOwner) //设置IsOwner识别本地玩家，以做区分，本地玩家在左上角展示血条，那么其他玩家是头顶展示的。
         {
             //HP值绑定上HP窗口
-            UISystem.GetWindow<UI_PlayerInfoWindow>().UpdateHP(fillAmount);
+            UISystem.Show<UI_PlayerInfoWindow>().UpdateHP(fillAmount);
         }
         else
         {

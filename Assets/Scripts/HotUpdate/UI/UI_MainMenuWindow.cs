@@ -35,7 +35,14 @@ public class UI_MainMenuWindow : UI_CustomWindowBase
     }
     private void RegisterButtonClick()
     {
-        UISystem.Show<UI_RegisterWindow>();
+        if (NetManager.Instance.IsConnectedClient || NetManager.Instance.InitClient())
+        {
+            UISystem.Show<UI_RegisterWindow>();
+        }
+        else
+        {
+            UISystem.Show<UI_MessagePopupWindow>().ShowMessage("Net error", Color.red);
+        }
     }
     private void QuitButtonClick()
     {

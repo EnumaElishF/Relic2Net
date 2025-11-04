@@ -1,6 +1,5 @@
 ﻿//使用PlayerManager和PlayerController，作为公共的部分，既会出现在Client又会出现在Server，
 //从而要求他们不能去依赖客户端或者服务端的程序集的内容，要打断他们的依赖关系，可以通过事件，去传，从而跨程序集通信
-using Cinemachine;
 using JKFrame;
 using Unity.Netcode;
 using UnityEngine;
@@ -154,7 +153,6 @@ public class PlayerManager : SingletonMono<PlayerManager>
         localPlayer = player;
         CameraManager.Instance.Init(localPlayer.cameraLookatTarget, localPlayer.cameraFollowTarget);
         localPlayer.canControl = playerControlEnable;
-        UISystem.Show<UI_PlayerInfoWindow>();
     }
 
     public void UseItem(int slotIndex)
