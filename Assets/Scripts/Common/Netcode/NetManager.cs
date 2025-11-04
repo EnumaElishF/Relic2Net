@@ -15,15 +15,11 @@ public class NetManager : NetworkManager
     /// <summary>
     /// 最先进行的初始化，然后进行InitClient或者InitServer
     /// </summary>
-    public void Init(bool isClient)
+    public void FirstInit()
     {
         Instance = this;
         unityTransport = GetComponent<UnityTransport>();
         netMessageManager = GetComponent<NetMessageManager>();
-        if (isClient) InitClient();
-        else InitServer();
-        netMessageManager.Init();
-
         prefabHandlerDic = new Dictionary<GameObject, NetworkPrefabInstanceHandler>(NetworkConfig.Prefabs.Prefabs.Count);
         //给每个网络对象预制体都绑定上handler
         foreach(NetworkPrefab item in NetworkConfig.Prefabs.Prefabs)
@@ -34,15 +30,24 @@ public class NetManager : NetworkManager
         }
     }
 
-    public void InitClient()
+    public bool InitClient()
     {
-        StartClient();
+        bool result = StartClient();
+        netMessageManager.Init();
+        return result;
     }
-
+    public void StopClient()
+    {
+        //Shutdown会清理掉netMessageManager.Init();上我们自己做的事件的绑定，里面有很多需要TODO的事情
+        Shutdown();
+    }
     public void InitServer()
     {
         StartServer();
+        netMessageManager.Init();
+
     }
+
     /// <summary>
     /// 生成一个对象，但是不要网络同步和显示
     /// </summary>

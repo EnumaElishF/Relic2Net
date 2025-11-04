@@ -18,7 +18,8 @@ public class ServerLaunch : MonoBehaviour
         //--->我们自建一个服务网络启动
         //NetManager.Instance.InitServer();
 
-        ServerResSystem.InstantiateNetworkManager().Init(false);
+        ServerResSystem.InstantiateNetworkManager().FirstInit();
+        NetManager.Instance.InitServer();//服务端没有太多要做的事情，直接初始化Server就可以
         Debug.Log("InitServers Succeed");
     }
     

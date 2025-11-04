@@ -37,7 +37,7 @@ public class ClientGlobal : SingletonMono<ClientGlobal>
         //加载本地化配置->到框架的 LocalizationSystem设置上
         LocalizationSystem.GlobalConfig = ResSystem.LoadAsset<LocalizationConfig>("GlobalLocalizationConfig");
 
-        ResSystem.InstantiateGameObject<NetManager>("NetworkManager").Init(true);//直接用的同步，因为文件很小，如果大了还是要用异步加载。
+        ResSystem.InstantiateGameObject<NetManager>("NetworkManager").FirstInit();//直接用的同步，因为文件很小，如果大了还是要用异步加载。
         EventSystem.AddTypeEventListener<GameSceneLaunchEvent>(OnGameSceneLaunchEvent);
         NetMessageManager.Instance.RegisterMessageCallback(MessageType.S_C_Disconnect, OnDisconnect); //注册使用OnDisconnect方法
         Debug.Log("InitClient 成功");

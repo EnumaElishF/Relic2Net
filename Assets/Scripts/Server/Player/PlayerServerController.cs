@@ -1,5 +1,6 @@
 ﻿using JKFrame;
 using System;
+using System.Collections;
 using Unity.Netcode.Components;
 using UnityEngine;
 
@@ -70,12 +71,25 @@ public class PlayerServerController : MonoBehaviour, IPlayerServerController,ISt
     public void OnNetworkSpawn()
     {
         stateMachine.Init(this);
+        ChangeState(PlayerState.Idle);
+        StartCoroutine(DoInitAOI());
+    }
+    /// <summary>
+    /// 角色生成延迟同步避免发送两次网络对象生成，
+    /// 这是NetCode的一个Bug，生成后立刻NetworkShow产生的，延迟一帧即可。
+    /// 这个问题解决起来简单，但是发现起来比较复杂
+    /// </summary>
+    private IEnumerator DoInitAOI()
+    {
+        //延迟一帧
+        //使用框架的方法，这个其实工具好处就是内置了一些可以重复利用的对象，避免一些gc的问题
+        yield return CoroutineTool.WaitForFrame();
+
         //登录游戏后，所在的位置，对应当前的AOI的坐标
         currentAOICoord = AOIManager.Instance.GetCoordByWorldPostion(transform.position);
         Debug.Log("Server产生玩家");
         //AOI添加玩家
         AOIManager.Instance.InitClient(mainController.OwnerClientId, currentAOICoord);
-        ChangeState(PlayerState.Idle);
     }
     public void OnNetworkDespawn()
     {

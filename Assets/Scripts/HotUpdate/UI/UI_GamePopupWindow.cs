@@ -31,7 +31,9 @@ public class UI_GamePopupWindow : UI_CustomWindowBase
     private void BackButtonClick()
     {
         // 退出到菜单场景
-        NetMessageManager.Instance.SendMessageToServer<C_S_Disconnect>(MessageType.C_S_Disconnect, default);
+        NetManager.Instance.StopClient();
+        ClientGlobal.Instance.EnterLoginScene();
+        //NetMessageManager.Instance.SendMessageToServer<C_S_Disconnect>(MessageType.C_S_Disconnect, default);
         //等待服务端回复消息后退出到登录场景，改为由ClientGlobal来监听。
         //ClientGlobal.Instance.EnterLoginScene();
     }
