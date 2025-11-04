@@ -18,6 +18,9 @@ public static class NetworkVariableSerializationBinder
 
         //为 FixedString32Bytes 显式注册网络序列化逻辑，确保 AOT 环境下能正确处理。
         BindFixedString32BytesSerialization();
+
+        //float类型的网络变量也要绑定序列化: 这是因为NetCode框架的特性导致的
+        //原本是不需要的，因为NetCode有一些代码是动态生成的，但是基于热更新的模式，这部分代码不能动态生成
         BindFloatSerialization();
 
     }

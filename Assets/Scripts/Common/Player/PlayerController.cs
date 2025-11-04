@@ -171,16 +171,6 @@ public partial class PlayerController : NetworkBehaviour
     {
         this.clientController = clientController;
     }
-    private void Start()
-    {
-        // Start 一定 在OnNetworkSpawn后执行，如果这个阶段IsSpawned = false 说明是个异常对象
-        if (!IsSpawned)
-        {
-            //网络对象对象池
-            //玩家如果退出登录,用这个可以销毁，但是我们有AOI相关的东西，不能仅仅把游戏对象销毁就结束。 
-            NetManager.Instance.DestroyObject(this.NetworkObject);
-        }
-    }
 }
 #endif
 

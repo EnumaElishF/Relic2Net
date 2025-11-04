@@ -37,6 +37,8 @@ public class PlayerClientController : MonoBehaviour,IPlayerClientController
             if (floatInfo == null) floatInfo = ResSystem.InstantiateGameObject<PlayerFloatInfo>(floatInfoPoint, "PlayerFloatInfo");
             floatInfo.UpdateName(mainController.playerName.Value.ToString());
         }
+        //客户端生成角色后自己手动更新一些血量显示
+        OnHpChanged(0, mainController.currentHp.Value);
     }
 
     #region 网络相关 ：生成和销毁
@@ -71,7 +73,13 @@ public class PlayerClientController : MonoBehaviour,IPlayerClientController
     private Vector3 lastInputDir = Vector3.zero;
     private void Update()
     {
-        if (!mainController.IsSpawned) return; //看看本地的玩家是不是宿主
+        if (!mainController.IsSpawned && gameObject.activeInHierarchy) 
+        {
+            //玩家如果退出登录,用这个可以销毁，但是我们有AOI相关的东西，不能仅仅把游戏对象销毁就结束。 
+            NetManager.Instance.DestroyObject(mainController.NetworkObject);
+        }
+        ; //看看本地的玩家是不是宿主
+        if (!mainController.IsOwner) return; //只有IsOwner当前本地玩家时才InitLocalPlayer、检测输入
         switch (mainController.currentState.Value)
         {
             case PlayerState.Idle:

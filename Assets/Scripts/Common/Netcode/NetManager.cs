@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using JKFrame;
+using System.Collections.Generic;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using UnityEngine;
@@ -70,8 +71,17 @@ public class NetManager : NetworkManager
     /// </summary>
     public void DestroyObject(NetworkObject networkObject)
     {
-        //Despawn: 在网络层面解除该对象的同步状态，使它不再被网络系统追踪和同步，但它既不会直接销毁游戏对象，也不会自动将其放入对象池。需要其他配置。
-        networkObject.Despawn();
+        if (networkObject.IsSpawned)
+        {
+            //Despawn: 在网络层面解除该对象的同步状态，使它不再被网络系统追踪和同步，但它既不会直接销毁游戏对象，也不会自动将其放入对象池。需要其他配置。
+            networkObject.Despawn();
+        }
+        else
+        {
+            //未真实生成的网络对象销毁，不能Despawn，而是直接丢进对象池
+            networkObject.GameObjectPushPool();
+        }
+       
     }
 
 }

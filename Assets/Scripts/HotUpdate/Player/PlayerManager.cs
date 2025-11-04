@@ -61,7 +61,7 @@ public class PlayerManager : SingletonMono<PlayerManager>
             clientController.FirstInit(arg.newPlayer);
         }
         clientController.Init();
-        if (arg.newPlayer.IsSpawned)
+        if (arg.newPlayer.IsOwner)
         {
             InitLocalPlayer(clientController);
         }
