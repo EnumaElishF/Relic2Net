@@ -1,9 +1,8 @@
 ﻿using JKFrame;
-using System.Collections;
-using Unity.Netcode.Components;
+using System;
 using UnityEngine;
-
-public class PlayerServerController : MonoBehaviour, IPlayerServerController,IStateMachineOwner
+//给玩家使用
+public class PlayerServerController : CharacterServerControllerBase<PlayerController>, IPlayerServerController,IStateMachineOwner
 {
     public class InputData
     {
@@ -18,43 +17,27 @@ public class PlayerServerController : MonoBehaviour, IPlayerServerController,ISt
     public float rotateSpeed { get; private set; }
     public float jumpHeightMultiply { get; private set; }
     public CharacterController characterController { get; private set; }
-    public Animator animator { get; private set; }
-    public NetworkAnimator networkAnimator { get; private set; }
     #endregion
 
-    public PlayerController mainController { get; private set; }
-    public Vector2Int currentAOICoord { get; private set; }
-    public InputData inputData { get; private set; }
-    public WeaponController weapon { get; private set; }
-    public WeaponConfig weaponConfig { get; private set; }
-    //框架，玩家使用的状态机
-    private StateMachine stateMachine;
-    public void FirstInit(PlayerController mainController)
-    {
-        this.mainController = mainController;
-        characterController = GetComponent<CharacterController>();
-        animator = mainController.View.GetComponent<Animator>();
-        networkAnimator = animator.GetComponent<NetworkAnimator>();
-        stateMachine = new StateMachine();
-        inputData = new InputData();
 
+
+    public InputData inputData { get; private set; }
+    public WeaponConfig weaponConfig { get; private set; }
+
+    public override void FirstInit(PlayerController mainController)
+    {
+        //放玩家特有的
+        base.FirstInit(mainController);
+        characterController = GetComponent<CharacterController>();
+        inputData = new InputData();
         rootMotionMoveSpeedMultiply = ServerGlobal.Instance.ServerConfig.rootMotionMoveSpeedMultiply;
         airMoveSpeed = ServerGlobal.Instance.ServerConfig.playerAirMoveSpeed;
         gravity = ServerGlobal.Instance.ServerConfig.playerGravity;
         rotateSpeed = ServerGlobal.Instance.ServerConfig.playerRotateSpeed;
         jumpHeightMultiply = ServerGlobal.Instance.ServerConfig.playerJumpHeightMultiply;
-
-        if(mainController == null)
-        {
-            Debug.Log(mainController + "mainController为空");
-        }
-        mainController.SetServerController(this);
         mainController.onUpdateWeaponObjectAction += MainController_onUpdateWeaponObjectAction;
     }
-    public void Init()
-    {
-        currentAnimation = "Idle";
-    }
+
     private void MainController_onUpdateWeaponObjectAction(GameObject obj)
     {
         if(!obj.TryGetComponent(out WeaponController temp))
@@ -66,46 +49,52 @@ public class PlayerServerController : MonoBehaviour, IPlayerServerController,ISt
         weaponConfig = ServerResSystem.GetItemConfig<WeaponConfig>(mainController.usedWeaponName.Value.ToString());
     }
 
-    #region 网络
-    public void OnNetworkSpawn()
-    {
-        stateMachine.Init(this);
-        ChangeState(PlayerState.Idle);
-        StartCoroutine(DoInitAOI());
-    }
-    /// <summary>
-    /// 角色生成延迟同步避免发送两次网络对象生成，
-    /// 这是NetCode的一个Bug，生成后立刻NetworkShow产生的，延迟一帧即可。
-    /// 这个问题解决起来简单，但是发现起来比较复杂
-    /// </summary>
-    private IEnumerator DoInitAOI()
-    {
-        //延迟一帧
-        //使用框架的方法，这个其实工具好处就是内置了一些可以重复利用的对象，避免一些gc的问题
-        yield return CoroutineTool.WaitForFrame();
 
-        //登录游戏后，所在的位置，对应当前的AOI的坐标
-        currentAOICoord = AOIManager.Instance.GetCoordByWorldPostion(transform.position);
-        Debug.Log("Server产生玩家");
-        //AOI添加玩家
-        AOIManager.Instance.InitClient(mainController.OwnerClientId, currentAOICoord);
-    }
-    public void OnNetworkDespawn()
+    public void ChangeState(PlayerState newState)
     {
-        //玩家销毁时，StateMachine要销毁
-        stateMachine.Destroy();
-        AOIManager.Instance.RemoveClient(mainController.OwnerClientId, currentAOICoord);
-    }
-    public void UpdateAOICoord()
-    {
-        //玩家开始移动
-        Vector2Int newCoord = AOIManager.Instance.GetCoordByWorldPostion(transform.position);
-        if (newCoord != currentAOICoord) // 发生了地图块坐标变化
+        mainController.currentState.Value = newState;
+        switch (newState)
         {
-            AOIManager.Instance.UpdateClientChunkCoord(mainController.OwnerClientId, currentAOICoord, newCoord);
-            currentAOICoord = newCoord;
+            case PlayerState.Idle:
+                stateMachine.ChangeState<PlayerIdleState>();
+                break;
+            case PlayerState.Move:
+                stateMachine.ChangeState<PlayerMoveState>();
+                break;
+            case PlayerState.Jump:
+                stateMachine.ChangeState<PlayerJumpState>();
+                break;
+            case PlayerState.AirDown:
+                stateMachine.ChangeState<PlayerAirDownState>();
+                break;
+            case PlayerState.Attack:
+                stateMachine.ChangeState<PlayerAttackState>();
+                break;
         }
     }
+
+
+    #region 网络
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
+        ChangeState(PlayerState.Idle);
+    }
+
+    protected override void OnInitAOI()
+    {
+        AOIManager.Instance.InitClient(mainController.OwnerClientId, currentAOICoord);
+    }
+
+    protected override void OnUpdateAOI(Vector2Int newCoord)
+    {
+        AOIManager.Instance.UpdateClientChunkCoord(mainController.OwnerClientId, currentAOICoord, newCoord);
+    }
+    protected override void OnRemoveAOI()
+    {
+        AOIManager.Instance.RemoveClient(mainController.OwnerClientId, currentAOICoord);
+    }
+
     #endregion
 
     #region 响应客户端的输入
@@ -136,41 +125,6 @@ public class PlayerServerController : MonoBehaviour, IPlayerServerController,ISt
         }
     }
     #endregion
-    //其他条件
-
-    public void ChangeState(PlayerState newState)
-    {
-        mainController.currentState.Value = newState;
-        switch (newState)
-        {
-            case PlayerState.Idle:
-                stateMachine.ChangeState<PlayerIdleState>();
-                break;
-            case PlayerState.Move:
-                stateMachine.ChangeState<PlayerMoveState>();
-                break;
-            case PlayerState.Jump:
-                stateMachine.ChangeState<PlayerJumpState>();
-                break;
-            case PlayerState.AirDown:
-                stateMachine.ChangeState<PlayerAirDownState>();
-                break;
-            case PlayerState.Attack:
-                stateMachine.ChangeState<PlayerAttackState>();
-                break;
-        }
-    }
-    private string currentAnimation = "Idle";
-    /// <summary>
-    /// 采用自己管理的方式，状态切换的代码，控制动作状态改变。不使用常规的状态机的SetBool动作切换
-    /// </summary>
-    public void PlayAnimation(string animationName)
-    {
-        if (currentAnimation == animationName) return;
-        networkAnimator.ResetTrigger(currentAnimation);
-        currentAnimation = animationName;
-        networkAnimator.SetTrigger(animationName);
-    }
 
     #region 战斗
     private void OnHit(IHitTarget target, Vector3 vector)

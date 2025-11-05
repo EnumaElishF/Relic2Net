@@ -1,14 +1,20 @@
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
-//公共 
-public abstract partial class CharacterControllerBase<V,C,S> : NetworkBehaviour where V : CharacterViewBase where C : ICharacterClientController where S : ICharacterServerController
+public abstract partial class CharacterControllerBase: NetworkBehaviour
 {
-    [SerializeField] protected V view; //Player_View,我们做泛型定义为V吧, 把View通过面板去序列化吧
-    public V View { get => view; }
+    //把功能都抽到非抽象类，然后做基类去作为属性，再在下面的泛型里，把抽象的属性进行实现
 
+#if !UNITY_SERVER || UNITY_EDITOR
+    public abstract ICharacterClientController ClientController { get; }
+#endif
+#if UNITY_SERVER || UNITY_EDITOR
+    public abstract ICharacterServerController ServerController { get; set; }
+#endif
     public List<SkillConfig> skillConfigList = new List<SkillConfig>();
     public NetVariable<float> currentHp = new NetVariable<float>();
+    public abstract CharacterViewBase CharacterView { get; }
+
 
     public override void OnNetworkSpawn()
     {
@@ -16,17 +22,17 @@ public abstract partial class CharacterControllerBase<V,C,S> : NetworkBehaviour 
         if (IsClient)
         {
 #if !UNITY_SERVER || UNITY_EDITOR
-            clientController.OnNetworkSpawn();
+            ClientController.OnNetworkSpawn();
 #endif
         }
         else
         {
 #if UNITY_SERVER || UNITY_EDITOR
-            if (serverController == null)
+            if (ServerController == null)
             {
                 Debug.Log("serverController空");
             }
-            serverController.OnNetworkSpawn();
+            ServerController.OnNetworkSpawn();
 #endif
         }
     }
@@ -39,13 +45,13 @@ public abstract partial class CharacterControllerBase<V,C,S> : NetworkBehaviour 
         if (IsClient)
         {
 #if !UNITY_SERVER || UNITY_EDITOR
-            clientController.OnNetworkDespawn();
+            ClientController.OnNetworkDespawn();
 #endif
         }
         else
         {
 #if UNITY_SERVER || UNITY_EDITOR
-            serverController.OnNetworkDespawn();
+            ServerController.OnNetworkDespawn();
 #endif
         }
     }
@@ -56,24 +62,32 @@ public abstract partial class CharacterControllerBase<V,C,S> : NetworkBehaviour 
     public void StartSkillClientRpc(int skillIndex)
     {
 #if !UNITY_SERVER || UNITY_EDITOR
-        clientController.StartSkill(skillIndex);
+        ClientController.StartSkill(skillIndex);
 #endif
     }
     [ClientRpc]
     public void StartSkillHitClientRpc()
     {
 #if !UNITY_SERVER || UNITY_EDITOR
-        clientController.StartSkillHit();
+        ClientController.StartSkillHit();
 #endif
     }
     [ClientRpc]
     public void PlaySkillHitEffectClientRpc(Vector3 point)//特效命中点
     {
 #if !UNITY_SERVER || UNITY_EDITOR
-        clientController.PlaySkillHitEffect(point);
+        ClientController.PlaySkillHitEffect(point);
 #endif
     }
     #endregion
+}
+//公共 
+public abstract partial class CharacterControllerBase<V,C,S> : CharacterControllerBase where V : CharacterViewBase where C : ICharacterClientController where S : ICharacterServerController
+{
+    [SerializeField] protected V view; //Player_View,我们做泛型定义为V吧, 把View通过面板去序列化吧
+    public V View { get => view; }
+    public override CharacterViewBase CharacterView => view;
+
 
 }
 /// <summary>
@@ -84,6 +98,7 @@ public abstract partial class CharacterControllerBase<V, C, S>
 {
     //C 继承 IPlayerClientController接口
     protected C clientController;
+    public override ICharacterClientController ClientController => clientController;
     public void SetClientController(C clientController)
     {
         this.clientController = clientController;
@@ -99,6 +114,11 @@ public abstract partial class CharacterControllerBase<V, C, S>
 {
     //用protect的吧，毕竟他的子类需要去访问这个参数，所以这样做
     protected S serverController;
+    public override ICharacterServerController ServerController 
+    {
+        get => serverController;
+        set => serverController = (S)value;
+    }
     public void SetServerController(S serverController)
     {
         this.serverController = serverController;
