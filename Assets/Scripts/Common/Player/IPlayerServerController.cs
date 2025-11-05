@@ -1,8 +1,7 @@
 using UnityEngine;
-public interface IPlayerServerController
+public interface IPlayerServerController : ICharacterServerController
 {
-    public void OnNetworkSpawn();
-    public void OnNetworkDespawn();
+
     public void ReceiveMoveInput(Vector3 moveDir);
     public void ReceiveJumpInput();
     public void ReceiveAttackInput(bool value);

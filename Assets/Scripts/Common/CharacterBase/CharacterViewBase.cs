@@ -1,27 +1,10 @@
-using JKFrame;
+﻿using Sirenix.OdinInspector;
+using UnityEditor.Animations;
 using System;
 using UnityEngine;
 
-public class Player_View : MonoBehaviour
+public abstract class CharacterViewBase : SerializedMonoBehaviour
 {
-    [SerializeField] private Transform weaponRoot;
-    private GameObject currentWeapon;
-    private void OnDisable()
-    {
-        SetWeapon(null);
-    }
-    public void SetWeapon(GameObject weapon)
-    {
-        if (currentWeapon != null) currentWeapon.GameObjectPushPool();
-        if (weapon != null)
-        {
-            weapon.transform.parent = weaponRoot;
-            weapon.transform.localPosition = Vector3.zero;
-            weapon.transform.localEulerAngles = Vector3.zero;
-        }
-        currentWeapon = weapon;
-    }
-
     /// <summary>
     /// Player的动画根运动，RootMotion是需要传递给服务端的(比较重要),客户端倒是不需要
     /// ！网络同步场景，比如服务器需要基于根运动计算角色权威位置，再同步给客户端
@@ -68,6 +51,37 @@ public class Player_View : MonoBehaviour
     private void StopSkillHit()
     {
         stopSkillHitAction?.Invoke();
+    }
+    #endregion
+
+
+    #region Editor编辑器
+    //添加手动启动器，到PlayerController脚本
+    //完全通过代码取代，不使用Animator的话，容易跳帧。要想有自然的过渡，还是得用Animator的连线的机制功能。
+    [Button, ContextMenu(nameof(SetAnimatorSettings))]
+    public void SetAnimatorSettings()
+    {
+        //是可以强转过来的，因为他可以从继承关系上拿到，AnimatorController点进去看，可以知道是runtimeAnimatorController他的子类
+        AnimatorController animatorController = (AnimatorController)animator.runtimeAnimatorController;
+        animatorController.parameters = null;
+        //遍历Animator动画控制器里的所有的状态：并附上过渡
+        AnimatorStateMachine stateMachine = animatorController.layers[0].stateMachine;
+        stateMachine.anyStateTransitions = null;
+        foreach (ChildAnimatorState state in stateMachine.states)
+        {
+            string triggerName = state.state.name;
+            AnimatorControllerParameter parameter = new AnimatorControllerParameter
+            {
+                name = state.state.name,
+                type = AnimatorControllerParameterType.Trigger
+            };
+            animatorController.AddParameter(parameter);
+            //创建从 Any State 到每一个动画的连线，并附加上动画名称的过渡Trigger
+            AnimatorStateTransition transition = stateMachine.AddAnyStateTransition(state.state);
+            transition.AddCondition(AnimatorConditionMode.If, 0.0f, triggerName);
+        }
+        UnityEditor.EditorUtility.SetDirty(animatorController);
+        UnityEditor.AssetDatabase.SaveAssetIfDirty(animatorController);
     }
     #endregion
 }

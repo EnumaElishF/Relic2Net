@@ -31,8 +31,8 @@ public class NetMessageManager : SingletonMono<NetMessageManager>
 
     private void ReceiveMessage(ulong clientId, FastBufferReader reader)
     {
-        try
-        {
+        //try
+        //{
             //TODO 每次加入新消息类型-> 其实这里可以做成自动化的，例如：通过特性的方式，运行的时候就注册进来，这里是只有一次的反射？要是反射多了，那么考虑自动化
             reader.ReadValueSafe(out MessageType messageType);
             Debug.Log("收到网络信息:" + messageType);
@@ -123,11 +123,11 @@ public class NetMessageManager : SingletonMono<NetMessageManager>
                     TriggerMessageCallback(MessageType.C_S_CraftItem, clientId, C_S_CraftItem);
                     break;
             }
-        }
-        catch(Exception e)
-        {
-            Debug.Log("消息接收失败!"+e.Message);
-        }
+        //}
+        //catch(Exception e)
+        //{
+        //    Debug.Log("消息接收失败!"+e.Message);
+        //}
 
     }
     /// <summary>

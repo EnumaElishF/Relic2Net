@@ -8,7 +8,7 @@ public class PlayerJumpState : PlayerStateBase
         base.Enter();//可以不保留，因为Enter里没有多少逻辑，如果父方法Enter内含重要逻辑的话，还是base一下比较好
         serverController.inputData.jump = false;
         serverController.PlayAnimation("JumpStart");
-        serverController.mainController.view.rootMotionAction += OnRootMotion;
+        serverController.mainController.View.rootMotionAction += OnRootMotion;
     }
     public override void Update()
     {
@@ -21,7 +21,7 @@ public class PlayerJumpState : PlayerStateBase
 
     public override void Exit()
     {
-        serverController.mainController.view.rootMotionAction -= OnRootMotion;
+        serverController.mainController.View.rootMotionAction -= OnRootMotion;
     }
     /// <summary>
     /// OnRootMotion只考虑了y轴
@@ -37,8 +37,8 @@ public class PlayerJumpState : PlayerStateBase
         if (moveDir != Vector3.zero)
         {
             //旋转:往哪边按就往哪边转的，设计（也可以修改成别的设计）
-            mainController.view.transform.rotation = Quaternion.RotateTowards(mainController.view.transform.rotation, Quaternion.LookRotation(moveDir), Time.deltaTime * serverController.rotateSpeed);
-            Vector3 forward = Time.deltaTime * serverController.rootMotionMoveSpeedMultiply * mainController.view.transform.forward;
+            mainController.View.transform.rotation = Quaternion.RotateTowards(mainController.View.transform.rotation, Quaternion.LookRotation(moveDir), Time.deltaTime * serverController.rotateSpeed);
+            Vector3 forward = Time.deltaTime * serverController.rootMotionMoveSpeedMultiply * mainController.View.transform.forward;
             //应用玩家的输入情况，x和z轴的
             deltaPosition.x = forward.x;
             deltaPosition.z = forward.y;

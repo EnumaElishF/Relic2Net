@@ -1,92 +1,48 @@
 using JKFrame;
 using System;
-using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
 
-#if UNITY_EDITOR
-using UnityEditor.Animations;
-#endif
 
 /// <summary>
 /// 公共   : 公共的地方大部分都是做分支的，分成客户端，和 服务端  
 /// PlayerController做mainController在Common程序集下，去采用PlayerServerController的部分数值
 /// </summary>
-public partial class PlayerController : NetworkBehaviour
+public partial class PlayerController : CharacterControllerBase<PlayerView,IPlayerClientController,IPlayerServerController>
 {
     #region 静态成员 static
     private static Func<string, GameObject> getWeaponFunc;
-    public static void SetGetWeaponFunc(Func<string,GameObject> func)
+    public static void SetGetWeaponFunc(Func<string, GameObject> func)
     {
         getWeaponFunc = func;
         Debug.Log($"委托绑定：{func.Method.DeclaringType.Name}.{func.Method.Name}"); // 输出绑定的方法所在类
     }
-    #endregion
-    public List<SkillConfig> skillConfigList = new List<SkillConfig>();
-    #region  面板赋值 (理论上，下面这些值，包括移动速度旋转速度等，客户端都不需要知道，只要服务端知道就行) 服务端基于根运动移动
-
-    public Player_View view { get; private set; }
     #endregion
 
     //TODO: 下面按照使用到的，去定义网络变量
     public NetVariable<PlayerState> currentState = new NetVariable<PlayerState>(PlayerState.None);
     public NetVariable<FixedString32Bytes> usedWeaponName = new NetVariable<FixedString32Bytes>();
     public NetVariable<FixedString32Bytes> playerName = new NetVariable<FixedString32Bytes>();
-    public NetVariable<float> currentHp = new NetVariable<float>();
 
     //FixedString32Bytes作为对中文的值类型做存储，UTF-8 属于新的程序集，要加入对Common的新程序集的引用 Unity.Collections;
     //并且FixedString32Bytes作对比String有很多优势：序列化效率更高，gc开销低，跨平台性好。FixedString32Bytes是值类型，String引用类型。
-
     //多个玩家，所以Player没有单例
     //public NetworkVariable<float> moveSpeed;   //网络变量：值类型，或者是结构体
-
     public override void OnNetworkSpawn()
     {
+#if !UNITY_SERVER || UNITY_EDITOR
+        if (IsClient)
+        {
+            //初始化生成PlayerController，要优先于clientController调用之前
+            EventSystem.TypeEventTrigger(new SpawnPlayerEvent { newPlayer = this }); 
+        }
+#endif
         base.OnNetworkSpawn();
         usedWeaponName.OnValueChanged = OnUsedWeaponNameChanged;
-        if (view == null) // 意味着没有初始化过
-        {
-            //直接查玩家下的游戏对象Player_kazuma的脚本Player_View
-            view = transform.Find("Player_kazuma").GetComponent<Player_View>();
-        }
-        if (IsClient)
-        {
-#if !UNITY_SERVER || UNITY_EDITOR
-            EventSystem.TypeEventTrigger(new SpawnPlayerEvent { newPlayer = this }); //初始化生成PlayerController，要优先于clientController调用之前
-            clientController.OnNetworkSpawn();
-#endif
-        }
-        else
-        {
-#if UNITY_SERVER || UNITY_EDITOR
-            if (serverController == null)
-            {
-                Debug.Log("serverController空");
-            }
-            serverController.OnNetworkSpawn();
-#endif
-        }
         UpdateWeaponObject(usedWeaponName.Value.ToString());
     }
-    /// <summary>
-    /// 玩家下线，Despawn消除玩家
-    /// </summary>
-    public override void OnNetworkDespawn()
-    {
-        if (IsClient)
-        {
-#if !UNITY_SERVER || UNITY_EDITOR
-            clientController.OnNetworkDespawn();
-#endif
-        }
-        else
-        {
-#if UNITY_SERVER || UNITY_EDITOR
-            serverController.OnNetworkDespawn();
-#endif
-        }
-    }
+
     private void OnUsedWeaponNameChanged(FixedString32Bytes previousValue, FixedString32Bytes newValue)
     {
         UpdateWeaponObject(newValue.ToString());
@@ -103,7 +59,6 @@ public partial class PlayerController : NetworkBehaviour
         //当变更武器的时候就回调一下这个event
         onUpdateWeaponObjectAction?.Invoke(weaponGameObject);
     }
-
 
     #region ServerRPC
     //相当于调用 "服务端" 上自身的本体
@@ -134,43 +89,17 @@ public partial class PlayerController : NetworkBehaviour
     }
 
     #endregion
-    #region ClientRPC
-    //Client的PRC其实就是去完成接口IPlayerClientController里的几个函数
-    [ClientRpc]
-    public void StartSkillClientRpc(int skillIndex)
-    {
-#if !UNITY_SERVER || UNITY_EDITOR
-        clientController.StartSkill(skillIndex);
-#endif
-    }
-    [ClientRpc]
-    public void StartSkillHitClientRpc()
-    {
-#if !UNITY_SERVER || UNITY_EDITOR
-        clientController.StartSkillHit();
-#endif
-    }
-    [ClientRpc]
-    public void PlaySkillHitEffectClientRpc(Vector3 point)//特效命中点
-    {
-#if !UNITY_SERVER || UNITY_EDITOR
-        clientController.PlaySkillHitEffect(point);
-#endif
-    }
-    #endregion
+
 }
+
 
 /// <summary>
 /// 客户端
 /// </summary>
 #if !UNITY_SERVER || UNITY_EDITOR
-public partial class PlayerController : NetworkBehaviour
+public partial class PlayerController
 {
-    private IPlayerClientController clientController;
-    public void SetClientController(IPlayerClientController clientController)
-    {
-        this.clientController = clientController;
-    }
+
 }
 #endif
 
@@ -179,13 +108,8 @@ public partial class PlayerController : NetworkBehaviour
 /// 服务端
 /// </summary>
 #if UNITY_SERVER || UNITY_EDITOR
-public partial class PlayerController : NetworkBehaviour,IStateMachineOwner
+public partial class PlayerController : IStateMachineOwner
 {
-    private IPlayerServerController serverController;
-    public void SetServerController (IPlayerServerController serverController)
-    {
-        this.serverController = serverController;
-    }
     /// <summary>
     /// 更新武器网络变量
     /// </summary>
@@ -197,36 +121,3 @@ public partial class PlayerController : NetworkBehaviour,IStateMachineOwner
 }
 #endif
 
-//编辑器部分
-#if UNITY_EDITOR
-public partial class PlayerController : NetworkBehaviour
-{
-    //添加手动启动器，到PlayerController脚本
-    //完全通过代码取代，不使用Animator的话，容易跳帧。要想有自然的过渡，还是得用Animator的连线的机制功能。
-    [ContextMenu(nameof(SetAnimatorSettings))]
-    public void SetAnimatorSettings()
-    {
-        //是可以强转过来的，因为他可以从继承关系上拿到，AnimatorController点进去看，可以知道是runtimeAnimatorController他的子类
-        AnimatorController animatorController = (AnimatorController)GetComponentInChildren<Animator>().runtimeAnimatorController;
-        animatorController.parameters = null;
-        //遍历Animator动画控制器里的所有的状态：并附上过渡
-        AnimatorStateMachine stateMachine = animatorController.layers[0].stateMachine;
-        stateMachine.anyStateTransitions = null;
-        foreach (ChildAnimatorState state in stateMachine.states)
-        {
-            string triggerName = state.state.name;
-            AnimatorControllerParameter parameter = new AnimatorControllerParameter
-            {
-                name = state.state.name,
-                type = AnimatorControllerParameterType.Trigger
-            };
-            animatorController.AddParameter(parameter);
-            //创建从 Any State 到每一个动画的连线，并附加上动画名称的过渡Trigger
-            AnimatorStateTransition transition = stateMachine.AddAnyStateTransition(state.state);
-            transition.AddCondition(AnimatorConditionMode.If, 0.0f, triggerName);
-        }
-        UnityEditor.EditorUtility.SetDirty(animatorController);
-        UnityEditor.AssetDatabase.SaveAssetIfDirty(animatorController);
-    }
-}
-#endif

@@ -5,7 +5,7 @@ public class PlayerMoveState : PlayerStateBase
     public override void Enter()
     {
         serverController.PlayAnimation("Move");
-        serverController.mainController.view.rootMotionAction += OnRootMotion;
+        serverController.mainController.View.rootMotionAction += OnRootMotion;
     }
 
 
@@ -27,11 +27,11 @@ public class PlayerMoveState : PlayerStateBase
             return;
         }
         //旋转
-        mainController.view.transform.rotation = Quaternion.RotateTowards(mainController.view.transform.rotation, Quaternion.LookRotation(serverController.inputData.moveDir), Time.deltaTime * serverController.rotateSpeed);
+        mainController.View.transform.rotation = Quaternion.RotateTowards(mainController.View.transform.rotation, Quaternion.LookRotation(serverController.inputData.moveDir), Time.deltaTime * serverController.rotateSpeed);
     }
     public override void Exit()
     {
-        serverController.mainController.view.rootMotionAction -= OnRootMotion;
+        serverController.mainController.View.rootMotionAction -= OnRootMotion;
     }
     /// <summary>
     /// 必须检查动画Clip 是否启用了Root Motion，需要单独修改移动动画，否则出问题

@@ -32,7 +32,7 @@ public class PlayerAirDownState: PlayerStateBase
             Vector3 deltaPosition = new Vector3(inputDir.x * serverController.airMoveSpeed, serverController.gravity, inputDir.z);
             if (inputDir != Vector3.zero)
             {
-                mainController.view.transform.rotation = Quaternion.RotateTowards(mainController.view.transform.rotation, Quaternion.LookRotation(inputDir), Time.deltaTime * serverController.rotateSpeed);
+                mainController.View.transform.rotation = Quaternion.RotateTowards(mainController.View.transform.rotation, Quaternion.LookRotation(inputDir), Time.deltaTime * serverController.rotateSpeed);
             }
             serverController.characterController.Move(deltaPosition * Time.deltaTime);
             if (serverController.characterController.isGrounded)

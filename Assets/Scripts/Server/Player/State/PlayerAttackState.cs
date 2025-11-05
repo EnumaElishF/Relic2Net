@@ -11,7 +11,7 @@ public class PlayerAttackState : PlayerStateBase
     /// </summary>
     public override void Enter()
     {
-        Player_View view = mainController.view;
+        PlayerView view = mainController.View;
         view.startSkillHitAction += View_startSkillHitAction;
         view.stopSkillHitAction += View_stopSkillHitAction;
         view.rootMotionAction += OnRootMotion;
@@ -20,7 +20,7 @@ public class PlayerAttackState : PlayerStateBase
 
     public override void Exit()
     {
-        Player_View view = mainController.view;
+        PlayerView view = mainController.View;
         view.startSkillHitAction -= View_startSkillHitAction;
         view.stopSkillHitAction -= View_stopSkillHitAction;
         view.rootMotionAction -= OnRootMotion;
@@ -32,7 +32,7 @@ public class PlayerAttackState : PlayerStateBase
         {
             if(serverController.inputData.moveDir != Vector3.zero && normalizedTime < skillConfig.rotateNormalizedTime)
             {
-                mainController.view.transform.rotation = Quaternion.RotateTowards(mainController.view.transform.rotation, Quaternion.LookRotation(serverController.inputData.moveDir), Time.deltaTime * serverController.rotateSpeed);
+                mainController.View.transform.rotation = Quaternion.RotateTowards(mainController.View.transform.rotation, Quaternion.LookRotation(serverController.inputData.moveDir), Time.deltaTime * serverController.rotateSpeed);
             }
             if (normalizedTime >= skillConfig.switchNormalizedTime && serverController.inputData.attack)
             {

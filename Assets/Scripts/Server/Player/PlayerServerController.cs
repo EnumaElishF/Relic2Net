@@ -33,7 +33,7 @@ public class PlayerServerController : MonoBehaviour, IPlayerServerController,ISt
     {
         this.mainController = mainController;
         characterController = GetComponent<CharacterController>();
-        animator = transform.Find("Player_kazuma").GetComponent<Animator>();
+        animator = mainController.View.GetComponent<Animator>();
         networkAnimator = animator.GetComponent<NetworkAnimator>();
         stateMachine = new StateMachine();
         inputData = new InputData();
