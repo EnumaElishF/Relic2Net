@@ -15,6 +15,7 @@ public static class NetworkVariableSerializationBinder
     {
         //TODO 以后 如果要加新的State，那就在这里继续加入
         BindUserNetworkVariableSerialization<PlayerState>();
+        BindUserNetworkVariableSerialization<MonsterState>();
 
         //为 FixedString32Bytes 显式注册网络序列化逻辑，确保 AOT 环境下能正确处理。
         BindFixedString32BytesSerialization();
@@ -57,6 +58,10 @@ public static class NetworkVariableSerializationBinder
             duplicateValue = value;
         };
     }
+    /// <summary>
+    /// 序列化绑定
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public static void BindUserNetworkVariableSerialization<T>() where T : unmanaged, Enum
     {
         //写入

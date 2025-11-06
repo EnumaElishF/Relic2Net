@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class MonsterClientController : CharacterClientControllerBase<MonsterController>, IMonsterClientController
 {
+    public override void FirstInit(MonsterController mainController)
+    {
+        base.FirstInit(mainController);
+    }
     public override void Init()
     {
         

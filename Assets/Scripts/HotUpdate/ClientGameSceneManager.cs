@@ -7,6 +7,7 @@ public class ClientGameSceneManager : MonoBehaviour
     void Start()
     {
         ClientMapManager.Instance.Init();//先初始化地图更合理一些
+        MonsterClientManager.Instance.Init();
         PlayerManager.Instance.Init();
         StartCoroutine(LoadGame());
     }
