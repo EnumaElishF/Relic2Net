@@ -6,7 +6,7 @@ public abstract partial class CharacterControllerBase: NetworkBehaviour
     //把功能都抽到非抽象类，然后做基类去作为属性，再在下面的泛型里，把抽象的属性进行实现
 
 #if !UNITY_SERVER || UNITY_EDITOR
-    public abstract ICharacterClientController ClientController { get; }
+    public abstract ICharacterClientController ClientController { get; set; }
 #endif
 #if UNITY_SERVER || UNITY_EDITOR
     public abstract ICharacterServerController ServerController { get; set; }
@@ -98,7 +98,11 @@ public abstract partial class CharacterControllerBase<V, C, S>
 {
     //C 继承 IPlayerClientController接口
     protected C clientController;
-    public override ICharacterClientController ClientController => clientController;
+    public override ICharacterClientController ClientController
+    {
+        get => clientController;
+        set => clientController = (C)value;
+    }
     public void SetClientController(C clientController)
     {
         this.clientController = clientController;

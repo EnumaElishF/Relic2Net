@@ -28,7 +28,9 @@ public static class ServerResSystem
         GameObject instance = GameObject.Instantiate(prefab,position,Quaternion.identity,parent);
 
         //服务端的terrain如果要一口气把1600个terrain渲染下来，电脑负担很重，所以不建议开启这个，而且服务端也没有什么必要
-        instance.GetComponent<Terrain>().enabled = false;
+        //这个组件被关了的话，导航系统就不会去烘焙他了，所以我们还是去默认启用他。即使电脑有负担。
+        //instance.GetComponent<Terrain>().enabled = false;
+
         return instance;
     }
     public static T GetItemConfig<T>(string itemName) where T: ItemConfigBase

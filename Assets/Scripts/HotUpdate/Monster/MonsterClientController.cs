@@ -2,32 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MonsterClientController : MonoBehaviour,IMonsterClientController
+public class MonsterClientController : CharacterClientControllerBase<MonsterController>, IMonsterClientController
 {
-    public void OnNetworkDespawn()
+    public override void Init()
     {
         
     }
 
-    public void OnNetworkSpawn()
+    protected override void OnHpChanged(float previousValue, float newValue)
     {
         
     }
-
-    public void PlaySkillHitEffect(Vector3 point)
-    {
-        
-    }
-
-    public void StartSkill(int skillIndex)
-    {
-        
-    }
-
-    public void StartSkillHit()
-    {
-        
-    }
-
-
 }

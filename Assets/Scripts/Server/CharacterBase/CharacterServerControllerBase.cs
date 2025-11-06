@@ -8,7 +8,7 @@ public abstract class CharacterServerControllerBase<M> : MonoBehaviour, ICharact
     #region 通用部分，不论是怪还是玩家
     public Animator animator { get; protected set; }
     public NetworkAnimator networkAnimator { get; protected set; }
-    public M mainController { get; protected set; } //主控制器M，PlayerController
+    public M mainController { get; protected set; } //主控制器M，PlayerController+MonsterController
     public Vector2Int currentAOICoord { get; protected set; }
     public WeaponController weapon { get; protected set; }
     public string currentAnimation { get; protected set; }
@@ -29,19 +29,17 @@ public abstract class CharacterServerControllerBase<M> : MonoBehaviour, ICharact
     {
         currentAnimation = "Idle";
     }
+    public virtual void OnNetworkSpawn()
+    {
+        stateMachine.Init(this);
+        StartCoroutine(DoInitAOI());
+    }
     public virtual void OnNetworkDespawn()
     {
         //玩家销毁时，StateMachine要销毁
         stateMachine.Destroy();
         OnRemoveAOI();
     }
-
-    public virtual void OnNetworkSpawn()
-    {
-        stateMachine.Init(this);
-        StartCoroutine(DoInitAOI());
-    }
-
 
 
     #region AOI的网络部分

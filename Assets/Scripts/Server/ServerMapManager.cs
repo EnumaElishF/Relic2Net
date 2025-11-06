@@ -1,4 +1,5 @@
 using JKFrame;
+using Unity.AI.Navigation;
 using UnityEngine;
 /// <summary>
 /// 
@@ -8,6 +9,7 @@ public class ServerMapManager : SingletonMono<ServerMapManager>
     //ServerMapManager在制作基本的配置参数上，要和ClientMapManager统一比较好
 
     [SerializeField] private MapConfig mapConfig;
+    [SerializeField] private NavMeshSurface navMeshSurface;
 
     //优化服务的加载全部地形，过滤掉周围一部分来提高测试速度
     [SerializeField] private int  testRange = 36; //过滤掉最外围几圈的地图块
@@ -34,6 +36,8 @@ public class ServerMapManager : SingletonMono<ServerMapManager>
 
             }
         }
+        //完成上面的实例化所有地图以后
+        navMeshSurface.BuildNavMesh();
     }
 
 

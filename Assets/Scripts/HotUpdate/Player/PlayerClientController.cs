@@ -1,7 +1,7 @@
 using JKFrame;
 using UnityEngine;
 
-public class PlayerClientController : MonoBehaviour,IPlayerClientController
+public class PlayerClientController : CharacterClientControllerBase<PlayerController>,IPlayerClientController
 {
     public Transform cameraLookatTarget { get; private set; }
     public Transform cameraFollowTarget { get; private set; }
@@ -9,15 +9,15 @@ public class PlayerClientController : MonoBehaviour,IPlayerClientController
     /// <summary>
     /// 本地玩家，主玩家控制器
     /// </summary>
-    public PlayerController mainController { get; private set; }
     private PlayerFloatInfo floatInfo;
     public bool canControl; //玩家是否可以控制
     private PlayerClientConfig clientConfig;
-    private SkillConfig currentSkillConfig;
-    public void FirstInit(PlayerController newPlayer) //第一次被添加组件调用
+
+
+    public override void FirstInit(PlayerController newPlayer) //第一次被添加组件调用
     {
-        this.mainController = newPlayer;
-        newPlayer.SetClientController(this);
+        base.FirstInit(newPlayer);
+        //下面是玩家客户端专享：
         //直接查游戏对象CameraLookat来赋值
         cameraLookatTarget = transform.Find("CameraLookat");
         cameraFollowTarget = transform.Find("CameraFollow");
@@ -26,7 +26,7 @@ public class PlayerClientController : MonoBehaviour,IPlayerClientController
         mainController.View.footStepAction += View_footStepAction;
     }
 
-    public void Init()
+    public override void Init()
     {
         if (mainController.IsOwner) //本地玩家看不到自己的名字
         {
@@ -40,14 +40,18 @@ public class PlayerClientController : MonoBehaviour,IPlayerClientController
         //客户端生成角色后自己手动更新一些血量显示
         OnHpChanged(0, mainController.currentHp.Value);
     }
-
-    #region 网络相关 ：生成和销毁
-    public void OnNetworkSpawn()
+    /// <summary>
+    /// 脚步声
+    /// </summary>
+    private void View_footStepAction()
     {
-        mainController.currentHp.OnValueChanged = OnHpChanged;
+        AudioClip audioClip = clientConfig.footStepAudios[Random.Range(0, clientConfig.footStepAudios.Length)];
+        AudioSystem.PlayOneShot(audioClip, transform.position);
     }
 
-    private void OnHpChanged(float previousValue, float newValue)
+    #region 网络相关 ：生成和销毁
+
+    protected override void OnHpChanged(float previousValue, float newValue)
     {
         float fillAmount = newValue / clientConfig.maxHp;
         if (mainController.IsOwner) //设置IsOwner识别本地玩家，以做区分，本地玩家在左上角展示血条，那么其他玩家是头顶展示的。
@@ -62,11 +66,8 @@ public class PlayerClientController : MonoBehaviour,IPlayerClientController
 
     }
 
-    public void OnNetworkDespawn()
-    {
-        
-    }
     #endregion
+
 
     #region 检测输入  
     //最后输入
@@ -158,61 +159,5 @@ public class PlayerClientController : MonoBehaviour,IPlayerClientController
     }
     #endregion
 
-    #region 战斗
-    public void StartSkill(int skillIndex)
-    {
-        currentSkillConfig = mainController.skillConfigList[skillIndex];
-        PlaySkillEffect(currentSkillConfig.releaseEffect);
-    }
-    public void StartSkillHit()
-    {
-        PlaySkillEffect(currentSkillConfig.startHitEffect);
-    }
-    private void PlaySkillEffect(SkillEffect skillEffect)
-    {
-        if (skillEffect == null) return;
-        if (skillEffect.audio != null)
-        {
-            AudioSystem.PlayOneShot(skillEffect.audio, transform.position);
-        }
-        if (skillEffect.prefab != null)
-        {
-            GameObject effectObj = GlobalUtility.GetOrInstantiate(skillEffect.prefab, null);
-            //效果的坐标，他是要考虑坐标在套入角色内，以及单独拿出外，坐标是会变换的，毕竟父级不一样
-            //效果的坐标，这里函数存的是对于在角色上是0,0,0的坐标，拉出来，无父级的时候是什么坐标。这样一个一直相对变化值
-            //将「角色本地坐标系的偏移量」转换为「世界坐标系的绝对位置」，让效果贴合角色指定位置
-            effectObj.transform.position = mainController.View.transform.TransformPoint(skillEffect.offset);
-            //效果的旋转，道理和上面类似，但是容易一些，我们用四元数相乘的逻辑，做角度叠加。 相对偏移角度skillEffect.rotation
-            //将「角色的基础旋转」与「效果的相对旋转」叠加，让效果朝向符合预期（如技能发射方向、特效朝向）
-            effectObj.transform.rotation = mainController.View.transform.rotation * Quaternion.Euler(skillEffect.rotation);
-            //因为角色模型不会变大变小，所以效果的相对缩放这个方面倒不用考虑其他计算，直接用设定就行
-            effectObj.transform.localScale = skillEffect.scale;
-        }
-    }
-    /// <summary>
-    /// 脚步声
-    /// </summary>
-    private void View_footStepAction()
-    {
-        AudioClip audioClip = clientConfig.footStepAudios[Random.Range(0, clientConfig.footStepAudios.Length)];
-        AudioSystem.PlayOneShot(audioClip, transform.position);
-    }
-
-    public void PlaySkillHitEffect(Vector3 point)
-    {
-        SkillEffect skillEffect = currentSkillConfig.hitEffect;
-        if (skillEffect == null) return;
-        if (skillEffect.audio != null)
-        {
-            AudioSystem.PlayOneShot(skillEffect.audio, transform.position);
-        }
-        if (skillEffect.prefab != null)
-        {
-            GameObject effectObj = GlobalUtility.GetOrInstantiate(skillEffect.prefab, null);
-            effectObj.transform.position = point;
-            effectObj.transform.localScale = skillEffect.scale;
-        }
-    }
-    #endregion
 
 }
