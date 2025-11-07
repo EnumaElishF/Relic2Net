@@ -6,9 +6,6 @@ public class PlayerClientController : CharacterClientControllerBase<PlayerContro
     public Transform cameraLookatTarget { get; private set; }
     public Transform cameraFollowTarget { get; private set; }
     public Transform floatInfoPoint { get; private set; }
-    /// <summary>
-    /// 本地玩家，主玩家控制器
-    /// </summary>
     private PlayerFloatInfo floatInfo;
     public bool canControl; //玩家是否可以控制
     private PlayerClientConfig clientConfig;
