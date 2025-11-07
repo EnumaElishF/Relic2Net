@@ -2,6 +2,7 @@ using JKFrame;
 
 public class MonsterController : CharacterControllerBase<MonsterView, IMonsterClientController, IMonsterServerController>
 {
+    public MonsterConfig monsterConfig;
     public NetVariable<MonsterState> currentState = new NetVariable<MonsterState>(MonsterState.None);
     public override void OnNetworkSpawn()
     {

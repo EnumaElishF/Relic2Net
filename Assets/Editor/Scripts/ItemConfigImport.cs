@@ -85,6 +85,7 @@ public static class ItemConfigImport
                         SetConfigCommon(itemConfig, chineseName, englishName, chineseDescription, englishDescription, iconPath, slotPrefabPath, price,itemCraftConfig);
                         itemConfig.defaultCountInShop = defaultCountOnShop;
 
+                        // 保存更新（覆盖文件内容）
                         EditorUtility.SetDirty(itemConfig);
                         if (isCreate) AssetDatabase.CreateAsset(itemConfig, configPath);
                         else AssetDatabase.SaveAssetIfDirty(itemConfig);
