@@ -1203,6 +1203,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillConfigList: []
   view: {fileID: 6345092499905850298}
+  monsterConfig: {fileID: 11400000, guid: cfd62e7d6d8179e4baf89b08b8ee0d34, type: 2}
 --- !u!195 &-4236089904304933950
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1210,7 +1211,7 @@ NavMeshAgent:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8653027813448077421}
-  m_Enabled: 1
+  m_Enabled: 0
   m_AgentTypeID: 0
   m_Radius: 0.5
   m_Speed: 3.5

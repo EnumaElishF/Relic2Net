@@ -10,6 +10,8 @@ public class ServerMapManager : SingletonMono<ServerMapManager>
 
     [SerializeField] private MapConfig mapConfig;
     [SerializeField] private NavMeshSurface navMeshSurface;
+    private MonsterSpawner[] monsterSpawners; //刷怪点数组
+
 
     //优化服务的加载全部地形，过滤掉周围一部分来提高测试速度
     [SerializeField] private int  testRange = 36; //过滤掉最外围几圈的地图块
@@ -38,6 +40,11 @@ public class ServerMapManager : SingletonMono<ServerMapManager>
         }
         //完成上面的实例化所有地图以后
         navMeshSurface.BuildNavMesh();
+        monsterSpawners = GetComponentsInChildren<MonsterSpawner>();
+        for(int i = 0;i< monsterSpawners.Length; i++)
+        {
+            monsterSpawners[i].Init();
+        }
     }
 
 

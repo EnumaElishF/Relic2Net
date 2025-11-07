@@ -5,6 +5,7 @@ public class MonsterStateBase : StateBase
 {
     protected MonsterServerController serverController;
     public MonsterController mainController { get => serverController.mainController; }
+    public MonsterConfig config { get => mainController.monsterConfig; }
     public override void Init(IStateMachineOwner owner)
     {
         base.Init(owner);

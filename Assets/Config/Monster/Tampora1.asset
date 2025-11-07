@@ -72,6 +72,7 @@ MonoBehaviour:
       Entry: 8
       Data: 
   maxHP: 120
+  pursueRange: 4
   attackValue: 10
   maxIdleTime: 8
   maxPatrolTime: 6

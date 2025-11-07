@@ -6,8 +6,9 @@ using UnityEngine;
 public class MonsterConfig : ConfigBase
 {
     public Dictionary<LanguageType, string> nameDic;
-    public float maxHP;
-    public float attackValue;
-    public float maxIdleTime;
-    public float maxPatrolTime;
+    public float maxHP;//最大生命值
+    public float pursueRange;//追击距离
+    public float attackValue;//攻击力
+    public float maxIdleTime;//最大待机时间
+    public float maxPatrolTime;//最大巡逻时间
 }
