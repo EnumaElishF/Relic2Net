@@ -16,5 +16,12 @@ public class MonsterIdleState : MonsterStateBase
         {
             serverController.ChangeState(MonsterState.Patrol);
         }
+        //搜索玩家
+        PlayerServerController player = serverController.SearchPlayer();
+        if (player != null)
+        {
+            serverController.ChangeState(MonsterState.Pursuit);
+            ((MonsterPursuitState)stateMachine.currStateObj).SetTarget(player);
+        }
     }
 }

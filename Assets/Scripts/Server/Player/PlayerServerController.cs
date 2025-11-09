@@ -19,10 +19,9 @@ public class PlayerServerController : CharacterServerControllerBase<PlayerContro
     public CharacterController characterController { get; private set; }
     #endregion
 
-
-
     public InputData inputData { get; private set; }
     public WeaponConfig weaponConfig { get; private set; }
+    public bool Living => gameObject.activeInHierarchy && mainController.currentHp.Value > 0;
 
     public override void FirstInit(PlayerController mainController)
     {

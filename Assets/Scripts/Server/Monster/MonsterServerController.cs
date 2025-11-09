@@ -6,6 +6,7 @@ public class MonsterServerController : CharacterServerControllerBase<MonsterCont
 {
     public NavMeshAgent navMeshAgent { get; private set; }
     public MonsterSpawner monsterSpawner { get; private set; } //刷怪点
+    public MonsterConfig monsterConfig { get => mainController.monsterConfig; }
     public override void FirstInit(MonsterController mainController)
     {
         base.FirstInit(mainController);
@@ -14,6 +15,7 @@ public class MonsterServerController : CharacterServerControllerBase<MonsterCont
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
+        mainController.currentHp.Value = monsterConfig.maxHP;
         ChangeState(MonsterState.Idle);
     }
     public void SetMonsterSpawner(MonsterSpawner monsterSpawner)
@@ -30,6 +32,9 @@ public class MonsterServerController : CharacterServerControllerBase<MonsterCont
                 break;
             case MonsterState.Patrol:
                 stateMachine.ChangeState<MonsterPatrolState>();
+                break;
+            case MonsterState.Pursuit:
+                stateMachine.ChangeState<MonsterPursuitState>();
                 break;
         }
     }
@@ -66,4 +71,26 @@ public class MonsterServerController : CharacterServerControllerBase<MonsterCont
     }
     #endregion
 
+    #region 搜索玩家
+    private float lastSearchPlayerTime; //不要每帧都搜索，我们做半秒搜索一次的时间，这样比较好
+    private Collider[] hitCollider = new Collider[1]; // 索敌目标，目前暂时做一个索敌就行
+    private const float searchPlayerInterval = 0.5f;
+    public PlayerServerController SearchPlayer(bool checkTime = true)
+    {
+        if (checkTime)
+        {
+            if(Time.time - lastSearchPlayerTime < 0.5f)
+            {
+                return null;
+            }
+            lastSearchPlayerTime = Time.time;
+        }
+        int count = Physics.OverlapSphereNonAlloc(transform.position + new Vector3(0, 1, 0), monsterConfig.searchPlayerRange, hitCollider,ServerGlobal.Instance.PlayerLayerMask);
+        if(count != 0)
+        {
+            return hitCollider[0].GetComponentInParent<PlayerServerController>();
+        }
+        return null;
+    }
+    #endregion
 }

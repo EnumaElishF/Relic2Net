@@ -2,5 +2,6 @@
 {
     None,
     Idle,
-    Patrol
+    Patrol,
+    Pursuit
 }

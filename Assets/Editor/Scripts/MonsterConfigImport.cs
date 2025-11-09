@@ -33,10 +33,12 @@ public static class MonsterConfigImport
                     { LanguageType.English,worksheet.Cells[x,3].Text.Trim()},
                 };
                 monsterConfig.maxHP = float.Parse(worksheet.Cells[x, 4].Text.Trim());
-                monsterConfig.pursueRange = float.Parse(worksheet.Cells[x, 5].Text.Trim());
-                monsterConfig.attackValue = float.Parse(worksheet.Cells[x, 6].Text.Trim());
-                monsterConfig.maxIdleTime = float.Parse(worksheet.Cells[x, 7].Text.Trim());
-                monsterConfig.maxPatrolTime = float.Parse(worksheet.Cells[x, 8].Text.Trim());
+                monsterConfig.attackValue = float.Parse(worksheet.Cells[x, 5].Text.Trim());
+                monsterConfig.maxIdleTime = float.Parse(worksheet.Cells[x, 6].Text.Trim());
+                monsterConfig.maxPatrolTime = float.Parse(worksheet.Cells[x, 7].Text.Trim());
+                monsterConfig.searchPlayerRange = float.Parse(worksheet.Cells[x, 8].Text.Trim());
+                monsterConfig.pursuitTime = float.Parse(worksheet.Cells[x, 9].Text.Trim());
+
 
                 // 保存更新（覆盖文件内容）
                 EditorUtility.SetDirty(monsterConfig); //Dirty重保存一下
