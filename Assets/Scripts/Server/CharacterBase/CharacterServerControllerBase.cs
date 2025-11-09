@@ -11,7 +11,6 @@ public abstract class CharacterServerControllerBase<M> : MonoBehaviour, ICharact
     public M mainController { get; protected set; } //主控制器M，PlayerController+MonsterController
     public Vector2Int currentAOICoord { get; protected set; }
     public WeaponController weapon { get; protected set; }
-    public string currentAnimation { get; protected set; }
 
     protected StateMachine stateMachine; //框架的类，玩家使用的状态机
     #endregion
@@ -74,6 +73,9 @@ public abstract class CharacterServerControllerBase<M> : MonoBehaviour, ICharact
     protected abstract void OnUpdateAOI(Vector2Int newCoord);
     #endregion
 
+    #region 动画
+    public string currentAnimation { get; protected set; }
+
     /// <summary>
     /// 采用自己管理的方式，状态切换的代码，控制动作状态改变。不使用常规的状态机的SetBool动作切换
     /// </summary>
@@ -84,4 +86,23 @@ public abstract class CharacterServerControllerBase<M> : MonoBehaviour, ICharact
         currentAnimation = animationName;
         networkAnimator.SetTrigger(animationName);
     }
+
+    /// <summary>
+    /// 解决动作已经进入下一个动画，但是还处于上一个动画的最后结束帧的事件
+    /// </summary>
+    public bool CheckAnimationState(string stateName, out float normalizedTime)
+    {
+        //优先判断下一个动作状态
+        AnimatorStateInfo nextInfo = animator.GetNextAnimatorStateInfo(0);
+        if (nextInfo.IsName(stateName))
+        {
+            normalizedTime = nextInfo.normalizedTime;
+            return true;
+        }
+        AnimatorStateInfo currentInfo = animator.GetCurrentAnimatorStateInfo(0);
+        normalizedTime = currentInfo.normalizedTime;
+        return currentInfo.IsName(stateName);
+    }
+    #endregion
+
 }

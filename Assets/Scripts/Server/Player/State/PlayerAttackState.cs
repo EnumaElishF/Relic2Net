@@ -28,7 +28,7 @@ public class PlayerAttackState : PlayerStateBase
     }
     public override void Update()
     {
-        if(CheckAnimationState(skillConfig.animationName,out float normalizedTime))
+        if(serverController.CheckAnimationState(skillConfig.animationName,out float normalizedTime))
         {
             if(serverController.inputData.moveDir != Vector3.zero && normalizedTime < skillConfig.rotateNormalizedTime)
             {
@@ -85,7 +85,8 @@ public class PlayerAttackState : PlayerStateBase
         {
             attackValue = skillConfig.attackValueMultiple * serverController.weaponConfig.attackValue,//技能攻击力系数*武器攻击力
             repelDistance = skillConfig.repelDistance,
-            repelTime = skillConfig.repelTime
+            repelTime = skillConfig.repelTime,
+            sourcePosition = serverController.transform.position
         };
         //通知客户端播放效果
         mainController.PlaySkillHitEffectClientRpc(point);

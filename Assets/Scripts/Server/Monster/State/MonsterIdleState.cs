@@ -20,8 +20,8 @@ public class MonsterIdleState : MonsterStateBase
         PlayerServerController player = serverController.SearchPlayer();
         if (player != null)
         {
+            serverController.SetTargetPlayer(player);
             serverController.ChangeState(MonsterState.Pursuit);
-            ((MonsterPursuitState)stateMachine.currStateObj).SetTarget(player);
         }
     }
 }

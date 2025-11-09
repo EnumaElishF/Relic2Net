@@ -3,7 +3,6 @@
 public class MonsterPursuitState : MonsterStateBase
 {
     private float timer;//计时器
-    private PlayerServerController targetPlayer;
     public override void Enter()
     {
         serverController.PlayAnimation("Move");
@@ -18,28 +17,20 @@ public class MonsterPursuitState : MonsterStateBase
             serverController.ChangeState(MonsterState.Patrol);
             return;
         }
-        if (targetPlayer != null)
+        if (serverController.CheckTargetPlayer())
         {
-            if (targetPlayer.Living)
-            {
-                serverController.navMeshAgent.SetDestination(targetPlayer.transform.position);
-                return;
-            }
-            else targetPlayer = null;
+            serverController.navMeshAgent.SetDestination(serverController.targetPlayer.transform.position);
+
         }
-        if(targetPlayer == null)
+        else
         {
             serverController.ChangeState(MonsterState.Patrol);
         }
-
     }
+
     public override void Exit()
     {
         serverController.StopMove();
-        targetPlayer = null;
     }
-    public  void SetTarget(PlayerServerController player)
-    {
-        this.targetPlayer = player;
-    }
+
 }

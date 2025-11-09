@@ -2,15 +2,17 @@ using JKFrame;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class MonsterServerController : CharacterServerControllerBase<MonsterController>,IMonsterServerController,IStateMachineOwner
+public class MonsterServerController : CharacterServerControllerBase<MonsterController>,IMonsterServerController,IStateMachineOwner,IHitTarget
 {
     public NavMeshAgent navMeshAgent { get; private set; }
+    public CharacterController characterController { get; private set; }
     public MonsterSpawner monsterSpawner { get; private set; } //刷怪点
     public MonsterConfig monsterConfig { get => mainController.monsterConfig; }
     public override void FirstInit(MonsterController mainController)
     {
         base.FirstInit(mainController);
         navMeshAgent = GetComponent<NavMeshAgent>();
+        characterController = GetComponent<CharacterController>();
     }
     public override void OnNetworkSpawn()
     {
@@ -35,6 +37,9 @@ public class MonsterServerController : CharacterServerControllerBase<MonsterCont
                 break;
             case MonsterState.Pursuit:
                 stateMachine.ChangeState<MonsterPursuitState>();
+                break;
+            case MonsterState.Damage:
+                stateMachine.ChangeState<MonsterDamageState>();
                 break;
         }
     }
@@ -75,6 +80,7 @@ public class MonsterServerController : CharacterServerControllerBase<MonsterCont
     private float lastSearchPlayerTime; //不要每帧都搜索，我们做半秒搜索一次的时间，这样比较好
     private Collider[] hitCollider = new Collider[1]; // 索敌目标，目前暂时做一个索敌就行
     private const float searchPlayerInterval = 0.5f;
+
     public PlayerServerController SearchPlayer(bool checkTime = true)
     {
         if (checkTime)
@@ -91,6 +97,43 @@ public class MonsterServerController : CharacterServerControllerBase<MonsterCont
             return hitCollider[0].GetComponentInParent<PlayerServerController>();
         }
         return null;
+    }
+
+
+    #endregion
+    #region 战斗
+    public PlayerServerController targetPlayer { get; private set; }
+    public void SetTargetPlayer(PlayerServerController targetPlayer)
+    {
+        this.targetPlayer = targetPlayer;
+    }
+    /// <summary>
+    /// 检查目标玩家是否存活
+    /// </summary>
+    /// <returns></returns>
+    public bool CheckTargetPlayer()
+    {
+        if (targetPlayer != null)
+        {
+            if (targetPlayer.Living)
+            {
+                return true;
+            }
+            else SetTargetPlayer(null);
+        }
+        return false;
+    }
+
+    public void BeHit(AttackData attackData)
+    {
+        //结算基本的伤害数值
+        if (mainController.currentHp.Value <= 0) return;
+        float hp = mainController.currentHp.Value;
+        hp -= attackData.attackValue;
+        if (hp < 0) hp = 0;
+        mainController.currentHp.Value = hp;
+        ChangeState(MonsterState.Damage);
+        ((MonsterDamageState)stateMachine.currStateObj).SetAttackData(attackData);
     }
     #endregion
 }

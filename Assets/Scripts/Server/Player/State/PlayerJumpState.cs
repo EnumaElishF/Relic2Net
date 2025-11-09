@@ -12,7 +12,7 @@ public class PlayerJumpState : PlayerStateBase
     }
     public override void Update()
     {
-        if(CheckAnimationState("JumpStart",out float time) && time >= 0.95f)
+        if(serverController.CheckAnimationState("JumpStart",out float time) && time >= 0.95f)
         {
             serverController.ChangeState(PlayerState.AirDown);
 

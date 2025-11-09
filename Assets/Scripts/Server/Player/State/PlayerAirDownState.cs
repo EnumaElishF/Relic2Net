@@ -20,7 +20,7 @@ public class PlayerAirDownState: PlayerStateBase
             }
             else
             {
-                if(CheckAnimationState("JumpEnd",out float time) && time >= 0.95f)
+                if(serverController.CheckAnimationState("JumpEnd",out float time) && time >= 0.95f)
                 {
                     serverController.ChangeState(PlayerState.Idle);
                 }

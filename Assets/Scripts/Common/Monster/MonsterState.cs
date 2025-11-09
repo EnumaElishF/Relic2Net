@@ -3,5 +3,6 @@
     None,
     Idle,
     Patrol,
-    Pursuit
+    Pursuit,
+    Damage,
 }
