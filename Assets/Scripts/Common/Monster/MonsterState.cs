@@ -5,4 +5,5 @@
     Patrol,
     Pursuit,
     Damage,
+    Attack,
 }

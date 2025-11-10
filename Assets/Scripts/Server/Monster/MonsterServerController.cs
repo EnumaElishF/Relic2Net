@@ -1,10 +1,12 @@
 using JKFrame;
+using System;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class MonsterServerController : CharacterServerControllerBase<MonsterController>,IMonsterServerController,IStateMachineOwner,IHitTarget
 {
     public const float recoverHPRate = 0.2f;
+    public const float attackRotateSpeed = 1000f;//攻击旋转方向的速度
     public NavMeshAgent navMeshAgent { get; private set; }
     public CharacterController characterController { get; private set; }
     public MonsterSpawner monsterSpawner { get; private set; } //刷怪点
@@ -14,6 +16,8 @@ public class MonsterServerController : CharacterServerControllerBase<MonsterCont
         base.FirstInit(mainController);
         navMeshAgent = GetComponent<NavMeshAgent>();
         characterController = GetComponent<CharacterController>();
+        weapon = GetComponentInChildren<WeaponController>();
+        weapon.Init("MonsterWeapon",OnHit);
     }
     public override void OnNetworkSpawn()
     {
@@ -25,6 +29,10 @@ public class MonsterServerController : CharacterServerControllerBase<MonsterCont
     {
         this.monsterSpawner = monsterSpawner;
     }
+    /// <summary>
+    /// 每次新加动作的状态的跳转
+    /// </summary>
+    /// <param name="newState"></param>
     public void ChangeState(MonsterState newState)
     {
         mainController.currentState.Value = newState;
@@ -41,6 +49,9 @@ public class MonsterServerController : CharacterServerControllerBase<MonsterCont
                 break;
             case MonsterState.Damage:
                 stateMachine.ChangeState<MonsterDamageState>();
+                break;
+            case MonsterState.Attack:
+                stateMachine.ChangeState<MonsterAttackState>();
                 break;
         }
     }
@@ -147,6 +158,25 @@ public class MonsterServerController : CharacterServerControllerBase<MonsterCont
             hp += monsterConfig.maxHP * recoverHPRate * Time.deltaTime;
             mainController.currentHp.Value = hp;
         }
+    }
+    private float lastAttackTime;
+    internal SkillConfig skillConfig;
+
+    /// <summary>
+    /// 是否满足时间大于攻击CD
+    /// </summary>
+    /// <returns></returns>
+    public bool CheckAttack()
+    {
+        return Time.time - lastAttackTime > monsterConfig.attackCD;
+    }
+    public void OnAttack()
+    {
+        lastAttackTime = Time.time;
+    }
+    private void OnHit(IHitTarget target, Vector3 vector)
+    {
+        ((MonsterAttackState)stateMachine.currStateObj).OnHit(target, vector);
     }
     #endregion
 }
