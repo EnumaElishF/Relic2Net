@@ -12,5 +12,7 @@ public class MonsterConfig : ConfigBase
     public float maxPatrolTime;//最大巡逻时间
     public float searchPlayerRange;//搜索玩家的范围
     public float pursuitTime;//追击的时间
-
+    public int audioGroupIndex; //音效组: 不同Monster选择不同的配置的音效组内的编号
+    public float attackRange;//攻击范围
+    public float attackCD;//攻击CD
 }

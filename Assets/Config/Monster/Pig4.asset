@@ -77,3 +77,6 @@ MonoBehaviour:
   maxPatrolTime: 10
   searchPlayerRange: 5
   pursuitTime: 5
+  audioGroupIndex: 0
+  attackRange: 1.5
+  attackCD: 2

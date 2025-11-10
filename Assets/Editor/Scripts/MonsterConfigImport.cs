@@ -38,7 +38,9 @@ public static class MonsterConfigImport
                 monsterConfig.maxPatrolTime = float.Parse(worksheet.Cells[x, 7].Text.Trim());
                 monsterConfig.searchPlayerRange = float.Parse(worksheet.Cells[x, 8].Text.Trim());
                 monsterConfig.pursuitTime = float.Parse(worksheet.Cells[x, 9].Text.Trim());
-
+                monsterConfig.audioGroupIndex = int.Parse(worksheet.Cells[x, 10].Text.Trim());//int类型
+                monsterConfig.attackRange = float.Parse(worksheet.Cells[x, 11].Text.Trim());
+                monsterConfig.attackCD = float.Parse(worksheet.Cells[x, 12].Text.Trim());
 
                 // 保存更新（覆盖文件内容）
                 EditorUtility.SetDirty(monsterConfig); //Dirty重保存一下

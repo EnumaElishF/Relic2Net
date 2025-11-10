@@ -22,6 +22,7 @@ public class MonsterPatrolState : MonsterStateBase
             serverController.ChangeState(MonsterState.Idle);
             return;
         }
+        serverController.RecoverHP();
         //搜索玩家
         PlayerServerController player = serverController.SearchPlayer();
         if (player != null)

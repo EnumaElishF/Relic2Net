@@ -1,0 +1,152 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0028d3b0a84a1724abbce752b5e1940d, type: 3}
+  m_Name: ClientGlobalConfig
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects:
+    - {fileID: 8300000, guid: b6bfc3bf19b30a04189875a684dc613e, type: 3}
+    - {fileID: 8300000, guid: 39457fecfedf3684a830ddd05159e4e5, type: 3}
+    - {fileID: 8300000, guid: 55bd8455245ad174d8097ac1c7820a62, type: 3}
+    - {fileID: 8300000, guid: 183a3ce4fb694634b9132e1d65526d34, type: 3}
+    - {fileID: 8300000, guid: 03b0146d1a121d24d8b4091d34ca3a45, type: 3}
+    - {fileID: 8300000, guid: 174baf0ab41fe89438a5ee511c083019, type: 3}
+    - {fileID: 8300000, guid: 3d497d95e42f5ee4fbabbf881f1bee58, type: 3}
+    - {fileID: 8300000, guid: 76e247c3fdc5d104badae8363bbdbd03, type: 3}
+    - {fileID: 8300000, guid: 9af6a32f226179340a90747566cae287, type: 3}
+    - {fileID: 8300000, guid: e899560bfbf37e44c9f83f798862413e, type: 3}
+    - {fileID: 8300000, guid: a4829ba267826f34e8d3a9aedb8a9282, type: 3}
+    - {fileID: 8300000, guid: f1717267054af7744ba825026c8bfddd, type: 3}
+    - {fileID: 8300000, guid: a7a61a7d15c06694687294b771f2a461, type: 3}
+    - {fileID: 8300000, guid: 8f7f93e02c174b74094a6a93c3c48d0c, type: 3}
+    - {fileID: 8300000, guid: f766207f49f27894fa0da5b074ae9c8c, type: 3}
+    - {fileID: 8300000, guid: 8de1681a8690a17478817cab6b8f29fa, type: 3}
+    - {fileID: 8300000, guid: f8373fc09c19576408cccc6b1592f0c3, type: 3}
+    - {fileID: 8300000, guid: 6c80ab178bc7b8e478d862c933fb9de3, type: 3}
+    - {fileID: 8300000, guid: 54f8e2e18adbc1c468372f7361eacd1f, type: 3}
+    - {fileID: 8300000, guid: 55ed573074f11a04281258769251bbf0, type: 3}
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: monsterFootStepAudioList
+      Entry: 7
+      Data: 0|System.Collections.Generic.List`1[[UnityEngine.AudioClip[], UnityEngine.AudioModule]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 2
+    - Name: 
+      Entry: 7
+      Data: 1|UnityEngine.AudioClip[], UnityEngine.AudioModule
+    - Name: 
+      Entry: 12
+      Data: 10
+    - Name: 
+      Entry: 10
+      Data: 0
+    - Name: 
+      Entry: 10
+      Data: 1
+    - Name: 
+      Entry: 10
+      Data: 2
+    - Name: 
+      Entry: 10
+      Data: 3
+    - Name: 
+      Entry: 10
+      Data: 4
+    - Name: 
+      Entry: 10
+      Data: 5
+    - Name: 
+      Entry: 10
+      Data: 6
+    - Name: 
+      Entry: 10
+      Data: 7
+    - Name: 
+      Entry: 10
+      Data: 8
+    - Name: 
+      Entry: 10
+      Data: 9
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 2|UnityEngine.AudioClip[], UnityEngine.AudioModule
+    - Name: 
+      Entry: 12
+      Data: 10
+    - Name: 
+      Entry: 10
+      Data: 10
+    - Name: 
+      Entry: 10
+      Data: 11
+    - Name: 
+      Entry: 10
+      Data: 12
+    - Name: 
+      Entry: 10
+      Data: 13
+    - Name: 
+      Entry: 10
+      Data: 14
+    - Name: 
+      Entry: 10
+      Data: 15
+    - Name: 
+      Entry: 10
+      Data: 16
+    - Name: 
+      Entry: 10
+      Data: 17
+    - Name: 
+      Entry: 10
+      Data: 18
+    - Name: 
+      Entry: 10
+      Data: 19
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+  playerFootStepAudios:
+  - {fileID: 8300000, guid: 75dc068412e381649a373b9956c186aa, type: 3}
+  - {fileID: 8300000, guid: 33c3651b23df8ed46855ec26cb3858c3, type: 3}
+  - {fileID: 8300000, guid: bffb87c645731634d8bc90b9edeac3c3, type: 3}
+  - {fileID: 8300000, guid: fa74d3c24d4b1e24b92297a78b6784e6, type: 3}
+  - {fileID: 8300000, guid: a041f01b25a56be4d900041031cd184a, type: 3}
+  - {fileID: 8300000, guid: 21014bdcf1ec1d34e9265a3c31fd3db8, type: 3}
+  - {fileID: 8300000, guid: 12c9cce4a7e97374a9da8847724a043a, type: 3}
+  - {fileID: 8300000, guid: 70e7973a254af8849a10a743a17882bf, type: 3}
+  - {fileID: 8300000, guid: b789add20a75d3c4f80bb1083bd00d85, type: 3}
+  - {fileID: 8300000, guid: 449630783da9b7747b6a05390c1753a0, type: 3}
+  playerMaxHp: 100

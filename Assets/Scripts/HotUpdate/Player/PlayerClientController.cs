@@ -8,7 +8,6 @@ public class PlayerClientController : CharacterClientControllerBase<PlayerContro
     public Transform floatInfoPoint { get; private set; }
     private PlayerFloatInfo floatInfo;
     public bool canControl; //玩家是否可以控制
-    private PlayerClientConfig clientConfig;
 
 
     public override void FirstInit(PlayerController newPlayer) //第一次被添加组件调用
@@ -19,7 +18,6 @@ public class PlayerClientController : CharacterClientControllerBase<PlayerContro
         cameraLookatTarget = transform.Find("CameraLookat");
         cameraFollowTarget = transform.Find("CameraFollow");
         floatInfoPoint = transform.Find("FloatPoint");
-        clientConfig = ResSystem.LoadAsset<PlayerClientConfig>(nameof(PlayerClientConfig));
         mainController.View.footStepAction += View_footStepAction;
     }
 
@@ -42,7 +40,7 @@ public class PlayerClientController : CharacterClientControllerBase<PlayerContro
     /// </summary>
     private void View_footStepAction()
     {
-        AudioClip audioClip = clientConfig.footStepAudios[Random.Range(0, clientConfig.footStepAudios.Length)];
+        AudioClip audioClip = ClientGlobal.Instance.Config.playerFootStepAudios[Random.Range(0, ClientGlobal.Instance.Config.playerFootStepAudios.Length)];
         AudioSystem.PlayOneShot(audioClip, transform.position);
     }
 
@@ -50,7 +48,7 @@ public class PlayerClientController : CharacterClientControllerBase<PlayerContro
 
     protected override void OnHpChanged(float previousValue, float newValue)
     {
-        float fillAmount = newValue / clientConfig.maxHp;
+        float fillAmount = newValue / ClientGlobal.Instance.Config.playerMaxHp;
         if (mainController.IsOwner) //设置IsOwner识别本地玩家，以做区分，本地玩家在左上角展示血条，那么其他玩家是头顶展示的。
         {
             //HP值绑定上HP窗口

@@ -9,7 +9,13 @@ public class MonsterClientController : CharacterClientControllerBase<MonsterCont
     {
         base.FirstInit(mainController);
         floatInfoPoint = transform.Find("FloatPoint");
-        floatInfo = ResSystem.InstantiateGameObject<MonsterFloatInfo>(floatInfoPoint,nameof(MonsterFloatInfo));
+        floatInfo = ResSystem.InstantiateGameObject<MonsterFloatInfo>(floatInfoPoint, nameof(MonsterFloatInfo));
+        mainController.View.footStepAction += View_footStepAction;
+    }
+    private void View_footStepAction()
+    {
+        AudioClip audioClip = ClientGlobal.Instance.Config.monsterFootStepAudioList[mainController.monsterConfig.audioGroupIndex][Random.Range(0, ClientGlobal.Instance.Config.playerFootStepAudios.Length)];
+        AudioSystem.PlayOneShot(audioClip, transform.position);
     }
     public override void Init()
     {

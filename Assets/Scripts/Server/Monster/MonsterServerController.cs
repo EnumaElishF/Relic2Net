@@ -4,6 +4,7 @@ using UnityEngine.AI;
 
 public class MonsterServerController : CharacterServerControllerBase<MonsterController>,IMonsterServerController,IStateMachineOwner,IHitTarget
 {
+    public const float recoverHPRate = 0.2f;
     public NavMeshAgent navMeshAgent { get; private set; }
     public CharacterController characterController { get; private set; }
     public MonsterSpawner monsterSpawner { get; private set; } //刷怪点
@@ -134,6 +135,18 @@ public class MonsterServerController : CharacterServerControllerBase<MonsterCont
         mainController.currentHp.Value = hp;
         ChangeState(MonsterState.Damage);
         ((MonsterDamageState)stateMachine.currStateObj).SetAttackData(attackData);
+    }
+    /// <summary>
+    /// 怪物脱战回血
+    /// </summary>
+    public void RecoverHP()
+    {
+        float hp = mainController.currentHp.Value;
+        if (hp < monsterConfig.maxHP)
+        {
+            hp += monsterConfig.maxHP * recoverHPRate * Time.deltaTime;
+            mainController.currentHp.Value = hp;
+        }
     }
     #endregion
 }
