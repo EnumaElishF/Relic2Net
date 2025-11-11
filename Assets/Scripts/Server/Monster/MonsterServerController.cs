@@ -53,6 +53,9 @@ public class MonsterServerController : CharacterServerControllerBase<MonsterCont
             case MonsterState.Attack:
                 stateMachine.ChangeState<MonsterAttackState>();
                 break;
+            case MonsterState.Die:
+                stateMachine.ChangeState<MonsterDieState>();
+                break;
         }
     }
     #region AOI
@@ -144,8 +147,16 @@ public class MonsterServerController : CharacterServerControllerBase<MonsterCont
         hp -= attackData.attackValue;
         if (hp < 0) hp = 0;
         mainController.currentHp.Value = hp;
-        ChangeState(MonsterState.Damage);
-        ((MonsterDamageState)stateMachine.currStateObj).SetAttackData(attackData);
+        if (hp <= 0)
+        {
+            ChangeState(MonsterState.Die);
+        }
+        else
+        {
+            ChangeState(MonsterState.Damage);
+            ((MonsterDamageState)stateMachine.currStateObj).SetAttackData(attackData);
+        }
+
     }
     /// <summary>
     /// 怪物脱战回血
@@ -177,6 +188,12 @@ public class MonsterServerController : CharacterServerControllerBase<MonsterCont
     private void OnHit(IHitTarget target, Vector3 vector)
     {
         ((MonsterAttackState)stateMachine.currStateObj).OnHit(target, vector);
+    }
+
+    public void Die()
+    {
+        NetManager.Instance.DestroyObject(mainController.NetworkObject);
+        monsterSpawner.OnMonsterDie();
     }
     #endregion
 }

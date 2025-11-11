@@ -6,4 +6,5 @@
     Pursuit,
     Damage,
     Attack,
+    Die
 }

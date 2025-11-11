@@ -149,4 +149,4 @@ MonoBehaviour:
   switchNormalizedTime: 0.4
   attackValue: 20
   repelDistance: 1.5
-  repelTime: 0.8
+  repelTime: 0.75

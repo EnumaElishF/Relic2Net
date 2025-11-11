@@ -46,4 +46,9 @@ public class MonsterSpawner : MonoBehaviour
             return transform.position;
         }
     }
+
+    public void OnMonsterDie()
+    {
+        //TODO
+    }
 }
