@@ -11,6 +11,7 @@ public class MonsterServerController : CharacterServerControllerBase<MonsterCont
     public CharacterController characterController { get; private set; }
     public MonsterSpawner monsterSpawner { get; private set; } //刷怪点
     public MonsterConfig monsterConfig { get => mainController.monsterConfig; }
+    private int indexAtSpawner;
     public override void FirstInit(MonsterController mainController)
     {
         base.FirstInit(mainController);
@@ -25,9 +26,10 @@ public class MonsterServerController : CharacterServerControllerBase<MonsterCont
         mainController.currentHp.Value = monsterConfig.maxHP;
         ChangeState(MonsterState.Idle);
     }
-    public void SetMonsterSpawner(MonsterSpawner monsterSpawner)
+    public void SetMonsterSpawner(MonsterSpawner monsterSpawner,int indexAtSpawner)
     {
         this.monsterSpawner = monsterSpawner;
+        this.indexAtSpawner = indexAtSpawner;
     }
     /// <summary>
     /// 每次新加动作的状态的跳转
@@ -193,7 +195,7 @@ public class MonsterServerController : CharacterServerControllerBase<MonsterCont
     public void Die()
     {
         NetManager.Instance.DestroyObject(mainController.NetworkObject);
-        monsterSpawner.OnMonsterDie();
+        monsterSpawner.OnMonsterDie(indexAtSpawner);
     }
     #endregion
 }

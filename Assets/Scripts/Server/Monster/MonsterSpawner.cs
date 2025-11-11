@@ -9,27 +9,56 @@ public class MonsterSpawner : MonoBehaviour
     public Transform[] spawnPoint;
     public GameObject[] monsterPrefab;
     public float patrolRange = 10;
+    public float interval = 10; //隔多少秒生成一次
     private float halfPatrolRange;
+    private MonsterServerController[] monsters;
+    private float timer;
     public void Init()
     {
 #if UNITY_EDITOR
         if (NetManager.Instance.IsClient) return;
 #endif
+        timer = interval;
+        monsters = new MonsterServerController[monsterPrefab.Length];
         halfPatrolRange = patrolRange / 2f;
         for(int i = 0; i < monsterPrefab.Length; i++)
         {
-            Transform point = spawnPoint[i];
-            NetworkObject monsterObject = NetManager.Instance.SpawnObjectNoShow(NetManager.ServerClientId, monsterPrefab[i], point.position, point.rotation);
-            //初始化怪物的服务端组件
-            if(!monsterObject.TryGetComponent(out MonsterServerController serverController))
-            {
-                serverController = monsterObject.gameObject.AddComponent<MonsterServerController>();
-                serverController.FirstInit(monsterObject.GetComponent<MonsterController>());
-            }
-            serverController.SetMonsterSpawner(this);
-            serverController.Init();
-            monsterObject.SpawnWithOwnership(NetManager.ServerClientId);
+            Spawn(i);
         }
+    }
+    private void Update()
+    {
+#if UNITY_EDITOR
+        if (NetManager.Instance.IsClient) return;
+#endif
+        timer -= Time.deltaTime;
+        if (timer <= 0)
+        {
+            timer = interval;
+            for (int i = 0; i < monsters.Length; i++)
+            {
+                if (monsters[i] == null)
+                {
+                    Spawn(i);
+                    return;
+                }
+            }
+        }
+    }
+    private void Spawn(int index)
+    {
+        Transform point = spawnPoint[index];
+        NetworkObject monsterObject = NetManager.Instance.SpawnObjectNoShow(NetManager.ServerClientId, monsterPrefab[index], point.position, point.rotation);
+        //初始化怪物的服务端组件
+        if (!monsterObject.TryGetComponent(out MonsterServerController serverController))
+        {
+            serverController = monsterObject.gameObject.AddComponent<MonsterServerController>();
+            serverController.FirstInit(monsterObject.GetComponent<MonsterController>());
+        }
+        serverController.SetMonsterSpawner(this,index);
+        serverController.Init();
+        monsterObject.SpawnWithOwnership(NetManager.ServerClientId);
+        monsters[index] = serverController;
     }
 
     public Vector3 GetPatrolPoint()
@@ -47,8 +76,8 @@ public class MonsterSpawner : MonoBehaviour
         }
     }
 
-    public void OnMonsterDie()
+    public void OnMonsterDie(int index)
     {
-        //TODO
+        monsters[index] = null;
     }
 }
