@@ -6,8 +6,7 @@ using Random = UnityEngine.Random;
 
 public class MonsterSpawner : MonoBehaviour
 {
-    public Transform[] spawnPoint;
-    public GameObject[] monsterPrefab;
+    public GameObject[] monsterPrefabs;
     public float patrolRange = 10;
     public float interval = 10; //隔多少秒生成一次
     private float halfPatrolRange;
@@ -19,9 +18,9 @@ public class MonsterSpawner : MonoBehaviour
         if (NetManager.Instance.IsClient) return;
 #endif
         timer = interval;
-        monsters = new MonsterServerController[monsterPrefab.Length];
+        monsters = new MonsterServerController[monsterPrefabs.Length];
         halfPatrolRange = patrolRange / 2f;
-        for(int i = 0; i < monsterPrefab.Length; i++)
+        for(int i = 0; i < monsterPrefabs.Length; i++)
         {
             Spawn(i);
         }
@@ -47,8 +46,7 @@ public class MonsterSpawner : MonoBehaviour
     }
     private void Spawn(int index)
     {
-        Transform point = spawnPoint[index];
-        NetworkObject monsterObject = NetManager.Instance.SpawnObjectNoShow(NetManager.ServerClientId, monsterPrefab[index], point.position, point.rotation);
+        NetworkObject monsterObject = NetManager.Instance.SpawnObjectNoShow(NetManager.ServerClientId, monsterPrefabs[index], GetPatrolPoint(), Quaternion.identity);
         //初始化怪物的服务端组件
         if (!monsterObject.TryGetComponent(out MonsterServerController serverController))
         {
